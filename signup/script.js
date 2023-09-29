@@ -1,32 +1,35 @@
-import { api_url } from "../js/constants.js";
+import { api_url, google_id } from "../js/constants.js";
+import { getUserSession, setUserSession } from "../js/storage.js";
 
-const handleCredentialResponse = async (response) => {
-  try {
-    const result = await fetch(`${api_url}/user?provider=google`, {
-      method: "POST",
-      body: JSON.stringify(response),
-    }).then(async (res) => {
-      console.log({ res });
-      if (!res.ok) {
-        const text = await res.text();
-        console.log({ text });
-        return text;
-      } else {
-        return res.json();
-      }
-    });
-    console.log({ result });
-  } catch (error) {
-    //TODO: handle error
-    console.log({ error });
-  }
-};
-
+/**
+ * Google Auth Setup
+ */
 window.onload = function () {
+  const user = getUserSession();
+
+  if (!!user?.id) {
+    window.location.replace("/");
+  }
+
   google.accounts.id.initialize({
-    client_id:
-      "914763218338-qvq8stve1sh2d2g14dcve9kacf51agt8.apps.googleusercontent.com",
-    callback: handleCredentialResponse,
+    client_id: google_id,
+    callback: async (googleResponse) => {
+      try {
+        const response = await fetch(`${api_url}/user?provider=google`, {
+          method: "POST",
+          body: JSON.stringify(googleResponse),
+        });
+
+        const { data } = await response.json();
+
+        if (data?.id) {
+          setUserSession(data);
+          window.location.replace("/");
+        }
+      } catch (error) {
+        console.debug({ error });
+      }
+    },
     use_fedcm_for_prompt: true,
   });
   google.accounts.id.renderButton(document.getElementById("google-button"), {
@@ -35,3 +38,33 @@ window.onload = function () {
   });
   google.accounts.id.prompt();
 };
+
+/**
+ * Create Account Submit
+ */
+document
+  .getElementById("signup-form")
+  .addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    try {
+      const email = document.getElementById("email-input").value;
+      const password = document.getElementById("password-input").value;
+
+      const response = await fetch(`${api_url}/user?provider=password`, {
+        method: "POST",
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      });
+
+      const { data } = await response.json();
+      if (data?.id) {
+        setUserSession(data);
+        window.location.replace("/");
+      }
+    } catch (error) {
+      console.debug(error);
+    }
+  });
