@@ -1,11 +1,10 @@
-import { api_url } from "../constants.js";
+import { api_url } from "../js/constants.js";
 
 const handleCredentialResponse = async (response) => {
   try {
     const result = await fetch(`${api_url}/user?provider=google`, {
       method: "POST",
       body: JSON.stringify(response),
-      mode: "no-cors",
     }).then(async (res) => {
       console.log({ res });
       if (!res.ok) {
