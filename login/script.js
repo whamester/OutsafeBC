@@ -15,14 +15,17 @@ window.onload = function () {
     client_id: google_id,
     callback: async (googleResponse) => {
       try {
-        const response = await fetch(`${api_url}/user?provider=google`, {
+        const response = await fetch(`${api_url}/auth?provider=google`, {
           method: "POST",
           body: JSON.stringify(googleResponse),
         });
 
         const { data } = await response.json();
-        setUserSession(data);
-        window.location.replace("/");
+
+        if (data?.id) {
+          setUserSession(data);
+          window.location.replace("/");
+        }
       } catch (error) {
         console.debug(error);
       }
@@ -44,18 +47,24 @@ document
   .addEventListener("submit", async (event) => {
     event.preventDefault();
 
-    const email = document.getElementById("email-input").value;
-    const password = document.getElementById("password-input").value;
+    try {
+      const email = document.getElementById("email-input").value;
+      const password = document.getElementById("password-input").value;
 
-    const response = await fetch(`${api_url}/auth`, {
-      method: "POST",
-      body: JSON.stringify({
-        email,
-        password,
-      }),
-    });
+      const response = await fetch(`${api_url}/auth`, {
+        method: "POST",
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      });
 
-    const { data } = await response.json();
-    setUserSession(data);
-    window.location.replace("/");
+      const { data } = await response.json();
+      if (data?.id) {
+        setUserSession(data);
+        window.location.replace("/");
+      }
+    } catch (error) {
+      console.debug(error);
+    }
   });
