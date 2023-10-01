@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Profile & Settings</title>
+
+    <!-- Link to css file -->
+    <link rel="stylesheet" href="./style.css" />
+    <!-- Link to js file -->
+    <script src="./script.js" defer></script>
+  </head>
+
+  <body>
+    <section id="my-profile">
+      <h1>My Profile</h1>
+      <p>Update your photo and personal details here.</p>
+      <form action="" id="profile-form">
+        <label for="name">Name</label>
+        <input type="text" id="name" />
+        <input type="text" id="surname" />
+        <label for="" id="email">Email address</label>
+        <input type="email" id="email" />
+        <!-- change password needs to go here -->
+        <button type="submit" id="save-profile-info-btn">Save</button>
+      </form>
+      <h2>Your photo</h2>
+      <p>This will be displayed on your profile.</p>
+      <img src="" alt="" id="profile-photo" />
+      <button id="change-profile-photo-btn">Change profile photo</button>
+    </section>
+    <section id="settings">
+      <h1>Settings</h1>
+      <p>Update your preferences here</p>
+
+      <div class="form-check form-switch">
+        <img src="" alt="" />
+        <label class="form-check-label" for="push-notification-switch"
+          >Push Notifications</label
+        >
+        <input
+          class="form-check-input"
+          type="checkbox"
+          role="switch"
+          id="push-notification-switch"
+          checked
+        />
+      </div>
+      <div class="form-check form-switch">
+        <img src="" alt="" />
+        <label class="form-check-label" for="camera-access-switch"
+          >Camera Access</label
+        >
+        <input
+          class="form-check-input"
+          type="checkbox"
+          role="switch"
+          id="camera-access-switch"
+          checked
+        />
+      </div>
+      <div class="form-check form-switch">
+        <img src="" alt="" />
+        <label class="form-check-label" for="location-switch">Location</label>
+        <input
+          class="form-check-input"
+          type="checkbox"
+          role="switch"
+          id="location-switch"
+          checked
+        />
+      </div>
+      <div class="form-check form-switch">
+        <img src="" alt="" />
+        <label class="form-check-label" for="system-files-switch"
+          >System Files</label
+        >
+        <input
+          class="form-check-input"
+          type="checkbox"
+          role="switch"
+          id="system-files-switch"
+          checked
+        />
+      </div>
+      <button type="submit" id="save-settings-btn">Save</button>
+    </section>
+    <section id="delete-account">
+      <h1>Delete Account</h1>
+      <p>
+        If you no longer want to use CampBuddy, you can permanently delete your
+        account. You can’t undo this action!
+      </p>
+      <button type="submit" id="delete-account-btn">Delete Account</button>
+    </section>
+  </body>
+</html>
