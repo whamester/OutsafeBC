@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <script src="report-hazard.js" defer></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.js"></script>
+	<link href="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.css" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+    <!-- <script type="module" src="script.js"></script> -->
+    <title>Document</title>
+</head>
+
+<body>
+    <header>
+        <h1>CampBuddy</h1>
+    </header>
+    <div class="toolbar">
+        <!-- header area shared among all pages. It also include navigation buttons -->
+        <a title="Select the location" href="#step1">1</a>
+        <span>-----</span>
+        <a title="What type of hazard would you like to report?" href="#step2">2</a>
+        <span>-----</span>
+        <a title="What type of wild animal did you spot?" href="#step3">3</a>
+        <span>-----</span>
+        <a title="Would you like to mention any further details?" href="#step4">4</a>
+        <span>-----</span>
+        <a title="Please upload photos to help others see the reported hazard visually." href="#step5">5</a>
+        <span>-----</span>
+        <a title="Review the report before submitting." href="#step6">6</a>
+        <span>-----</span>
+        <a href="#step7">7</a>
+    </div>
+    <main>
+        <form id="form">
+            <div class="page" id="step1">
+                <h1>1. Select the location.</h1>
+                <h1 id="loc"></h1>
+                <div id="map"></div>
+                <label>Your current location is:</label>
+                <input type="text" id="name" required>
+                <br>
+                <a href="#step2">Continue</a>
+            </div>
+            <div class="page" id="step2">
+                <h1>2. What type of hazard would you like to report?</h1>
+                <input type="radio" name="category" value="Wildlife">Wildlife<br>
+                <input type="radio" name="category" value="Weather">Weather<br>
+                <input type="radio" name="category" value="Infrastructure">Infrastructure<br>
+                <input type="radio" name="category" value="Campsite">Campsite<br>
+                <a href="#step1">Back</a>
+                <a href="#step3">Continue</a>
+            </div>
+            <div class="page" id="step3">
+                <h1>3. What type of wild animal did you spot?</h1>
+                <input type="radio" name="type" value="Bear">Bear<br>
+                <input type="radio" name="type" value="Coyote">Coyote<br>
+                <input type="radio" name="type" value="Coguar">Coguar<br>
+                <input type="radio" name="type" value="Elk">Elk<br>
+                <input type="radio" name="type" value="Raccoon">Raccoon<br>
+                <a href="#step2">Back</a>
+                <a href="#step4">Continue</a>
+            </div>
+
+            <div class="page" id="step4">
+                <h1>4. Would you like to mention any further details?</h1>
+                <input type="text" id="details">
+                <br>
+                <a href="#step3">Back</a>
+                <a href="#step5">Continue</a>
+            </div>
+
+            <div class="page" id="step5">
+                <h1>5. Please upload photos to help others see the reported hazard visually. </h1>
+                <p>Upload pictures</p>
+                <input type="text" id="picture">
+                <br>
+                <a href="#step4">Back</a>
+                <a href="#step6" onClick="myFu()">Continue</a>
+                <!-- <input type="submit" class="submit" value="Continue"/> -->
+
+                <!-- <input type="submit" class="submit" value="Continue" onClick="myFu()"/>
+                <script>
+                    function myFu(){
+                        window.location.href="#step6"
+                    }
+                </script> -->
+
+                <!-- <button id="button5" class="button" onClick="myFu()">Continue</button> -->
+
+                <!-- <script>
+                    function myFu(){
+                        const locationInput = form.querySelector("#name")
+    console.log(locationInput.value)
+                        window.location.href="#step6"
+                    }
+                </script> -->
+
+            </div>
+
+            <div class="page" id="step6">
+                <h1>6. Review the report before submitting.</h1>
+                <!-- <h2>Location:</h2>
+                <h2>Type of hazard:</h2>
+                <h2>Hazard:</h2>
+                <h2>Additional details:</h2>
+                <h2>Photos:</h2> -->
+                <br>
+                <div id="review">
+
+                </div>
+                <br>
+                <a href="#step5">Back</a>
+                <!-- <a href="#step7">Submit Report</a> -->
+                <input type="submit" class="submit" onClick="confiFu()">
+                <script>
+                    function confiFu(){
+                        window.location.href="#step7"
+                    }
+                </script>
+            </div>
+
+            <div class="page" id="step7">
+                <h1>7. Your report has been submitted!</h1>
+                <p>Thank you for helping others have a safe camping experience.</p>
+                <br>
+                <a href="#step7">OK</a>
+            </div>
+        </form>
+    </main>
+</body>
+
+</html>
