@@ -15,7 +15,7 @@ https://leafletjs.com/examples/quick-start/
 ```
 [name-of-the-feature] (snake case)
 - style.css (import variables and global styles in the feature css file)
-- [name-of-the-feature].js
+- script.js
 - index.html (import features css file and feature js file)
 ```
 
