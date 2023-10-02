@@ -58,14 +58,32 @@ function showError(error) {
 }
 
 // Display user details:
+let userData = [];
+let userID = "76beea43-679a-4607-9d42-a1af3b1e6554";
+let baseURL =
+  "https://enchanting-llama-6664aa.netlify.app/.netlify/functions/user?id=";
+let userURL = baseURL + userID;
+
+async function getUserInfo() {
+  let res = await fetch(userURL);
+  let data = await res.json();
+  userData = data.data;
+
+  console.log(userData);
+  document.getElementById("name").setAttribute("value", userData.name);
+  document.getElementById("surname").setAttribute("value", userData.lastname);
+  document.getElementById("email").setAttribute("value", userData.email);
+}
+
+getUserInfo();
 
 // Profile photo
 let profilePhoto = document.getElementById("profile-photo");
 let inputPhoto = document.getElementById("change-profile-photo-btn");
 
 inputPhoto.onchange = () => {
-    profilePhoto.src = URL.createObjectURL(inputPhoto.files[0])
-}
+  profilePhoto.src = URL.createObjectURL(inputPhoto.files[0]);
+};
 
 // testing:
 
