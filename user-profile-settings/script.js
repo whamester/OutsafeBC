@@ -1,106 +1,25 @@
-// Geolocation toggle (not going to be able to toggle)
+// User information
+import { getUserSession } from "../js/storage.js";
 
-const geolocationSwitch = document.getElementById("geolocation-switch");
-
-// Check if geolocation is enabled
-navigator.permissions
-  .query({ name: "geolocation" })
-  .then((permissionStatus) => {
-    if (permissionStatus.state === "granted") {
-      geolocationSwitch.checked = true;
-      getLocation();
-    } else {
-      geolocationSwitch.checked = false;
-    }
-  });
-
-geolocationSwitch.addEventListener("change", locationSwitch);
-
-function locationSwitch() {
-  if (geolocationSwitch.checked) {
-    getLocation();
-  } else {
-    console.log("Geolocation is disabled.");
-  }
+const user = getUserSession();
+function showUserInfo() {
+  document.getElementById("name").setAttribute("value", user.name);
+  document.getElementById("email").setAttribute("value", user.email);
 }
 
-function getLocation() {
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(showPosition, showError);
-  } else {
-    console.log("Geolocation is not supported by this browser.");
-  }
-}
+showUserInfo();
 
-function showPosition(position) {
-  const latitude = position.coords.latitude;
-  const longitude = position.coords.longitude;
-  console.log(
-    `Your current location is: Latitude ${latitude}, Longitude ${longitude}`
-  );
-}
+// Change password
+changePwBtn.addEventListener("click", (event) => {
+  event.preventDefault();
+  changePwPopup.style.display = "block";
+});
 
-function showError(error) {
-  switch (error.code) {
-    case error.PERMISSION_DENIED:
-      console.log("User denied the request for geolocation.");
-      break;
-    case error.POSITION_UNAVAILABLE:
-      console.log("Location information is unavailable.");
-      break;
-    case error.TIMEOUT:
-      console.log("The request to get user location timed out.");
-      break;
-    case error.UNKNOWN_ERROR:
-      console.log("An unknown error occurred.");
-      break;
-  }
-}
-
-// Display user details:
-let userData = [];
-let userID = "76beea43-679a-4607-9d42-a1af3b1e6554";
-let baseURL =
-  "https://enchanting-llama-6664aa.netlify.app/.netlify/functions/user?id=";
-let userURL = baseURL + userID;
-
-async function getUserInfo() {
-  let res = await fetch(userURL);
-  let data = await res.json();
-  userData = data.data;
-
-  console.log(userData);
-  document.getElementById("name").setAttribute("value", userData.name);
-  document.getElementById("surname").setAttribute("value", userData.lastname);
-  document.getElementById("email").setAttribute("value", userData.email);
-}
-
-getUserInfo();
+changePwSaveBtn.addEventListener("click", () => {
+  changePwPopup.style.display = "none";
+});
 
 // Profile photo
-let profilePhoto = document.getElementById("profile-photo");
-let inputPhoto = document.getElementById("change-profile-photo-btn");
-
-inputPhoto.onchange = () => {
-  profilePhoto.src = URL.createObjectURL(inputPhoto.files[0]);
+changeProfilePhotoBtn.onchange = () => {
+  profilePhoto.src = URL.createObjectURL(changeProfilePhotoBtn.files[0]);
 };
-
-// testing:
-
-// permission checker
-navigator.permissions.query({ name: "camera" }).then((res) => {
-  res.onchange = (e) => {
-    // detecting if the event is a change
-    if (e.type === "change") {
-      // checking what the new permissionStatus state is
-      const newState = e.target.state;
-      if (newState === "denied") {
-        console.log("Permission blocked");
-      } else if (newState === "granted") {
-        console.log("Permission granted");
-      } else {
-        console.log("Permission default");
-      }
-    }
-  };
-});

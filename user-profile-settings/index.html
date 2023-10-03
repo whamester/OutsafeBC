@@ -8,36 +8,34 @@
     <!-- Link to css file -->
     <link rel="stylesheet" href="./style.css" />
     <!-- Link to js file -->
-    <script src="./script.js" defer></script>
+    <script type="module" src="./script.js" defer></script>
   </head>
 
   <body>
-    <section id="my-profile">
+    <section id="myProfile">
       <h1>My Profile</h1>
       <p>Update your photo and personal details here.</p>
-      <form id="profile-form">
+      <form id="profileForm">
         <label for="name">Name</label>
         <input type="text" id="name" />
-        <label for="surname">Surname</label>
-        <!-- hide surname label in css -->
-        <input type="text" id="surname" />
         <label for="email">Email address</label>
         <input type="email" id="email" />
-        <!-- change password needs to go here -->
       </form>
+      <h2>Password</h2>
+      <button id="changePwBtn">Change Password</button>
       <h2>Your photo</h2>
       <p>This will be displayed on your profile.</p>
-      <img src="#" alt="#" id="profile-photo" />
+      <img src="#" alt="#" id="profilePhoto" />
       <!-- change label css to look like button -->
-      <label for="change-profile-photo-btn">Change profile photo</label>
+      <label for="changeProfilePhotoBtn">Change profile photo</label>
       <!-- hide input field in css -->
       <input
-        id="change-profile-photo-btn"
+        id="changeProfilePhotoBtn"
         type="file"
         accept="image/jpeg, image/jpg, image/png"
       />
 
-      <button type="submit" id="save-profile-info-btn">Save</button>
+      <button type="submit" id="saveProfileInfoBtn">Save</button>
     </section>
     <section id="settings">
       <h1>Settings</h1>
@@ -46,68 +44,36 @@
       <div class="form-check form-switch">
         <img src="#" alt="#" />
         <!-- icon -->
-        <label class="form-check-label" for="push-notification-switch"
+        <label class="form-check-label" for="pushNotificationSwitch"
           >Push Notifications</label
         >
         <input
           class="form-check-input"
           type="checkbox"
           role="switch"
-          id="push-notification-switch"
+          id="pushNotificationSwitch"
           checked
         />
       </div>
-      <div class="form-check form-switch">
-        <img src="#" alt="#" />
-        <!-- icon -->
-        <label class="form-check-label" for="camera-access-switch"
-          >Camera Access</label
-        >
-        <input
-          class="form-check-input"
-          type="checkbox"
-          role="switch"
-          id="camera-access-switch"
-          checked
-        />
+      <div id="changePwPopup">
+        <form id="changePwForm">
+          <label for="oldPw">Old Password</label>
+          <input type="password" id="oldPw" />
+          <label for="newPw">New Password</label>
+          <input type="password" id="newPw" />
+          <label for="newPwConfirm">Confirm New Password</label>
+          <input type="password" id="newPwConfirm" />
+          <button id="changePwSaveBtn">Save & Close</button>
+        </form>
       </div>
-      <div class="form-check form-switch">
-        <img src="#" alt="#" />
-        <!-- icon -->
-        <label class="form-check-label" for="geolocation-switch"
-          >Location</label
-        >
-        <input
-          class="form-check-input"
-          type="checkbox"
-          role="switch"
-          id="geolocation-switch"
-          checked
-        />
-      </div>
-      <div class="form-check form-switch">
-        <img src="#" alt="#" />
-        <!-- icon -->
-        <label class="form-check-label" for="system-files-switch"
-          >System Files</label
-        >
-        <input
-          class="form-check-input"
-          type="checkbox"
-          role="switch"
-          id="system-files-switch"
-          checked
-        />
-      </div>
-      <button type="submit" id="save-settings-btn">Save</button>
     </section>
-    <section id="delete-account">
+    <section id="deleteAcount">
       <h1>Delete Account</h1>
       <p>
         If you no longer want to use CampBuddy, you can permanently delete your
         account. You can’t undo this action!
       </p>
-      <button type="submit" id="delete-account-btn">Delete Account</button>
+      <button type="submit" id="deleteAcountBtn">Delete Account</button>
     </section>
   </body>
 </html>
