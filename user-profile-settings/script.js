@@ -23,3 +23,12 @@ changePwSaveBtn.addEventListener("click", () => {
 changeProfilePhotoBtn.onchange = () => {
   profilePhoto.src = URL.createObjectURL(changeProfilePhotoBtn.files[0]);
 };
+
+// Delete profile
+deleteAccountBtn.addEventListener("click", () => {
+  deleteAccountConfirm.style.display = "block";
+});
+
+deleteAccountNoBtn.addEventListener("click", () => {
+  deleteAccountConfirm.style.display = "none";
+});
