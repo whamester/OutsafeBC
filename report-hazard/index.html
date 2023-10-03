@@ -8,14 +8,12 @@
     <script src="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.js"></script>
 	<link href="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.css" rel="stylesheet" />
     <link rel="stylesheet" href="style.css" />
-    <!-- <script type="module" src="script.js"></script> -->
     <title>Document</title>
 </head>
 
 <body>
     
     <div class="toolbar">
-        <!-- header area shared among all pages. It also include navigation buttons -->
         <a title="Select the location" href="#step1">1</a>
         <span>-----</span>
         <a title="What type of hazard would you like to report?" href="#step2">2</a>
@@ -76,41 +74,17 @@
                 <br>
                 <a href="#step4">Back</a>
                 <a href="#step6" onClick="myFu()">Continue</a>
-                <!-- <input type="submit" class="submit" value="Continue"/> -->
-
-                <!-- <input type="submit" class="submit" value="Continue" onClick="myFu()"/>
-                <script>
-                    function myFu(){
-                        window.location.href="#step6"
-                    }
-                </script> -->
-
-                <!-- <button id="button5" class="button" onClick="myFu()">Continue</button> -->
-
-                <!-- <script>
-                    function myFu(){
-                        const locationInput = form.querySelector("#name")
-    console.log(locationInput.value)
-                        window.location.href="#step6"
-                    }
-                </script> -->
-
+                
             </div>
 
             <div class="page" id="step6">
                 <h1>6. Review the report before submitting.</h1>
-                <!-- <h2>Location:</h2>
-                <h2>Type of hazard:</h2>
-                <h2>Hazard:</h2>
-                <h2>Additional details:</h2>
-                <h2>Photos:</h2> -->
                 <br>
                 <div id="review">
 
                 </div>
                 <br>
                 <a href="#step5">Back</a>
-                <!-- <a href="#step7">Submit Report</a> -->
                 <input type="submit" class="submit" onClick="confiFu()">
                 <script>
                     function confiFu(){
