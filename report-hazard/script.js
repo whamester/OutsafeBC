@@ -27,7 +27,7 @@ class ReportForm {
   }
 }
 
-const reportArray = [];
+// const reportArray = [];
 
 const form = document.getElementById("form");
 
@@ -48,8 +48,8 @@ form.addEventListener("submit", function (event) {
     detailsInput.value,
     pictureInput.value
   );
-
-  reportArray.push(report);
+  console.log(report)
+  // reportArray.push(report);
 });
 
 // form.addEventListener("button", function(event){
