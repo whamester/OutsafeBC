@@ -1,4 +1,4 @@
-const allPages = document.querySelectorAll("div.page");
+const allPages = document.querySelectorAll("section.page");
 allPages[0].style.display = "block";
 
 function displayCurrentSection(event) {

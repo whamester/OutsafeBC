@@ -35,7 +35,7 @@
 
     <main>
       <form id="form">
-        <div class="page" id="step1">
+        <section class="page" id="step1">
           <h1>1. Select the location.</h1>
           <h1 id="loc"></h1>
           <div id="map"></div>
@@ -43,8 +43,8 @@
           <input type="text" id="name" required />
           <br />
           <a href="#step2">Continue</a>
-        </div>
-        <div class="page" id="step2">
+        </section>
+        <section class="page" id="step2">
           <h1>2. What type of hazard would you like to report?</h1>
           <input type="radio" name="category" value="Wildlife" />Wildlife<br />
           <input type="radio" name="category" value="Weather" />Weather<br />
@@ -56,8 +56,8 @@
           <input type="radio" name="category" value="Campsite" />Campsite<br />
           <a href="#step1">Back</a>
           <a href="#step3">Continue</a>
-        </div>
-        <div class="page" id="step3">
+        </section>
+        <section class="page" id="step3">
           <h1>3. What type of wild animal did you spot?</h1>
           <input type="radio" name="type" value="Bear" />Bear<br />
           <input type="radio" name="type" value="Coyote" />Coyote<br />
@@ -66,17 +66,17 @@
           <input type="radio" name="type" value="Raccoon" />Raccoon<br />
           <a href="#step2">Back</a>
           <a href="#step4">Continue</a>
-        </div>
+        </section>
 
-        <div class="page" id="step4">
+        <section class="page" id="step4">
           <h1>4. Would you like to mention any further details?</h1>
           <input type="text" id="details" />
           <br />
           <a href="#step3">Back</a>
           <a href="#step5">Continue</a>
-        </div>
+        </section>
 
-        <div class="page" id="step5">
+        <section class="page" id="step5">
           <h1>
             5. Please upload photos to help others see the reported hazard
             visually.
@@ -86,9 +86,9 @@
           <br />
           <a href="#step4">Back</a>
           <a href="#step6" onClick="myFu()">Continue</a>
-        </div>
+        </section>
 
-        <div class="page" id="step6">
+        <section class="page" id="step6">
           <h1>6. Review the report before submitting.</h1>
           <br />
           <div id="review"></div>
@@ -96,14 +96,14 @@
           <a href="#step5">Back</a>
           <input type="submit" class="submit" onClick="confiFu6_7()" />
           
-        </div>
+        </section>
 
-        <div class="page" id="step7">
+        <section class="page" id="step7">
           <h1>7. Your report has been submitted!</h1>
           <p>Thank you for helping others have a safe camping experience.</p>
           <br />
           <a href="#step7">OK</a>
-        </div>
+        </section>
       </form>
     </main>
   </body>
