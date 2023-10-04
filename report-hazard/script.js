@@ -75,6 +75,10 @@ function myFu() {
     `5.Photos: ${pictureInput.value}<br>`;
 }
 
+function confiFu() {
+  window.location.href = "#step7";
+}
+
 const longitude = 236.8924;
 const latitude = 49.22386;
 
