@@ -75,7 +75,7 @@ function myFu() {
     `5.Photos: ${pictureInput.value}<br>`;
 }
 
-function confiFu() {
+function confiFu6_7() {
   window.location.href = "#step7";
 }
 
