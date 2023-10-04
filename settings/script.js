@@ -16,7 +16,17 @@ function showUserInfo() {
 showUserInfo();
 
 // Change user information
+let userName = user?.name
+let userEmail = user?.email
 
+saveProfileInfoBtn.addEventListener("click", () => {
+  userName = document.getElementById("name").value
+  user.name = userName
+  userEmail = document.getElementById("email").value
+  user.email = userEmail
+  localStorage.setItem("user", JSON.stringify(user));
+  showProfilePic()
+})
 
 // Change password
 changePwBtn.addEventListener("click", (event) => {
