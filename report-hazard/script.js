@@ -55,18 +55,18 @@ function myFu() {
   window.location.href = "#step6";
 
   lable.innerHTML =
-    `1.Location: <br>` +
-    `2.Type of hazard: <br>` +
-    `3.Hazard: <br>` +
-    `4.Additional details: <br>` +
-    `5.Photos: <br>`;
+    `1.Location: ` +
+    `2.Type of hazard: ` +
+    `3.Hazard: ` +
+    `4.Additional details: ` +
+    `5.Photos: `;
 
   value.innerHTML =
-    ` ${locationInput}<br>` +
-    ` ${categoryInput.value}<br>` +
-    ` ${typeInput.value}<br>` +
-    ` ${detailsInput.value}<br>` +
-    ` ${pictureInput.value}<br>`;
+    ` ${locationInput}` +
+    ` ${categoryInput.value}` +
+    ` ${typeInput.value}` +
+    ` ${detailsInput.value}` +
+    ` ${pictureInput.value}`;
 }
 
 function confiFu6_7() {
