@@ -1,7 +1,7 @@
 const allPages = document.querySelectorAll("div.page");
 allPages[0].style.display = "block";
 
-function navigateToPage(event) {
+function displayCurrentSection(event) {
   const pageId = location.hash ? location.hash : "#step1";
   for (let page of allPages) {
     if (pageId === "#" + page.id) {
@@ -12,10 +12,10 @@ function navigateToPage(event) {
   }
   return;
 }
-navigateToPage();
+displayCurrentSection();
 
 //init handler for hash navigation
-window.addEventListener("hashchange", navigateToPage);
+window.addEventListener("hashchange", displayCurrentSection);
 
 class ReportForm {
   constructor(location, category, type, details, picture) {
