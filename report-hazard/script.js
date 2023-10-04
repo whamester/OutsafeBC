@@ -17,7 +17,7 @@ navigateToPage();
 //init handler for hash navigation
 window.addEventListener("hashchange", navigateToPage);
 
-class Report {
+class ReportForm {
   constructor(location, category, type, details, picture) {
     this.location = location;
     this.category = category;
@@ -41,7 +41,7 @@ form.addEventListener("submit", function (event) {
   const detailsInput = form.querySelector("#details");
   const pictureInput = form.querySelector("#picture");
 
-  const report = new Report(
+  const report = new ReportForm(
     locationInput.value,
     categoryInput.value,
     typeInput.value,
