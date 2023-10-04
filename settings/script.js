@@ -1,13 +1,22 @@
-// User information
+//Show user information
 import { getUserSession } from "../js/storage.js";
 
 const user = getUserSession();
+
 function showUserInfo() {
-  document.getElementById("name").setAttribute("value", user.name);
-  document.getElementById("email").setAttribute("value", user.email);
+  if (user) {
+  document.getElementById("name").setAttribute("value", user?.name);
+  document.getElementById("email").setAttribute("value", user?.email);
+  } else {
+    myProfile.style.display = "none"
+    deleteAccount.style.display = "none"
+  }
 }
 
 showUserInfo();
+
+// Change user information
+
 
 // Change password
 changePwBtn.addEventListener("click", (event) => {
@@ -20,9 +29,22 @@ changePwSaveBtn.addEventListener("click", () => {
 });
 
 // Profile photo
+function showProfilePic (){
+  profilePhoto.setAttribute("src", user?.photo)
+}
+
+showProfilePic()
+
+let userPhoto = user?.photo
+
 changeProfilePhotoBtn.onchange = () => {
-  profilePhoto.src = URL.createObjectURL(changeProfilePhotoBtn.files[0]);
+  const photoURL = URL.createObjectURL(changeProfilePhotoBtn.files[0]);
+  userPhoto = photoURL;
+  user.photo = userPhoto;
+  localStorage.setItem("user", JSON.stringify(user));
+  showProfilePic()
 };
+
 
 // Delete profile
 deleteAccountBtn.addEventListener("click", () => {
