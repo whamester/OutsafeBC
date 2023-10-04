@@ -77,12 +77,19 @@ function myFu() {
   // console.log(locationInput.value)
   window.location.href = "#step6";
 
-  review.innerHTML =
-    `1.Location: ${locationInput.value}<br>` +
-    `2.Type of hazard: ${categoryInput.value}<br>` +
-    `3.Hazard: ${typeInput.value}<br>` +
-    `4.Additional details: ${detailsInput.value}<br>` +
-    `5.Photos: ${pictureInput.value}<br>`;
+  lable.innerHTML =
+    `1.Location: <br>` +
+    `2.Type of hazard: <br>` +
+    `3.Hazard: <br>` +
+    `4.Additional details: <br>` +
+    `5.Photos: <br>`;
+  
+  value.innerHTML =
+    ` ${locationInput.value}<br>` +
+    ` ${categoryInput.value}<br>` +
+    ` ${typeInput.value}<br>` +
+    ` ${detailsInput.value}<br>` +
+    ` ${pictureInput.value}<br>`;  
 }
 
 function confiFu6_7() {
