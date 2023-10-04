@@ -96,28 +96,28 @@ function confiFu6_7() {
   window.location.href = "#step7";
 }
 
-const longitude = 236.8924;
-const latitude = 49.22386;
+// const longitude = 236.8924;
+// const latitude = 49.22386;
 
-showCoordOnMap(longitude, latitude);
+// showCoordOnMap(longitude, latitude);
 
-function showCoordOnMap(longitude, latitude) {
-  const map = new maplibregl.Map({
-    container: "map",
-    style:
-      "https://api.maptiler.com/maps/streets/style.json?key=get_your_own_OpIi9ZULNHzrESv6T2vL",
-    center: [longitude, latitude],
-    zoom: 14.5,
-  });
-  // add navigation bar to map
-  const mapNav = new maplibregl.NavigationControl();
-  map.addControl(mapNav, "top-left");
-  // add the point as marker to map
-  const marker = new maplibregl.Marker()
-    .setLngLat([longitude, latitude])
-    .addTo(map);
-}
-document.getElementById("loc").innerHTML = `<pre>longitude: ${longitude}
-latitude:  ${latitude}</pre>`;
+// function showCoordOnMap(longitude, latitude) {
+//   const map = new maplibregl.Map({
+//     container: "map",
+//     style:
+//       "https://api.maptiler.com/maps/streets/style.json?key=get_your_own_OpIi9ZULNHzrESv6T2vL",
+//     center: [longitude, latitude],
+//     zoom: 14.5,
+//   });
+//   // add navigation bar to map
+//   const mapNav = new maplibregl.NavigationControl();
+//   map.addControl(mapNav, "top-left");
+//   // add the point as marker to map
+//   const marker = new maplibregl.Marker()
+//     .setLngLat([longitude, latitude])
+//     .addTo(map);
+// }
+// document.getElementById("loc").innerHTML = `<pre>longitude: ${longitude}
+// latitude:  ${latitude}</pre>`;
 
-console.log(`Geolocation: ( lng: ${longitude}, lat: ${latitude} )`);
+// console.log(`Geolocation: ( lng: ${longitude}, lat: ${latitude} )`);
