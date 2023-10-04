@@ -17,13 +17,23 @@ displayCurrentSection();
 //init handler for hash navigation
 window.addEventListener("hashchange", displayCurrentSection);
 
+// class ReportForm {
+//   constructor(location, category, type, details, picture) {
+//     this.location = location;
+//     this.category = category;
+//     this.type = type;
+//     this.details = details;
+//     this.picture = picture;
+//   }
+// }
+
 class ReportForm {
-  constructor(location, category, type, details, picture) {
-    this.location = location;
-    this.category = category;
-    this.type = type;
-    this.details = details;
-    this.picture = picture;
+  constructor(categoryId, categoryOptionId, location, comment, images) {
+    this.categoryId = categoryId;
+    this.categoryOptionId = categoryOptionId;
+    this.location = location;    
+    this.comment = comment;
+    this.images = images;
   }
 }
 
@@ -42,9 +52,9 @@ form.addEventListener("submit", function (event) {
   const pictureInput = form.querySelector("#picture");
 
   const report = new ReportForm(
-    locationInput.value,
     categoryInput.value,
     typeInput.value,
+    locationInput.value,
     detailsInput.value,
     pictureInput.value
   );
