@@ -43,7 +43,8 @@ const form = document.getElementById("form");
 
 form.addEventListener("submit", function (event) {
   event.preventDefault();
-  const locationInput = form.querySelector("#name");
+  const locationInput = lat_lng;
+  // const locationInput = form.querySelector("#name");
   // const categoryInput = form.querySelector("#step2")
   const categoryInput = form.querySelector('input[name="category"]:checked');
   // const typeInput = form.querySelector("#step3")
@@ -54,7 +55,7 @@ form.addEventListener("submit", function (event) {
   const report = new ReportForm(
     categoryInput.value,
     typeInput.value,
-    locationInput.value,
+    locationInput,
     detailsInput.value,
     pictureInput.value
   );
@@ -69,7 +70,8 @@ form.addEventListener("submit", function (event) {
 // })
 
 function myFu() {
-  const locationInput = form.querySelector("#name");
+  const locationInput = lat_lng;
+  // const locationInput = form.querySelector("#name");
   const categoryInput = form.querySelector('input[name="category"]:checked');
   const typeInput = form.querySelector('input[name="type"]:checked');
   const detailsInput = form.querySelector("#details");
@@ -85,7 +87,8 @@ function myFu() {
     `5.Photos: <br>`;
   
   value.innerHTML =
-    ` ${locationInput.value}<br>` +
+  ` ${locationInput}<br>` +  
+  // ` ${locationInput.value}<br>` +
     ` ${categoryInput.value}<br>` +
     ` ${typeInput.value}<br>` +
     ` ${detailsInput.value}<br>` +
@@ -96,28 +99,17 @@ function confiFu6_7() {
   window.location.href = "#step7";
 }
 
-// const longitude = 236.8924;
-// const latitude = 49.22386;
+let map = L.map('map').setView([49.22386,236.8924], 15)
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(map);
 
-// showCoordOnMap(longitude, latitude);
+map.on('click',onMapClick)
 
-// function showCoordOnMap(longitude, latitude) {
-//   const map = new maplibregl.Map({
-//     container: "map",
-//     style:
-//       "https://api.maptiler.com/maps/streets/style.json?key=get_your_own_OpIi9ZULNHzrESv6T2vL",
-//     center: [longitude, latitude],
-//     zoom: 14.5,
-//   });
-//   // add navigation bar to map
-//   const mapNav = new maplibregl.NavigationControl();
-//   map.addControl(mapNav, "top-left");
-//   // add the point as marker to map
-//   const marker = new maplibregl.Marker()
-//     .setLngLat([longitude, latitude])
-//     .addTo(map);
-// }
-// document.getElementById("loc").innerHTML = `<pre>longitude: ${longitude}
-// latitude:  ${latitude}</pre>`;
+let lat_lng = ""
 
-// console.log(`Geolocation: ( lng: ${longitude}, lat: ${latitude} )`);
+function onMapClick(e){
+  lat_lng = e.latlng
+  console.log(e.latlng)
+  console.log(lat_lng)
+}

@@ -10,24 +10,54 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+    ></script>
     <title>Document</title>
   </head>
 
   <body>
-
     <nav>
       <ul>
         <li><a title="Select the location" href="#step1">1</a></li>
 
-        <li><a title="What type of hazard would you like to report?" href="#step2">2</a></li>
+        <li>
+          <a title="What type of hazard would you like to report?" href="#step2"
+            >2</a
+          >
+        </li>
 
-        <li><a title="What type of wild animal did you spot?" href="#step3">3</a></li>
+        <li>
+          <a title="What type of wild animal did you spot?" href="#step3">3</a>
+        </li>
 
-        <li><a title="Would you like to mention any further details?" href="#step4">4</a></li>
+        <li>
+          <a
+            title="Would you like to mention any further details?"
+            href="#step4"
+            >4</a
+          >
+        </li>
 
-        <li><a title="Please upload photos to help others see the reported hazard visually" href="#step5">5</a></li>
+        <li>
+          <a
+            title="Please upload photos to help others see the reported hazard visually"
+            href="#step5"
+            >5</a
+          >
+        </li>
 
-        <li><a title="Review the report before submitting." href="#step6">6</a></li>
+        <li>
+          <a title="Review the report before submitting." href="#step6">6</a>
+        </li>
 
         <li><a href="#step7">7</a></li>
       </ul>
@@ -37,9 +67,9 @@
       <form id="form">
         <section class="page" id="step1">
           <h1>1. Select the location.</h1>
-          <!-- <h1 id="loc"></h1>
-          <div id="map"></div> -->
-          
+
+          <div id="map"></div>
+
           <label>Your current location is:</label>
           <input type="text" id="name" required />
           <br />
@@ -92,13 +122,11 @@
         <section class="page" id="step6">
           <h1>6. Review the report before submitting.</h1>
           <br />
-          <!-- <div id="review"></div> -->
           <div id="lable"></div>
           <div id="value"></div>
           <br />
           <a href="#step5">Back</a>
           <input type="submit" class="submit" onClick="confiFu6_7()" />
-          
         </section>
 
         <section class="page" id="step7">
