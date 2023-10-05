@@ -1,5 +1,7 @@
+/**
+ * Page Load
+ */
 const allPages = document.querySelectorAll("section.page");
-allPages[0].style.display = "block";
 
 function displayCurrentSection(event) {
   const pageId = location.hash ? location.hash : "#step1";
@@ -16,75 +18,97 @@ displayCurrentSection();
 
 window.addEventListener("hashchange", displayCurrentSection);
 
+/**
+ * Hazard Report Form State
+ */
 class ReportForm {
-  constructor(categoryId, categoryOptionId, location, comment, images) {
-    this.categoryId = categoryId;
-    this.categoryOptionId = categoryOptionId;
-    this.location = location;
-    this.comment = comment;
-    this.images = images;
+  constructor() {
+    this.categoryId = null;
+    this.categoryOptionId = null;
+    this.location = {
+      lat: null,
+      lng: null,
+      address: null,
+    };
+    this.comment = null;
+    this.images = [];
   }
 }
 
-const form = document.getElementById("form");
+const currentReport = new ReportForm();
 
-form.addEventListener("submit", function (event) {
-  event.preventDefault();
-  const locationInput = lat_lng;
-  const categoryInput = form.querySelector('input[name="category"]:checked');
-  const typeInput = form.querySelector('input[name="type"]:checked');
-  const detailsInput = form.querySelector("#details");
-  const pictureInput = form.querySelector("#picture");
-
-  const report = new ReportForm(
-    categoryInput.value,
-    typeInput.value,
-    locationInput,
-    detailsInput.value,
-    pictureInput.value
-  );
-  console.log(report);
-});
-
-function myFu() {
-  const locationInput = lat_lng;
-  const categoryInput = form.querySelector('input[name="category"]:checked');
-  const typeInput = form.querySelector('input[name="type"]:checked');
-  const detailsInput = form.querySelector("#details");
-  const pictureInput = form.querySelector("#picture");
-  window.location.href = "#step6";
-
-  lable.innerHTML =
-    `1.Location: ` +
-    `2.Type of hazard: ` +
-    `3.Hazard: ` +
-    `4.Additional details: ` +
-    `5.Photos: `;
-
-  value.innerHTML =
-    ` ${locationInput}` +
-    ` ${categoryInput.value}` +
-    ` ${typeInput.value}` +
-    ` ${detailsInput.value}` +
-    ` ${pictureInput.value}`;
-}
-
-function confiFu6_7() {
-  window.location.href = "#step7";
-}
-
+/**
+ * Step 1: Location
+ */
 let map = L.map("map").setView([49.22386, 236.8924], 15);
 L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
   attribution:
     '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
 }).addTo(map);
 
-map.on("click", onMapClick);
+map.on("click", onSelectLocation);
 
-let lat_lng = "";
-
-function onMapClick(e) {
-  lat_lng = e.latlng;
-  console.log(e.latlng);
-  console.log(lat_lng);
+function onSelectLocation(event) {
+  currentReport.location = {
+    lat: event.latlng.lat,
+    lng: event.latlng.lng,
+    address: "Fake address", //TODO: Get address
+  };
 }
+
+/**
+ * Step 2: Category List
+ */
+document
+  .querySelectorAll('[name="categoryRadioBtn"]')
+  .forEach((categoryElement) => {
+    categoryElement.addEventListener("change", (event) => {
+      window.location.href = "#step3"; //TODO: Review this, because is hard for the user when you are using the keyboard
+
+      currentReport.categoryId = event.target.value;
+    });
+  });
+
+/**
+ * Step 3: Hazard Options List
+ */
+document
+  .querySelectorAll('[name="hazardOptionRadioBtn"]')
+  .forEach((categoryElement) => {
+    categoryElement.addEventListener("change", (event) => {
+      window.location.href = "#step4"; //TODO: Review this, because is hard for the user when you are using the keyboard
+      currentReport.categoryOptionId = event.target.value;
+    });
+  });
+
+/**
+ * Step 4: Comments
+ */
+commentInput.addEventListener("change", (event) => {
+  currentReport.comment = event.target.value;
+});
+
+/**
+ * Step 5: Images
+ * Pending
+ */
+
+
+/**
+ * Step 6: Show Confirmation
+ */
+showConfirmationBtn.addEventListener("click", () => {
+  locationOutput.innerHTML = `${currentReport.location.address} (${currentReport.location.lat},${currentReport.location.lng})`;
+  categoryOutput.innerHTML = currentReport.categoryId;
+  hazardOptionOutput.innerHTML = currentReport.categoryOptionId;
+  commentOutput.innerHTML = currentReport.comment;
+});
+
+/**
+ * Submit Form
+ */
+reportHazardForm.addEventListener("submit", function (event) {
+  event.preventDefault();
+  console.log(currentReport);
+  //TODO: Hit create hazard report endpoint
+});
