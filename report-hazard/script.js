@@ -4,7 +4,7 @@
 const allPages = document.querySelectorAll("section.page");
 
 function displayCurrentSection(event) {
-  const pageId = location.hash ? location.hash : "#step1";
+  const pageId = location.hash ? location.hash : "#select-location";
   for (let page of allPages) {
     if (pageId === "#" + page.id) {
       page.style.display = "block";
@@ -63,7 +63,7 @@ document
   .querySelectorAll('[name="categoryRadioBtn"]')
   .forEach((categoryElement) => {
     categoryElement.addEventListener("change", (event) => {
-      window.location.href = "#step3"; //TODO: Review this, because is hard for the user when you are using the keyboard
+      window.location.href = "#hazard-type"; //TODO: Review this, because is hard for the user when you are using the keyboard
 
       currentReport.categoryId = event.target.value;
     });
@@ -76,7 +76,7 @@ document
   .querySelectorAll('[name="hazardOptionRadioBtn"]')
   .forEach((categoryElement) => {
     categoryElement.addEventListener("change", (event) => {
-      window.location.href = "#step4"; //TODO: Review this, because is hard for the user when you are using the keyboard
+      window.location.href = "#additional-details"; //TODO: Review this, because is hard for the user when you are using the keyboard
       currentReport.categoryOptionId = event.target.value;
     });
   });
@@ -92,7 +92,6 @@ commentInput.addEventListener("change", (event) => {
  * Step 5: Images
  * Pending
  */
-
 
 /**
  * Step 6: Show Confirmation

@@ -11,9 +11,9 @@
 
     <script type="module" src="../js/home.js" defer></script>
 
-    <link rel="manifest" href="/manifest.json" />
+    <link rel="manifest" href="../manifest.json" />
 
-    <link rel="apple-touch-icon" href="/img/icons/icon-96x96.png" />
+    <link rel="apple-touch-icon" href="../img/icons/icon-96x96.png" />
     <meta name="apple-mobile-web-app-status-bar" content="#000000" />
 
     <meta name="theme-color" content="#000000" />
@@ -40,22 +40,26 @@
   <body>
     <nav>
       <ul>
-        <li><a title="Select the location" href="#step1">1</a></li>
+        <li><a title="Select the location" href="#select-location">1</a></li>
 
         <li>
-          <a title="What type of hazard would you like to report?" href="#step2"
+          <a
+            title="What type of hazard would you like to report?"
+            href="#hazard-category"
             >2</a
           >
         </li>
 
         <li>
-          <a title="What type of wild animal did you spot?" href="#step3">3</a>
+          <a title="What type of wild animal did you spot?" href="#hazard-type"
+            >3</a
+          >
         </li>
 
         <li>
           <a
             title="Would you like to mention any further details?"
-            href="#step4"
+            href="#additional-details"
             >4</a
           >
         </li>
@@ -63,13 +67,15 @@
         <li>
           <a
             title="Please upload photos to help others see the reported hazard visually"
-            href="#step5"
+            href="#upload-photos"
             >5</a
           >
         </li>
 
         <li>
-          <a title="Review the report before submitting." href="#step6">6</a>
+          <a title="Review the report before submitting." href="#review-report"
+            >6</a
+          >
         </li>
 
         <li><a href="#step7">7</a></li>
@@ -78,7 +84,7 @@
 
     <main>
       <form id="reportHazardForm">
-        <section id="step1" class="page">
+        <section id="select-location" class="page">
           <h1>1. Select the location.</h1>
 
           <div>
@@ -91,10 +97,10 @@
             <div id="map"></div>
           </div>
 
-          <a href="#step2">Continue</a>
+          <a href="#hazard-category">Continue</a>
         </section>
 
-        <section id="step2" class="page">
+        <section id="hazard-category" class="page">
           <h1>2. What type of hazard would you like to report?</h1>
           <!-- TODO: This categories will come from the API -->
           <div>
@@ -140,7 +146,7 @@
           </div>
         </section>
 
-        <section id="step3" class="page">
+        <section id="hazard-type" class="page">
           <h1>3. What type of wild animal did you spot?</h1>
           <!-- TODO: display label and options from the API -->
           <div>
@@ -190,17 +196,17 @@
           </div>
         </section>
 
-        <section id="step4" class="page">
+        <section id="additional-details" class="page">
           <h1>4. Would you like to mention any further details?</h1>
 
           <div>
             <textarea id="commentInput"></textarea>
           </div>
 
-          <a href="#step5">Continue</a>
+          <a href="#upload-photos">Continue</a>
         </section>
 
-        <section id="step5" class="page">
+        <section id="upload-photos" class="page">
           <h1>
             5. Please upload photos to help others see the reported hazard
             visually. <span>(Optional)</span>
@@ -224,10 +230,10 @@
             </div>
           </div>
 
-          <a href="#step6" id="showConfirmationBtn">Continue</a>
+          <a href="#review-report" id="showConfirmationBtn">Continue</a>
         </section>
 
-        <section id="step6" class="page">
+        <section id="review-report" class="page">
           <h1>6. Review the report before submitting.</h1>
 
           <div>
@@ -277,7 +283,7 @@
             </div>
           </div>
 
-          <button id="saveReportBtn" type="submit" class="submit" >
+          <button id="saveReportBtn" type="submit" class="submit">
             Submit Report
           </button>
         </section>
