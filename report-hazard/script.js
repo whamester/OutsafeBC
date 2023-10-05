@@ -37,6 +37,25 @@ class ReportForm {
 
 const currentReport = new ReportForm();
 
+// /**
+//  * Step 1: Location
+//  */
+// let map = L.map("map").setView([49.22386, 236.8924], 15);
+// L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+//   attribution:
+//     '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+// }).addTo(map);
+
+// map.on("click", onSelectLocation);
+
+// function onSelectLocation(event) {
+//   currentReport.location = {
+//     lat: event.latlng.lat,
+//     lng: event.latlng.lng,
+//     address: "Fake address", //TODO: Get address
+//   };
+// }
+
 /**
  * Step 1: Location
  */
@@ -48,13 +67,31 @@ L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
 
 map.on("click", onSelectLocation);
 
+let marketCoordenated = [49.2388545, -123.1556304];
+
+let marker = L.marker(marketCoordenated)
+  .addTo(map)
+  .bindPopup("Location selected")
+  .openPopup();
+
 function onSelectLocation(event) {
+  map.removeLayer(marker);
+  marker = L.marker([event.latlng.lat, event.latlng.lng], { draggable: true })
+    .addTo(map)
+    .bindPopup("Location selected")
+    .openPopup();
+
   currentReport.location = {
     lat: event.latlng.lat,
     lng: event.latlng.lng,
     address: "Fake address", //TODO: Get address
   };
 }
+
+map.on("geosearch_showlocation", function (result) {
+  console.log({ result });
+  L.marker([result.x, result.y]).addTo(map);
+});
 
 /**
  * Step 2: Category List
