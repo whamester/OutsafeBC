@@ -1,5 +1,8 @@
-import { api_url, google_id } from "../js/constants.js";
-import { getUserSession, setUserSession } from "../js/storage.js";
+import { API_URL, GOOGLE_ID } from "../../constants.js";
+import {
+  getUserSession,
+  setUserSession,
+} from "../../assets/helpers/storage.js";
 
 /**
  * Google Auth Setup
@@ -12,10 +15,10 @@ window.onload = function () {
   }
 
   google.accounts.id.initialize({
-    client_id: google_id,
+    client_id: GOOGLE_ID,
     callback: async (googleResponse) => {
       try {
-        const response = await fetch(`${api_url}/auth?provider=google`, {
+        const response = await fetch(`${API_URL}/auth?provider=google`, {
           method: "POST",
           body: JSON.stringify(googleResponse),
         });

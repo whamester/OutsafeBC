@@ -1,7 +1,7 @@
-export const api_url =
+export const API_URL =
   "https://enchanting-llama-6664aa.netlify.app/.netlify/functions";
 
-export const user_storage = "user";
+export const USER_STORAGE = "user";
 
-export const google_id =
+export const GOOGLE_ID =
   "914763218338-qvq8stve1sh2d2g14dcve9kacf51agt8.apps.googleusercontent.com";
