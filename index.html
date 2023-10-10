@@ -1,88 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
 
-    <link rel="stylesheet" href="./styles/variables.css" />
-    <link rel="stylesheet" href="./styles/global.css" />
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Outsafe BC</title>
+</head>
 
-    <script type="module" src="./js/home.js" defer></script>
-
-    <link rel="manifest" href="/manifest.json" />
-
-    <link rel="apple-touch-icon" href="/img/icons/icon-96x96.png" />
-    <meta name="apple-mobile-web-app-status-bar" content="#000000" />
-
-    <meta name="theme-color" content="#000000" />
-
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-      crossorigin=""
-    />
-    <!-- Make sure you put this AFTER Leaflet's CSS -->
-    <script
-      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-      crossorigin=""
-    ></script>
-  </head>
-
-  <body>
-    <h1>PWA Home</h1>
-    <span id="username"></span>
-    <button id="logout-btn">Log Out</button>
-    <div id="map"></div>
-  </body>
+<body>
   <script>
-    const map = L.map("map").setView([49.2244201, -123.1114554], 13);
-
-    const tiles = L.tileLayer(
-      "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
-      {
-        maxZoom: 19,
-        attribution:
-          '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-      }
-    ).addTo(map);
-
-    const marker = L.marker([49.2388545, -123.1556304])
-      .addTo(map)
-      .bindPopup("<b>Hello world!</b><br />I am a popup.")
-      .openPopup();
-
-    const circle = L.circle([49.252352, -123.123705], {
-      color: "red",
-      fillColor: "#f03",
-      fillOpacity: 0.5,
-      radius: 1000,
-    })
-      .addTo(map)
-      .bindPopup("I am a circle.");
-
-    const polygon = L.polygon([
-      [49.240013, -123.096761],
-      [49.240122, -123.091096],
-      [49.232054, -123.094368],
-    ])
-      .addTo(map)
-      .bindPopup("I am a polygon.");
-
-    const popup = L.popup()
-      .setLatLng([49.2388545, -123.1556304])
-      .setContent("I am a standalone popup.")
-      .openOn(map);
-
-    function onMapClick(e) {
-      popup
-        .setLatLng(e.latlng)
-        .setContent(`You clicked the map at ${e.latlng.toString()}`)
-        .openOn(map);
-    }
-
-    map.on("click", onMapClick);
+    // redirect user to view hazard screen
+    window.location.replace("/pages/home");
   </script>
+</body>
+
 </html>
