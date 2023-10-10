@@ -1,9 +1,33 @@
-/**
- * Page Load
- */
-const allPages = document.querySelectorAll("section.page");
+//Models
+import ReportForm from "../../assets/models/ReportForm.js";
+import Map from "../../assets/models/Map.js";
 
-function displayCurrentSection(event) {
+//Variable Declaration
+const currentReport = new ReportForm();
+let position = Map.DEFAULT_LOCATION;
+let map = null;
+
+/**
+ * Page Init
+ */
+
+window.onload = function () {
+  displayCurrentSection();
+  window.addEventListener("hashchange", displayCurrentSection);
+
+  // Loads the map even if the user has not accepted the permissions
+  map = new Map(position);
+  map.setMarkerOnMap(position.latitude, position.longitude, "You", {
+    draggable: true,
+  }); //TODO: Consult with design the message of the marker
+
+  //Override the current location if the user accepts the permissions
+  loadGeolocation();
+};
+
+const displayCurrentSection = () => {
+  const allPages = document.querySelectorAll("section.page");
+
   const pageId = location.hash ? location.hash : "#select-location";
   for (let page of allPages) {
     if (pageId === "#" + page.id) {
@@ -12,86 +36,35 @@ function displayCurrentSection(event) {
       page.style.display = "none";
     }
   }
-  return;
-}
-displayCurrentSection();
+};
 
-window.addEventListener("hashchange", displayCurrentSection);
-
-/**
- * Hazard Report Form State
- */
-class ReportForm {
-  constructor() {
-    this.categoryId = null;
-    this.categoryOptionId = null;
-    this.location = {
-      lat: null,
-      lng: null,
-      address: null,
-    };
-    this.comment = null;
-    this.images = [];
-  }
-}
-
-const currentReport = new ReportForm();
-
-// /**
-//  * Step 1: Location
-//  */
-// let map = L.map("map").setView([49.22386, 236.8924], 15);
-// L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-//   attribution:
-//     '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-// }).addTo(map);
-
-// map.on("click", onSelectLocation);
-
-// function onSelectLocation(event) {
-//   currentReport.location = {
-//     lat: event.latlng.lat,
-//     lng: event.latlng.lng,
-//     address: "Fake address", //TODO: Get address
-//   };
-// }
+const loadGeolocation = async () => {
+  position = await Map.getCurrentLocation();
+  map.setMarkerOnMap(position.latitude, position.longitude, "You", {
+    draggable: true,
+  });
+};
 
 /**
  * Step 1: Location
  */
-let map = L.map("map").setView([49.22386, 236.8924], 15);
-L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-  attribution:
-    '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-}).addTo(map);
 
-map.on("click", onSelectLocation);
+if (map) {
+  map.on("click", onSelectLocation);
+}
 
-let marketCoordenated = [49.2388545, -123.1556304];
-
-let marker = L.marker(marketCoordenated)
-  .addTo(map)
-  .bindPopup("Location selected")
-  .openPopup();
-
-function onSelectLocation(event) {
+const onSelectLocation = (event) => {
   map.removeLayer(marker);
-  marker = L.marker([event.latlng.lat, event.latlng.lng], { draggable: true })
-    .addTo(map)
-    .bindPopup("Location selected")
-    .openPopup();
+  map.setMarkerOnMap(event.latlng.lat, event.latlng.lng, "Location selected", {
+    draggable: true,
+  });
 
   currentReport.location = {
     lat: event.latlng.lat,
     lng: event.latlng.lng,
     address: "Fake address", //TODO: Get address
   };
-}
-
-map.on("geosearch_showlocation", function (result) {
-  console.log({ result });
-  L.marker([result.x, result.y]).addTo(map);
-});
+};
 
 /**
  * Step 2: Category List

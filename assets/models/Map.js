@@ -26,7 +26,7 @@ class Map {
     this.currentMarker = null;
   }
 
-  setMarkerOnMap(latitude, longitude, message, icon) {
+  setMarkerOnMap(latitude, longitude, message, params) {
     if (!this.map) {
       this.map = L.map(Map.MAP_ID, { zoomControl: false }).setView(
         [latitude, longitude],
@@ -38,7 +38,8 @@ class Map {
     }
 
     const marker = L.marker([latitude, longitude], {
-      icon: icon ?? Map.pinIcon,
+      ...params,
+      icon: params?.icon ?? Map.pinIcon,
     })
       .bindPopup(message)
       .addTo(this.map);
