@@ -1,6 +1,6 @@
 // injects the HTML string into the DOM
-const injectHTML = (componentArray) => {
-  const root = document.getElementById("root");
+const injectHTML = (componentArray, id) => {
+  const root = document.getElementById(id ?? "root");
   root.insertAdjacentHTML(
     'beforeend', 
     componentArray.map(component => {

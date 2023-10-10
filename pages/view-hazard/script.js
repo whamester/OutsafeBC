@@ -15,4 +15,3 @@ const position = await Map.getCurrentLocation();
 new Map(position);
 // pin users location on the map
 const marker = Map.setMarkerOnMap(position.latitude, position.longitude, "You");
-
