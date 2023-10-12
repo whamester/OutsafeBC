@@ -25,16 +25,16 @@
 }
 
 #alert.success {
-	border: 1px solid var(--warning-success-500-base, #10973d);
-	background: var(--warning-success-50, #e7f5ec);
+	border: 1px solid var(--success);
+	background: var(--success-50);
 }
 
 #alert.warning {
-	border: 1px solid var(--warning-warning-500-base, #f3a218);
-	background: var(--warning-warning-50, #fef6e8);
+	border: 1px solid var(--warning);
+	background: var(--warning-50);
 }
 
 #alert.error {
-	border: 1px solid var(--warning-error-500-base, #d42621);
-	background: var(--warning-error-50, #fbe9e9);
+	border: 1px solid var(--error);
+	background: var(--error-50);
 }
