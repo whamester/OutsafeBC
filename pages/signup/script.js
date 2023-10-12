@@ -54,7 +54,7 @@ document
       const email = document.getElementById("email-input").value;
       const password = document.getElementById("password-input").value;
 
-      const response = await fetch(`${api_url}/user?provider=password`, {
+      const response = await fetch(`${API_URL}/user?provider=password`, {
         method: "POST",
         body: JSON.stringify({
           email,
