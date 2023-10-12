@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- WPA -->
+    <link rel="manifest" href="../../manifest.json">
+    <link rel="apple-touch-icon" href="../../assets/css/img/icons/icon-96x96.png">
+    <meta name="apple-mobile-web-app-status-bar" content="#000000">
+    <meta name="theme-color" content="#000000">
+
+    <!-- leaflet CSS for maps -->
+    <!-- <link rel="stylesheet" href="../../modules/leaflet/leaflet.css"> -->
+    <!-- leaflet JS for maps -->
+    <!-- <script src="../../modules/leaflet/leaflet.js"></script> -->
+    <!-- Firebase JS -->
+    <script src="https://www.gstatic.com/firebasejs/ui/6.0.1/firebase-ui-auth.js"></script>
+    <!-- Firebase CSS -->
+    <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/6.0.1/firebase-ui-auth.css" />
+    <!-- Bootstrap JS -->
+    <script src="../../modules/bootstrap/js/bootstrap.min.js"></script>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="../../modules/bootstrap/css/bootstrap.min.css">
+    <!-- Variables -->
+    <link rel="stylesheet" href="../../assets/css/variables.css">
+    <!-- Global Styles -->
+    <link rel="stylesheet" href="../../assets/css/global.css">
+    <!-- Feature Styles -->
+    <link rel="stylesheet" href="./style.css">
+    <!-- Global JS -->
+    <script type="module" src="../../global.js" defer></script>
+    <!-- Feature JS -->
+    <script type="module" src="./script.js" defer></script>
+
+    <title>Sign Up</title>
+</head>
+
+<body>
+    <script src="https://accounts.google.com/gsi/client" async></script>
+
+    <h1>Sign Up</h1>
+    <form id="signup-form">
+
+        <label for="email-input">Email</label>
+        <input id="email-input" autocomplete='username' type="email" required>
+
+        <label for="password-input">Password</label>
+        <input id="password-input" type="password" required>
+
+        <button type="submit">Create Acccount</button>
+    </form>
+    <span>or</span>
+    <span>Signup with:</span>
+    <div id="google-button"></div>
+
+    <div>
+        Already have an account? <a href="/login/index.html" aria-label="Link to login">Log in</a>
+    </div>
+</body>
+
+</html>
