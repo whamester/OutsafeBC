@@ -1,0 +1,19 @@
+@import url(./_fonts.css);
+@import url(./_variables.css);
+
+:root {
+	font-size: var(--font-size-base);
+	width: 100%;
+	height: 100%;
+}
+
+body {
+	width: 100%;
+	height: 100%;
+	font-family: 'Instrument Sans', sans-serif;
+}
+
+.leaflet-tile-pane {
+	-webkit-filter: grayscale(100%);
+	filter: grayscale(100%);
+}
