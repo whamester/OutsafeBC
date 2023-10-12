@@ -1,5 +1,5 @@
 //Show user information
-import { getUserSession, setUserSession } from "../js/storage.js";
+import { getUserSession, setUserSession } from "../../assets/helpers/storage.js";
 
 const user = getUserSession();
 
