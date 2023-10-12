@@ -27,6 +27,6 @@ Working with a feature structure means that every feature folder will have the j
 - js
   - global.js (To have some generic logic or settings, also all the js needed for the index.html page)
 - styles
-  - variables.css (all files should have the variables at the beginning)
-  - global.css (all files should have this styles)
+  - \_variables.css (imported inside \_global.css)
+  - \_global.css (all files should have this styles)
   - [component].css (to avoid large css files and keep the classes organized we will create one file per component and import the component css file into the feature css file)
