@@ -8,11 +8,10 @@ class AlertPopup {
 
 	constructor() {
 		const alert = `
-        <div id="alert" class="d-none">
-            <p id="alert-message"></p>
-        </div>
-
-    `
+			<div id="alert" class="d-none">
+				<p id="alert-message"></p>
+			</div>
+		`
 
 		const body = document.getElementsByTagName('body')?.[0]
 
