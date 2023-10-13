@@ -1,224 +1,298 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- WPA -->
-  <link rel="manifest" href="../../manifest.json">
-  <link rel="apple-touch-icon" href="../../assets/css/img/icons/icon-96x96.png">
-  <meta name="apple-mobile-web-app-status-bar" content="#000000">
-  <meta name="theme-color" content="#000000">
+    <!-- WPA -->
+    <link rel="manifest" href="../../manifest.json" />
+    <link
+      rel="apple-touch-icon"
+      href="../../assets/css/img/icons/icon-96x96.png"
+    />
+    <meta name="apple-mobile-web-app-status-bar" content="#000000" />
+    <meta name="theme-color" content="#000000" />
 
-  <!-- leaflet CSS for maps -->
-  <link rel="stylesheet" href="../../modules/leaflet/leaflet.css">
-  <!-- leaflet JS for maps -->
-  <script src="../../modules/leaflet/leaflet.js"></script>
-  <!-- Bootstrap JS -->
-  <script src="../../modules/bootstrap/js/bootstrap.min.js"></script>
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="../../modules/bootstrap/css/bootstrap.min.css">
-  <!-- Variables -->
-  <link rel="stylesheet" href="../../assets/css/variables.css">
-  <!-- Global Styles -->
-  <link rel="stylesheet" href="../../assets/css/global.css">
-  <!-- Feature Styles -->
-  <link rel="stylesheet" href="./style.css">
-  <!-- Global JS -->
-  <script type="module" src="../../global.js" defer></script>
-  <!-- Feature JS -->
-  <script type="module" src="./script.js" defer></script>
+    <!-- leaflet CSS for maps -->
+    <link rel="stylesheet" href="../../modules/leaflet/leaflet.css" />
+    <!-- leaflet JS for maps -->
+    <script src="../../modules/leaflet/leaflet.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="../../modules/bootstrap/js/bootstrap.min.js"></script>
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="../../modules/bootstrap/css/bootstrap.min.css"
+    />
+    <!-- Variables -->
+    <link rel="stylesheet" href="../../assets/css/variables.css" />
+    <!-- Global Styles -->
+    <link rel="stylesheet" href="../../assets/css/global.css" />
+    <!-- Feature Styles -->
+    <link rel="stylesheet" href="./style.css" />
+    <!-- Global JS -->
+    <script type="module" src="../../global.js" defer></script>
+    <!-- Feature JS -->
+    <script type="module" src="./script.js" defer></script>
 
-  <title>Report Hazard</title>
-</head>
+    <title>Report Hazard</title>
+  </head>
 
-<body>
-  <nav>
-    <ul>
-      <li><a title="Select the location" href="#select-location">Select Location</a></li>
+  <body>
+    <nav>
+      <ul>
+        <li>
+          <a title="Select the location" href="#select-location"
+            >Select Location</a
+          >
+        </li>
 
-      <li>
-        <a title="What type of hazard would you like to report?" href="#hazard-category">Hazard Category</a>
-      </li>
+        <li>
+          <a
+            title="What type of hazard would you like to report?"
+            href="#hazard-category"
+            >Hazard Category</a
+          >
+        </li>
 
-      <li>
-        <a title="What type of wild animal did you spot?" href="#hazard-type">Hazard Type</a>
-      </li>
+        <li>
+          <a title="What type of wild animal did you spot?" href="#hazard-type"
+            >Hazard Type</a
+          >
+        </li>
 
-      <li>
-        <a title="Would you like to mention any further details?" href="#additional-details">Additional Details</a>
-      </li>
+        <li>
+          <a
+            title="Would you like to mention any further details?"
+            href="#additional-details"
+            >Additional Details</a
+          >
+        </li>
 
-      <li>
-        <a title="Please upload photos to help others see the reported hazard visually" href="#upload-photos">Upload
-          Photos</a>
-      </li>
+        <li>
+          <a
+            title="Please upload photos to help others see the reported hazard visually"
+            href="#upload-photos"
+            >Upload Photos</a
+          >
+        </li>
 
-      <li>
-        <a title="Review the report before submitting." href="#review-report">Review Report</a>
-      </li>
-    </ul>
-  </nav>
+        <li>
+          <a title="Review the report before submitting." href="#review-report"
+            >Review Report</a
+          >
+        </li>
+      </ul>
+    </nav>
 
-  <main>
-    <form id="reportHazardForm">
-      <section id="select-location" class="page">
-        <h1>1. Select the location.</h1>
-
-        <div>
-          <div>
-            <label>Your current location is:</label>
-            <input type="text" id="locationAddressInput" required />
-          </div>
-
-          <p>You can also move the pin on the map to set your location.</p>
-          <div id="map"></div>
-        </div>
-
-        <a href="#hazard-category">Continue</a>
-      </section>
-
-      <section id="hazard-category" class="page">
-        <h1>2. What type of hazard would you like to report?</h1>
-        <!-- TODO: This categories will come from the API -->
-        <div>
-          <div>
-            <input type="radio" name="categoryRadioBtn" id="category-1" value="wildlife" />
-            <label for="category-1">Wildlife</label>
-          </div>
-
-          <div>
-            <input type="radio" name="categoryRadioBtn" id="category-2" value="weather" />
-            <label for="category-2">Weather</label>
-          </div>
+    <main>
+      <form id="reportHazardForm">
+        <section id="select-location" class="page">
+          <h1>1. Select the location.</h1>
 
           <div>
-            <input type="radio" name="categoryRadioBtn" value="infrastructure" id="category-3" />
-            <label for="category-3">Infrastructure</label>
+            <div>
+              <label>Your current location is:</label>
+              <input type="text" id="locationAddressInput" required />
+            </div>
+
+            <p>You can also move the pin on the map to set your location.</p>
+            <div id="map"></div>
           </div>
+
+          <a href="#hazard-category">Continue</a>
+        </section>
+
+        <section id="hazard-category" class="page">
+          <h1>2. What type of hazard would you like to report?</h1>
 
           <div>
-            <input type="radio" name="categoryRadioBtn" value="campsite" id="category-4" />
-            <label for="category-4">Campsite</label>
+            <div>
+              <input
+                type="radio"
+                name="categoryRadioBtn"
+                id="category-1"
+                value="wildlife"
+              />
+              <label for="category-1" id="category1"></label>
+            </div>
+
+            <div>
+              <input
+                type="radio"
+                name="categoryRadioBtn"
+                id="category-2"
+                value="weather"
+              />
+              <label for="category-2" id="category2"></label>
+            </div>
+
+            <div>
+              <input
+                type="radio"
+                name="categoryRadioBtn"
+                value="infrastructure"
+                id="category-3"
+              />
+              <label for="category-3" id="category3"></label>
+            </div>
+
+            <div>
+              <input
+                type="radio"
+                name="categoryRadioBtn"
+                value="campsite"
+                id="category-4"
+              />
+              <label for="category-4" id="category4"></label>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <section id="hazard-type" class="page">
-        <h1>3. What type of wild animal did you spot?</h1>
-        <!-- TODO: display label and options from the API -->
-        <div>
-          <input id="option-1" type="radio" name="hazardOptionRadioBtn" value="bear" />
-          <label for="option-1">Bear</label>
-        </div>
-        <div>
-          <input id="option-2" type="radio" name="hazardOptionRadioBtn" value="coyote" />
-          <label for="option-2">Coyote</label>
-        </div>
-        <div>
-          <input id="option-3" type="radio" name="hazardOptionRadioBtn" value="coguar" />
-          <label for="option-3">Coguar</label>
-        </div>
-        <div>
-          <input id="option-4" type="radio" name="hazardOptionRadioBtn" value="elk" />
-          <label for="option-4">Elk</label>
-        </div>
-        <div>
-          <input id="option-5" type="radio" name="hazardOptionRadioBtn" value="raccoon" />
-          <label for="option-5">Raccoon</label>
-        </div>
-      </section>
+        <section id="hazard-type" class="page">
+          <h1>3. What type of wild animal did you spot?</h1>
+          <!-- TODO: display label and options from the API -->
+          <div>
+            <input
+              id="option-1"
+              type="radio"
+              name="hazardOptionRadioBtn"
+              value="bear"
+            />
+            <label for="option-1">Bear</label>
+          </div>
+          <div>
+            <input
+              id="option-2"
+              type="radio"
+              name="hazardOptionRadioBtn"
+              value="coyote"
+            />
+            <label for="option-2">Coyote</label>
+          </div>
+          <div>
+            <input
+              id="option-3"
+              type="radio"
+              name="hazardOptionRadioBtn"
+              value="coguar"
+            />
+            <label for="option-3">Coguar</label>
+          </div>
+          <div>
+            <input
+              id="option-4"
+              type="radio"
+              name="hazardOptionRadioBtn"
+              value="elk"
+            />
+            <label for="option-4">Elk</label>
+          </div>
+          <div>
+            <input
+              id="option-5"
+              type="radio"
+              name="hazardOptionRadioBtn"
+              value="raccoon"
+            />
+            <label for="option-5">Raccoon</label>
+          </div>
+        </section>
 
-      <section id="additional-details" class="page">
-        <h1>4. Would you like to mention any further details?</h1>
+        <section id="additional-details" class="page">
+          <h1>4. Would you like to mention any further details?</h1>
 
-        <div>
-          <textarea id="commentInput"></textarea>
-        </div>
+          <div>
+            <textarea id="commentInput"></textarea>
+          </div>
 
-        <a href="#upload-photos">Continue</a>
-      </section>
+          <a href="#upload-photos">Continue</a>
+        </section>
 
-      <section id="upload-photos" class="page">
-        <h1>
-          5. Please upload photos to help others see the reported hazard
-          visually. <span>(Optional)</span>
-        </h1>
+        <section id="upload-photos" class="page">
+          <h1>
+            5. Please upload photos to help others see the reported hazard
+            visually. <span>(Optional)</span>
+          </h1>
 
-        <div>
-          <button id="takePictureBtn" type="button">
-            <span>Take a picture</span>
+          <div>
+            <button id="takePictureBtn" type="button">
+              <span>Take a picture</span>
+            </button>
+            <!-- TODO// Add icon here -->
+            <p>Take a picture</p>
+            <p>At the hazard site? Click a picture to add in the report.</p>
+
+            <div id="dragAndDropArea">
+              <input
+                id="uploadPictureInput"
+                type="file"
+                accept="image/jpeg, image/jpg, image/png"
+              />
+              <span>File size limit: 10 MB</span>
+            </div>
+          </div>
+
+          <a href="#review-report" id="showConfirmationBtn">Continue</a>
+        </section>
+
+        <section id="review-report" class="page">
+          <h1>6. Review the report before submitting.</h1>
+
+          <div>
+            <div>
+              <p>Location:</p>
+
+              <div>
+                <p id="locationOutput"></p>
+                <button>Edit</button>
+              </div>
+            </div>
+
+            <div>
+              <p>Type of hazard::</p>
+
+              <div>
+                <p id="categoryOutput"></p>
+                <button>Edit</button>
+              </div>
+            </div>
+
+            <div>
+              <p>Hazard:</p>
+
+              <div>
+                <p id="hazardOptionOutput"></p>
+                <button>Edit</button>
+              </div>
+            </div>
+
+            <div>
+              <p>Additional details:</p>
+
+              <div>
+                <p id="commentOutput"></p>
+                <button>Edit</button>
+              </div>
+            </div>
+
+            <div>
+              <p>Photos:</p>
+
+              <div>
+                <p id="imagesOutput"></p>
+                <button>Edit</button>
+              </div>
+            </div>
+          </div>
+
+          <button id="saveReportBtn" type="submit" class="submit">
+            Submit Report
           </button>
-          <!-- TODO// Add icon here -->
-          <p>Take a picture</p>
-          <p>At the hazard site? Click a picture to add in the report.</p>
-
-          <div id="dragAndDropArea">
-            <input id="uploadPictureInput" type="file" accept="image/jpeg, image/jpg, image/png" />
-            <span>File size limit: 10 MB</span>
-          </div>
-        </div>
-
-        <a href="#review-report" id="showConfirmationBtn">Continue</a>
-      </section>
-
-      <section id="review-report" class="page">
-        <h1>6. Review the report before submitting.</h1>
-
-        <div>
-          <div>
-            <p>Location:</p>
-
-            <div>
-              <p id="locationOutput"></p>
-              <button>Edit</button>
-            </div>
-          </div>
-
-          <div>
-            <p>Type of hazard::</p>
-
-            <div>
-              <p id="categoryOutput"></p>
-              <button>Edit</button>
-            </div>
-          </div>
-
-          <div>
-            <p>Hazard:</p>
-
-            <div>
-              <p id="hazardOptionOutput"></p>
-              <button>Edit</button>
-            </div>
-          </div>
-
-          <div>
-            <p>Additional details:</p>
-
-            <div>
-              <p id="commentOutput"></p>
-              <button>Edit</button>
-            </div>
-          </div>
-
-          <div>
-            <p>Photos:</p>
-
-            <div>
-              <p id="imagesOutput"></p>
-              <button>Edit</button>
-            </div>
-          </div>
-        </div>
-
-        <button id="saveReportBtn" type="submit" class="submit">
-          Submit Report
-        </button>
-      </section>
-    </form>
-  </main>
-</body>
+        </section>
+      </form>
+    </main>
+  </body>
 
 </html>

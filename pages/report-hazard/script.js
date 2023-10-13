@@ -69,11 +69,27 @@ const onSelectLocation = (event) => {
 /**
  * Step 2: Category List
  */
+
+async function getCategory() {
+  const baseURL =
+    "https://enchanting-llama-6664aa.netlify.app/.netlify/functions/hazard-category";
+
+  let res = await fetch(baseURL);
+  let data = await res.json();
+
+  for (let i = 0; i < data.data.length; i++) {
+    catego = data.data[i].name;
+    var catego = document.getElementById("category" + (i + 1));
+    catego.innerHTML = data.data[i].name;
+  }
+}
+getCategory();
+
 document
   .querySelectorAll('[name="categoryRadioBtn"]')
   .forEach((categoryElement) => {
     categoryElement.addEventListener("change", (event) => {
-      window.location.href = "#hazard-type"; //TODO: Review this, because is hard for the user when you are using the keyboard
+      window.location.href = "#hazard-type";
 
       currentReport.categoryId = event.target.value;
     });
@@ -86,7 +102,7 @@ document
   .querySelectorAll('[name="hazardOptionRadioBtn"]')
   .forEach((categoryElement) => {
     categoryElement.addEventListener("change", (event) => {
-      window.location.href = "#additional-details"; //TODO: Review this, because is hard for the user when you are using the keyboard
+      window.location.href = "#additional-details";
       currentReport.categoryOptionId = event.target.value;
     });
   });
