@@ -44,12 +44,13 @@
     <h2>Your photo</h2>
     <p>This will be displayed on your profile.</p>
     <img src="#" alt="#" id="profilePhoto" />
-    <!-- change label css to look like button -->
-    <label for="changeProfilePhotoBtn">Change profile photo</label>
-    <!-- hide input field in css -->
-    <input id="changeProfilePhotoBtn" type="file" accept="image/jpeg, image/jpg, image/png" />
 
-    <button type="submit" id="saveProfileInfoBtn" form="profileForm">Save</button>
+    <div id="fileDropWrapper"><p>Drop your image here, or click to browse</p>
+    </div>
+
+    <button type="submit" id="saveProfileInfoBtn" form="profileForm">
+      Save
+    </button>
   </section>
   <section id="settings">
     <h1>Settings</h1>
@@ -58,8 +59,16 @@
     <div class="form-check form-switch">
       <img src="#" alt="#" />
       <!-- icon -->
-      <label class="form-check-label" for="pushNotificationSwitch">Push Notifications</label>
-      <input class="form-check-input" type="checkbox" role="switch" id="pushNotificationSwitch" checked />
+      <label class="form-check-label" for="pushNotificationSwitch"
+        >Push Notifications</label
+      >
+      <input
+        class="form-check-input"
+        type="checkbox"
+        role="switch"
+        id="pushNotificationSwitch"
+        checked
+      />
     </div>
     <div id="changePwPopup">
       <form id="changePwForm">
