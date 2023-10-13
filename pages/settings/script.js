@@ -21,7 +21,8 @@ let userName = user?.name
 let userEmail = user?.email
 let userID = user?.id
 
-saveProfileInfoBtn.addEventListener('click', () => {
+saveProfileInfoBtn.addEventListener('click', (e) => {
+	e.preventDefault()
 	userName = document.getElementById('name').value
 	userEmail = document.getElementById('email').value
 	user.name = userName
