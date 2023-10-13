@@ -29,7 +29,6 @@ saveProfileInfoBtn.addEventListener('click', () => {
 	setUserSession(user)
 	showProfilePic()
 	saveUserInfo()
-	console.log(`${API_URL}/user?id=${userID}`)
 })
 
 // Save user information
@@ -39,6 +38,9 @@ async function saveUserInfo() {
 
 		const response = await fetch(`${API_URL}/user?id=${userID}`, {
 			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/json',
+			},
 			body: JSON.stringify({
 				name,
 			}),
@@ -46,7 +48,7 @@ async function saveUserInfo() {
 		const result = await response.json()
 		console.log('success', result)
 	} catch (error) {
-		console.error('error', error)
+		console.log('error', error)
 	}
 }
 
