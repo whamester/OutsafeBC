@@ -128,9 +128,34 @@ deleteAccountNoBtn.addEventListener('click', toggleDelModal)
 
 // Update settings
 
+// Check permission status
+if ('Notification' in window) {
+	navigator.permissions
+		.query({ name: 'notifications' })
+		.then((notificationPermissionStatus) => {
+			if (notificationPermissionStatus.state !== 'granted') {
+				console.log('Push Notification permissions are not granted')
+			}
+		})
+} else {
+	console.log('Push notifications are not supported in this browser.')
+}
+
+if ('geolocation' in navigator) {
+	navigator.permissions
+		.query({ name: 'geolocation' })
+		.then((geolocationPermissionStatus) => {
+			if (geolocationPermissionStatus.state !== 'granted') {
+				console.log('Geolocation permissions are not granted')
+			}
+		})
+} else {
+	console.log('Geolocation is not supported in this browser.')
+}
+
 // Check status of push notification setting
 
-async function getNotificationSettings (){
+async function getNotificationSettings() {
 	const response = await fetch(`${API_URL}/notification?user_id=${userID}`)
 	const result = await response.json()
 	let status = result.data.is_enabled
@@ -140,10 +165,9 @@ async function getNotificationSettings (){
 	} else {
 		pushNotificationSwitch.checked = false
 	}
-
 }
 
-getNotificationSettings ()
+getNotificationSettings()
 
 // Toggle push notification setting
 
