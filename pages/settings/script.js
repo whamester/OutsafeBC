@@ -3,6 +3,12 @@ import { getUserSession, setUserSession } from '../../assets/helpers/storage.js'
 import { API_URL } from '../../constants.js'
 
 const user = getUserSession()
+const dropArea = document.getElementById('dropArea')
+const inputFile = document.getElementById('inputImage')
+let userName = user?.name
+let userEmail = user?.email
+let userID = user?.id
+let picture
 
 function showUserInfo() {
 	if (user) {
@@ -17,9 +23,6 @@ function showUserInfo() {
 showUserInfo()
 
 // Change user information
-let userName = user?.name
-let userEmail = user?.email
-let userID = user?.id
 
 saveProfileInfoBtn.addEventListener('click', (e) => {
 	e.preventDefault()
@@ -75,9 +78,6 @@ function showProfilePic() {
 
 showProfilePic()
 
-const dropArea = document.getElementById('dropArea')
-const inputFile = document.getElementById('inputImage')
-var picture
 
 inputFile.addEventListener('change', loadImage)
 
