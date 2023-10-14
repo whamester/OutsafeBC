@@ -30,8 +30,7 @@ saveProfileInfoBtn.addEventListener('click', (e) => {
 	userEmail = document.getElementById('email').value
 	user.name = userName
 	user.email = userEmail
-	setUserSession(user)
-	// showProfilePic()
+
 	saveUserInfo()
 	saveProfilePicture()
 })
@@ -51,6 +50,7 @@ async function saveUserInfo() {
 			}),
 		})
 		const result = await response.json()
+		setUserSession(user)
 		console.log('user name updated succesfully', result)
 	} catch (error) {
 		console.log('user name error', error)
@@ -77,7 +77,6 @@ function showProfilePic() {
 }
 
 showProfilePic()
-
 
 inputFile.addEventListener('change', loadImage)
 
