@@ -1,0 +1,11 @@
+@import url(./_fonts.css);
+@import url(./_variables.css);
+
+body {
+	font-family: 'Instrument Sans', sans-serif;
+}
+
+.leaflet-tile-pane {
+	-webkit-filter: grayscale(100%);
+	filter: grayscale(100%);
+}
