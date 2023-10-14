@@ -1,4 +1,3 @@
-//Show user information
 import { getUserSession, setUserSession } from '../../assets/helpers/storage.js'
 import { API_URL } from '../../constants.js'
 
@@ -10,6 +9,7 @@ let userEmail = user?.email
 let userID = user?.id
 let picture
 
+//Show user information
 function showUserInfo() {
 	if (user) {
 		document.getElementById('name').setAttribute('value', user?.name)
@@ -23,7 +23,6 @@ function showUserInfo() {
 showUserInfo()
 
 // Change user information
-
 saveProfileInfoBtn.addEventListener('click', (e) => {
 	e.preventDefault()
 	userName = document.getElementById('name').value
@@ -59,24 +58,20 @@ async function saveUserInfo() {
 
 // Change password
 function togglePwModal() {
-	const pwModal = changePwPopup.style
+	const pwModal = resetPwPopup.style
 	pwModal.display = pwModal.display === 'block' ? 'none' : 'block'
 }
 
-changePwBtn.addEventListener('click', togglePwModal)
-
-changePwSaveBtn.addEventListener('click', togglePwModal)
+resetPwBtn.addEventListener('click', togglePwModal)
+resetPwSaveBtn.addEventListener('click', togglePwModal)
+resetPwCanelBtn.addEventListener('click', togglePwModal)
 
 // Profile photo
-function showProfilePic() {
-	if (user && user.photo) {
-		profilePhoto.setAttribute('src', user?.photo)
-	} else {
-		profilePhoto.setAttribute('src', '#')
-	}
+function showProfilePic(url = '#') {
+	profilePhoto.setAttribute('src', url)
 }
 
-showProfilePic()
+showProfilePic(user?.photo)
 
 inputFile.addEventListener('change', loadImage)
 
@@ -109,7 +104,7 @@ async function saveProfilePicture() {
 		})
 		const result = await response.json()
 		console.log('picture upload success', result)
-		// get image url from API response and set it to user?.photo
+		// TODO: get image url from API response and set it to user?.photo
 	} catch (error) {
 		console.log('picture upload error', error)
 	}
@@ -126,7 +121,6 @@ deleteAccountBtn.addEventListener('click', toggleDelModal)
 deleteAccountNoBtn.addEventListener('click', toggleDelModal)
 
 // Update settings
-
 // Check permission status
 if ('Notification' in window) {
 	navigator.permissions
@@ -159,7 +153,6 @@ if ('geolocation' in navigator) {
 }
 
 // Check status of push notification setting
-
 async function getNotificationSettings() {
 	const response = await fetch(`${API_URL}/notification?user_id=${userID}`)
 	const result = await response.json()
@@ -175,7 +168,6 @@ async function getNotificationSettings() {
 getNotificationSettings()
 
 // Toggle push notification setting
-
 async function setNotificationSettings() {
 	let state
 	if (pushNotificationSwitch.checked) {
