@@ -134,7 +134,10 @@ if ('Notification' in window) {
 		.query({ name: 'notifications' })
 		.then((notificationPermissionStatus) => {
 			if (notificationPermissionStatus.state !== 'granted') {
-				console.log('Push Notification permissions are not granted')
+				const permissionStatus = document.getElementById('permissionStatus')
+				const pElement = document.createElement('p')
+				pElement.textContent = 'Push Notification permissions are not granted'
+				permissionStatus.appendChild(pElement)
 			}
 		})
 } else {
@@ -146,7 +149,10 @@ if ('geolocation' in navigator) {
 		.query({ name: 'geolocation' })
 		.then((geolocationPermissionStatus) => {
 			if (geolocationPermissionStatus.state !== 'granted') {
-				console.log('Geolocation permissions are not granted')
+				const permissionStatus = document.getElementById('permissionStatus')
+				const pElement = document.createElement('p')
+				pElement.textContent = 'Geolocation permissions are not granted'
+				permissionStatus.appendChild(pElement)
 			}
 		})
 } else {
