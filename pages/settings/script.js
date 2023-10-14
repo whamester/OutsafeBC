@@ -19,15 +19,40 @@ showUserInfo()
 // Change user information
 let userName = user?.name
 let userEmail = user?.email
+let userID = user?.id
 
-saveProfileInfoBtn.addEventListener('click', () => {
+saveProfileInfoBtn.addEventListener('click', (e) => {
+	e.preventDefault()
 	userName = document.getElementById('name').value
-	user.name = userName
 	userEmail = document.getElementById('email').value
+	user.name = userName
 	user.email = userEmail
 	setUserSession(user)
-	showProfilePic()
+	// showProfilePic()
+	saveUserInfo()
+	saveProfilePicture()
 })
+
+// Save user information
+async function saveUserInfo() {
+	try {
+		const name = document.getElementById('name').value
+
+		const response = await fetch(`${API_URL}/user?id=${userID}`, {
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				name,
+			}),
+		})
+		const result = await response.json()
+		console.log('user name updated succesfully', result)
+	} catch (error) {
+		console.log('user name error', error)
+	}
+}
 
 // Change password
 function togglePwModal() {
@@ -40,14 +65,26 @@ changePwBtn.addEventListener('click', togglePwModal)
 changePwSaveBtn.addEventListener('click', togglePwModal)
 
 // Profile photo
-
 function showProfilePic() {
-	profilePhoto.setAttribute('src', user?.photo)
+	if (user && user.photo) {
+		profilePhoto.setAttribute('src', user?.photo)
+	} else {
+		profilePhoto.setAttribute('src', '#')
+	}
 }
 
 showProfilePic()
 
-const dropArea = document.getElementById('fileDropWrapper')
+const dropArea = document.getElementById('dropArea')
+const inputFile = document.getElementById('inputImage')
+var picture
+
+inputFile.addEventListener('change', loadImage)
+
+function loadImage() {
+	picture = inputFile.files[0]
+	showProfilePic()
+}
 
 dropArea.addEventListener('dragover', (e) => {
 	e.preventDefault()
@@ -56,23 +93,28 @@ dropArea.addEventListener('dragover', (e) => {
 dropArea.addEventListener('drop', (e) => {
 	e.preventDefault()
 
-	const picture = e.dataTransfer.files[0]
-	const fileType = picture.type
-
-	if (
-		fileType == 'image/png' ||
-		fileType == 'image/jpg' ||
-		fileType == 'image/jpeg'
-	) {
-		let userPhoto = user?.photo
-
-		const photoURL = URL.createObjectURL(picture)
-		userPhoto = photoURL
-		user.photo = userPhoto
-		setUserSession(user)
-		showProfilePic()
-	}
+	inputFile.files = e.dataTransfer.files
+	loadImage()
 })
+
+async function saveProfilePicture() {
+	try {
+		const response = await fetch(`${API_URL}/user-image?userId=${userID}`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				picture,
+			}),
+		})
+		const result = await response.json()
+		console.log('picture upload success', result)
+		// get image url from API response and set it to user?.photo
+	} catch (error) {
+		console.log('picture upload error', error)
+	}
+}
 
 // Delete profile
 function toggleDelModal() {
@@ -86,11 +128,31 @@ deleteAccountNoBtn.addEventListener('click', toggleDelModal)
 
 // Update settings
 
-async function getUserSettings() {
-	const response = await fetch(`${API_URL}/notification?user_id=${userID}`)
-	const data = await response.json()
+async function setNotificationSettings() {
+	let state
+	if (pushNotificationSwitch.checked) {
+		state = true
+	} else {
+		state = false
+	}
+	console.log(state)
 
-	console.log(data);
+	try {
+		const response = await fetch(`${API_URL}/notification?user_id=${userID}`, {
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				is_enabled: state,
+			}),
+		})
+
+		const result = await response.json()
+		console.log('Notifications turned on', result)
+	} catch (error) {
+		console.log('Notifications turned off', error)
+	}
 }
 
-getUserSettings()
+pushNotificationSwitch.addEventListener('change', setNotificationSettings)
