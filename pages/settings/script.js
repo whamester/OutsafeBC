@@ -28,8 +28,9 @@ saveProfileInfoBtn.addEventListener('click', (e) => {
 	user.name = userName
 	user.email = userEmail
 	setUserSession(user)
-	showProfilePic()
+	// showProfilePic()
 	saveUserInfo()
+	saveProfilePicture()
 })
 
 // Save user information
@@ -47,9 +48,9 @@ async function saveUserInfo() {
 			}),
 		})
 		const result = await response.json()
-		console.log('success', result)
+		console.log('user name updated succesfully', result)
 	} catch (error) {
-		console.log('error', error)
+		console.log('user name error', error)
 	}
 }
 
@@ -74,7 +75,16 @@ function showProfilePic() {
 
 showProfilePic()
 
-const dropArea = document.getElementById('fileDropWrapper')
+const dropArea = document.getElementById('dropArea')
+const inputFile = document.getElementById('inputImage')
+var picture
+
+inputFile.addEventListener('change', loadImage)
+
+function loadImage() {
+	picture = inputFile.files[0]
+	showProfilePic()
+}
 
 dropArea.addEventListener('dragover', (e) => {
 	e.preventDefault()
@@ -83,23 +93,28 @@ dropArea.addEventListener('dragover', (e) => {
 dropArea.addEventListener('drop', (e) => {
 	e.preventDefault()
 
-	const picture = e.dataTransfer.files[0]
-	const fileType = picture.type
-
-	if (
-		fileType == 'image/png' ||
-		fileType == 'image/jpg' ||
-		fileType == 'image/jpeg'
-	) {
-		let userPhoto = user?.photo
-
-		const photoURL = URL.createObjectURL(picture)
-		userPhoto = photoURL
-		user.photo = userPhoto
-		setUserSession(user)
-		showProfilePic()
-	}
+	inputFile.files = e.dataTransfer.files
+	loadImage()
 })
+
+async function saveProfilePicture() {
+	try {
+		const response = await fetch(`${API_URL}/user-image?userId=${userID}`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				picture,
+			}),
+		})
+		const result = await response.json()
+		console.log('picture upload success', result)
+		// get image url from API response and set it to user?.photo
+	} catch (error) {
+		console.log('picture upload error', error)
+	}
+}
 
 // Delete profile
 function toggleDelModal() {
