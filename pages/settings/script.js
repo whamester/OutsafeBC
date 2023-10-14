@@ -128,6 +128,25 @@ deleteAccountNoBtn.addEventListener('click', toggleDelModal)
 
 // Update settings
 
+// Check status of push notification setting
+
+async function getNotificationSettings (){
+	const response = await fetch(`${API_URL}/notification?user_id=${userID}`)
+	const result = await response.json()
+	let status = result.data.is_enabled
+
+	if (status) {
+		pushNotificationSwitch.checked = true
+	} else {
+		pushNotificationSwitch.checked = false
+	}
+
+}
+
+getNotificationSettings ()
+
+// Toggle push notification setting
+
 async function setNotificationSettings() {
 	let state
 	if (pushNotificationSwitch.checked) {
