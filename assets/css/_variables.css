@@ -1,0 +1,127 @@
+:root {
+	/* Design Media Queries */
+	--d-mobile: 375px;
+	--d-web: 1440px;
+
+	/* Typography */
+	--font-size-base: 16px;
+
+	/* Desktop [DONT USE DIRECTLY]*/
+	--heading-1-large-size: 40px;
+	--heading-1-large-letter-spacing: -1%;
+	--heading-1-large-line-height: 120%;
+
+	--heading-2-large-size: 32px;
+	--heading-2-large-letter-spacing: -1%;
+	--heading-2-large-line-height: 120%;
+
+	--heading-3-large-size: 24px;
+	--heading-3-large-letter-spacing: -1%;
+	--heading-3-large-line-height: 120%;
+
+	--body-1-large-size: 18px;
+	--body-1-large-letter-spacing: 0;
+	--body-1-large-line-height: 150%;
+
+	--body-2-large-size: 16px;
+	--body-2-large-letter-spacing: 0;
+	--body-2-large-line-height: 150%;
+
+	--body-3-large-size: 14px;
+	--body-3-large-letter-spacing: 0;
+	--body-3-large-line-height: 150%;
+
+	--body-4-large-size: 12px;
+	--body-4-large-letter-spacing: 0;
+	--body-4-large-line-height: 150%;
+
+	/* Mobile [DONT USE DIRECTLY]*/
+	--heading-1-small-size: 24px;
+	--heading-1-small-letter-spacing: -1%;
+	--heading-1-small-line-height: 120%;
+
+	--heading-2-small-size: 20px;
+	--heading-2-small-letter-spacing: -0.75%;
+	--heading-2-small-line-height: 120%;
+
+	--heading-3-small-size: 16px;
+	--heading-3-small-letter-spacing: -0.75%;
+	--heading-3-small-line-height: 120%;
+
+	--body-1-small-size: 16px;
+	--body-1-small-letter-spacing: 0;
+	--body-1-small-line-height: 150%;
+
+	--body-2-small-size: 14px;
+	--body-2-small-letter-spacing: 0;
+	--body-2-small-line-height: 150%;
+
+	--body-3-small-size: 12px;
+	--body-3-small-letter-spacing: 0;
+	--body-3-small-line-height: 150%;
+
+	/* Headings [USE THESE INSTEAD]*/
+	--heading-1-size: var(--heading-1-large-size);
+	--heading-1-letter-spacing: var(--heading-1-large-letter-spacing);
+	--heading-1-line-height: var(--heading-1-large-line-height);
+
+	--heading-2-size: var(--heading-2-large-size);
+	--heading-2-letter-spacing: var(--heading-2-large-letter-spacing);
+	--heading-2-line-height: var(--heading-2-large-line-height);
+
+	--heading-3-size: var(--heading-3-large-size);
+	--heading-3-letter-spacing: var(--heading-3-large-letter-spacing);
+	--heading-3-line-height: var(--heading-3-large-line-height);
+
+	/* Body [USE THESE INSTEAD]*/
+	--body-1-size: var(--body-1-large-size);
+	--body-1-letter-spacing: var(--body-1-large-letter-spacing);
+	--body-1-line-height: var(--body-1-line-height);
+
+	--body-2-size: var(--body-2-large-size);
+	--body-2-letter-spacing: var(--body-2-large-letter-spacing);
+	--body-2-line-height: var(--body-2-line-height);
+
+	--body-3-size: var(--body-3-large-size);
+	--body-3-letter-spacing: var(--body-3-large-letter-spacing);
+	--body-3-line-height: var(--body-3-large-line-height);
+
+	--body-4-size: var(--body-4-large-size);
+	--body-4-letter-spacing: var(--body-4-large-letter-spacing);
+	--body-4-line-height: var(--body-4-large-line-height);
+}
+
+@media screen and (max-width: 375px) {
+	:root {
+		/* Headings */
+		--heading-1-size: var(--heading-1-small-size);
+		--heading-1-letter-spacing: var(--heading-1-small-letter-spacing);
+		--heading-1-line-height: var(--heading-1-small-line-height);
+
+		--heading-2-size: var(--heading-2-small-size);
+		--heading-2-letter-spacing: var(--heading-2-small-letter-spacing);
+		--heading-2-line-height: var(--heading-2-small-line-height);
+
+		--heading-3-size: var(--heading-3-small-size);
+		--heading-3-letter-spacing: var(--heading-3-small-letter-spacing);
+		--heading-3-line-height: var(--heading-3-small-line-height);
+
+		/* Body */
+		--body-1-size: var(--body-1-small-size);
+		--body-1-letter-spacing: var(--body-1-small-letter-spacing);
+		--body-1-line-height: var(--body-1-line-height);
+
+		--body-2-size: var(--body-2-small-size);
+		--body-2-letter-spacing: var(--body-2-small-letter-spacing);
+		--body-2-line-height: var(--body-2-line-height);
+
+		--body-3-size: var(--body-3-small-size);
+		--body-3-letter-spacing: var(--body-3-small-letter-spacing);
+		--body-3-line-height: var(--body-3-small-line-height);
+
+		/* There is no body-4-small variant */
+		--body-4-size: var(--body-3-small-size);
+		--body-4-letter-spacing: var(--body-3-small-letter-spacing);
+		--body-4-line-height: var(--body-3-small-line-height);
+	}
+}
