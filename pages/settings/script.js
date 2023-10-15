@@ -1,5 +1,9 @@
 import readImage from '../../assets/helpers/read-image.js'
-import { getUserSession, setUserSession } from '../../assets/helpers/storage.js'
+import {
+	getUserSession,
+	setUserSession,
+	clearUserSession,
+} from '../../assets/helpers/storage.js'
 import { API_URL } from '../../constants.js'
 
 const user = getUserSession()
@@ -187,6 +191,10 @@ async function deleteAccount() {
 		}
 
 		console.log('Account deleted successfully', data, message)
+
+		toggleDelModal()
+		clearUserSession()
+		window.location.replace('/')
 	} catch (error) {
 		console.log('Could not delete account', error)
 	}
