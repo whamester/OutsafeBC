@@ -14,7 +14,8 @@ let map = null
  * Page Init
  */
 window.onload = function () {
-	injectHTML([Navbar, GeoMap])
+	injectHTML([Navbar], 'home-body', 'afterbegin')
+	injectHTML([GeoMap])
 
 	// Loads the map even if the user has not accepted the permissions
 	map = new Map(position)

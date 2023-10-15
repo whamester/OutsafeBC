@@ -9,7 +9,8 @@ class AlertPopup {
 	constructor() {
 		const alert = `
 			<div id="alert" class="d-none">
-				<p id="alert-message"></p>
+				<div id="alert-icon"></div>
+				<p id="alert-message" class="text-body-2"></p>
 			</div>
 		`
 

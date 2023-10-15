@@ -1,5 +1,6 @@
 @import url(./_fonts.css);
 @import url(./_variables.css);
+@import url(./_typography.css);
 
 @import url(./alert-popup.css);
 

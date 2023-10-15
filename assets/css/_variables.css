@@ -76,11 +76,11 @@
 	/* Body [USE THESE INSTEAD]*/
 	--body-1-size: var(--body-1-large-size);
 	--body-1-letter-spacing: var(--body-1-large-letter-spacing);
-	--body-1-line-height: var(--body-1-line-height);
+	--body-1-line-height: var(--body-1-large-line-height);
 
 	--body-2-size: var(--body-2-large-size);
 	--body-2-letter-spacing: var(--body-2-large-letter-spacing);
-	--body-2-line-height: var(--body-2-line-height);
+	--body-2-line-height: var(--body-2-large-line-height);
 
 	--body-3-size: var(--body-3-large-size);
 	--body-3-letter-spacing: var(--body-3-large-letter-spacing);

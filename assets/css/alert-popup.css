@@ -1,5 +1,5 @@
 #alert {
-	width: 300px;
+	min-width: 300px;
 	background: gray;
 	position: absolute;
 	top: 2rem;
@@ -7,8 +7,9 @@
 	display: flex;
 	align-items: center;
 	gap: 1rem;
-	padding: 0.5rem;
+	padding: 1.5rem;
 	border-radius: 1rem;
+	font-weight: 500;
 }
 
 #alert #alert-message {
@@ -19,6 +20,28 @@
 	align-items: center;
 }
 
+#alert #alert-icon {
+	width: 3rem;
+	height: 3rem;
+	border-radius: 6.25rem;
+	flex-shrink: 0;
+}
+
+#alert.success #alert-icon {
+	border: 1px solid var(--success-500);
+	background: var(--white);
+}
+
+#alert.warning #alert-icon {
+	border: 1px solid var(--warning-500);
+	background: var(--white);
+}
+
+#alert.error #alert-icon {
+	border: 1px solid var(--error-500);
+	background: var(--white);
+}
+
 #alert.dismiss {
 	transform: translateY(-200px);
 	transition: all ease 0.5s;
@@ -27,14 +50,17 @@
 #alert.success {
 	border: 1px solid var(--success);
 	background: var(--success-50);
+	color: var(--success-900);
 }
 
 #alert.warning {
 	border: 1px solid var(--warning);
 	background: var(--warning-50);
+	color: var(--warning-900);
 }
 
 #alert.error {
 	border: 1px solid var(--error);
 	background: var(--error-50);
+	color: var(--error-900);
 }
