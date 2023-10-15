@@ -1,41 +1,68 @@
+import readImage from '../../assets/helpers/read-image.js'
 import { getUserSession, setUserSession } from '../../assets/helpers/storage.js'
 import { API_URL } from '../../constants.js'
 
 const user = getUserSession()
+
 const dropArea = document.getElementById('dropArea')
 const inputFile = document.getElementById('inputImage')
-let userName = user?.name
-let userEmail = user?.email
+
 let userID = user?.id
 let picture
 
+let changedFields = {
+	name: false,
+	photo: false,
+}
+
+document.getElementById('name').addEventListener('input', () => {
+	changedFields.name = true
+})
+
+document.getElementById('inputImage').addEventListener('input', () => {
+	changedFields.photo = true
+})
+
 //Show user information
 function showUserInfo() {
-	if (user) {
+	if (!!user) {
 		document.getElementById('name').setAttribute('value', user?.name)
 		document.getElementById('email').setAttribute('value', user?.email)
-	} else {
-		myProfile.style.display = 'none'
-		deleteAccount.style.display = 'none'
+		return
 	}
+
+	window.location.replace('/')
 }
 
 showUserInfo()
 
-// Change user information
-saveProfileInfoBtn.addEventListener('click', (e) => {
-	e.preventDefault()
-	userName = document.getElementById('name').value
-	userEmail = document.getElementById('email').value
-	user.name = userName
-	user.email = userEmail
+function clearDirtyField() {
+	changedFields.name = false
+	changedFields.photo = false
+}
 
-	saveUserInfo()
-	saveProfilePicture()
+// Change user information
+saveProfileInfoBtn.addEventListener('click', async (e) => {
+	e.preventDefault()
+
+	if (changedFields.photo) {
+		const result = await saveProfilePicture()
+		await saveUserInfo(result.data.url)
+		clearDirtyField()
+
+		return
+	}
+
+	if (changedFields.name) {
+		await saveUserInfo()
+		clearDirtyField()
+
+		return
+	}
 })
 
 // Save user information
-async function saveUserInfo() {
+async function saveUserInfo(photo = undefined) {
 	try {
 		const name = document.getElementById('name').value
 
@@ -46,11 +73,24 @@ async function saveUserInfo() {
 			},
 			body: JSON.stringify({
 				name,
+				photo,
 			}),
 		})
-		const result = await response.json()
-		setUserSession(user)
-		console.log('user name updated succesfully', result)
+		const { data, error, message } = await response.json()
+
+		if (!!error) {
+			console.error(error)
+			return
+		}
+
+		if (data) {
+			setUserSession({
+				...user,
+				...data,
+			})
+
+			console.log(message)
+		}
 	} catch (error) {
 		console.log('user name error', error)
 	}
@@ -77,7 +117,10 @@ inputFile.addEventListener('change', loadImage)
 
 function loadImage() {
 	picture = inputFile.files[0]
-	showProfilePic()
+
+	readImage(picture, ({ target }) => {
+		showProfilePic(target.result)
+	})
 }
 
 dropArea.addEventListener('dragover', (e) => {
@@ -93,20 +136,24 @@ dropArea.addEventListener('drop', (e) => {
 
 async function saveProfilePicture() {
 	try {
-		const response = await fetch(`${API_URL}/user-image?userId=${userID}`, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({
-				picture,
-			}),
-		})
+		const response = await fetch(
+			`${API_URL}/user-image?userId=${userID}.${picture?.type?.replace(
+				'image/',
+				''
+			)}`,
+			{
+				method: 'POST',
+				headers: {
+					'Content-Type': picture.type,
+				},
+				body: picture,
+			}
+		)
 		const result = await response.json()
-		console.log('picture upload success', result)
-		// TODO: get image url from API response and set it to user?.photo
+		return result
 	} catch (error) {
 		console.log('picture upload error', error)
+		return null
 	}
 }
 
@@ -169,14 +216,6 @@ getNotificationSettings()
 
 // Toggle push notification setting
 async function setNotificationSettings() {
-	let state
-	if (pushNotificationSwitch.checked) {
-		state = true
-	} else {
-		state = false
-	}
-	console.log(state)
-
 	try {
 		const response = await fetch(`${API_URL}/notification?user_id=${userID}`, {
 			method: 'PUT',
@@ -184,12 +223,18 @@ async function setNotificationSettings() {
 				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify({
-				is_enabled: state,
+				is_enabled: !!pushNotificationSwitch.checked,
 			}),
 		})
 
-		const result = await response.json()
-		console.log('Notifications turned on', result)
+		const { error, data, message } = await response.json()
+
+		if (!!error) {
+			console.error(error)
+			return
+		}
+
+		console.log('Notifications turned on', data, message)
 	} catch (error) {
 		console.log('Notifications turned off', error)
 	}
