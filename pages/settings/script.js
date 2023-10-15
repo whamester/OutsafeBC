@@ -169,28 +169,14 @@ deleteAccountBtn.addEventListener('click', toggleDelModal)
 deleteAccountNoBtn.addEventListener('click', toggleDelModal)
 deleteAccountYesBtn.addEventListener('click', deleteAccount)
 
-async function getCurrentUser() {
-	try {
-		const response = await fetch(`${API_URL}/user?id=${userID}`)
-		const result = await response.json()
-		return result.data
-	} catch (error) {
-		console.log('Unable to get current user', error)
-		throw error
-	}
-}
-
 async function deleteAccount() {
 	try {
-		const currentUser = await getCurrentUser()
-		const body = JSON.stringify(currentUser)
-
 		const response = await fetch(`${API_URL}/user`, {
 			method: 'DELETE',
 			headers: {
 				'Content-Type': 'application/json',
 			},
-			body: body,
+			body: JSON.stringify(user.auth),
 		})
 
 		const { error, data, message } = await response.json()
