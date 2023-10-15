@@ -6,6 +6,8 @@ const user = getUserSession()
 
 const dropArea = document.getElementById('dropArea')
 const inputFile = document.getElementById('inputImage')
+const nameField = document.getElementById('name')
+const emailField = document.getElementById('email')
 
 let userID = user?.id
 let picture
@@ -15,19 +17,19 @@ let changedFields = {
 	photo: false,
 }
 
-document.getElementById('name').addEventListener('input', () => {
+nameField.addEventListener('input', () => {
 	changedFields.name = true
 })
 
-document.getElementById('inputImage').addEventListener('input', () => {
+inputFile.addEventListener('input', () => {
 	changedFields.photo = true
 })
 
 //Show user information
 function showUserInfo() {
 	if (!!user) {
-		document.getElementById('name').setAttribute('value', user?.name)
-		document.getElementById('email').setAttribute('value', user?.email)
+		nameField.setAttribute('value', user?.name)
+		emailField.setAttribute('value', user?.email)
 		return
 	}
 
@@ -64,7 +66,7 @@ saveProfileInfoBtn.addEventListener('click', async (e) => {
 // Save user information
 async function saveUserInfo(photo = undefined) {
 	try {
-		const name = document.getElementById('name').value
+		const name = nameField.value
 
 		const response = await fetch(`${API_URL}/user?id=${userID}`, {
 			method: 'PUT',
@@ -169,46 +171,49 @@ deleteAccountNoBtn.addEventListener('click', toggleDelModal)
 
 // Update settings
 // Check permission status
-if ('Notification' in window) {
-	navigator.permissions
-		.query({ name: 'notifications' })
-		.then((notificationPermissionStatus) => {
-			if (notificationPermissionStatus.state !== 'granted') {
-				const permissionStatus = document.getElementById('permissionStatus')
-				const pElement = document.createElement('p')
-				pElement.textContent = 'Push Notification permissions are not granted'
-				permissionStatus.appendChild(pElement)
-			}
-		})
-} else {
-	console.log('Push notifications are not supported in this browser.')
-}
+function checkPermissions() {
+	const permissionStatus = document.getElementById('permissionStatus')
 
-if ('geolocation' in navigator) {
-	navigator.permissions
-		.query({ name: 'geolocation' })
-		.then((geolocationPermissionStatus) => {
-			if (geolocationPermissionStatus.state !== 'granted') {
-				const permissionStatus = document.getElementById('permissionStatus')
-				const pElement = document.createElement('p')
-				pElement.textContent = 'Geolocation permissions are not granted'
-				permissionStatus.appendChild(pElement)
-			}
-		})
-} else {
-	console.log('Geolocation is not supported in this browser.')
+	if ('Notification' in window) {
+		navigator.permissions
+			.query({ name: 'notifications' })
+			.then((notificationPermissionStatus) => {
+				if (notificationPermissionStatus.state !== 'granted') {
+					const pElement = document.createElement('p')
+					pElement.textContent = 'Push Notification permissions are not granted'
+					permissionStatus.appendChild(pElement)
+				}
+			})
+	}
+
+	if ('geolocation' in navigator) {
+		navigator.permissions
+			.query({ name: 'geolocation' })
+			.then((geolocationPermissionStatus) => {
+				if (geolocationPermissionStatus.state !== 'granted') {
+					const pElement = document.createElement('p')
+					pElement.textContent = 'Geolocation permissions are not granted'
+					permissionStatus.appendChild(pElement)
+				}
+			})
+	}
 }
+checkPermissions()
 
 // Check status of push notification setting
 async function getNotificationSettings() {
-	const response = await fetch(`${API_URL}/notification?user_id=${userID}`)
-	const result = await response.json()
-	let status = result.data.is_enabled
+	try {
+		const response = await fetch(`${API_URL}/notification?user_id=${userID}`)
+		const result = await response.json()
+		let status = result.data.is_enabled
 
-	if (status) {
-		pushNotificationSwitch.checked = true
-	} else {
-		pushNotificationSwitch.checked = false
+		if (status) {
+			pushNotificationSwitch.checked = true
+		} else {
+			pushNotificationSwitch.checked = false
+		}
+	} catch (error) {
+		console.log('Unable to get notification status', error)
 	}
 }
 
