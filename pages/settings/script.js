@@ -277,3 +277,8 @@ async function setNotificationSettings() {
 }
 
 pushNotificationSwitch.addEventListener('change', setNotificationSettings)
+
+logOutBtn.addEventListener('click', () => {
+	clearUserSession()
+	window.location.replace('/')
+})
