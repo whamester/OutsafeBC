@@ -77,6 +77,7 @@ document
 				setUserSession(data)
 				window.location.replace('/')
 			}
+
 			if (!!error) {
 				alert.show(error, AlertPopup.error)
 			}
