@@ -1,95 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<head>
-	<meta charset="UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<!-- WPA -->
+		<link rel="manifest" href="../../manifest.json" />
+		<link
+			rel="apple-touch-icon"
+			href="../../assets/css/img/icons/icon-96x96.png"
+		/>
+		<meta name="apple-mobile-web-app-status-bar" content="#000000" />
+		<meta name="theme-color" content="#000000" />
 
-	<!-- WPA -->
-	<link rel="manifest" href="../../manifest.json" />
-	<link rel="apple-touch-icon" href="../../assets/css/img/icons/icon-96x96.png" />
-	<meta name="apple-mobile-web-app-status-bar" content="#000000" />
-	<meta name="theme-color" content="#000000" />
+		<!-- Bootstrap JS -->
+		<script src="../../modules/bootstrap/js/bootstrap.min.js"></script>
+		<!-- Bootstrap CSS -->
+		<link
+			rel="stylesheet"
+			href="../../modules/bootstrap/css/bootstrap.min.css"
+		/>
+		<!-- Global Styles -->
+		<link rel="stylesheet" href="../../assets/css/_global.css" />
+		<!-- Feature Styles -->
+		<link rel="stylesheet" href="./style.css" />
+		<!-- Global JS -->
+		<script type="module" src="../../global.js" defer></script>
+		<!-- Feature JS -->
+		<script type="module" src="./script.js" defer></script>
 
-  <!-- Bootstrap JS -->
-  <script src="../../modules/bootstrap/js/bootstrap.min.js"></script>
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="../../modules/bootstrap/css/bootstrap.min.css">
-  <!-- Global Styles -->
-  <link rel="stylesheet" href="../../assets/css/_global.css">
-  <!-- Feature Styles -->
-  <link rel="stylesheet" href="./style.css">
-  <!-- Global JS -->
-  <script type="module" src="../../global.js" defer></script>
-  <!-- Feature JS -->
-  <script type="module" src="./script.js" defer></script>
+		<title>Settings</title>
+	</head>
 
-	<title>Settings</title>
-</head>
+	<body>
+		<section id="myProfile">
+			<h1>My Profile</h1>
+			<p>Update your photo and personal details here.</p>
 
-<body>
-	<section id="myProfile">
-		<h1>My Profile</h1>
-		<p>Update your photo and personal details here.</p>
+			<form id="profileForm">
+				<label for="name">Name</label>
+				<input type="text" id="name" required />
+				<label for="email">Email address</label>
+				<input type="email" id="email" readonly />
+			</form>
 
-		<form id="profileForm">
-			<label for="name">Name</label>
-			<input type="text" id="name" required />
-			<label for="email">Email address</label>
-			<input type="email" id="email" readonly />
-		</form>
+			<h2>Password</h2>
+			<button id="resetPwBtn">Reset Password</button>
 
-		<h2>Password</h2>
-		<button id="resetPwBtn">Reset Password</button>
+			<div id="resetPwPopup">
+				<button id="resetPwSaveBtn">Reset Password</button>
+				<button id="resetPwCanelBtn">Cancel</button>
+			</div>
 
-		<div id="resetPwPopup">
-			<button id="resetPwSaveBtn">Reset Password</button>
-			<button id="resetPwCanelBtn">Cancel</button>
-		</div>
+			<h2>Your photo</h2>
+			<p>This will be displayed on your profile.</p>
+			<img src="#" alt="User profile picture" id="profilePhoto" />
 
-		<h2>Your photo</h2>
-		<p>This will be displayed on your profile.</p>
-		<img src="#" alt="User profile picture" id="profilePhoto" />
+			<div id="fileDropWrapper">
+				<label for="inputImage" id="dropArea">
+					<input type="file" accept="image/*" id="inputImage" hidden />
+					Drop your image here, or click to browse
+				</label>
+			</div>
 
-		<div id="fileDropWrapper">
-			<label for="inputImage" id="dropArea">
-				<input type="file" accept="image/*" id="inputImage" hidden />
-				<p>Drop your image here, or click to browse</p>
-			</label>
-		</div>
+			<button type="submit" id="saveProfileInfoBtn" form="profileForm">
+				Save
+			</button>
+		</section>
 
-		<button type="submit" id="saveProfileInfoBtn" form="profileForm">
-			Save
-		</button>
-	</section>
+		<section id="settings">
+			<h1>Settings</h1>
 
-	<section id="settings">
-		<h1>Settings</h1>
+			<p>Update your preferences here</p>
+			<div id="permissionStatus"></div>
 
-		<p>Update your preferences here</p>
-		<div id="permissionStatus"></div>
+			<div class="form-check form-switch">
+				<img src="#" alt="#" />
+				<!-- icon -->
+				<label class="form-check-label" for="pushNotificationSwitch"
+					>Push Notifications</label
+				>
+				<input
+					class="form-check-input"
+					type="checkbox"
+					role="switch"
+					id="pushNotificationSwitch"
+				/>
+			</div>
+		</section>
 
-		<div class="form-check form-switch">
-			<img src="#" alt="#" />
-			<!-- icon -->
-			<label class="form-check-label" for="pushNotificationSwitch">Push Notifications</label>
-			<input class="form-check-input" type="checkbox" role="switch" id="pushNotificationSwitch" />
-		</div>
-	</section>
-
-	<section id="deleteAccount">
-		<h1>Delete Account</h1>
-		<p>
-			If you no longer want to use Outsafe BC, you can permanently delete your
-			account. You can’t undo this action!
-		</p>
-		<button id="deleteAccountBtn">Delete Account</button>
-		<div id="deleteAccountConfirm">
-			<h2>Are you sure you want to delete your account?</h2>
-			<button id="deleteAccountYesBtn">Yes</button>
-			<button id="deleteAccountNoBtn">No</button>
-		</div>
-	</section>
-</body>
-
+		<section id="deleteAccount">
+			<h1>Delete Account</h1>
+			<p>
+				If you no longer want to use Outsafe BC, you can permanently delete your
+				account. You can’t undo this action!
+			</p>
+			<button id="deleteAccountBtn">Delete Account</button>
+			<div id="deleteAccountConfirm">
+				<h2>Are you sure you want to delete your account?</h2>
+				<button id="deleteAccountYesBtn">Yes</button>
+				<button id="deleteAccountNoBtn">No</button>
+			</div>
+		</section>
+	</body>
 </html>
