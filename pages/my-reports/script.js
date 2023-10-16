@@ -1,1 +1,3 @@
-window.location.replace("../view-hazard");
+import { API_URL } from "../../constants.js";
+let reportData = []
+
