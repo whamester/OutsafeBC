@@ -16,7 +16,7 @@ class Map {
       Map.CURRENT_ZOOM
     );
 
-    L.tileLayer(`https://tiles.stadiamaps.com/tiles/outdoors/{z}/{x}/{y}{r}.png`, {
+    L.tileLayer(`https://tile.openstreetmap.org/{z}/{x}/{y}.png`, {
       maxZoom: Map.MAX_ZOOM,
       attribution:
         '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
