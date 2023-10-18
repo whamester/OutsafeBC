@@ -1,5 +1,10 @@
 import { API_URL, GOOGLE_ID } from '../../constants.js'
+//Helpers
 import { getUserSession, setUserSession } from '../../assets/helpers/storage.js'
+//Components
+import AlertPopup from '../../assets/components/AlertPopup.js'
+//Variables
+const alert = new AlertPopup()
 
 /**
  * Google Auth Setup
@@ -21,11 +26,17 @@ window.onload = function () {
 					body: JSON.stringify(googleResponse),
 				})
 
-				const { data } = await response.json()
+				const { data, error } = await response.json()
 
 				if (data?.id) {
+					alert.show('Welcome!')
+
 					setUserSession(data)
 					window.location.replace('/')
+				}
+
+				if (!!error) {
+					alert.show(error, AlertPopup.error)
 				}
 			} catch (error) {
 				console.debug({ error })
@@ -60,10 +71,16 @@ document
 				}),
 			})
 
-			const { data } = await response.json()
+			const { data, error } = await response.json()
 			if (data?.id) {
+				alert.show('Welcome!')
+
 				setUserSession(data)
 				window.location.replace('/')
+			}
+
+			if (!!error) {
+				alert.show(error, AlertPopup.error)
 			}
 		} catch (error) {
 			console.debug(error)

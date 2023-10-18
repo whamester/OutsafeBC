@@ -1,8 +1,8 @@
 //Components
-import GeoMap from "../../assets/components/GeoMap.js";
-import Navbar from "../../assets/components/Navbar.js";
+import GeoMap from '../../assets/components/GeoMap.js'
+import Navbar from '../../assets/components/Navbar.js'
 //Helpers
-import injectHTML from "../../assets/helpers/inject-html.js";
+import injectHTML from '../../assets/helpers/inject-html.js'
 //Models
 import Map from "../../assets/models/Map.js";
 // Api helper

@@ -66,19 +66,12 @@ class Map {
     }).addTo(Map.map);
   }
 
-  static async getCurrentLocation() {
-    // check if browser supports geolocation
-    if (!("geolocation" in navigator)) {
-      console.log("Geolocation not supported on your browser.");
-      return;
-    }
-
-    // navigator options for better accuracy
-    const navigatorOptions = {
-      enableHighAccuracy: true,
-      timeout: 5000,
-      maximumAge: 0,
-    };
+	static async getCurrentLocation() {
+		// check if browser supports geolocation
+		if (!('geolocation' in navigator)) {
+			console.log('Geolocation not supported on your browser.')
+			return
+		}
 
     try {
       const position = await new Promise((resolve, reject) => {
@@ -102,4 +95,4 @@ class Map {
   }
 }
 
-export default Map;
+export default Map

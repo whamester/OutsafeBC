@@ -10,7 +10,7 @@ const Navbar = (params) => {
     </nav>
     ${ isSearchable ? SearchBar(params): "" }
   </header>
-  `;
-};
+  `
+}
 
-export default Navbar;
+export default Navbar
