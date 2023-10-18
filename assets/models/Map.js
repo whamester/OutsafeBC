@@ -1,3 +1,5 @@
+import { JAWG_ACCESS_TOKEN } from '../../constants.js'
+
 class Map {
 	static CURRENT_ZOOM = 11
 	static MAX_ZOOM = 19
@@ -17,11 +19,33 @@ class Map {
 			Map.CURRENT_ZOOM
 		)
 
-		L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-			maxZoom: Map.MAX_ZOOM,
-			attribution:
-				'&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-		}).addTo(this.map)
+		// L.tileLayer(
+		// 	'https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.{ext}',
+		// 	{
+		// 		// minZoom: 0,
+		// 		// maxZoom: 20,
+		// 		attribution:
+		// 			'&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+		// 		ext: 'png',
+		// 	}
+		// ).addTo(this.map)
+
+		L.tileLayer(
+			`https://{s}.tile.jawg.io/jawg-sunny/{z}/{x}/{y}{r}.png?access-token=${JAWG_ACCESS_TOKEN}`,
+			{
+				attribution:
+					'<a href="http://jawg.io" title="Tiles Courtesy of Jawg Maps" target="_blank">&copy; <b>Jawg</b>Maps</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+				minZoom: 0,
+				maxZoom: 22,
+				accessToken: JAWG_ACCESS_TOKEN,
+			}
+		).addTo(this.map)
+
+		// L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+		// 	maxZoom: Map.MAX_ZOOM,
+		// 	attribution:
+		// 		'&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+		// }).addTo(this.map)
 
 		this.currentMarker = null
 
