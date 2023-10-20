@@ -30,3 +30,24 @@ Working with a feature structure means that every feature folder will have the j
   - \_variables.css (imported inside \_global.css)
   - \_global.css (all files should have this styles)
   - [component].css (to avoid large css files and keep the classes organized we will create one file per component and import the component css file into the feature css file)
+
+## Naming Conventions
+
+# Javascript
+
+- Variables: Camel case
+- Constants: Snake case, Uppercase with underscore
+- Component: Pascal case
+- Helper function: Camel case
+- Classes: Pascal case
+- Classes and Components file names: Pascal case
+
+All file names: Lowercase hyphenated (Unless specified otherwise)
+
+# CSS
+
+- BEM: https://getbem.com/
+
+# HTML
+
+- IDs, Snake case or Camel case
