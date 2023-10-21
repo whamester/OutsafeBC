@@ -11,6 +11,25 @@ const olderReports = document.getElementById('olderReports')
 const recentBtn = document.getElementById('recentReportsBtn')
 const olderBtn = document.getElementById('olderReportsBtn')
 
+// Checkbox toggle
+// Set the recentBtn to be checked initially
+recentBtn.checked = true
+displayRecentReports()
+displayOlderReports()
+
+recentBtn.addEventListener('click', () => {
+	recentBtn.checked = true
+	olderBtn.checked = false
+	recentReports.style.display = 'block'
+	olderReports.style.display = 'none'
+})
+olderBtn.addEventListener('click', () => {
+	recentBtn.checked = false
+	olderBtn.checked = true
+	olderReports.style.display = 'block'
+	recentReports.style.display = 'none'
+})
+
 // Get all the recent reports for the logged in user and display them
 
 async function getRecentReports() {
@@ -45,4 +64,36 @@ async function displayRecentReports() {
 	}
 }
 
-displayRecentReports()
+// Get all the older reports for the logged in user and display them
+
+async function getOlderReports() {
+	try {
+		olderReportArr.splice(0, olderReportArr.length)
+
+		const response = await fetch(
+			`${API_URL}/hazard-report?cursor=20&size=40&user_id=${userID}&type=past`
+		)
+		const result = await response.json()
+
+		olderReportArr.push(...result.data.results)
+	} catch (error) {
+		console.log('Could not get user reports', error)
+	}
+}
+
+async function displayOlderReports() {
+	await getOlderReports()
+
+	for (const index of olderReportArr) {
+		let hazardReport = new MyReport(
+			index.id,
+			index.hazardCategory.name,
+			index.hazard.name,
+			index.location.address,
+			index.created_at,
+			index.images,
+			index.comment
+		)
+		olderReports.appendChild(hazardReport.reportContent())
+	}
+}
