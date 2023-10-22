@@ -135,34 +135,37 @@ commentInput.addEventListener('change', (event) => {
 
 function checkMobileDevice() {
 	let navegador = navigator.userAgent;
-	let mensaje;
+	// let mensaje;
 	let esDispositivoMovil;
 	if (navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/webOS/i) || navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/iPod/i) || navigator.userAgent.match(/BlackBerry/i) || navigator.userAgent.match(/Windows Phone/i)) {
-	  mensaje = "Estás usando un dispositivo móvil!!";
+	//   mensaje = "Estás usando un dispositivo móvil!!";
 	  esDispositivoMovil = true;
+	  document.getElementById("desktop").style.display = "none"
 	} else {
-	  mensaje = "No estás usando un móvil";
+	//   mensaje = "No estás usando un móvil";
 	  esDispositivoMovil = false;
+	  document.getElementById("mobile").style.display = "none"
 	}
 
 	// Set the message in the <div>
 	// document.getElementById("resultado").textContent = mensaje;
 
 	// Return true or false
-	return esDispositivoMovil;
+	// return esDispositivoMovil;
+	
   }
 
-  // Call the function and get the result
-  let isMobile = checkMobileDevice();
+//   // Call the function and get the result
+//   let isMobile = checkMobileDevice();
 
-  // You can use the isMobile variable as true or false
-  if(isMobile === true){
-	document.getElementById("desktop").style.display = "none"
-	console.log("Is a mobile device");  
-  }else{
-	document.getElementById("mobile").style.display = "none"
-	console.log("Is not a mobile device");
-  }
+//   // You can use the isMobile variable as true or false
+//   if(isMobile === true){
+// 	document.getElementById("desktop").style.display = "none"
+// 	// console.log("Is a mobile device");  
+//   }else{
+// 	document.getElementById("mobile").style.display = "none"
+// 	// console.log("Is not a mobile device");
+//   }
 
 /**
  * Step 6: Show Confirmation
