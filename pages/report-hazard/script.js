@@ -211,7 +211,7 @@ function snapPhoto() {
 	currentReport.images = arrayPict
 }
 
-const fileInput = document.getElementById('uploadPictureInput')
+const fileInput = document.getElementById('uploadPictureInputDesktop')
 
 fileInput.addEventListener('change', function () {
 	const selectedFile = fileInput.files[0]
