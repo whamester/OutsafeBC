@@ -83,7 +83,6 @@
 			<section id="hazard-category" class="page">
 				<h1>2. What type of hazard would you like to report?</h1>
 				<div id="hazard-category-content"></div>
-				</div>
 			</section>
 
 			<section id="hazard-type" class="page">
@@ -109,6 +108,7 @@
 					<input id="option-5" type="radio" name="hazardOptionRadioBtn" value="raccoon" />
 					<label for="option-5">Raccoon</label>
 				</div>
+				<a href="#additional-details">Continue</a>
 			</section>
 
 			<section id="additional-details" class="page">
@@ -127,7 +127,7 @@
 					visually. <span>(Optional)</span>
 				</h1>
 
-				<div>
+				<div id="desktop">
 					<button id="takePictureBtn" type="button">
 						<span>Take a picture</span>
 					</button>
@@ -139,6 +139,18 @@
 						<input id="uploadPictureInput" type="file" accept="image/jpeg, image/jpg, image/png" />
 						<span>File size limit: 10 MB</span>
 					</div>
+				</div>
+				<div id="mobile">
+					<label for="enviroment" class="custom-file-upload">
+						<input type="file" id="enviroment" capture="enviroment" accept="image/*" style="display:none;" />
+						Take a picture<br>
+						<span>At the hazard site? Click a picture to add in the report.</span>
+					</label>
+					<label for="enviroment" class="custom-file-upload">
+						<input type="file" id="uploadPictureInput" accept="image/jpeg, image/jpg, image/png" style="display:none;"/>
+						Upload Files<br>
+						<span>File size limit: 10 MB</span>
+					</label>
 				</div>
 
 				<a href="#review-report" id="showConfirmationBtn">Continue</a>
