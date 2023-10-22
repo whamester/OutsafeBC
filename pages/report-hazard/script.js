@@ -139,19 +139,21 @@ function checkMobileDevice() {
 
 	if (navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/webOS/i) || navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/iPod/i) || navigator.userAgent.match(/BlackBerry/i) || navigator.userAgent.match(/Windows Phone/i)) {
 	  isMobileDevice = true;
+	  document.getElementById("desktop").style.display = "none"
 	} else {
 	  isMobileDevice = false;
+	  document.getElementById("mobile").style.display = "none"
 	}
 	return isMobileDevice;
   }
 
-  let isMobile = checkMobileDevice();
+  checkMobileDevice();
 
-  if(isMobile === true){
-	document.getElementById("desktop").style.display = "none"
-  }else{
-	document.getElementById("mobile").style.display = "none"
-  }
+//   if(isMobile === true){
+// 	document.getElementById("desktop").style.display = "none"
+//   }else{
+// 	document.getElementById("mobile").style.display = "none"
+//   }
 
 /**
  * Step 6: Show Confirmation
