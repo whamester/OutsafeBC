@@ -128,7 +128,7 @@
 				</h1>
 
 				<div id="desktop">
-					<button id="takePictureBtn" type="button">
+					<button id="starCameraBtn" type="button">
 						<span>Take a picture</span>
 					</button>
 					<!-- TODO// Add icon here -->
@@ -136,18 +136,31 @@
 					<p>At the hazard site? Click a picture to add in the report.</p>
 
 					<div id="dragAndDropArea">
-						<input id="uploadPictureInput" type="file" accept="image/jpeg, image/jpg, image/png" />
+						<input id="uploadPictureInputDesktop" type="file" accept="image/jpeg, image/jpg, image/png" />
 						<span>File size limit: 10 MB</span>
+					</div>
+					<div id="takePhoto" style="display: none">
+						<!-- </div> -->
+						<br />
+						<video id="video" width="320" height="240" autoplay></video>
+						<br />
+						<button id="takePictureBtn" disabled >Take a photo</button>
+						<button id="stop" disabled>Stop Camera</button>
+						<br />
+						<canvas hidden id="canvas-1" width="320" height="240"></canvas>
+					</div>
+					<div>
+							<p id="imagesFirstOutput"></p>
 					</div>
 				</div>
 				<div id="mobile">
-					<label for="enviroment" class="custom-file-upload">
-							<input type="file" id="enviroment" capture="enviroment" accept="image/*" style="display:none;"/>
+					<label for="environmentMobile" class="custom-file-upload">
+							<input type="file" id="environmentMobile" capture="environment" accept="image/*" style="display:none;"/>
 						Take a picture<br>
 						<span>At the hazard site? Click a picture to add in the report.</span>
 					</label><br><br>
-					<label for="uploadPictureInput" class="custom-file-upload">
-						<input type="file" id="uploadPictureInput"accept="image/jpeg, image/jpg, image/png" style="display:none;"/>
+					<label for="uploadPictureInputMobile" class="custom-file-upload">
+						<input type="file" id="uploadPictureInputMobile" accept="image/jpeg, image/jpg, image/png" style="display:none;"/>
 						Upload Files<br>
 						<span>File size limit: 10 MB</span>
 					</label>
