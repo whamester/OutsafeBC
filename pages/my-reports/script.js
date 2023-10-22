@@ -18,16 +18,12 @@ displayRecentReports()
 displayOlderReports()
 
 recentBtn.addEventListener('click', () => {
-	recentBtn.checked = true
-	olderBtn.checked = false
 	recentReports.style.display = 'block'
 	olderReports.style.display = 'none'
 })
 olderBtn.addEventListener('click', () => {
-	recentBtn.checked = false
-	olderBtn.checked = true
-	olderReports.style.display = 'block'
 	recentReports.style.display = 'none'
+	olderReports.style.display = 'block'
 })
 
 // Get all the recent reports for the logged in user and display them
