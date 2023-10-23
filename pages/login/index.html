@@ -1,61 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<!-- WPA -->
+		<link rel="manifest" href="../../manifest.json" />
+		<link
+			rel="apple-touch-icon"
+			href="../../assets/css/img/icons/icon-96x96.png"
+		/>
+		<meta name="apple-mobile-web-app-status-bar" content="#000000" />
+		<meta name="theme-color" content="#000000" />
 
-    <!-- WPA -->
-    <link rel="manifest" href="../../manifest.json">
-    <link rel="apple-touch-icon" href="../../assets/css/img/icons/icon-96x96.png">
-    <meta name="apple-mobile-web-app-status-bar" content="#000000">
-    <meta name="theme-color" content="#000000">
+		<!-- leaflet CSS for maps -->
+		<!-- <link rel="stylesheet" href="../../modules/leaflet/leaflet.css"> -->
+		<!-- leaflet JS for maps -->
+		<!-- <script src="../../modules/leaflet/leaflet.js"></script> -->
+		<!-- Firebase JS -->
+		<script src="https://www.gstatic.com/firebasejs/ui/6.0.1/firebase-ui-auth.js"></script>
+		<!-- Firebase CSS -->
+		<link
+			type="text/css"
+			rel="stylesheet"
+			href="https://www.gstatic.com/firebasejs/ui/6.0.1/firebase-ui-auth.css"
+		/>
+		<!-- Bootstrap JS -->
+		<script src="../../modules/bootstrap/js/bootstrap.min.js"></script>
+		<!-- Bootstrap CSS -->
+		<link
+			rel="stylesheet"
+			href="../../modules/bootstrap/css/bootstrap.min.css"
+		/>
+		<!-- Global Styles -->
+		<link rel="stylesheet" href="../../assets/css/_global.css" />
+		<!-- Feature Styles -->
+		<link rel="stylesheet" href="./style.css" />
+		<!-- Global JS -->
+		<script type="module" src="../../global.js" defer></script>
+		<!-- Feature JS -->
+		<script type="module" src="./script.js" defer></script>
 
-    <!-- leaflet CSS for maps -->
-    <!-- <link rel="stylesheet" href="../../modules/leaflet/leaflet.css"> -->
-    <!-- leaflet JS for maps -->
-    <!-- <script src="../../modules/leaflet/leaflet.js"></script> -->
-    <!-- Firebase JS -->
-    <script src="https://www.gstatic.com/firebasejs/ui/6.0.1/firebase-ui-auth.js"></script>
-    <!-- Firebase CSS -->
-    <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/6.0.1/firebase-ui-auth.css" />
-    <!-- Bootstrap JS -->
-    <script src="../../modules/bootstrap/js/bootstrap.min.js"></script>
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="../../modules/bootstrap/css/bootstrap.min.css">
-    <!-- Global Styles -->
-    <link rel="stylesheet" href="../../assets/css/_global.css">
-    <!-- Feature Styles -->
-    <link rel="stylesheet" href="./style.css">
-    <!-- Global JS -->
-    <script type="module" src="../../global.js" defer></script>
-    <!-- Feature JS -->
-    <script type="module" src="./script.js" defer></script>
+		<title>Login</title>
+	</head>
 
-    <title>Login</title>
-</head>
+	<body id="home-body">
+		<script src="https://accounts.google.com/gsi/client" async></script>
+        <div class="content-wrapper">
+		<h1 class="text-heading-1">Log in</h1>
+		<p class="text-body-2">Welcome back! Please enter your details</p>
+		<form id="login-form">
+			<label for="email-input" class="text-body-2 medium">Email</label>
+			<input id="email-input" autocomplete="username" type="email" required />
 
-<body id="home-body">
-    <script src="https://accounts.google.com/gsi/client" async></script>
+			<label for="password-input" class="text-body-2 medium">Password</label>
+			<input
+				id="password-input"
+				autocomplete="new-password"
+				type="password"
+				required
+			/>
+		</form>
+		<!-- TODO: add forget password link -->
+		<a href="">Forgot Password?</a>
+		<button type="submit" form="login-form">Login</button>
+		<span>or</span>
+		<span>Login with:</span>
+		<div id="google-button"></div>
 
-
-    <h1>Log In</h1>
-    <form id="login-form">
-        <label for="email-input">Email</label>
-        <input id="email-input" autocomplete="username" type="email" required>
-
-        <label for="password-input">Password</label>
-        <input id="password-input" autocomplete="new-password" type="password" required>
-
-        <button type="submit">Login</button>
-    </form>
-    <span>or</span>
-    <span>Login with:</span>
-    <div id="google-button"></div>
-
-    <div>
-        Don't have an account? <a href="/pages/signup/index.html" aria-label="Link to sign up">Sign up</a>
+		<div>
+			Don't have an account?
+			<a href="/pages/signup/index.html" aria-label="Link to sign up"
+				>Sign up</a
+			>
+		</div>
     </div>
-</body>
-
+	</body>
 </html>
