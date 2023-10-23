@@ -283,7 +283,6 @@ printPhotos()
 const environmentMobileInput = document.getElementById("environmentMobile");
 const uploadPictureInputMobile = document.getElementById("uploadPictureInputMobile");
 const imagesFirstOutput2 = document.getElementById("imagesFirstOutput2");
-const photos = [];
 
 environmentMobileInput.addEventListener("change", handleFileSelection);
 uploadPictureInputMobile.addEventListener("change", handleFileSelection);
@@ -292,14 +291,14 @@ function handleFileSelection(event) {
   const selectedFiles = event.target.files;
 
   for (let i = 0; i < selectedFiles.length; i++) {
-    if (photos.length >= 3) {
+    if (arrayPict.length >= 3) {
       break;
     }
     const selectedFile = selectedFiles[i];
     if (selectedFile.type.startsWith("image/")) {
       const imageElement = document.createElement("img")
       imageElement.src = URL.createObjectURL(selectedFile)
-      photos.push(imageElement)
+      arrayPict.push(imageElement)
     }
   }
   renderPhotos();
@@ -308,8 +307,8 @@ function handleFileSelection(event) {
 function renderPhotos() {
   imagesFirstOutput2.innerHTML = ""
 
-  for (let i = 0; i < photos.length; i++) {
-    imagesFirstOutput2.appendChild(photos[i])
+  for (let i = 0; i < arrayPict.length; i++) {
+    imagesFirstOutput2.appendChild(arrayPict[i])
   }
 }
 
