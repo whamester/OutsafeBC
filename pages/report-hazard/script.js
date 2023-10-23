@@ -277,6 +277,31 @@ document.addEventListener('arraychange', printPhotos)
 
 printPhotos()
 
+
+//Mobile browser
+
+const environmentMobileInput = document.getElementById("environmentMobile")
+
+const imagesFirstOutput2 = document.getElementById("imagesFirstOutput2")
+
+environmentMobileInput.addEventListener("change", function(event) {
+
+  if (event.target.files.length > 0) {
+    const selectedFile = event.target.files[0]
+
+    if (selectedFile.type.startsWith("image/")) {
+      const imageElement = document.createElement("img")
+      imageElement.src = URL.createObjectURL(selectedFile)
+      imagesFirstOutput2.innerHTML = ""
+      imagesFirstOutput2.appendChild(imageElement)
+    } else {
+      imagesFirstOutput2.innerHTML = "The selected file is not a valid image."
+    }
+  } else {
+    imagesFirstOutput2.innerHTML = "No file selected."
+  }
+})
+
 /**
  * Step 6: Show Confirmation
  */
