@@ -3,6 +3,6 @@
 	width: 100vw;
 }
 
-#dragAndDropArea, #custom-file-upload2{
+#dragAndDropArea, .custom-file-upload2{
 	border: dashed;
 }
