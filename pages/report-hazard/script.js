@@ -347,7 +347,8 @@ function renderPhotos() {
 	imagesFirstOutput2.innerHTML = ''
 
 	for (let i = 0; i < arrayPict.length; i++) {
-		imagesFirstOutput2.appendChild(arrayPict[i])
+		// imagesFirstOutput2.appendChild(arrayPict[i])
+		imagesFirstOutput2(arrayPict[i])
 	}
 }
 
