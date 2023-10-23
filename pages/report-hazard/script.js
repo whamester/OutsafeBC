@@ -221,7 +221,7 @@ fileInput.addEventListener('change', function () {
 
 			reader.onload = function (e) {
 				const base64String = e.target.result.split(',')[1]
-
+// console.log(base64String)
 				arrayPict.push('data:image/png;base64,' + base64String)
 			}
 
@@ -234,10 +234,54 @@ fileInput.addEventListener('change', function () {
 	}
 })
 
+
+const dragAndDropArea = document.getElementById('dragAndDropArea')
+const uploadPictureInputDesktop = document.getElementById('uploadPictureInputDesktop')
+
+dragAndDropArea.addEventListener('dragover', (e) => {
+    e.preventDefault()
+    dragAndDropArea.classList.add('active')
+})
+
+dragAndDropArea.addEventListener('dragleave', () => {
+    dragAndDropArea.classList.remove('active')
+})
+
+dragAndDropArea.addEventListener('drop', (e) => {
+    e.preventDefault()
+    dragAndDropArea.classList.remove('active')
+    handleFiles(e.dataTransfer.files)
+})
+
+
+uploadPictureInputDesktop.addEventListener('change', () => {
+    handleFiles(uploadPictureInputDesktop.files)
+})
+
+function handleFiles(files) {
+    for (const file of files) {
+		if (file) {
+			const reader = new FileReader()
+
+			reader.onload = function (e) {
+				const base64String = e.target.result.split(',')[1]
+// console.log(base64String)
+				arrayPict.push('data:image/png;base64,' + base64String)
+			}
+
+			reader.readAsDataURL(file)
+		} else {
+			imagesFirstOutput.innerHTML = '' }
+    }
+}
+
+
+
 // Print images
 function printPhotos() {
 	imagesFirstOutput.innerHTML = ''
-	for (let i = 0; i < arrayPict.length; i++) {
+	// for (let i = 0; i < arrayPict.length; i++) {
+	for (let i = 0; i < 3; i++) {
 		if (arrayPict[i]) {
 			imagesFirstOutput.innerHTML += `<img src="${arrayPict[i]}" width="150" />`
 			if (arrayPict.length > 2) {
