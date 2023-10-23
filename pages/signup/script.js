@@ -1,8 +1,10 @@
 import { API_URL, GOOGLE_ID } from '../../constants.js'
 //Helpers
 import { getUserSession, setUserSession } from '../../assets/helpers/storage.js'
+import injectHTML from '../../assets/helpers/inject-html.js'
 //Components
 import AlertPopup from '../../assets/components/AlertPopup.js'
+import Navbar from '../../assets/components/Navbar.js'
 //Variables
 const alert = new AlertPopup()
 
@@ -11,6 +13,9 @@ const alert = new AlertPopup()
  */
 
 window.onload = function () {
+	// Inject Navbar
+	injectHTML([Navbar], 'home-body', 'afterbegin')
+	
 	const user = getUserSession()
 
 	if (!!user?.id) {
