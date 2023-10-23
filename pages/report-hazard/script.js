@@ -280,38 +280,36 @@ printPhotos()
 
 //Mobile browser
 
-const environmentMobileInput = document.getElementById("environmentMobile")
-const uploadPictureInputMobile = document.getElementById("uploadPictureInputMobile")
-const imagesFirstOutput2 = document.getElementById("imagesFirstOutput2")
-const photos = []
+const environmentMobileInput = document.getElementById("environmentMobile");
+const uploadPictureInputMobile = document.getElementById("uploadPictureInputMobile");
+const imagesFirstOutput2 = document.getElementById("imagesFirstOutput2");
+const photos = [];
 
-environmentMobileInput.addEventListener("change", handleFileSelection)
-uploadPictureInputMobile.addEventListener("change", handleFileSelection)
+environmentMobileInput.addEventListener("change", handleFileSelection);
+uploadPictureInputMobile.addEventListener("change", handleFileSelection);
 
 function handleFileSelection(event) {
-  const selectedFiles = event.target.files
+  const selectedFiles = event.target.files;
 
   for (let i = 0; i < selectedFiles.length; i++) {
-    const selectedFile = selectedFiles[i]
-
     if (photos.length >= 3) {
-      break
+      break;
     }
-
+    const selectedFile = selectedFiles[i];
     if (selectedFile.type.startsWith("image/")) {
       const imageElement = document.createElement("img")
       imageElement.src = URL.createObjectURL(selectedFile)
-      photos.push(imageElement);
-      renderPhotos();
+      photos.push(imageElement)
     }
   }
+  renderPhotos();
 }
 
 function renderPhotos() {
   imagesFirstOutput2.innerHTML = ""
 
   for (let i = 0; i < photos.length; i++) {
-    imagesFirstOutput2.appendChild(photos[i]);
+    imagesFirstOutput2.appendChild(photos[i])
   }
 }
 
