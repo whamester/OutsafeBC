@@ -133,6 +133,7 @@ commentInput.addEventListener('change', (event) => {
  * Pending
  */
 
+//Checking if the user is accessing through a mobile browser or a desktop browser
 function checkMobileDevice() {
 	if (
 		navigator.userAgent.match(/Android/i) ||
@@ -151,6 +152,7 @@ function checkMobileDevice() {
 
 checkMobileDevice()
 
+
 let arrayPict = []
 
 const video = document.getElementById('video')
@@ -161,6 +163,7 @@ const startBtn = document.getElementById('starCameraBtn')
 const stopBtn = document.getElementById('stop')
 const sapBtn = document.getElementById('takePictureBtn')
 
+//Open and close the camera on a desktop browser if the device has a camera
 function startCamera() {
 	document.getElementById('takePhoto').style.display = 'block'
 	if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
@@ -213,6 +216,7 @@ function snapPhoto() {
 
 const fileInput = document.getElementById('uploadPictureInputDesktop')
 
+//Click to upload a picture
 fileInput.addEventListener('change', function () {
 	const selectedFile = fileInput.files[0]
 	if (arrayPict.length < 3) {
@@ -221,7 +225,6 @@ fileInput.addEventListener('change', function () {
 
 			reader.onload = function (e) {
 				const base64String = e.target.result.split(',')[1]
-				// console.log(base64String)
 				arrayPict.push('data:image/png;base64,' + base64String)
 			}
 
@@ -234,6 +237,7 @@ fileInput.addEventListener('change', function () {
 	}
 })
 
+//drag and drop option to upload picture
 const dragAndDropArea = document.getElementById('dragAndDropArea')
 
 dragAndDropArea.addEventListener('dragover', (e) => {
@@ -272,7 +276,7 @@ function handleFiles(files) {
 // Print images
 function printPhotos() {
 	imagesFirstOutput.innerHTML = ''
-	// for (let i = 0; i < arrayPict.length; i++) {
+	
 	for (let i = 0; i < 3; i++) {
 		if (arrayPict[i]) {
 			imagesFirstOutput.innerHTML += `<img src="${arrayPict[i]}" width="150" />`
@@ -316,9 +320,7 @@ printPhotos()
 //Mobile browser
 
 const environmentMobileInput = document.getElementById('environmentMobile')
-const uploadPictureInputMobile = document.getElementById(
-	'uploadPictureInputMobile'
-)
+const uploadPictureInputMobile = document.getElementById('uploadPictureInputMobile')
 const imagesFirstOutput2 = document.getElementById('imagesFirstOutput2')
 
 environmentMobileInput.addEventListener('change', handleFileSelection)

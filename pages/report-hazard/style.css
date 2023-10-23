@@ -2,3 +2,7 @@
 	height: 400px;
 	width: 100vw;
 }
+
+#dragAndDropArea, #custom-file-upload{
+	border: solid;
+}
