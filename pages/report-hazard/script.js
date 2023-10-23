@@ -221,56 +221,53 @@ fileInput.addEventListener('change', function () {
 
 			reader.onload = function (e) {
 				const base64String = e.target.result.split(',')[1]
-// console.log(base64String)
+				// console.log(base64String)
 				arrayPict.push('data:image/png;base64,' + base64String)
 			}
 
 			reader.readAsDataURL(selectedFile)
 		} else {
-			imagesFirstOutput.innerHTML = '' 
+			imagesFirstOutput.innerHTML = ''
 		}
 	} else {
 		console.log('You have already taken 3 pictures.') //Display an alert box
 	}
 })
 
-
 const dragAndDropArea = document.getElementById('dragAndDropArea')
 
 dragAndDropArea.addEventListener('dragover', (e) => {
-    e.preventDefault()
-    dragAndDropArea.classList.add('active')
+	e.preventDefault()
+	dragAndDropArea.classList.add('active')
 })
 
 dragAndDropArea.addEventListener('dragleave', () => {
-    dragAndDropArea.classList.remove('active')
+	dragAndDropArea.classList.remove('active')
 })
 
 dragAndDropArea.addEventListener('drop', (e) => {
-    e.preventDefault()
-    dragAndDropArea.classList.remove('active')
-    handleFiles(e.dataTransfer.files)
+	e.preventDefault()
+	dragAndDropArea.classList.remove('active')
+	handleFiles(e.dataTransfer.files)
 })
 
-
 function handleFiles(files) {
-    for (const file of files) {
+	for (const file of files) {
 		if (file) {
 			const reader = new FileReader()
 
 			reader.onload = function (e) {
 				const base64String = e.target.result.split(',')[1]
-// console.log(base64String)
+				// console.log(base64String)
 				arrayPict.push('data:image/png;base64,' + base64String)
 			}
 
 			reader.readAsDataURL(file)
 		} else {
-			imagesFirstOutput.innerHTML = '' }
-    }
+			imagesFirstOutput.innerHTML = ''
+		}
+	}
 }
-
-
 
 // Print images
 function printPhotos() {
@@ -316,41 +313,41 @@ document.addEventListener('arraychange', printPhotos)
 
 printPhotos()
 
-
 //Mobile browser
 
-const environmentMobileInput = document.getElementById("environmentMobile")
-const uploadPictureInputMobile = document.getElementById("uploadPictureInputMobile")
-const imagesFirstOutput2 = document.getElementById("imagesFirstOutput2")
+const environmentMobileInput = document.getElementById('environmentMobile')
+const uploadPictureInputMobile = document.getElementById(
+	'uploadPictureInputMobile'
+)
+const imagesFirstOutput2 = document.getElementById('imagesFirstOutput2')
 
-environmentMobileInput.addEventListener("change", handleFileSelection)
-uploadPictureInputMobile.addEventListener("change", handleFileSelection)
+environmentMobileInput.addEventListener('change', handleFileSelection)
+uploadPictureInputMobile.addEventListener('change', handleFileSelection)
 
 function handleFileSelection(event) {
-  const selectedFiles = event.target.files
+	const selectedFiles = event.target.files
 
-  for (let i = 0; i < selectedFiles.length; i++) {
-    if (arrayPict.length >= 3) {
-      break;
-    }
-    const selectedFile = selectedFiles[i];
-    if (selectedFile.type.startsWith("image/")) {
-      const imageElement = document.createElement("img")
-      imageElement.src = URL.createObjectURL(selectedFile)
-      arrayPict.push(imageElement)
-    }
-  }
-  renderPhotos();
+	for (let i = 0; i < selectedFiles.length; i++) {
+		if (arrayPict.length >= 3) {
+			break
+		}
+		const selectedFile = selectedFiles[i]
+		if (selectedFile.type.startsWith('image/')) {
+			const imageElement = document.createElement('img')
+			imageElement.src = URL.createObjectURL(selectedFile)
+			arrayPict.push(imageElement)
+		}
+	}
+	renderPhotos()
 }
 
 function renderPhotos() {
-  imagesFirstOutput2.innerHTML = ""
+	imagesFirstOutput2.innerHTML = ''
 
-  for (let i = 0; i < arrayPict.length; i++) {
-    imagesFirstOutput2.appendChild(arrayPict[i])
-  }
+	for (let i = 0; i < arrayPict.length; i++) {
+		imagesFirstOutput2.appendChild(arrayPict[i])
+	}
 }
-
 
 /**
  * Step 6: Show Confirmation
