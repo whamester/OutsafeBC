@@ -92,6 +92,7 @@
 
 .btn-secondary:active:not(:disabled) {
 	outline: 2px solid var(--secondary-600);
+	border-color: var(--secondary-200);
 	background: var(--secondary-200);
 	color: var(--secondary-active-btn-color);
 }
@@ -115,8 +116,8 @@
 }
 
 .btn-success:active:not(:disabled) {
-	color: var(--white);
-	background: var(--success-active-btn-color);
+	color: var(--success-active-btn-color);
+	background: var(--success-600);
 }
 
 .btn-success:disabled {
@@ -133,7 +134,8 @@
 
 .btn-warning:hover {
 	border: 1px solid var(--warning-700);
-	background: var(--warning-hover-btn-color);
+	background: var(--warning-100);
+	color: var(--warning-hover-btn-color);
 }
 
 .btn-warning:active:not(:disabled) {
