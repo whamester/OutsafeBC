@@ -7,6 +7,8 @@ import AlertPopup from '../../assets/components/AlertPopup.js'
 import Navbar from '../../assets/components/Navbar.js'
 //Variables
 const alert = new AlertPopup()
+const password = document.getElementById('password-input')
+const confirmPassword = document.getElementById('confirm-password-input')
 
 /**
  * Google Auth Setup
@@ -15,7 +17,7 @@ const alert = new AlertPopup()
 window.onload = function () {
 	// Inject Navbar
 	injectHTML([Navbar], 'home-body', 'afterbegin')
-	
+
 	const user = getUserSession()
 
 	if (!!user?.id) {
@@ -63,16 +65,16 @@ document
 	.getElementById('signup-form')
 	.addEventListener('submit', async (event) => {
 		event.preventDefault()
-
+		const email = document.getElementById('email-input').value
+		const password = document.getElementById('password-input').value
+		const userName = document.getElementById('name-input').value
 		try {
-			const email = document.getElementById('email-input').value
-			const password = document.getElementById('password-input').value
-
 			const response = await fetch(`${API_URL}/user?provider=password`, {
 				method: 'POST',
 				body: JSON.stringify({
 					email,
 					password,
+					userName,
 				}),
 			})
 
@@ -91,3 +93,18 @@ document
 			console.debug(error)
 		}
 	})
+
+/**
+ * Validate Password
+ */
+
+function validatePassword() {
+	if (password.value != confirmPassword.value) {
+		confirmPassword.setCustomValidity("Passwords Don't Match")
+	} else {
+		confirmPassword.setCustomValidity('')
+	}
+}
+
+password.onchange = validatePassword
+confirmPassword.onkeyup = validatePassword
