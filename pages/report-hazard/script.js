@@ -281,26 +281,40 @@ printPhotos()
 //Mobile browser
 
 const environmentMobileInput = document.getElementById("environmentMobile")
-
+const uploadPictureInputMobile = document.getElementById("uploadPictureInputMobile")
 const imagesFirstOutput2 = document.getElementById("imagesFirstOutput2")
+const photos = []
 
-environmentMobileInput.addEventListener("change", function(event) {
+environmentMobileInput.addEventListener("change", handleFileSelection)
+uploadPictureInputMobile.addEventListener("change", handleFileSelection)
 
-  if (event.target.files.length > 0) {
-    const selectedFile = event.target.files[0]
+function handleFileSelection(event) {
+  const selectedFiles = event.target.files
+
+  for (let i = 0; i < selectedFiles.length; i++) {
+    const selectedFile = selectedFiles[i]
+
+    if (photos.length >= 3) {
+      break
+    }
 
     if (selectedFile.type.startsWith("image/")) {
       const imageElement = document.createElement("img")
       imageElement.src = URL.createObjectURL(selectedFile)
-      imagesFirstOutput2.innerHTML = ""
-      imagesFirstOutput2.appendChild(imageElement)
-    } else {
-      imagesFirstOutput2.innerHTML = "The selected file is not a valid image."
+      photos.push(imageElement);
+      renderPhotos();
     }
-  } else {
-    imagesFirstOutput2.innerHTML = "No file selected."
   }
-})
+}
+
+function renderPhotos() {
+  imagesFirstOutput2.innerHTML = ""
+
+  for (let i = 0; i < photos.length; i++) {
+    imagesFirstOutput2.appendChild(photos[i]);
+  }
+}
+
 
 /**
  * Step 6: Show Confirmation
