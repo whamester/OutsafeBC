@@ -12,17 +12,13 @@
 }
 
 /* /For easy testing on a mobile browser, this property is temporary */
-.imagesFirstOutput2 , img{
-	width: 10%;
-	height: auto;
-}
 
-.imagesFirstOutput2 > img{
+#imagesFirstOutput2 > img {
 	display: grid;
 	grid-template-columns: 1fr;
 }
 
-.imagesFirstOutput , img{
+img{
 	width: 10%;
 	height: auto;
 }
