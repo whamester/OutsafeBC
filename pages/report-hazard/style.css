@@ -6,3 +6,7 @@
 #dragAndDropArea, .custom-file-upload2{
 	border: dashed;
 }
+
+.custom-file-upload{
+	border: solid;
+}
