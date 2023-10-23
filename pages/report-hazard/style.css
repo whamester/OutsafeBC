@@ -15,6 +15,9 @@
 .imagesFirstOutput2 , img{
 	width: 10%;
 	height: auto;
+}
+
+.imagesFirstOutput2 > img{
 	display: grid;
 	grid-template-columns: 1fr;
 }
