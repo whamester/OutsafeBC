@@ -280,15 +280,15 @@ printPhotos()
 
 //Mobile browser
 
-const environmentMobileInput = document.getElementById("environmentMobile");
-const uploadPictureInputMobile = document.getElementById("uploadPictureInputMobile");
-const imagesFirstOutput2 = document.getElementById("imagesFirstOutput2");
+const environmentMobileInput = document.getElementById("environmentMobile")
+const uploadPictureInputMobile = document.getElementById("uploadPictureInputMobile")
+const imagesFirstOutput2 = document.getElementById("imagesFirstOutput2")
 
-environmentMobileInput.addEventListener("change", handleFileSelection);
-uploadPictureInputMobile.addEventListener("change", handleFileSelection);
+environmentMobileInput.addEventListener("change", handleFileSelection)
+uploadPictureInputMobile.addEventListener("change", handleFileSelection)
 
 function handleFileSelection(event) {
-  const selectedFiles = event.target.files;
+  const selectedFiles = event.target.files
 
   for (let i = 0; i < selectedFiles.length; i++) {
     if (arrayPict.length >= 3) {
