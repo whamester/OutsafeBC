@@ -135,8 +135,11 @@
 					<!-- TODO// Add icon here -->
 
 					<div id="dragAndDropArea">
-						<span>Drop your images here, </span>
-						<input id="uploadPictureInputDesktop" type="file" accept="image/jpeg, image/jpg, image/png" />
+						<span>Drop your images here, or </span>
+						<label for="uploadPictureInputDesktop" >
+						<input id="uploadPictureInputDesktop" type="file" accept="image/jpeg, image/jpg, image/png" style="display:none"/>
+						<span> <u>click to browse</u> </span>
+					</label>
 					</div>					
 
 					<div id="takePhoto" style="display: none">
@@ -165,7 +168,7 @@
 						<span>File size limit: 10 MB</span>
 					</label>
 					<div>
-							<p id="imagesFirstOutput"></p>
+							<p id="imagesFirstOutput2"></p>
 					</div>
 				</div>
 

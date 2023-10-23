@@ -236,7 +236,6 @@ fileInput.addEventListener('change', function () {
 
 
 const dragAndDropArea = document.getElementById('dragAndDropArea')
-const uploadPictureInputDesktop = document.getElementById('uploadPictureInputDesktop')
 
 dragAndDropArea.addEventListener('dragover', (e) => {
     e.preventDefault()
@@ -253,10 +252,6 @@ dragAndDropArea.addEventListener('drop', (e) => {
     handleFiles(e.dataTransfer.files)
 })
 
-
-uploadPictureInputDesktop.addEventListener('change', () => {
-    handleFiles(uploadPictureInputDesktop.files)
-})
 
 function handleFiles(files) {
     for (const file of files) {
