@@ -128,11 +128,12 @@
 				</h1>
 
 				<div id="desktop">
-					<button id="starCameraBtn" type="button">
-					<!-- TODO// Add icon here -->
+					<label for="starCameraBtn" class="custom-file-upload">
+						<button id="starCameraBtn" type="button" style="display:none"></button>
+										<!-- TODO// Add icon here -->
 						<span>Take a picture</span>
 						<span>At the hazard site? Click a picture to add in the report.</span>
-					</button>
+					</label>
 					<br><br>
 
 					<div id="dragAndDropArea">
@@ -142,6 +143,7 @@
 							<input id="uploadPictureInputDesktop" type="file" accept="image/jpeg, image/jpg, image/png" style="display:none"/>
 							<span> <u>click to browse</u> </span>
 						</label>
+						<span>File size limit: 10 MB</span>
 					</div>					
 
 					<div id="takePhoto" style="display: none">
