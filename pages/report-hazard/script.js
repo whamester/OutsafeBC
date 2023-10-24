@@ -262,7 +262,6 @@ function handleFiles(files) {
 
 			reader.onload = function (e) {
 				const base64String = e.target.result.split(',')[1]
-				// console.log(base64String)
 				arrayPict.push('data:image/png;base64,' + base64String)
 			}
 
@@ -348,7 +347,6 @@ function renderPhotos() {
 
 	for (let i = 0; i < arrayPict.length; i++) {
 		imagesFirstOutput2.appendChild(arrayPict[i])
-		// imagesFirstOutput2(arrayPict[i])
 	}
 }
 
