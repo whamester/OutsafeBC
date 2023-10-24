@@ -174,7 +174,7 @@ hazardTypeBtn.addEventListener('click', async () => {
 					content.appendChild(div)
 				}
 			} else {
-				console.log('Categoría no encontrada en el JSON.')
+				console.log('Category not found on JSON.')
 			}
 		} catch (error) {
 			console.error(error)
