@@ -15,10 +15,6 @@
 	<link rel="stylesheet" href="../../modules/leaflet/leaflet.css">
 	<!-- leaflet JS for maps -->
 	<script src="../../modules/leaflet/leaflet.js"></script>
-	<!-- Bootstrap JS -->
-	<script src="../../modules/bootstrap/js/bootstrap.min.js"></script>
-	<!-- Bootstrap CSS -->
-	<link rel="stylesheet" href="../../modules/bootstrap/css/bootstrap.min.css">
 	<!-- Global Styles -->
 	<link rel="stylesheet" href="../../assets/css/_global.css">
 	<!-- Feature Styles -->
@@ -83,7 +79,6 @@
 			<section id="hazard-category" class="page">
 				<h1>2. What type of hazard would you like to report?</h1>
 				<div id="hazard-category-content"></div>
-				</div>
 			</section>
 
 			<section id="hazard-type" class="page">
@@ -109,6 +104,7 @@
 					<input id="option-5" type="radio" name="hazardOptionRadioBtn" value="raccoon" />
 					<label for="option-5">Raccoon</label>
 				</div>
+				<a href="#additional-details">Continue</a>
 			</section>
 
 			<section id="additional-details" class="page">
@@ -127,17 +123,56 @@
 					visually. <span>(Optional)</span>
 				</h1>
 
-				<div>
-					<button id="takePictureBtn" type="button">
+				<div id="desktop">
+					<label for="starCameraBtn" class="custom-file-upload">
+						<button id="starCameraBtn" type="button" style="display:none"></button>
+						<!-- TODO// Add icon here -->
 						<span>Take a picture</span>
-					</button>
-					<!-- TODO// Add icon here -->
-					<p>Take a picture</p>
-					<p>At the hazard site? Click a picture to add in the report.</p>
+						<span>At the hazard site? Click a picture to add in the report.</span>
+					</label>
+					<br><br>
 
 					<div id="dragAndDropArea">
-						<input id="uploadPictureInput" type="file" accept="image/jpeg, image/jpg, image/png" />
+						<!-- TODO// Add icon here -->
+						<span>Drop your images here, or </span>
+						<label for="uploadPictureInputDesktop">
+							<input id="uploadPictureInputDesktop" type="file" accept="image/jpeg, image/jpg, image/png"
+								style="display:none" />
+							<span> <u>click to browse</u> </span>
+						</label>
 						<span>File size limit: 10 MB</span>
+					</div>
+
+					<div id="takePhoto" style="display: none">
+						<br />
+						<video id="video" width="320" height="240" autoplay></video>
+						<br />
+						<button id="takePictureBtn" disabled>Take a photo</button>
+						<button id="stop" disabled>Stop Camera</button>
+						<br />
+						<canvas hidden id="canvas-1" width="320" height="240"></canvas>
+					</div>
+					<div id="imagesFirstOutput">
+						<!-- <p id="imagesFirstOutput"></p> -->
+					</div>
+				</div>
+				<div id="mobile">
+					<label for="environmentMobile" class="custom-file-upload">
+						<input type="file" id="environmentMobile" capture="environment" accept="image/*"
+							style="display:none;" />
+						<!-- TODO// Add icon here -->
+						Take a picture<br>
+						<span>At the hazard site? Click a picture to add in the report.</span>
+					</label><br><br>
+					<label for="uploadPictureInputMobile" class="custom-file-upload2">
+						<input type="file" id="uploadPictureInputMobile" accept="image/jpeg, image/jpg, image/png"
+							style="display:none;" />
+						<!-- TODO// Add icon here -->
+						Upload Files<br>
+						<span>File size limit: 10 MB</span>
+					</label>
+					<div id="imagesFirstOutput2">
+						<!-- <p id="imagesFirstOutput2"></p> -->
 					</div>
 				</div>
 

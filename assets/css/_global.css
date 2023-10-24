@@ -2,6 +2,9 @@
 @import url(./_variables.css);
 @import url(./_typography.css);
 
+@import url(./button.css);
+@import url(./input.css);
+
 @import url(./alert-popup.css);
 
 :root {
@@ -14,9 +17,10 @@ body {
 	width: 100%;
 	height: 100%;
 	font-family: 'Instrument Sans', sans-serif;
+	color: var(--neutral-900);
+	margin: 0;
 }
 
-/* .leaflet-tile-pane {
-	-webkit-filter: grayscale(100%);
-	filter: grayscale(100%);
-} */
+.hidden {
+	display: none !important;
+}

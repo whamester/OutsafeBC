@@ -2,3 +2,23 @@
 	height: 400px;
 	width: 100vw;
 }
+
+#dragAndDropArea, .custom-file-upload2{
+	border: dashed;
+}
+
+.custom-file-upload{
+	border: solid;
+}
+
+/* /For easy testing on a mobile browser, this property is temporary */
+
+#imagesFirstOutput2 > img {
+	display: grid;
+	grid-template-columns: 1fr;
+}
+
+img{
+	width: 10%;
+	height: auto;
+}

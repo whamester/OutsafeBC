@@ -1,7 +1,57 @@
-/* TODO: generate the font classes */
+.text-heading-1 {
+	font-size: var(--heading-1-size);
+	letter-spacing: var(--heading-1-letter-spacing);
+	line-height: var(--heading-1-line-height);
+}
+
+.text-heading-2 {
+	font-size: var(--heading-2-size);
+	letter-spacing: var(--heading-2-letter-spacing);
+	line-height: var(--heading-2-line-height);
+}
+
+.text-heading-3 {
+	font-size: var(--heading-3-size);
+	letter-spacing: var(--heading-3-letter-spacing);
+	line-height: var(--heading-3-line-height);
+}
+
+.text-body-1 {
+	font-size: var(--body-1-size);
+	letter-spacing: var(--body-1-letter-spacing);
+	line-height: var(--body-1-line-height);
+}
 
 .text-body-2 {
 	font-size: var(--body-2-size);
 	letter-spacing: var(--body-2-letter-spacing);
 	line-height: var(--body-2-line-height);
+}
+
+.text-body-3 {
+	font-size: var(--body-3-size);
+	letter-spacing: var(--body-3-letter-spacing);
+	line-height: var(--body-3-line-height);
+}
+
+.text-body-4 {
+	font-size: var(--body-4-size);
+	letter-spacing: var(--body-4-letter-spacing);
+	line-height: var(--body-4-line-height);
+}
+
+.bold {
+	font-weight: 700;
+}
+
+.semibold {
+	font-weight: 600;
+}
+
+.medium {
+	font-weight: 500;
+}
+
+.regular {
+	font-weight: 400;
 }
