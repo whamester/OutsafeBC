@@ -7,7 +7,7 @@
 
     <link rel="stylesheet" href="../../assets/css/_global.css" />
 
-    <script src="../../global.js" defer></script>
+    <script src="../../global.js" defer type="module"></script>
 
     <title>Components</title>
 
@@ -41,14 +41,14 @@
             padding-left: 3rem;
         }
 
-        #input>section {
+        [id="input-section"]>section {
             display: flex;
             flex-direction: column;
             gap: 2rem;
             max-width: 300px;
         }
 
-        #input>section>h3 {
+        [id="input-section"]>section>h3 {
             padding-top: 1rem;
         }
     </style>
@@ -64,14 +64,18 @@
 <body>
     <nav>
         <ul>
-            <li><a href="#button">Button</a></li>
-            <li><a href="#input">Input</a></li>
+            <li><a href="#button-section">Button</a></li>
+            <li><a href="#input-section">Input</a></li>
+            <li><a href="#modal-section">Modal</a></li>
+            <li><a href="#alert-section">Alert</a></li>
+
+
         </ul>
     </nav>
     <main id="main">
         <h1>Components</h1>
 
-        <section id="button">
+        <section id="button-section">
             <h2>Button</h2>
 
             <section>
@@ -109,7 +113,7 @@
             </section>
         </section>
 
-        <section id="input">
+        <section id="input-section">
             <h2>Input</h2>
 
 
@@ -188,7 +192,82 @@
                 </div>
             </section>
         </section>
+
+        <section id="modal-section">
+            <h2>Modal</h2>
+
+            <section>
+                <h3>Default</h3>
+
+                <button id="open-modal-btn" class="btn btn-primary">Open Modal</button>
+                <script type="module">
+                    import Modal from '../../assets/components/Modal.js'
+                    const openModalBtn = document.getElementById('open-modal-btn')
+
+                    openModalBtn.addEventListener('click', () => {
+
+                        const modal = new Modal()
+
+                        const closeModal = () => {
+                            console.log('closing modal')
+                            modal.close()
+                        }
+                        const button = document.createElement('button')
+                        button.setAttribute('id', 'open-modal-btn')
+                        button.setAttribute('class', 'btn btn-primary')
+                        button.addEventListener('click', closeModal)
+                        button.innerHTML = 'Continue Exploring'
+
+                        modal.show({
+                            title: "Your report has been submitted!",
+                            description: "Thank you for helping others have a safe camping experience.",
+                            icon: { name: 'icon-circle-check', color: '#000000', size: '3.5rem' },
+                            actions: button, // '<button id="open-modal-btn" class="btn btn-primary">Continue Exploring</button>',
+                            enableOverlayClickClose: true
+                        })
+                    })
+                </script>
+            </section>
+        </section>
+
+        <section id="alert-section">
+            <h2>Alert</h2>
+
+            <section>
+                <h3>Default</h3>
+
+                <button id="open-success-alert-btn" class="btn btn-success">Open Success Alert</button>
+                <button id="open-warning-alert-btn" class="btn btn-warning">Open Warning Alert</button>
+                <button id="open-error-alert-btn" class="btn btn-error">Open Error Alert</button>
+
+                <script type="module">
+                    import AlertPopup from '../../assets/components/AlertPopup.js'
+
+                    const successBtn = document.getElementById('open-success-alert-btn')
+                    const warningBtn = document.getElementById('open-warning-alert-btn')
+                    const errorBtn = document.getElementById('open-error-alert-btn')
+
+
+                    successBtn.addEventListener('click', () => {
+                        const alert = new AlertPopup()
+                        alert.show("Hello there!")
+                    })
+
+                    warningBtn.addEventListener('click', () => {
+                        const alert = new AlertPopup()
+                        alert.show("Warning!", AlertPopup.warning, 5000)
+                    })
+
+                    errorBtn.addEventListener('click', () => {
+                        const alert = new AlertPopup()
+                        alert.show(AlertPopup.SOMETHING_WENT_WRONG_MESSAGE, AlertPopup.error)
+                    })
+                </script>
+            </section>
+        </section>
     </main>
+
+
 </body>
 
 </html>
