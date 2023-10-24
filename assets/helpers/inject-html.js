@@ -1,23 +1,17 @@
 // injects the HTML string into the DOM
-const injectHTML = (componentArray, id = 'root', position = 'beforeend') => {
-	const root = document.getElementById(id)
+const injectHTML = (params) => {
+	params.forEach(comp => {
+		const root = document.getElementById(comp?.id ?? "root");
 
-	if (!root) {
-		console.error(`${id} element not found.`)
-		return
-	}
-
-	root.insertAdjacentHTML(
-		position,
-		componentArray
-			.map((component) => {
-				if (typeof component === 'function') return component()
-
-				// argument passed to component
-				return component[0](component[1])
-			})
-			?.join('')
-	)
+		if (!root) {
+			console.error(`${ id } element not found.`);
+		} else {
+			root.insertAdjacentHTML(
+				comp?.position ?? "beforeend",
+				comp?.func(comp?.args)
+			)
+		}
+	});
 }
 
 export default injectHTML

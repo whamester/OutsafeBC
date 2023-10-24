@@ -28,7 +28,7 @@ const apiRequest = (endpoint, {method, body, ...customConfig} = {}) => {
     }).catch(error => {
       console.log(`Error: ${ error.message }, Endpoint: ${ endpoint }`);
       return {};
-    })
+    });
 }
 
 export default apiRequest;

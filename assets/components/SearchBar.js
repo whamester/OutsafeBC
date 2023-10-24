@@ -1,23 +1,32 @@
-const SearchBar = ({categories, reports}) => {
-  const filterModalToggle = () => {
-    return `
-      const filterModal = document.getElementById("filter--modal");
-      filterModal.classList.toggle("d-none");
-    `
-  }
+export const SearchBarSuggestionCard = ({ properties }) => {
+  return `
+    <div 
+      class="card--suggestions" 
+      data-value='${ JSON.stringify({ lat: properties.lat , lng: properties.lon }) }'>
+      ${ properties?.address_line1 }, ${ properties?.address_line2 }
+    </div>
+  `
+};
 
+const SearchBar = ({ categories, reports }) => {
   return `
     <div class="mt-4">
-      <div class="d-flex mx-4">
-        <div class="form-control">
-          <input class="search--input" placeholder="Search here..."/>
+      <div id="box--search" class="d-flex mx-4 flex-column">
+        <div class="d-flex">
+          <div class="form-control">
+            <input
+              id="input--search"
+              placeholder="Search here..."/>
+          </div>
+          <button 
+            id="button--filter-open"
+            class="btn btn-light">
+            <img src="/assets/img/icons/icon-filter.png">
+            Filters
+          </button>
         </div>
-        <button 
-          class="btn btn-light filter--btn"
-          onclick='${ filterModalToggle() }'>
-          <img src="/assets/img/icons/icon-filter.png">
-          Filters
-        </button>
+
+        <div id="box--suggestion"></div>
       </div>
       <div class="ms-4 container">
         <div class="mt-2 row flex-nowrap overflow-auto">
@@ -26,15 +35,15 @@ const SearchBar = ({categories, reports}) => {
           }).join("") }
         </div>
       </div>
-      <div class="position-fixed bottom-0 start-0 row flex-nowrap gap-3 overflow-auto m-4 search--results">
-        ${ reports?.map(item => {
-          const location = `${ item?.location?.lat }, ${ item?.location?.lng }, ${ item?.location?.address }`;
+      <div id="cards--box" class="position-fixed bottom-0 start-0 row flex-nowrap gap-3 overflow-auto m-4 pe-5 search--results">
+        ${ reports?.map((item, idx) => {
+          const location = item?.location?.address ?? `${ item?.location?.lat }, ${ item?.location?.lng }`;
           const dateObj = new Date(item.updated_at);
           const date = dateObj.toLocaleString("default", { day: "numeric", weekday: "long", year: "numeric" });
           const time = dateObj.toLocaleTimeString("default", { hour: "2-digit", minute: "2-digit", timeZoneName: "short" });
 
           return `
-            <div class="col-2 bg-white p-2 rounded report--cards" data-details='${ JSON.stringify(item) }'>
+            <div id="card-${ idx+1 }" class="col-3 bg-white p-2 rounded report--cards" data-details='${ JSON.stringify(item) }'>
               <p class="h3">${ item.hazardCategory?.name }</p>
               <p>${ location }</p>
               <p>${ date + "&nbsp;" + time }</p>
@@ -46,9 +55,10 @@ const SearchBar = ({categories, reports}) => {
     </div>
 
     <div 
-      id="filter--modal" 
-      class="position-fixed top-0 start-0 bg-light vw-100 vh-100 d-none">
-      <button onclick='${ filterModalToggle() }'>X</button>
+      id="modal--filter"
+      style="display: none"
+      class="position-fixed top-0 start-0 bg-light vw-100 vh-100">
+      <button id="button--filter-close">X</button>
       <div>
         ${ categories?.map(item => {
           return `
