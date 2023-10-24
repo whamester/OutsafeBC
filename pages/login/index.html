@@ -50,21 +50,22 @@
 			<h1 class="text-heading-1">Log in</h1>
 			<p class="text-body-2">Welcome back! Please enter your details</p>
 			<form id="login-form">
-				<div class="InputAndLabel">
+				<div class="InputAndLabel form-field">
 					<label for="email-input" class="text-body-2 medium">Email</label>
 					<input
 						id="email-input"
 						autocomplete="username"
 						type="email"
 						required
-						class=""
+						placeholder="name@email.com"
 					/>
 				</div>
 
-				<div class="InputAndLabel">
+				<div class="InputAndLabel form-field with-icon">
 					<label for="password-input" class="text-body-2 medium"
 						>Password*</label
 					>
+					<i class="icon-search icon-right"></i>
 					<input
 						id="password-input"
 						autocomplete="new-password"
@@ -72,7 +73,7 @@
 						required
 						class=""
 					/>
-					<!-- <button id="show-pw">show pw</button> -->
+
 				</div>
 			</form>
 			<!-- TODO: add forget password link -->
