@@ -8,7 +8,7 @@ class AlertPopup {
 
 	constructor() {
 		const alert = `
-			<div id="alert" class="d-none">
+			<div id="alert" class="hidden">
 				<div id="alert-icon"></div>
 				<p id="alert-message" class="text-body-2"></p>
 			</div>
@@ -39,7 +39,7 @@ class AlertPopup {
 
 		const alertElement = document.getElementById('alert')
 		alertElement.classList.add(this.type)
-		alertElement.classList.remove('d-none')
+		alertElement.classList.remove('hidden')
 
 		setTimeout(() => {
 			const alertElement = document.getElementById('alert')
