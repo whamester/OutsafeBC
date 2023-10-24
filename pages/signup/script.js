@@ -9,6 +9,10 @@ import Navbar from '../../assets/components/Navbar.js'
 const alert = new AlertPopup()
 const password = document.getElementById('password-input')
 const confirmPassword = document.getElementById('confirm-password-input')
+const confirmPasswordForm = document.getElementById('confirmPwForm')
+const confirmPasswordError = document.getElementById('confirmPwError')
+const showPw = document.getElementById('show-pw')
+const showPwConfirm = document.getElementById('show-pw-confrim')
 
 /**
  * Google Auth Setup
@@ -100,11 +104,33 @@ document
 
 function validatePassword() {
 	if (password.value != confirmPassword.value) {
-		confirmPassword.setCustomValidity("Passwords Don't Match")
+		confirmPasswordForm.classList.add('error')
+		confirmPasswordError.style.display = 'block'
 	} else {
-		confirmPassword.setCustomValidity('')
+		confirmPasswordForm.classList.remove('error')
+		confirmPasswordError.style.display = 'none'
 	}
 }
 
 password.onchange = validatePassword
 confirmPassword.onkeyup = validatePassword
+
+/**
+ * Toggle Password Visibility
+ */
+
+showPw.addEventListener('click', () => {
+	if (password.type === 'password') {
+		password.type = 'text'
+	} else {
+		password.type = 'password'
+	}
+})
+
+showPwConfirm.addEventListener('click', () => {
+	if (confirmPassword.type === 'password') {
+		confirmPassword.type = 'text'
+	} else {
+		confirmPassword.type = 'password'
+	}
+})

@@ -25,13 +25,6 @@
 			rel="stylesheet"
 			href="https://www.gstatic.com/firebasejs/ui/6.0.1/firebase-ui-auth.css"
 		/>
-		<!-- Bootstrap JS -->
-		<script src="../../modules/bootstrap/js/bootstrap.min.js"></script>
-		<!-- Bootstrap CSS -->
-		<link
-			rel="stylesheet"
-			href="../../modules/bootstrap/css/bootstrap.min.css"
-		/>
 		<!-- Global Styles -->
 		<link rel="stylesheet" href="../../assets/css/_global.css" />
 		<!-- Feature Styles -->
@@ -50,53 +43,44 @@
 		<div class="ContentWrapper">
 			<h1 class="text-heading-1">Create an account</h1>
 			<form id="signup-form">
-				<div class="InputAndLabel">
+				<div class="InputAndLabel form-field">
 					<label for="name-input" class="text-body-2 medium">Name*</label>
-					<input
-						id="name-input"
-						autocomplete="name"
-						type="text"
-						required
-						class="form-control"
-					/>
+					<input id="name-input" autocomplete="name" type="text" required />
 				</div>
 
-				<div class="InputAndLabel">
+				<div class="InputAndLabel form-field">
 					<label for="email-input" class="text-body-2 medium">Email*</label>
 					<input
 						id="email-input"
 						autocomplete="username"
 						type="email"
 						required
-						class="form-control"
 					/>
 				</div>
 
-				<div class="InputAndLabel">
+				<div class="InputAndLabel form-field with-icon">
 					<label for="password-input" class="text-body-2 medium"
 						>Password*</label
 					>
-					<input
-						id="password-input"
-						type="password"
-						required
-						class="form-control"
-					/>
-					<p class="PasswordHint text-body-3 regular">
+					<i class="icon-search icon-right" id="show-pw"></i>
+					<input id="password-input" type="password" required />
+					<span class="form-field__helper">
 						Must be at least 8 characters
-					</p>
+					</span>
 				</div>
 
-				<div class="InputAndLabel">
+				<div class="InputAndLabel form-field with-icon" id="confirmPwForm">
 					<label for="confirm-password-input" class="text-body-2 medium"
 						>Confirm Password*</label
 					>
-					<input
-						id="confirm-password-input"
-						type="password"
-						required
-						class="form-control"
-					/>
+					<i class="icon-search icon-right" id="show-pw-confrim"></i>
+					<input id="confirm-password-input" type="password" required />
+					<span
+						class="form-field__helper"
+						style="display: none"
+						id="confirmPwError"
+						>Passwords don't match</span
+					>
 				</div>
 
 				<button type="submit" class="btn btn-primary">Sign up</button>

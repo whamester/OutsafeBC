@@ -98,10 +98,10 @@ document
  * Toggle Password Visibility
  */
 
-// showPw.addEventListener('click', () => {
-// 	if (password.type === 'password') {
-// 		password.type = 'text'
-// 	} else {
-// 		password.type = 'password'
-// 	}
-// })
+showPw.addEventListener('click', () => {
+	if (password.type === 'password') {
+		password.type = 'text'
+	} else {
+		password.type = 'password'
+	}
+})
