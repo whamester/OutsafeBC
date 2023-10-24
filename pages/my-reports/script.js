@@ -47,15 +47,15 @@ async function getRecentReports() {
 async function displayRecentReports() {
 	await getRecentReports()
 
-	for (const index of recentReportArr) {
+	for (const report of recentReportArr) {
 		let hazardReport = new MyReport(
-			index.id,
-			index.hazardCategory.name,
-			index.hazard.name,
-			index.location.address,
-			index.created_at,
-			index.images,
-			index.comment
+			report.id,
+			report.hazardCategory.name,
+			report.hazard.name,
+			report.location.address,
+			report.created_at,
+			report.images,
+			report.comment
 		)
 		recentReports.appendChild(hazardReport.reportContent())
 	}
@@ -81,15 +81,15 @@ async function getOlderReports() {
 async function displayOlderReports() {
 	await getOlderReports()
 
-	for (const index of olderReportArr) {
+	for (const report of olderReportArr) {
 		let hazardReport = new MyReport(
-			index.id,
-			index.hazardCategory.name,
-			index.hazard.name,
-			index.location.address,
-			index.created_at,
-			index.images,
-			index.comment
+			report.id,
+			report.hazardCategory.name,
+			report.hazard.name,
+			report.location.address,
+			report.created_at,
+			report.images,
+			report.comment
 		)
 		olderReports.appendChild(hazardReport.reportContent())
 	}
