@@ -28,6 +28,7 @@ olderBtn.addEventListener('click', () => {
 
 // Get all the recent reports for the logged in user and display them
 
+// TODO: handle pagination
 async function getRecentReports() {
 	try {
 		recentReportArr.splice(0, recentReportArr.length)
