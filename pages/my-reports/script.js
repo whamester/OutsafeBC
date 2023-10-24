@@ -1,6 +1,9 @@
-import MyReport from '../../assets/helpers/report-card.js'
 import { API_URL } from '../../constants.js'
+// Helpers
+import MyReport from '../../assets/helpers/report-card.js'
 import { getUserSession } from '../../assets/helpers/storage.js'
+// Components
+import AlertPopup from '../../assets/components/AlertPopup.js'
 
 // Variables
 const user = getUserSession()
@@ -12,6 +15,7 @@ const recentReports = document.getElementById('recentReports')
 const olderReports = document.getElementById('olderReports')
 const recentBtn = document.getElementById('recentReportsBtn')
 const olderBtn = document.getElementById('olderReportsBtn')
+const alert = new AlertPopup()
 
 // Checkbox toggle
 // Set the recentBtn to be checked initially
