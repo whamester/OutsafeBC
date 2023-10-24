@@ -70,24 +70,28 @@ const onSelectLocation = (event) => {
 /**
  * Step 2: Category List
  */
-
+let categories = []
 const getCategories = async () => {
 	try {
 		let response = await fetch(`${API_URL}/hazard-category`)
 		let { data } = await response.json()
 		const content = document.getElementById('hazard-category-content')
+		
 
 		for (let i = 0; i < data.length; i++) {
 			const category = data[i]
 			const div = document.createElement('div')
 			const radio = document.createElement('input')
+			
+			if (category.options.length === 1){
+				categories.push(category.id)
+			}
 
 			radio.setAttribute('type', 'radio')
 			radio.setAttribute('name', 'categoryRadioBtn')
 			radio.setAttribute('id', `category-${category.id}-radio`)
 			radio.setAttribute('value', category.id)
 			radio.addEventListener('change', (event) => {
-				window.location.href = '#hazard-type'
 				currentReport.categoryId = event.target.value
 			})
 
@@ -112,14 +116,72 @@ getCategories()
 /**
  * Step 3: Hazard Options List
  */
-document
-	.querySelectorAll('[name="hazardOptionRadioBtn"]')
-	.forEach((categoryElement) => {
-		categoryElement.addEventListener('change', (event) => {
-			window.location.href = '#additional-details'
-			currentReport.categoryOptionId = event.target.value
-		})
-	})
+
+hazardTypeBtn.addEventListener('click', async () => {
+	console.log(categories.includes(currentReport.categoryId))
+	if (categories.includes(currentReport.categoryId)) {
+		window.location.href = '#additional-details'
+
+		const content = document.getElementById('hazard-type-content')
+
+		if (content) {
+			content.innerHTML = ''
+		}
+	} else {
+		window.location.href = '#hazard-type'
+
+		const content = document.getElementById('hazard-type-content')
+
+		if (content) {
+			content.innerHTML = ''
+		}
+		try {
+			const response = await fetch(`${API_URL}/hazard-category`)
+			const { data } = await response.json()
+			const content = document.getElementById('hazard-type-content')
+
+			let index = -1
+			for (let i = 0; i < data.length; i++) {
+				if (data[i].id === currentReport.categoryId) {
+					index = i
+					break
+				}
+			}
+
+			if (index !== -1) {
+				const arrayType = data[index].options
+
+				for (let i = 0; i < arrayType.length; i++) {
+					const div = document.createElement('div')
+					const radio = document.createElement('input')
+
+					radio.setAttribute('type', 'radio')
+					radio.setAttribute('name', 'categoryRadioBtn')
+					radio.setAttribute('id', `category-${arrayType[i].id}-radio`)
+					radio.setAttribute('value', arrayType[i].id)
+
+					radio.addEventListener('change', (event) => {
+						currentReport.typeId = event.target.value
+					})
+
+					const label = document.createElement('label')
+					label.setAttribute('id', `category-${arrayType[i].id}-label`)
+					label.setAttribute('for', `category-${arrayType[i].id}-radio`)
+					label.innerHTML = arrayType[i].name
+
+					div.appendChild(radio)
+					div.appendChild(label)
+
+					content.appendChild(div)
+				}
+			} else {
+				console.log('Categoría no encontrada en el JSON.')
+			}
+		} catch (error) {
+			console.error(error)
+		}
+	}
+})
 
 /**
  * Step 4: Comments
@@ -151,7 +213,6 @@ function checkMobileDevice() {
 }
 
 checkMobileDevice()
-
 
 let arrayPict = []
 
@@ -275,7 +336,7 @@ function handleFiles(files) {
 // Print images
 function printPhotos() {
 	imagesFirstOutput.innerHTML = ''
-	
+
 	for (let i = 0; i < 3; i++) {
 		if (arrayPict[i]) {
 			imagesFirstOutput.innerHTML += `<img src="${arrayPict[i]}" width="150" />`
@@ -319,7 +380,9 @@ printPhotos()
 //Mobile browser
 
 const environmentMobileInput = document.getElementById('environmentMobile')
-const uploadPictureInputMobile = document.getElementById('uploadPictureInputMobile')
+const uploadPictureInputMobile = document.getElementById(
+	'uploadPictureInputMobile'
+)
 const imagesFirstOutput2 = document.getElementById('imagesFirstOutput2')
 
 environmentMobileInput.addEventListener('change', handleFileSelection)
@@ -356,7 +419,7 @@ function renderPhotos() {
 showConfirmationBtn.addEventListener('click', () => {
 	locationOutput.innerHTML = `${currentReport.location.address} (${currentReport.location.lat},${currentReport.location.lng})`
 	categoryOutput.innerHTML = currentReport.categoryId
-	hazardOptionOutput.innerHTML = currentReport.categoryOptionId
+	hazardOptionOutput.innerHTML = currentReport.typeId
 	commentOutput.innerHTML = currentReport.comment
 })
 
