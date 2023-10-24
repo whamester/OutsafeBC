@@ -2,10 +2,12 @@ import MyReport from '../../assets/helpers/report-card.js'
 import { API_URL } from '../../constants.js'
 import { getUserSession } from '../../assets/helpers/storage.js'
 
+// Variables
 const user = getUserSession()
 let userID = user?.id
 let recentReportArr = []
 let olderReportArr = []
+let olderReportClicked = false
 const recentReports = document.getElementById('recentReports')
 const olderReports = document.getElementById('olderReports')
 const recentBtn = document.getElementById('recentReportsBtn')
@@ -15,15 +17,20 @@ const olderBtn = document.getElementById('olderReportsBtn')
 // Set the recentBtn to be checked initially
 recentBtn.checked = true
 displayRecentReports()
-displayOlderReports()
 
 recentBtn.addEventListener('click', () => {
 	recentReports.style.display = 'block'
 	olderReports.style.display = 'none'
 })
 olderBtn.addEventListener('click', () => {
-	recentReports.style.display = 'none'
-	olderReports.style.display = 'block'
+	if (!olderReportClicked) {
+		displayOlderReports()
+		recentReports.style.display = 'none'
+		olderReports.style.display = 'block'
+	} else {
+		recentReports.style.display = 'none'
+		olderReports.style.display = 'block'
+	}
 })
 
 // Get all the recent reports for the logged in user and display them
@@ -62,7 +69,6 @@ async function displayRecentReports() {
 }
 
 // Get all the older reports for the logged in user and display them
-
 async function getOlderReports() {
 	try {
 		olderReportArr.splice(0, olderReportArr.length)
@@ -93,4 +99,5 @@ async function displayOlderReports() {
 		)
 		olderReports.appendChild(hazardReport.reportContent())
 	}
+	olderReportClicked = true
 }
