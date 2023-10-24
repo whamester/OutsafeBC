@@ -1,12 +1,12 @@
 //Models
 import ReportForm from '../../assets/models/ReportForm.js'
 import Map from '../../assets/models/Map.js'
+import { API_URL } from '../../constants.js'
 
 //Variable Declaration
 const currentReport = new ReportForm()
 let position = Map.DEFAULT_LOCATION
 let map = null
-const API_URL = 'https://enchanting-llama-6664aa.netlify.app/.netlify/functions'
 
 /**
  * Page Init
@@ -152,7 +152,6 @@ function checkMobileDevice() {
 
 checkMobileDevice()
 
-
 let arrayPict = []
 
 const video = document.getElementById('video')
@@ -276,7 +275,7 @@ function handleFiles(files) {
 // Print images
 function printPhotos() {
 	imagesFirstOutput.innerHTML = ''
-	
+
 	for (let i = 0; i < 3; i++) {
 		if (arrayPict[i]) {
 			imagesFirstOutput.innerHTML += `<img src="${arrayPict[i]}" width="150" />`
@@ -320,7 +319,9 @@ printPhotos()
 //Mobile browser
 
 const environmentMobileInput = document.getElementById('environmentMobile')
-const uploadPictureInputMobile = document.getElementById('uploadPictureInputMobile')
+const uploadPictureInputMobile = document.getElementById(
+	'uploadPictureInputMobile'
+)
 const imagesFirstOutput2 = document.getElementById('imagesFirstOutput2')
 
 environmentMobileInput.addEventListener('change', handleFileSelection)
