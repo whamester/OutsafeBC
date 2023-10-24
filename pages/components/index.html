@@ -68,8 +68,6 @@
             <li><a href="#input-section">Input</a></li>
             <li><a href="#modal-section">Modal</a></li>
             <li><a href="#alert-section">Alert</a></li>
-
-
         </ul>
     </nav>
     <main id="main">
@@ -255,7 +253,7 @@
 
                     warningBtn.addEventListener('click', () => {
                         const alert = new AlertPopup()
-                        alert.show("Warning!", AlertPopup.warning, 5000)
+                        alert.show("Warning with 5 seconds delay!", AlertPopup.warning, 5000)
                     })
 
                     errorBtn.addEventListener('click', () => {
@@ -266,8 +264,6 @@
             </section>
         </section>
     </main>
-
-
 </body>
 
 </html>
