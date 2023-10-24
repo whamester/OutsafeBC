@@ -76,14 +76,13 @@ const getCategories = async () => {
 		let response = await fetch(`${API_URL}/hazard-category`)
 		let { data } = await response.json()
 		const content = document.getElementById('hazard-category-content')
-		
 
 		for (let i = 0; i < data.length; i++) {
 			const category = data[i]
 			const div = document.createElement('div')
 			const radio = document.createElement('input')
-			
-			if (category.options.length === 1){
+
+			if (category.options.length === 1) {
 				categories.push(category.id)
 			}
 
