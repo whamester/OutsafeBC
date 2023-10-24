@@ -7,6 +7,8 @@ import AlertPopup from '../../assets/components/AlertPopup.js'
 import Navbar from '../../assets/components/Navbar.js'
 //Variables
 const alert = new AlertPopup()
+const password = document.getElementById('password-input')
+const showPw = document.getElementById('show-pw')
 
 /**
  * Google Auth Setup
@@ -91,3 +93,15 @@ document
 			console.debug(error)
 		}
 	})
+
+/**
+ * Toggle Password Visibility
+ */
+
+// showPw.addEventListener('click', () => {
+// 	if (password.type === 'password') {
+// 		password.type = 'text'
+// 	} else {
+// 		password.type = 'password'
+// 	}
+// })
