@@ -3,6 +3,7 @@
 @import url(./_typography.css);
 
 @import url(./button.css);
+@import url(./input.css);
 
 @import url(./alert-popup.css);
 

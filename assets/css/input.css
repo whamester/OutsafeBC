@@ -1,0 +1,101 @@
+.form-field {
+	display: flex;
+	flex-direction: column;
+	gap: 0.38rem;
+	position: relative;
+}
+
+.form-field label {
+	font-size: var(--body-3-size);
+	letter-spacing: var(--body-3-letter-spacing);
+	line-height: var(--body-3-line-height);
+	color: var(--neutral-700);
+}
+
+.form-field input {
+	border-radius: 0.5rem;
+	border: 1px solid var(--neutral-300);
+	background: var(--white);
+	box-shadow: var(--shadow-xs);
+	display: flex;
+	padding: 0.5rem 0.75rem;
+	align-items: center;
+	gap: 1rem;
+	align-self: stretch;
+	color: var(--neutral-800);
+	caret-color: var(--accent-500);
+}
+
+.form-field input:focus {
+	border: 1px solid var(--neutral-200);
+	background: var(--white);
+	box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.05), 0px 0px 0px 2px #9aa3a1;
+	outline: none;
+}
+
+.form-field input::placeholder {
+	color: var(--neutral-500);
+}
+
+.form-field input:disabled {
+	border: 1px solid var(--neutral-300);
+	background: var(--neutral-100);
+}
+
+.form-field .form-field__helper {
+	font-size: var(--body-3-size);
+	letter-spacing: var(--body-3-letter-spacing);
+	line-height: var(--body-3-line-height);
+}
+
+.form-field.error input:not(:disabled) {
+	border: 1px solid var(--error-500);
+}
+
+.form-field.error input:focus:not(:disabled) {
+	border: 1px solid var(--error-500);
+	box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.05), 0px 0px 0px 2px #f2bcba;
+}
+
+.form-field.error .form-field__helper {
+	color: var(--error-500);
+}
+
+.form-field.error .icon-exclamation-mark {
+	width: 20px;
+	height: 20px;
+	background-color: var(--error-500);
+	position: absolute;
+	top: 34px;
+	right: 0.75rem;
+}
+
+.form-field i[class^='icon-'] {
+	background-color: var(--neutral-500);
+	height: 20px;
+	width: 20px;
+}
+
+.form-field.with-icon {
+	position: relative;
+}
+
+.form-field.with-icon i[class^='icon-'].icon-right {
+	position: absolute;
+	top: 34px;
+	right: 0.75rem;
+}
+
+.form-field.with-icon i[class^='icon-'].icon-left {
+	position: absolute;
+	top: 34px;
+	left: 0.75rem;
+}
+
+.form-field.with-icon i[class^='icon-'].icon-right ~ input {
+	padding-right: 2rem;
+}
+
+.form-field.with-icon i[class^='icon-'].icon-left ~ input {
+	padding-left: 2rem;
+}
