@@ -6,9 +6,9 @@
 }
 
 .form-field label {
-	font-size: var(--body-3-size);
-	letter-spacing: var(--body-3-letter-spacing);
-	line-height: var(--body-3-line-height);
+	font-size: var(--body-2-size);
+	letter-spacing: var(--body-2-letter-spacing);
+	line-height: var(--body-2-line-height);
 	color: var(--neutral-700);
 }
 
