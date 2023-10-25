@@ -30,7 +30,7 @@ class Modal {
 		const {
 			title,
 			description,
-			icon = { name: 'icon-circle-check', color: '#000000', size: '3.5rem' },
+			icon = { name: 'icon-check', color: '#000000', size: '3.5rem' },
 			actions, // element or string
 			enableOverlayClickClose = false,
 		} = params
