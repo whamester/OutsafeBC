@@ -24,6 +24,10 @@
 	align-self: stretch;
 	color: var(--neutral-800);
 	caret-color: var(--accent-500);
+	font-size: var(--body-2-size);
+	letter-spacing: var(--body-2-letter-spacing);
+	line-height: var(--body-2-line-height);
+	width: 100%;
 }
 
 .form-field input:focus {
@@ -43,9 +47,15 @@
 }
 
 .form-field .form-field__helper {
-	font-size: var(--body-3-size);
-	letter-spacing: var(--body-3-letter-spacing);
-	line-height: var(--body-3-line-height);
+	font-size: var(--body-2-size);
+	letter-spacing: var(--body-2-letter-spacing);
+	line-height: var(--body-2-line-height);
+}
+
+.form-field .form-field__input-container {
+	width: 100%;
+	display: flex;
+	position: relative;
 }
 
 .form-field.error input:not(:disabled) {
@@ -66,8 +76,11 @@
 	height: 20px;
 	background-color: var(--error-500);
 	position: absolute;
-	top: 34px;
 	right: 0.75rem;
+	top: 0;
+	bottom: 0;
+	margin-top: auto;
+	margin-bottom: auto;
 }
 
 .form-field i[class^='icon-'] {
@@ -82,14 +95,20 @@
 
 .form-field.with-icon i[class^='icon-'].icon-right {
 	position: absolute;
-	top: 34px;
 	right: 0.75rem;
+	top: 0;
+	bottom: 0;
+	margin-top: auto;
+	margin-bottom: auto;
 }
 
 .form-field.with-icon i[class^='icon-'].icon-left {
 	position: absolute;
-	top: 34px;
 	left: 0.75rem;
+	top: 0;
+	bottom: 0;
+	margin-top: auto;
+	margin-bottom: auto;
 }
 
 .form-field.with-icon i[class^='icon-'].icon-right ~ input {
