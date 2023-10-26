@@ -93,12 +93,12 @@
                     </span>
                 </button>
                 <button class="btn btn-secondary">
-                    <i class="icon-circle-check"></i>
+                    <i class="icon-check"></i>
                     Secondary
                 </button>
-                <button class="btn btn-success">Button <i class="icon-circle-check"></i></button>
-                <button class="btn btn-warning">Warning <i class="icon-circle-check"></i></button>
-                <button class="btn btn-error">Error <i class="icon-circle-check"></i></button>
+                <button class="btn btn-success">Button <i class="icon-check"></i></button>
+                <button class="btn btn-warning">Warning <i class="icon-check"></i></button>
+                <button class="btn btn-error">Error <i class="icon-check"></i></button>
 
                 <h3>Disabled</h3>
 
@@ -121,7 +121,10 @@
                     <label>
                         Label
                     </label>
-                    <input type="text" placeholder="name@email.com" />
+                    <div class="form-field__input-container">
+                        <input type="text" placeholder="name@email.com" />
+                    </div>
+
                     <span class="form-field__helper">This is a helper message.</span>
                 </div>
 
@@ -129,7 +132,9 @@
                     <label>
                         Label
                     </label>
-                    <input type="text" value="mikewillson@gmail.com" />
+                    <div class="form-field__input-container">
+                        <input type="text" value="mikewillson@gmail.com" />
+                    </div>
                     <span class="form-field__helper">This is a helper message.</span>
                 </div>
 
@@ -140,7 +145,10 @@
                     <label>
                         Label
                     </label>
-                    <input type="text" placeholder="name@email.com" disabled />
+                    <div class="form-field__input-container">
+                        <input type="text" placeholder="name@email.com" disabled />
+                    </div>
+
                     <span class="form-field__helper">This is a helper message.</span>
                 </div>
 
@@ -148,7 +156,9 @@
                     <label>
                         Label
                     </label>
-                    <input type="text" value="mikewillson@gmail.com" disabled />
+                    <div class="form-field__input-container">
+                        <input type="text" value="mikewillson@gmail.com" disabled />
+                    </div>
                     <span class="form-field__helper">This is a helper message.</span>
                 </div>
 
@@ -159,7 +169,9 @@
                     <label>
                         Label
                     </label>
-                    <input type="text" placeholder="name@email.com" />
+                    <div class="form-field__input-container">
+                        <input type="text" placeholder="name@email.com" />
+                    </div>
                     <span class="form-field__helper">This is an error message.</span>
                 </div>
 
@@ -167,7 +179,9 @@
                     <label>
                         Label
                     </label>
-                    <input type="text" value="mikewillson@gmail.com" />
+                    <div class="form-field__input-container">
+                        <input type="text" value="mikewillson@gmail.com" />
+                    </div>
                     <span class="form-field__helper">This is an error message.</span>
                 </div>
 
@@ -178,15 +192,20 @@
                         Label
                     </label>
                     <i class="icon-search icon-left"></i>
-                    <input type="text" placeholder="name@email.com" />
+                    <div class="form-field__input-container">
+                        <input type="text" placeholder="name@email.com" />
+                    </div>
                 </div>
 
                 <div class="form-field with-icon">
                     <label>
                         Label
                     </label>
-                    <i class="icon-search icon-right"></i>
-                    <input type="text" value="mikewillson@gmail.com" />
+                    <div class="form-field__input-container">
+                        <i class="icon-search icon-right"></i>
+                        <input type="text" value="mikewillson@gmail.com" />
+                    </div>
+
                 </div>
             </section>
         </section>
@@ -219,7 +238,7 @@
                         modal.show({
                             title: "Your report has been submitted!",
                             description: "Thank you for helping others have a safe camping experience.",
-                            icon: { name: 'icon-circle-check', color: '#000000', size: '3.5rem' },
+                            icon: { name: 'icon-check', color: '#000000', size: '3.5rem' },
                             actions: button, // '<button id="open-modal-btn" class="btn btn-primary">Continue Exploring</button>',
                             enableOverlayClickClose: true
                         })
