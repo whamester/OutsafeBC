@@ -1,19 +1,25 @@
+h1,
 .text-heading-1 {
 	font-size: var(--heading-1-size);
 	letter-spacing: var(--heading-1-letter-spacing);
 	line-height: var(--heading-1-line-height);
+	font-weight: 600;
 }
 
+h2,
 .text-heading-2 {
 	font-size: var(--heading-2-size);
 	letter-spacing: var(--heading-2-letter-spacing);
 	line-height: var(--heading-2-line-height);
+	font-weight: 600;
 }
 
+h3,
 .text-heading-3 {
 	font-size: var(--heading-3-size);
 	letter-spacing: var(--heading-3-letter-spacing);
 	line-height: var(--heading-3-line-height);
+	font-weight: 600;
 }
 
 .text-body-1 {
@@ -28,10 +34,13 @@
 	line-height: var(--body-2-line-height);
 }
 
+p,
 .text-body-3 {
 	font-size: var(--body-3-size);
 	letter-spacing: var(--body-3-letter-spacing);
 	line-height: var(--body-3-line-height);
+	margin: 0;
+	padding: 0;
 }
 
 .text-body-4 {

@@ -6,6 +6,7 @@
 @import url(./input.css);
 
 @import url(./alert-popup.css);
+@import url(./modal.css);
 
 :root {
 	font-size: var(--font-size-base);
@@ -13,10 +14,13 @@
 	height: 100%;
 }
 
+* {
+	font-family: 'Instrument Sans', sans-serif;
+}
+
 body {
 	width: 100%;
 	height: 100%;
-	font-family: 'Instrument Sans', sans-serif;
 	color: var(--neutral-900);
 	margin: 0;
 }
