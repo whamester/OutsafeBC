@@ -79,32 +79,13 @@
 			<section id="hazard-category" class="page">
 				<h1>2. What type of hazard would you like to report?</h1>
 				<div id="hazard-category-content"></div>
+				<a href="#hazard-type">Continue</a>
 			</section>
 
 			<section id="hazard-type" class="page">
 				<h1>3. What type of wild animal did you spot?</h1>
-				<!-- TODO: display label and options from the API -->
-				<div>
-					<input id="option-1" type="radio" name="hazardOptionRadioBtn" value="bear" />
-					<label for="option-1">Bear</label>
-				</div>
-				<div>
-					<input id="option-2" type="radio" name="hazardOptionRadioBtn" value="coyote" />
-					<label for="option-2">Coyote</label>
-				</div>
-				<div>
-					<input id="option-3" type="radio" name="hazardOptionRadioBtn" value="coguar" />
-					<label for="option-3">Coguar</label>
-				</div>
-				<div>
-					<input id="option-4" type="radio" name="hazardOptionRadioBtn" value="elk" />
-					<label for="option-4">Elk</label>
-				</div>
-				<div>
-					<input id="option-5" type="radio" name="hazardOptionRadioBtn" value="raccoon" />
-					<label for="option-5">Raccoon</label>
-				</div>
-				<a href="#additional-details">Continue</a>
+				<div id="hazard-option-content"></div>
+				<a id="selectHazardOptionLink" href="#additional-details">Continue</a>
 			</section>
 
 			<section id="additional-details" class="page">
@@ -153,7 +134,7 @@
 						<canvas hidden id="canvas-1" width="320" height="240"></canvas>
 					</div>
 					<div id="imagesFirstOutput">
-						<!-- <p id="imagesFirstOutput"></p> -->
+
 					</div>
 				</div>
 				<div id="mobile">
@@ -172,7 +153,7 @@
 						<span>File size limit: 10 MB</span>
 					</label>
 					<div id="imagesFirstOutput2">
-						<!-- <p id="imagesFirstOutput2"></p> -->
+
 					</div>
 				</div>
 
@@ -192,8 +173,8 @@
 						</div>
 					</div>
 
-					<div>
-						<p>Type of hazard::</p>
+					<div id="review-report-category">
+						<p>Type of hazard:</p>
 
 						<div>
 							<p id="categoryOutput"></p>

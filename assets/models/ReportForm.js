@@ -1,15 +1,21 @@
 class ReportForm {
-  constructor() {
-    this.categoryId = null;
-    this.categoryOptionId = null;
-    this.location = {
-      lat: null,
-      lng: null,
-      address: null,
-    };
-    this.comment = null;
-    this.images = [];
-  }
+	constructor() {
+		this.category = {
+			id: null,
+			name: null,
+		}
+		this.option = {
+			id: null,
+			name: null,
+		}
+		this.location = {
+			lat: null,
+			lng: null,
+			address: null,
+		}
+		this.comment = null
+		this.images = []
+	}
 }
 
-export default ReportForm;
+export default ReportForm
