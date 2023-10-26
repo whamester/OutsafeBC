@@ -8,3 +8,7 @@ export const GOOGLE_ID =
 
 export const JAWG_ACCESS_TOKEN =
 	'LESUiiQclmPkbbaFTaPx6M64QWgnmvYXQQXuIcownKAbCziOC3kyYUdEEqGn9wT3'
+
+export const API_GEOAPIFY_KEY = '73853666fca14743bb38de0027358f26'
+
+export const API_GEOAPIFY_URL = 'https://api.geoapify.com/v1/geocode/'
