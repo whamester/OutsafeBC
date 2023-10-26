@@ -1,0 +1,11 @@
+header {
+	max-width: 80rem;
+	padding-top: 1rem;
+	padding-bottom: 1rem;
+	margin: auto;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	border-bottom: 1px solid var(--neutral-300);
+	background: var(--white);
+}
