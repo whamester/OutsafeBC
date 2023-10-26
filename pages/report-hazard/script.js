@@ -2,11 +2,13 @@
 import ReportForm from '../../assets/models/ReportForm.js'
 import Map from '../../assets/models/Map.js'
 import { API_URL } from '../../constants.js'
+import AlertPopup from '../../assets/components/AlertPopup.js'
 
 //Variable Declaration
 const currentReport = new ReportForm()
 let position = Map.DEFAULT_LOCATION
 let map = null
+let skipHazardOption = false
 
 /**
  * Page Init
@@ -27,6 +29,14 @@ window.onload = function () {
 }
 
 const displayCurrentSection = () => {
+	if (skipHazardOption && location.hash === '#hazard-type') {
+		window.location.hash = '#additional-details'
+	}
+
+	if (skipHazardOption && location.hash === '#review-report') {
+		document.getElementById('review-report-category').classList.add('hidden')
+	}
+
 	const allPages = document.querySelectorAll('section.page')
 
 	const pageId = location.hash ? location.hash : '#select-location'
@@ -82,16 +92,23 @@ const getCategories = async () => {
 			const div = document.createElement('div')
 			const radio = document.createElement('input')
 
-			if (category.options.length === 1) {
-				categories.push(category.id)
-			}
-
 			radio.setAttribute('type', 'radio')
 			radio.setAttribute('name', 'categoryRadioBtn')
 			radio.setAttribute('id', `category-${category.id}-radio`)
 			radio.setAttribute('value', category.id)
 			radio.addEventListener('change', (event) => {
-				currentReport.categoryId = event.target.value
+				skipHazardOption = false
+
+				const selectedCategoryId = event.target.value
+				const selectedCategory = data.find(
+					(category) => category.id === selectedCategoryId
+				)
+				currentReport.category.id = selectedCategoryId
+				currentReport.category.name = selectedCategory.name
+
+				const options = selectedCategory.options ?? []
+
+				populateHazardOptions(options)
 			})
 
 			const label = document.createElement('label')
@@ -116,71 +133,46 @@ getCategories()
  * Step 3: Hazard Options List
  */
 
-hazardTypeBtn.addEventListener('click', async () => {
-	console.log(categories.includes(currentReport.categoryId))
-	if (categories.includes(currentReport.categoryId)) {
-		window.location.href = '#additional-details'
-
-		const content = document.getElementById('hazard-type-content')
-
-		if (content) {
-			content.innerHTML = ''
+const populateHazardOptions = (options) => {
+	try {
+		if (options.length === 1) {
+			currentReport.option.id = options[0].id
+			currentReport.option.name = options[0].name
+			skipHazardOption = true
 		}
-	} else {
-		window.location.href = '#hazard-type'
 
-		const content = document.getElementById('hazard-type-content')
+		for (let i = 0; i < options.length; i++) {
+			const option = options[i]
 
-		if (content) {
-			content.innerHTML = ''
+			const div = document.createElement('div')
+			const radio = document.createElement('input')
+
+			radio.setAttribute('type', 'radio')
+			radio.setAttribute('name', 'categoryRadioBtn')
+			radio.setAttribute('id', `category-${option.id}-radio`)
+			radio.setAttribute('value', option.id)
+
+			radio.addEventListener('change', (event) => {
+				currentReport.option.id = event.target.value
+				currentReport.option.name = option.name
+			})
+
+			const label = document.createElement('label')
+			label.setAttribute('id', `category-${option.id}-label`)
+			label.setAttribute('for', `category-${option.id}-radio`)
+			label.innerHTML = option.name
+
+			div.appendChild(radio)
+			div.appendChild(label)
+
+			document.getElementById('hazard-option-content').appendChild(div)
 		}
-		try {
-			const response = await fetch(`${API_URL}/hazard-category`)
-			const { data } = await response.json()
-			const content = document.getElementById('hazard-type-content')
-
-			let index = -1
-			for (let i = 0; i < data.length; i++) {
-				if (data[i].id === currentReport.categoryId) {
-					index = i
-					break
-				}
-			}
-
-			if (index !== -1) {
-				const arrayType = data[index].options
-
-				for (let i = 0; i < arrayType.length; i++) {
-					const div = document.createElement('div')
-					const radio = document.createElement('input')
-
-					radio.setAttribute('type', 'radio')
-					radio.setAttribute('name', 'categoryRadioBtn')
-					radio.setAttribute('id', `category-${arrayType[i].id}-radio`)
-					radio.setAttribute('value', arrayType[i].id)
-
-					radio.addEventListener('change', (event) => {
-						currentReport.typeId = event.target.value
-					})
-
-					const label = document.createElement('label')
-					label.setAttribute('id', `category-${arrayType[i].id}-label`)
-					label.setAttribute('for', `category-${arrayType[i].id}-radio`)
-					label.innerHTML = arrayType[i].name
-
-					div.appendChild(radio)
-					div.appendChild(label)
-
-					content.appendChild(div)
-				}
-			} else {
-				console.log('Category not found on JSON.')
-			}
-		} catch (error) {
-			console.error(error)
-		}
+	} catch (error) {
+		console.log(error)
+		const alert = new AlertPopup()
+		alert.show(AlertPopup.SOMETHING_WENT_WRONG_MESSAGE, AlertPopup.error)
 	}
-})
+}
 
 /**
  * Step 4: Comments
@@ -417,8 +409,8 @@ function renderPhotos() {
  */
 showConfirmationBtn.addEventListener('click', () => {
 	locationOutput.innerHTML = `${currentReport.location.address} (${currentReport.location.lat},${currentReport.location.lng})`
-	categoryOutput.innerHTML = currentReport.categoryId
-	hazardOptionOutput.innerHTML = currentReport.typeId
+	categoryOutput.innerHTML = currentReport.category.name
+	hazardOptionOutput.innerHTML = currentReport.option.name
 	commentOutput.innerHTML = currentReport.comment
 })
 
