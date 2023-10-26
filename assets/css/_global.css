@@ -3,6 +3,7 @@
 @import url(./_typography.css);
 
 @import url(./button.css);
+@import url(./input.css);
 
 @import url(./alert-popup.css);
 
@@ -17,6 +18,7 @@ body {
 	height: 100%;
 	font-family: 'Instrument Sans', sans-serif;
 	color: var(--neutral-900);
+	margin: 0;
 }
 
 .hidden {

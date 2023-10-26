@@ -1,12 +1,12 @@
 //Models
 import ReportForm from '../../assets/models/ReportForm.js'
 import Map from '../../assets/models/Map.js'
+import { API_URL } from '../../constants.js'
 
 //Variable Declaration
 const currentReport = new ReportForm()
 let position = Map.DEFAULT_LOCATION
 let map = null
-const API_URL = 'https://enchanting-llama-6664aa.netlify.app/.netlify/functions'
 
 /**
  * Page Init

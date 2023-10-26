@@ -15,10 +15,6 @@
 	<link rel="stylesheet" href="../../modules/leaflet/leaflet.css">
 	<!-- leaflet JS for maps -->
 	<script src="../../modules/leaflet/leaflet.js"></script>
-	<!-- Bootstrap JS -->
-	<script src="../../modules/bootstrap/js/bootstrap.min.js"></script>
-	<!-- Bootstrap CSS -->
-	<link rel="stylesheet" href="../../modules/bootstrap/css/bootstrap.min.css">
 	<!-- Global Styles -->
 	<link rel="stylesheet" href="../../assets/css/_global.css">
 	<!-- Feature Styles -->
@@ -111,7 +107,7 @@
 				<div id="desktop">
 					<label for="starCameraBtn" class="custom-file-upload">
 						<button id="starCameraBtn" type="button" style="display:none"></button>
-										<!-- TODO// Add icon here -->
+						<!-- TODO// Add icon here -->
 						<span>Take a picture</span>
 						<span>At the hazard site? Click a picture to add in the report.</span>
 					</label>
@@ -120,41 +116,44 @@
 					<div id="dragAndDropArea">
 						<!-- TODO// Add icon here -->
 						<span>Drop your images here, or </span>
-						<label for="uploadPictureInputDesktop" >
-							<input id="uploadPictureInputDesktop" type="file" accept="image/jpeg, image/jpg, image/png" style="display:none"/>
+						<label for="uploadPictureInputDesktop">
+							<input id="uploadPictureInputDesktop" type="file" accept="image/jpeg, image/jpg, image/png"
+								style="display:none" />
 							<span> <u>click to browse</u> </span>
 						</label>
 						<span>File size limit: 10 MB</span>
-					</div>					
+					</div>
 
 					<div id="takePhoto" style="display: none">
 						<br />
 						<video id="video" width="320" height="240" autoplay></video>
 						<br />
-						<button id="takePictureBtn" disabled >Take a photo</button>
+						<button id="takePictureBtn" disabled>Take a photo</button>
 						<button id="stop" disabled>Stop Camera</button>
 						<br />
 						<canvas hidden id="canvas-1" width="320" height="240"></canvas>
 					</div>
 					<div id="imagesFirstOutput">
-							
+
 					</div>
 				</div>
 				<div id="mobile">
 					<label for="environmentMobile" class="custom-file-upload">
-							<input type="file" id="environmentMobile" capture="environment" accept="image/*" style="display:none;"/>
+						<input type="file" id="environmentMobile" capture="environment" accept="image/*"
+							style="display:none;" />
 						<!-- TODO// Add icon here -->
-							Take a picture<br>
+						Take a picture<br>
 						<span>At the hazard site? Click a picture to add in the report.</span>
 					</label><br><br>
 					<label for="uploadPictureInputMobile" class="custom-file-upload2">
-						<input type="file" id="uploadPictureInputMobile" accept="image/jpeg, image/jpg, image/png" style="display:none;"/>
+						<input type="file" id="uploadPictureInputMobile" accept="image/jpeg, image/jpg, image/png"
+							style="display:none;" />
 						<!-- TODO// Add icon here -->
 						Upload Files<br>
 						<span>File size limit: 10 MB</span>
 					</label>
 					<div id="imagesFirstOutput2">
-							
+
 					</div>
 				</div>
 
