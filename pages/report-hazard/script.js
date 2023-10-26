@@ -235,6 +235,8 @@ function startCamera() {
 		sapBtn.disabled = false
 	} else {
 		console.log("this browser doesn't support media devices")
+		const alert = new AlertPopup()
+		alert.show("This browser doesn't support media devices", AlertPopup.warning)
 	}
 }
 
@@ -261,7 +263,12 @@ function snapPhoto() {
 
 		arrayPict.push(canvasDataURL)
 	} else {
-		console.log('You have already taken 3 pictures.') //Display an alert box
+		console.log('You have already taken 3 pictures.')
+		const alert = new AlertPopup()
+		alert.show(
+			'You have reached the limit of pictures allowed',
+			AlertPopup.warning
+		)
 	}
 	currentReport.images = arrayPict
 }
@@ -285,7 +292,12 @@ fileInput.addEventListener('change', function () {
 			imagesFirstOutput.innerHTML = ''
 		}
 	} else {
-		console.log('You have already taken 3 pictures.') //Display an alert box
+		console.log('You have already taken 3 pictures.')
+		const alert = new AlertPopup()
+		alert.show(
+			'You have reached the limit of pictures allowed',
+			AlertPopup.warning
+		)
 	}
 })
 
