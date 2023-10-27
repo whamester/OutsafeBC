@@ -5,10 +5,12 @@ import injectHTML from '../../assets/helpers/inject-html.js'
 //Components
 import AlertPopup from '../../assets/components/AlertPopup.js'
 import Navbar from '../../assets/components/Navbar.js'
+import loadIcons from '../../assets/helpers/load-icons.js'
 //Variables
 const alert = new AlertPopup()
 const password = document.getElementById('password-input')
 const showPw = document.getElementById('show-pw')
+const hidePw = document.getElementById('hide-pw')
 
 /**
  * Google Auth Setup
@@ -98,10 +100,19 @@ document
  * Toggle Password Visibility
  */
 
-showPw.addEventListener('click', () => {
+showPw.addEventListener('click', showHideEyeIcon)
+hidePw.addEventListener('click', showHideEyeIcon)
+
+function showHideEyeIcon() {
 	if (password.type === 'password') {
 		password.type = 'text'
+		hidePw.classList.remove('hidden')
+		showPw.classList.add('hidden')
+		loadIcons()
 	} else {
 		password.type = 'password'
+		showPw.classList.remove('hidden')
+		hidePw.classList.add('hidden')
+		loadIcons()
 	}
-})
+}
