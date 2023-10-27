@@ -5,7 +5,6 @@ import injectHTML from '../../assets/helpers/inject-html.js'
 //Components
 import AlertPopup from '../../assets/components/AlertPopup.js'
 import Navbar from '../../assets/components/Navbar.js'
-import Modal from '../../assets/components/Modal.js'
 //Variables
 const alert = new AlertPopup()
 const password = document.getElementById('password-input')
