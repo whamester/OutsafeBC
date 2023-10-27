@@ -12,7 +12,9 @@ const confirmPassword = document.getElementById('confirm-password-input')
 const confirmPasswordForm = document.getElementById('confirmPwForm')
 const confirmPasswordError = document.getElementById('confirmPwError')
 const showPw = document.getElementById('show-pw')
-const showPwConfirm = document.getElementById('show-pw-confrim')
+const hidePw = document.getElementById('hide-pw')
+const showPwConfirm = document.getElementById('show-pw-confirm')
+const hidePwConfirm = document.getElementById('hide-pw-confirm')
 
 /**
  * Google Auth Setup
@@ -119,18 +121,39 @@ confirmPassword.onkeyup = validatePassword
  * Toggle Password Visibility
  */
 
-showPw.addEventListener('click', () => {
+showPw.addEventListener('click', showHideEyeIcon)
+hidePw.addEventListener('click', showHideEyeIcon)
+
+function showHideEyeIcon() {
 	if (password.type === 'password') {
 		password.type = 'text'
+		hidePw.classList.remove('hidden')
+		showPw.classList.add('hidden')
 	} else {
 		password.type = 'password'
+		showPw.classList.remove('hidden')
+		hidePw.classList.add('hidden')
 	}
-})
+}
+showPwConfirm.addEventListener('click', showHideEyeIconConfirm)
+hidePwConfirm.addEventListener('click', showHideEyeIconConfirm)
 
-showPwConfirm.addEventListener('click', () => {
+function showHideEyeIconConfirm() {
 	if (confirmPassword.type === 'password') {
 		confirmPassword.type = 'text'
+		hidePwConfirm.classList.remove('hidden')
+		showPwConfirm.classList.add('hidden')
 	} else {
 		confirmPassword.type = 'password'
+		showPwConfirm.classList.remove('hidden')
+		hidePwConfirm.classList.add('hidden')
 	}
-})
+}
+
+// showPwConfirm.addEventListener('click', () => {
+// 	if (confirmPassword.type === 'password') {
+// 		confirmPassword.type = 'text'
+// 	} else {
+// 		confirmPassword.type = 'password'
+// 	}
+// })
