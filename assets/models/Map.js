@@ -10,7 +10,10 @@ class Map {
 	}
 
 	static pinIcon = new L.Icon({
-		iconUrl: '/assets/img/icons/icon-map-pin.png',
+		iconUrl: '/assets/icons/location-pin-fill.svg',
+		iconSize: [40, 40], // size of the icon
+		iconAnchor: [20, 40], // point of the icon which will correspond to marker's location
+		popupAnchor: [0, -40], // point from which the popup should open relative to the iconAnchor
 	})
 
 	constructor({ latitude, longitude }) {
