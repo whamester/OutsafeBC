@@ -207,7 +207,7 @@ function checkMobileDevice() {
 	}
 }
 
-// checkMobileDevice()
+checkMobileDevice()
 
 let arrayPict = []
 
@@ -424,17 +424,28 @@ function handleFileSelection(event) {
 	renderPhotos()
 	currentReport.images = arrayPict
 }
+document.addEventListener('arraychange', renderPhotos)
 
+renderPhotos()
 function renderPhotos() {
 	imagesFirstOutput2.innerHTML = ''
 
-	for (let i = 0; i < arrayPict.length; i++) {
-		// imagesFirstOutput2.innerHTML += `<img src="${arrayPict[i]}" width="150" />`
-		imagesFirstOutput2.appendChild(arrayPict[i])
-		// imagesFirstOutput3.innerHTML += arrayPict[i]
-		// console.log(arrayPict[i])
-		// imagesFirstOutput2.innerHTML += `<img src="${arrayPict[i]}" width="150" />`
-		// imagesFirstOutput.innerHTML += `<img src="${arrayPict[i]}" width="150" />`
+	// for (let i = 0; i < arrayPict.length; i++) {
+	// 	// imagesFirstOutput2.innerHTML += `<img src="${arrayPict[i]}" width="150" />`
+	// 	imagesFirstOutput2.appendChild(arrayPict[i])
+	// 	// imagesFirstOutput3.innerHTML += arrayPict[i]
+	// 	// console.log(arrayPict[i])
+	// 	// imagesFirstOutput2.innerHTML += `<img src="${arrayPict[i]}" width="150" />`
+	// 	// imagesFirstOutput.innerHTML += `<img src="${arrayPict[i]}" width="150" />`
+	// }
+
+	for (let i = 0; i < 3; i++) {
+		if (arrayPict[i]) {
+			imagesFirstOutput2.innerHTML += `<img src="${arrayPict[i]}" width="150" />`
+			// if (arrayPict.length > 2) {
+			// 	document.getElementById('takePictureBtn').style.display = 'none'
+			// }
+		}
 	}
 }
 
@@ -464,35 +475,32 @@ showConfirmationBtn.addEventListener('click', () => {
 /**
  * Submit Form
  */
-reportHazardForm.addEventListener('submit', function (event) {
+reportHazardForm.addEventListener('submit', async function (event) {
 	event.preventDefault()
 	console.log(currentReport)
-	//TODO: Hit create hazard report endpoint
+	// TODO: Hit create hazard report endpoint
 
 	const jsonBody = JSON.stringify(currentReport)
 
-	const url = 'https://enchanting-llama-6664aa.netlify.app/.netlify/functions/hazard-report'
+	const url =
+		'https://enchanting-llama-6664aa.netlify.app/.netlify/functions/hazard-report'
 
-	fetch(url, {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		body: jsonBody,
-	})
-		.then((response) => {
-			if (response.ok) {
-				return response.json()
-			} else {
-				throw new Error('Failed to send the POST request')
-			}
+	try {
+		const response = await fetch(url, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: jsonBody,
 		})
-		.then((responseData) => {
-			
+
+		if (response.ok) {
+			const responseData = await response.json()
 			console.log('Response Data:', responseData)
-		})
-		.catch((error) => {
-			
-			console.error('Error:', error)
-		})
+		} else {
+			throw new Error('Failed to send the POST request')
+		}
+	} catch (error) {
+		console.error('Error:', error)
+	}
 })
