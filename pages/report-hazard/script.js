@@ -207,7 +207,7 @@ function checkMobileDevice() {
 	}
 }
 
-checkMobileDevice()
+// checkMobileDevice()
 
 let arrayPict = []
 
