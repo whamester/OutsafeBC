@@ -393,7 +393,7 @@ const uploadPictureInputMobile = document.getElementById(
 	'uploadPictureInputMobile'
 )
 const imagesFirstOutput2 = document.getElementById('imagesFirstOutput2')
-const imagesFirstOutput3 = document.getElementById('imagesFirstOutput2')//to delete do not forget this is to use as a console.log
+const imagesFirstOutput3 = document.getElementById('imagesFirstOutput2') //to delete do not forget this is to use as a console.log
 
 environmentMobileInput.addEventListener('change', handleFileSelection)
 uploadPictureInputMobile.addEventListener('change', handleFileSelection)
@@ -423,7 +423,6 @@ function handleFileSelection(event) {
 	}
 	renderPhotos()
 	currentReport.images = arrayPict
-	
 }
 
 function renderPhotos() {
@@ -469,4 +468,31 @@ reportHazardForm.addEventListener('submit', function (event) {
 	event.preventDefault()
 	console.log(currentReport)
 	//TODO: Hit create hazard report endpoint
+
+	const jsonBody = JSON.stringify(currentReport)
+
+	const url = 'https://enchanting-llama-6664aa.netlify.app/.netlify/functions/hazard-report'
+
+	fetch(url, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: jsonBody,
+	})
+		.then((response) => {
+			if (response.ok) {
+				return response.json()
+			} else {
+				throw new Error('Failed to send the POST request')
+			}
+		})
+		.then((responseData) => {
+			
+			console.log('Response Data:', responseData)
+		})
+		.catch((error) => {
+			
+			console.error('Error:', error)
+		})
 })
