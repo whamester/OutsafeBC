@@ -10,7 +10,7 @@ class Map {
 	}
 
 	static pinIcon = new L.Icon({
-		iconUrl: '/assets/icons/location-pin-fill.svg',
+		iconUrl: '/assets/icons/location-pin-fill-red.svg',
 		iconSize: [40, 40], // size of the icon
 		iconAnchor: [20, 40], // point of the icon which will correspond to marker's location
 		popupAnchor: [0, -40], // point from which the popup should open relative to the iconAnchor
