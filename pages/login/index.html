@@ -39,50 +39,58 @@
 
 	<body id="home-body">
 		<script src="https://accounts.google.com/gsi/client" async></script>
-		<div class="ContentWrapper">
+		<div class="content-wrapper">
 			<h1 class="text-heading-1">Log in</h1>
 			<p class="text-body-2">Welcome back! Please enter your details</p>
 			<form id="login-form">
-				<div class="InputAndLabel form-field">
+				<div class="form-field">
 					<label for="email-input" class="text-body-2 medium">Email</label>
-					<input
-						id="email-input"
-						autocomplete="username"
-						type="email"
-						required
-						placeholder="name@email.com"
-					/>
+					<div class="form-field__input-container">
+						<input
+							id="email-input"
+							autocomplete="username"
+							type="email"
+							required
+							placeholder="name@email.com"
+						/>
+					</div>
 				</div>
 
-				<div class="InputAndLabel form-field with-icon">
+				<div class="form-field with-icon">
 					<label for="password-input" class="text-body-2 medium"
 						>Password*</label
 					>
-					<i class="icon-search icon-right" id="show-pw"></i>
-					<input
-						id="password-input"
-						autocomplete="new-password"
-						type="password"
-						required
-					/>
+					<div class="form-field__input-container">
+						<i class="icon-search icon-right" id="show-pw"></i>
+						<input
+							id="password-input"
+							autocomplete="new-password"
+							type="password"
+							required
+						/>
+					</div>
 				</div>
 			</form>
 			<!-- TODO: add forget password link -->
-			<a href="" class="text-body-2 bold Link">Forgot Password?</a>
-			<button type="submit" form="login-form" class="btn btn-primary">
-				Log in
-			</button>
+			<a href="" class="text-body-2 bold Link forget-password"
+				>Forgot Password?</a
+			>
+			<div class="flex-wrapper_bottom">
+				<button type="submit" form="login-form" class="btn btn-primary">
+					Log in
+				</button>
 
-			<div id="google-button"></div>
+				<div id="google-button"></div>
 
-			<div class="text-body-2 medium Center">
-				Don't have an account?
-				<a
-					href="/pages/signup/index.html"
-					aria-label="Link to sign up"
-					class="bold Link"
-					>Sign up</a
-				>
+				<div class="text-body-2 medium Center">
+					Don't have an account?
+					<a
+						href="/pages/signup/index.html"
+						aria-label="Link to sign up"
+						class="bold Link"
+						>Sign up</a
+					>
+				</div>
 			</div>
 		</div>
 	</body>

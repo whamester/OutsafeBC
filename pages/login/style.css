@@ -1,11 +1,12 @@
-.ContentWrapper {
+.content-wrapper {
 	margin: 2rem 1rem 1rem 1rem;
 }
-.ContentWrapper > a {
+.forget-password {
+	margin-top: 2rem;
+	margin-bottom: 2.5rem;
 	display: block;
 	text-align: right;
 	text-decoration: none;
-	margin-bottom: 2.5rem;
 }
 
 .Link {
@@ -26,19 +27,19 @@ h1 {
 
 form {
 	margin-top: 2.5rem;
-}
-
-.InputAndLabel {
 	display: flex;
 	flex-direction: column;
-	align-items: flex-start;
-	gap: 0.375rem;
-	align-self: stretch;
-	margin-bottom: 2rem;
+	gap: 2rem;
+}
+
+.flex-wrapper_bottom {
+	display: flex;
+	flex-direction: column;
+	gap: 1.25rem;
 }
 
 .btn,
-#google-button {
+#google-button,
+input {
 	width: 100%;
-	margin-bottom: 1.25rem;	
 }
