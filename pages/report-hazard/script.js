@@ -421,8 +421,9 @@ function handleFileSelection(event) {
 			reader.readAsDataURL(selectedFile)
 		}
 	}
-	currentReport.images = arrayPict
 	renderPhotos()
+	currentReport.images = arrayPict
+	
 }
 
 function renderPhotos() {
@@ -433,7 +434,7 @@ function renderPhotos() {
 		// imagesFirstOutput2.appendChild(arrayPict[i])
 		// imagesFirstOutput3.innerHTML += arrayPict[i]
 		// console.log(arrayPict[i])
-		imagesFirstOutput2.innerHTML += `<img src="${arrayPict[i-1]}" width="150" />`
+		imagesFirstOutput2.innerHTML += `<img src="${arrayPict[i]}" width="150" />`
 		// imagesFirstOutput.innerHTML += `<img src="${arrayPict[i]}" width="150" />`
 	}
 }
