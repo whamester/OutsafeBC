@@ -4,10 +4,14 @@
 .forget-password {
 	margin-top: 2rem;
 	margin-bottom: 2.5rem;
-	display: block;
-	text-align: right;
-	text-decoration: none;
+	background: none;
+	border: none;
 }
+
+.align-right {
+	text-align: right;
+	border: 0;
+  }
 
 .Link {
 	color: var(--neutral-neutral-700, #344054);
