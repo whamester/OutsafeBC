@@ -426,7 +426,7 @@ function handleFileSelection(event) {
 }
 
 function renderPhotos() {
-	imagesFirstOutput2.innerHTML = ''
+	// imagesFirstOutput2.innerHTML = ''
 
 	for (let i = 0; i < arrayPict.length; i++) {
 		// imagesFirstOutput2.innerHTML += `<img src="${arrayPict[i]}" width="150" />`
