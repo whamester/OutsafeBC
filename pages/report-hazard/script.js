@@ -425,18 +425,18 @@ function handleFileSelection(event) {
 	currentReport.images = arrayPict
 }
 
-// function renderPhotos() {
-// 	imagesFirstOutput2.innerHTML = ''
+function renderPhotos() {
+	imagesFirstOutput2.innerHTML = ''
 
-// 	for (let i = 0; i < arrayPict.length; i++) {
-// 		// imagesFirstOutput2.innerHTML += `<img src="${arrayPict[i]}" width="150" />`
-// 		// imagesFirstOutput2.appendChild(arrayPict[i])
-// 		// imagesFirstOutput3.innerHTML += arrayPict[i]
-// 		// console.log(arrayPict[i])
-// 		imagesFirstOutput2.innerHTML += `<img src="${arrayPict[i]}" width="150" />`
-// 		// imagesFirstOutput.innerHTML += `<img src="${arrayPict[i]}" width="150" />`
-// 	}
-// }
+	for (let i = 0; i < arrayPict.length; i++) {
+		// imagesFirstOutput2.innerHTML += `<img src="${arrayPict[i]}" width="150" />`
+		imagesFirstOutput2.appendChild(arrayPict[i])
+		// imagesFirstOutput3.innerHTML += arrayPict[i]
+		// console.log(arrayPict[i])
+		// imagesFirstOutput2.innerHTML += `<img src="${arrayPict[i]}" width="150" />`
+		// imagesFirstOutput.innerHTML += `<img src="${arrayPict[i]}" width="150" />`
+	}
+}
 
 /**
  * Step 6: Show Confirmation
