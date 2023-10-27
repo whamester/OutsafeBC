@@ -99,6 +99,9 @@ const getCategories = async () => {
 			radio.addEventListener('change', (event) => {
 				skipHazardOption = false
 
+				currentReport.option.id = null
+				currentReport.option.name = null
+	
 				const selectedCategoryId = event.target.value
 				const selectedCategory = data.find(
 					(category) => category.id === selectedCategoryId
@@ -135,6 +138,7 @@ getCategories()
 
 const populateHazardOptions = (options) => {
 	try {
+		document.getElementById('hazard-option-content').innerHTML = ""
 		if (options.length === 1) {
 			currentReport.option.id = options[0].id
 			currentReport.option.name = options[0].name
@@ -148,8 +152,8 @@ const populateHazardOptions = (options) => {
 			const radio = document.createElement('input')
 
 			radio.setAttribute('type', 'radio')
-			radio.setAttribute('name', 'categoryRadioBtn')
-			radio.setAttribute('id', `category-${option.id}-radio`)
+			radio.setAttribute('name', 'optionRadioBtn')
+			radio.setAttribute('id', `option-${option.id}-radio`)
 			radio.setAttribute('value', option.id)
 
 			radio.addEventListener('change', (event) => {
@@ -158,13 +162,13 @@ const populateHazardOptions = (options) => {
 			})
 
 			const label = document.createElement('label')
-			label.setAttribute('id', `category-${option.id}-label`)
-			label.setAttribute('for', `category-${option.id}-radio`)
+			label.setAttribute('id', `option-${option.id}-label`)
+			label.setAttribute('for', `option-${option.id}-radio`)
 			label.innerHTML = option.name
 
 			div.appendChild(radio)
 			div.appendChild(label)
-
+			
 			document.getElementById('hazard-option-content').appendChild(div)
 		}
 	} catch (error) {

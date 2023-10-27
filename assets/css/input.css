@@ -102,7 +102,7 @@
 	margin-bottom: auto;
 }
 
-.form-field.with-icon i[class^='icon-'].icon-left {
+.form-field.with-icon i[class^='icon-'].left {
 	position: absolute;
 	left: 0.75rem;
 	top: 0;
@@ -115,6 +115,6 @@
 	padding-right: 2rem;
 }
 
-.form-field.with-icon i[class^='icon-'].icon-left ~ input {
+.form-field.with-icon i[class^='icon-'].left ~ input {
 	padding-left: 2rem;
 }
