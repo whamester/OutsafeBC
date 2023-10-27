@@ -101,7 +101,7 @@ const getCategories = async () => {
 
 				currentReport.option.id = null
 				currentReport.option.name = null
-	
+
 				const selectedCategoryId = event.target.value
 				const selectedCategory = data.find(
 					(category) => category.id === selectedCategoryId
@@ -138,7 +138,7 @@ getCategories()
 
 const populateHazardOptions = (options) => {
 	try {
-		document.getElementById('hazard-option-content').innerHTML = ""
+		document.getElementById('hazard-option-content').innerHTML = ''
 		if (options.length === 1) {
 			currentReport.option.id = options[0].id
 			currentReport.option.name = options[0].name
@@ -168,7 +168,7 @@ const populateHazardOptions = (options) => {
 
 			div.appendChild(radio)
 			div.appendChild(label)
-			
+
 			document.getElementById('hazard-option-content').appendChild(div)
 		}
 	} catch (error) {
@@ -428,6 +428,15 @@ showConfirmationBtn.addEventListener('click', () => {
 	categoryOutput.innerHTML = currentReport.category.name
 	hazardOptionOutput.innerHTML = currentReport.option.name
 	commentOutput.innerHTML = currentReport.comment
+	imagesOutput.innerHTML = ''
+
+	for (let i = 0; i < 3; i++) {
+		if (currentReport.images[i]) {
+			imagesOutput.innerHTML += `<img src="${currentReport.images[i]}" width="150" />`
+		} else {
+			imagesOutput.innerHTML += 'No Image Provided'
+		}
+	}
 })
 
 /**
