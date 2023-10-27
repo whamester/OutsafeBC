@@ -422,6 +422,7 @@ function renderPhotos() {
 	for (let i = 0; i < arrayPict.length; i++) {
 		imagesFirstOutput2.appendChild(arrayPict[i])
 		imagesFirstOutput3.innerHTML += arrayPict[i]
+		console.log(arrayPict[i])
 	}
 }
 
