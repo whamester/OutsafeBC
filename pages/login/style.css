@@ -1,5 +1,5 @@
 .content-wrapper {
-	margin: 2rem 1rem 1rem 1rem;
+	padding: 2rem 1rem 3rem 1rem;
 }
 
 .forget-password {
@@ -14,16 +14,8 @@
 	border: 0;
 }
 
-.Link {
-	color: var(--neutral-neutral-700, #344054);
-}
-
 div > p {
 	color: var(--neutral-neutral-500, #667185);
-}
-
-.Center {
-	text-align: center;
 }
 
 h1 {

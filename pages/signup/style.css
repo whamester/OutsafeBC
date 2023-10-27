@@ -1,21 +1,9 @@
 .content-wrapper {
-	margin: 2rem 1rem 1rem 1rem;
+	padding: 2rem 1rem 3rem 1rem;
 }
 
 h1 {
 	margin-bottom: 2rem;
-}
-
-.password-hint {
-	color: var(--neutral-neutral-400, #98a2b3);
-}
-
-.Link {
-	color: var(--neutral-neutral-700, #344054);
-}
-
-.Center {
-	text-align: center;
 }
 
 form {
