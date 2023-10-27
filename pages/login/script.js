@@ -108,11 +108,9 @@ function showHideEyeIcon() {
 		password.type = 'text'
 		hidePw.classList.remove('hidden')
 		showPw.classList.add('hidden')
-		loadIcons()
 	} else {
 		password.type = 'password'
 		showPw.classList.remove('hidden')
 		hidePw.classList.add('hidden')
-		loadIcons()
 	}
 }
