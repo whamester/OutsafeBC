@@ -393,6 +393,7 @@ const uploadPictureInputMobile = document.getElementById(
 	'uploadPictureInputMobile'
 )
 const imagesFirstOutput2 = document.getElementById('imagesFirstOutput2')
+const imagesFirstOutput3 = document.getElementById('imagesFirstOutput2')//to delete do not forget this is to use as a console.log
 
 environmentMobileInput.addEventListener('change', handleFileSelection)
 uploadPictureInputMobile.addEventListener('change', handleFileSelection)
@@ -408,10 +409,10 @@ function handleFileSelection(event) {
 		if (selectedFile.type.startsWith('image/')) {
 			const imageElement = document.createElement('img')
 			imageElement.src = URL.createObjectURL(selectedFile)
-			arrayPict.push('data:image/png;base64,' + imageElement)
+			arrayPict.push(imageElement)
 		}
 	}
-	currentReport.images = arrayPict
+	// currentReport.images = arrayPict
 	renderPhotos()
 }
 
@@ -420,6 +421,7 @@ function renderPhotos() {
 
 	for (let i = 0; i < arrayPict.length; i++) {
 		imagesFirstOutput2.appendChild(arrayPict[i])
+		imagesFirstOutput3.innerHTML += `arrayPict[i]`
 	}
 }
 
