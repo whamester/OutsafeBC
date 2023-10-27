@@ -303,6 +303,7 @@ fileInput.addEventListener('change', function () {
 			AlertPopup.warning
 		)
 	}
+	currentReport.images = arrayPict
 })
 
 //drag and drop option to upload picture
@@ -338,6 +339,7 @@ function handleFiles(files) {
 			imagesFirstOutput.innerHTML = ''
 		}
 	}
+	currentReport.images = arrayPict
 }
 
 // Print images
@@ -408,7 +410,7 @@ function handleFileSelection(event) {
 			imageElement.src = URL.createObjectURL(selectedFile)
 			arrayPict.push(imageElement)
 		}
-	}
+	}currentReport.images = arrayPict
 	renderPhotos()
 }
 
@@ -433,8 +435,12 @@ showConfirmationBtn.addEventListener('click', () => {
 	for (let i = 0; i < 3; i++) {
 		if (currentReport.images[i]) {
 			imagesOutput.innerHTML += `<img src="${currentReport.images[i]}" width="150" />`
+			console.log(currentReport.images[i])
+			console.log(arrayPict)
 		} else {
 			imagesOutput.innerHTML += 'No Image Provided'
+			console.log(currentReport.images[i])
+			console.log(arrayPict)
 		}
 	}
 })
