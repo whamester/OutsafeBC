@@ -408,9 +408,10 @@ function handleFileSelection(event) {
 		if (selectedFile.type.startsWith('image/')) {
 			const imageElement = document.createElement('img')
 			imageElement.src = URL.createObjectURL(selectedFile)
-			arrayPict.push(imageElement)
+			arrayPict.push('data:image/png;base64,' + imageElement)
 		}
-	}currentReport.images = arrayPict
+	}
+	currentReport.images = arrayPict
 	renderPhotos()
 }
 
