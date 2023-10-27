@@ -29,6 +29,7 @@
 }
 
 img {
-	width: 60px;
-	height: 60px;
+	clip-path: circle(50% at 50% 50%);
+	width: auto;
+	height: 80px;
 }

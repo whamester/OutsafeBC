@@ -1,21 +1,20 @@
+import { API_URL } from '../../constants.js'
+// Helpers
 import readImage from '../../assets/helpers/read-image.js'
 import {
 	getUserSession,
 	setUserSession,
 	clearUserSession,
 } from '../../assets/helpers/storage.js'
-import { API_URL } from '../../constants.js'
 
+// Variables
 const user = getUserSession()
-
 const dropArea = document.getElementById('dropArea')
 const inputFile = document.getElementById('inputImage')
 const nameField = document.getElementById('name')
 const emailField = document.getElementById('email')
-
 let userID = user?.id
 let picture
-
 let changedFields = {
 	name: false,
 	photo: false,
@@ -112,6 +111,7 @@ resetPwBtn.addEventListener('click', togglePwModal)
 resetPwSaveBtn.addEventListener('click', togglePwModal)
 resetPwCanelBtn.addEventListener('click', togglePwModal)
 
+// TODO: default avatar
 // Profile photo
 function showProfilePic(url = '#') {
 	profilePhoto.setAttribute('src', url)
