@@ -485,3 +485,42 @@ reportHazardForm.addEventListener('submit', async function (event) {
 		console.error('Error:', error)
 	}
 })
+
+/**
+ * Update Form
+ */
+
+// reportHazardForm.addEventListener('submit', async function (event) {
+updateReportBtn.addEventListener('click', async function (event) {	
+	event.preventDefault()
+	console.log(currentReport)
+
+	const jsonBody = JSON.stringify(currentReport)
+
+	const endpoint ='https://enchanting-llama-6664aa.netlify.app/.netlify/functions/hazard-report?id='
+	let id = 1
+
+		const url = endpoint + id;
+
+	try {
+		const response = await fetch(url, {
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: jsonBody,
+		})
+
+		if (response.ok) {
+			const responseData = await response.json()
+			console.log('Response Data:', responseData)
+
+			// window.location.href = '../../pages/home/index.html'//comment while im testing 
+
+		} else {
+			throw new Error('Failed to send the PUT request')
+		}
+	} catch (error) {
+		console.error('Error:', error)
+	}
+})
