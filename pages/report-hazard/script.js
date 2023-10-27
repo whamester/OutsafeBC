@@ -409,10 +409,19 @@ function handleFileSelection(event) {
 		if (selectedFile.type.startsWith('image/')) {
 			const imageElement = document.createElement('img')
 			imageElement.src = URL.createObjectURL(selectedFile)
-			arrayPict.push(imageElement)
+			// arrayPict.push(imageElement)
+			const reader = new FileReader()
+
+			reader.onload = function (e) {
+				const base64String = e.target.result.split(',')[1]
+				arrayPict.push('data:image/png;base64,' + base64String)
+				console.log(arrayPict[0])
+			}
+
+			reader.readAsDataURL(selectedFile)
 		}
 	}
-	// currentReport.images = arrayPict
+	currentReport.images = arrayPict
 	renderPhotos()
 }
 
