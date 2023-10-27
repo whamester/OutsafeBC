@@ -497,6 +497,9 @@ reportHazardForm.addEventListener('submit', async function (event) {
 		if (response.ok) {
 			const responseData = await response.json()
 			console.log('Response Data:', responseData)
+
+			window.location.href = '../../pages/home/index.html';
+
 		} else {
 			throw new Error('Failed to send the POST request')
 		}
