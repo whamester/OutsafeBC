@@ -3,12 +3,16 @@ import ReportForm from '../../assets/models/ReportForm.js'
 import Map from '../../assets/models/Map.js'
 import { API_URL } from '../../constants.js'
 import AlertPopup from '../../assets/components/AlertPopup.js'
+import {
+	getUserSession,
+} from '../../assets/helpers/storage.js'
 
 //Variable Declaration
 const currentReport = new ReportForm()
 let position = Map.DEFAULT_LOCATION
 let map = null
 let skipHazardOption = false
+const user = getUserSession()
 
 /**
  * Page Init
@@ -393,6 +397,7 @@ const uploadPictureInputMobile = document.getElementById(
 	'uploadPictureInputMobile'
 )
 const imagesFirstOutput2 = document.getElementById('imagesFirstOutput2')
+const imagesFirstOutput3 = document.getElementById('imagesFirstOutput2') //to delete do not forget this is to use as a console.log
 
 environmentMobileInput.addEventListener('change', handleFileSelection)
 uploadPictureInputMobile.addEventListener('change', handleFileSelection)
@@ -408,11 +413,13 @@ function handleFileSelection(event) {
 		if (selectedFile.type.startsWith('image/')) {
 			const imageElement = document.createElement('img')
 			imageElement.src = URL.createObjectURL(selectedFile)
+			// arrayPict.push(imageElement)
 			const reader = new FileReader()
 
 			reader.onload = function (e) {
 				const base64String = e.target.result.split(',')[1]
 				arrayPict.push('data:image/png;base64,' + base64String)
+				console.log(arrayPict[0])
 			}
 
 			reader.readAsDataURL(selectedFile)
@@ -427,9 +434,21 @@ renderPhotos()
 function renderPhotos() {
 	imagesFirstOutput2.innerHTML = ''
 
+	// for (let i = 0; i < arrayPict.length; i++) {
+	// 	// imagesFirstOutput2.innerHTML += `<img src="${arrayPict[i]}" width="150" />`
+	// 	imagesFirstOutput2.appendChild(arrayPict[i])
+	// 	// imagesFirstOutput3.innerHTML += arrayPict[i]
+	// 	// console.log(arrayPict[i])
+	// 	// imagesFirstOutput2.innerHTML += `<img src="${arrayPict[i]}" width="150" />`
+	// 	// imagesFirstOutput.innerHTML += `<img src="${arrayPict[i]}" width="150" />`
+	// }
+
 	for (let i = 0; i < 3; i++) {
 		if (arrayPict[i]) {
 			imagesFirstOutput2.innerHTML += `<img src="${arrayPict[i]}" width="150" />`
+			// if (arrayPict.length > 2) {
+			// 	document.getElementById('takePictureBtn').style.display = 'none'
+			// }
 		}
 	}
 }
@@ -447,8 +466,12 @@ showConfirmationBtn.addEventListener('click', () => {
 	for (let i = 0; i < 3; i++) {
 		if (currentReport.images[i]) {
 			imagesOutput.innerHTML += `<img src="${currentReport.images[i]}" width="150" />`
+			console.log(currentReport.images[i])
+			console.log(arrayPict)
 		} else {
 			imagesOutput.innerHTML += 'No Image Provided'
+			console.log(currentReport.images[i])
+			console.log(arrayPict)
 		}
 	}
 })
@@ -458,6 +481,8 @@ showConfirmationBtn.addEventListener('click', () => {
  */
 reportHazardForm.addEventListener('submit', async function (event) {
 	event.preventDefault()
+	console.log(currentReport)
+	// TODO: Hit create hazard report endpoint
 
 	const jsonBody = JSON.stringify(currentReport)
 
@@ -476,8 +501,6 @@ reportHazardForm.addEventListener('submit', async function (event) {
 		if (response.ok) {
 			const responseData = await response.json()
 			console.log('Response Data:', responseData)
-
-			window.location.href = '../../pages/home/index.html'
 		} else {
 			throw new Error('Failed to send the POST request')
 		}
