@@ -3,9 +3,8 @@ import ReportForm from '../../assets/models/ReportForm.js'
 import Map from '../../assets/models/Map.js'
 import { API_URL } from '../../constants.js'
 import AlertPopup from '../../assets/components/AlertPopup.js'
-import {
-	getUserSession,
-} from '../../assets/helpers/storage.js'
+import { getUserSession } from '../../assets/helpers/storage.js'
+import { API_POST_HR } from '../../constants.js'
 
 //Variable Declaration
 const currentReport = new ReportForm()
@@ -13,6 +12,8 @@ let position = Map.DEFAULT_LOCATION
 let map = null
 let skipHazardOption = false
 const user = getUserSession()
+
+currentReport.user = 'user'
 
 /**
  * Page Init
@@ -85,6 +86,7 @@ const onSelectLocation = (event) => {
  * Step 2: Category List
  */
 let categories = []
+let printCatego = ''
 const getCategories = async () => {
 	try {
 		let response = await fetch(`${API_URL}/hazard-category`)
@@ -110,8 +112,9 @@ const getCategories = async () => {
 				const selectedCategory = data.find(
 					(category) => category.id === selectedCategoryId
 				)
-				currentReport.category.id = selectedCategoryId
-				currentReport.category.name = selectedCategory.name
+				// currentReport.category.id = selectedCategoryId
+				// currentReport.category.name = selectedCategory.name
+				printCatego = selectedCategory.name
 
 				const options = selectedCategory.options ?? []
 
@@ -278,7 +281,12 @@ function snapPhoto() {
 			AlertPopup.warning
 		)
 	}
-	currentReport.images = arrayPict
+	// currentReport.images = arrayPict
+	currentReport.images = [
+		'https://source.unsplash.com/random/300x300?road,hazard',
+		'https://source.unsplash.com/random/300x300?road,hazard',
+		'https://source.unsplash.com/random/300x300?road,hazard',
+	]
 }
 
 const fileInput = document.getElementById('uploadPictureInputDesktop')
@@ -307,7 +315,12 @@ fileInput.addEventListener('change', function () {
 			AlertPopup.warning
 		)
 	}
-	currentReport.images = arrayPict
+	// currentReport.images = arrayPict
+	currentReport.images = [
+		'https://source.unsplash.com/random/300x300?road,hazard',
+		'https://source.unsplash.com/random/300x300?road,hazard',
+		'https://source.unsplash.com/random/300x300?road,hazard',
+	]
 })
 
 //drag and drop option to upload picture
@@ -343,7 +356,12 @@ function handleFiles(files) {
 			imagesFirstOutput.innerHTML = ''
 		}
 	}
-	currentReport.images = arrayPict
+	// currentReport.images = arrayPict
+	currentReport.images = [
+		'https://source.unsplash.com/random/300x300?road,hazard',
+		'https://source.unsplash.com/random/300x300?road,hazard',
+		'https://source.unsplash.com/random/300x300?road,hazard',
+	]
 }
 
 // Print images
@@ -397,7 +415,6 @@ const uploadPictureInputMobile = document.getElementById(
 	'uploadPictureInputMobile'
 )
 const imagesFirstOutput2 = document.getElementById('imagesFirstOutput2')
-const imagesFirstOutput3 = document.getElementById('imagesFirstOutput2') //to delete do not forget this is to use as a console.log
 
 environmentMobileInput.addEventListener('change', handleFileSelection)
 uploadPictureInputMobile.addEventListener('change', handleFileSelection)
@@ -426,7 +443,12 @@ function handleFileSelection(event) {
 		}
 	}
 	renderPhotos()
-	currentReport.images = arrayPict
+	// currentReport.images = arrayPict
+	currentReport.images = [
+		'https://source.unsplash.com/random/300x300?road,hazard',
+		'https://source.unsplash.com/random/300x300?road,hazard',
+		'https://source.unsplash.com/random/300x300?road,hazard',
+	]
 }
 document.addEventListener('arraychange', renderPhotos)
 
@@ -434,21 +456,10 @@ renderPhotos()
 function renderPhotos() {
 	imagesFirstOutput2.innerHTML = ''
 
-	// for (let i = 0; i < arrayPict.length; i++) {
-	// 	// imagesFirstOutput2.innerHTML += `<img src="${arrayPict[i]}" width="150" />`
-	// 	imagesFirstOutput2.appendChild(arrayPict[i])
-	// 	// imagesFirstOutput3.innerHTML += arrayPict[i]
-	// 	// console.log(arrayPict[i])
-	// 	// imagesFirstOutput2.innerHTML += `<img src="${arrayPict[i]}" width="150" />`
-	// 	// imagesFirstOutput.innerHTML += `<img src="${arrayPict[i]}" width="150" />`
-	// }
 
 	for (let i = 0; i < 3; i++) {
 		if (arrayPict[i]) {
 			imagesFirstOutput2.innerHTML += `<img src="${arrayPict[i]}" width="150" />`
-			// if (arrayPict.length > 2) {
-			// 	document.getElementById('takePictureBtn').style.display = 'none'
-			// }
 		}
 	}
 }
@@ -458,7 +469,8 @@ function renderPhotos() {
  */
 showConfirmationBtn.addEventListener('click', () => {
 	locationOutput.innerHTML = `${currentReport.location.address} (${currentReport.location.lat},${currentReport.location.lng})`
-	categoryOutput.innerHTML = currentReport.category.name
+	// categoryOutput.innerHTML = currentReport.category.name
+	categoryOutput.innerHTML = printCatego
 	hazardOptionOutput.innerHTML = currentReport.option.name
 	commentOutput.innerHTML = currentReport.comment
 	imagesOutput.innerHTML = ''
@@ -481,16 +493,11 @@ showConfirmationBtn.addEventListener('click', () => {
  */
 reportHazardForm.addEventListener('submit', async function (event) {
 	event.preventDefault()
-	console.log(currentReport)
-	// TODO: Hit create hazard report endpoint
 
 	const jsonBody = JSON.stringify(currentReport)
 
-	const url =
-		'https://enchanting-llama-6664aa.netlify.app/.netlify/functions/hazard-report'
-
 	try {
-		const response = await fetch(url, {
+		const response = await fetch(API_POST_HR, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',

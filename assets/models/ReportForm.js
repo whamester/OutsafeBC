@@ -1,8 +1,11 @@
 class ReportForm {
 	constructor() {
-		this.category = {
+		// this.category = {
+		// 	id: null,
+		// 	name: null,
+		// }
+		this.user = {
 			id: null,
-			name: null,
 		}
 		this.option = {
 			id: null,
