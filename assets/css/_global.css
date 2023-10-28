@@ -15,8 +15,3 @@ body {
 	height: 100%;
 	font-family: 'Instrument Sans', sans-serif;
 }
-
-.leaflet-tile-pane {
-	-webkit-filter: grayscale(80%);
-	filter: grayscale(80%);
-}

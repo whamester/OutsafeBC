@@ -131,11 +131,3 @@ document.getElementById("input--search")
 document.getElementById("map")
   .addEventListener("click", closeSearchSuggestion)
 
-geoMap.map?.on("dblclick", async function (e) {
-  const lat = e.latlng.lat;
-  const lng = e.latlng.lng;
-  geoMap.setMarkerOnMap(lat, lng);
-  const locationArray = await geocode({lat, lng}, "reverse-geocode");
-  locationDetails = `${ locationArray[0].properties.address_line1 }, ${ locationArray[0]?.properties.address_line2 }`;
-  searchInput.value = locationDetails;
-});
