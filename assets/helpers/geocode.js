@@ -31,7 +31,7 @@ const geocode = async (params, type) => {
     
     return resJson?.features ?? [];
   } catch (error) {
-    console.log(`Func: searchLocationSuggestion, Type: ${ type }, Error: ${ error.message }`);
+    console.log(`Func: geocode, Type: ${ type }, Error: ${ error.message }`);
     return [];
   }
 };

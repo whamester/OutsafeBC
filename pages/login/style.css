@@ -1,0 +1,46 @@
+.content-wrapper {
+	padding: 2rem 1rem 3rem 1rem;
+}
+
+.forget-password {
+	margin-top: 2rem;
+	margin-bottom: 2.5rem;
+	background: none;
+	border: none;
+}
+
+.align-right {
+	text-align: right;
+	border: 0;
+}
+
+div > p {
+	color: var(--neutral-neutral-500, #667185);
+}
+
+h1 {
+	margin-bottom: 0.5rem;
+}
+
+form {
+	margin-top: 2.5rem;
+	display: flex;
+	flex-direction: column;
+	gap: 2rem;
+}
+
+.flex-wrapper__bottom {
+	display: flex;
+	flex-direction: column;
+	gap: 1.25rem;
+}
+
+.btn,
+#google-button,
+input {
+	width: 100%;
+}
+
+.btn-primary {
+	justify-content: center;
+}
