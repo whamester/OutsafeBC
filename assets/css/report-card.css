@@ -1,0 +1,4 @@
+.report-card__outer {
+    display: flex;
+    border: 1px solid black;
+}

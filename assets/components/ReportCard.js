@@ -1,4 +1,4 @@
-import ReportCard from './card-container.js'
+import ReportCard from '../helpers/card-container.js'
 
 class MyReport extends ReportCard {
 	constructor(id, category, hazard, location, date, photos, comment) {
@@ -6,9 +6,12 @@ class MyReport extends ReportCard {
 	}
 
 	reportContent() {
-		let div = document.createElement('div')
-		div.setAttribute('id', `reportCard${this.id}`)
-		div.innerHTML = `
+		let divOuter = document.createElement('div')
+		divOuter.setAttribute('id', `reportCard${this.id}`)
+		divOuter.setAttribute('class', `report-card__outer`)
+		let divInner = document.createElement('div')
+		divInner.setAttribute('class', `report-card__inner`)
+		divInner.innerHTML = `
         <h2>${this.hazard}</h2>
 		<p>${this.location}</p>
 		<p>${this.date}</p>
@@ -17,7 +20,8 @@ class MyReport extends ReportCard {
 		<p>Description</p>
 		<p>${this.comment}</p>
         `
-		return div
+		divOuter.appendChild(divInner)
+		return divOuter
 	}
 }
 

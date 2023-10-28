@@ -1,6 +1,6 @@
 import { API_URL } from '../../constants.js'
 // Helpers
-import MyReport from '../../assets/helpers/report-card.js'
+import MyReport from '../../assets/components/ReportCard.js'
 import { getUserSession } from '../../assets/helpers/storage.js'
 // Components
 import AlertPopup from '../../assets/components/AlertPopup.js'
