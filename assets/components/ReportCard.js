@@ -44,10 +44,9 @@ class MyReport extends ReportCard {
 		for (const pic of photos) {
 			let image = document.createElement('img')
 			image.src = pic
-			gallery.appendChild(image)			
+			gallery.appendChild(image)
 		}
 
-		
 		let divOuter = document.createElement('div')
 		divOuter.setAttribute('id', `reportCard${this.id}`)
 		divOuter.setAttribute('class', `report-card__outer`)
@@ -92,12 +91,15 @@ class MyReport extends ReportCard {
 		<div class="report-card__spacer-line"></div>
 
 		<div class="report-card__my-reports-buttons">
-			<button class="btn btn-secondary">
-				<i class="icon-check"></i>
-				Update Status
-			</button>
-			<button class="btn btn-secondary" id="${this.id}">
-				<i class="icon-check"></i>
+			<div class="report-card__toggle_button">
+				<label class="switch">
+					<input type="checkbox" id="toggleSwitch" checked>
+					<span class="slider round"></span>
+				</label>
+				<span id="toggleStatus">Active</span>
+			</div>
+			<button class="btn btn-tertiary text-body-3 medium" id="${this.id}">
+				<i class="icon-edit"></i>
 				Edit Report
 			</button>
 		</div>
