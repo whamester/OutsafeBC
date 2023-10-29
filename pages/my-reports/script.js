@@ -5,6 +5,7 @@ import { getUserSession } from '../../assets/helpers/storage.js'
 import loadIcons from '../../assets/helpers/load-icons.js'
 // Components
 import AlertPopup from '../../assets/components/AlertPopup.js'
+import { toggle } from '../../assets/components/ToggleSwitch.js'
 
 // Variables
 const user = getUserSession()
@@ -72,7 +73,8 @@ async function displayRecentReports() {
 			report.location.address,
 			report.created_at,
 			report.images,
-			report.comment
+			report.comment,
+			toggle
 		)
 		recentReports.appendChild(hazardReport.reportContent())
 		loadIcons()
@@ -117,14 +119,5 @@ async function displayOlderReports() {
 	olderReportClicked = true
 }
 
-// Report Card Toggle Switch
 
-toggleSwitch.addEventListener('change', function () {
-	if (toggleSwitch.checked) {
-		toggleStatus.textContent = 'Ongoing'
-		toggleStatus.style.color = 'var(--success-success-500-base, #10973D)'
-	} else {
-		toggleStatus.textContent = 'Inactive'
-		toggleStatus.style.color = 'var(--warning-warning-700, #AD7311)'
-	}
-})
+
