@@ -4,16 +4,16 @@ import {
 } from "../../constants.js";
 
 const geocode = async (params, type) => {
-  let url = "";
+  let url = API_GEOAPIFY_URL;
 
   if (type === "autocomplete") {
     const encodedSearchTerm = encodeURIComponent(params?.searchTerm);
-    url = `${ API_GEOAPIFY_URL }autocomplete?text=${ encodedSearchTerm }&apiKey=${ API_GEOAPIFY_KEY }`;
+    url += `autocomplete?text=${ encodedSearchTerm }&apiKey=${ API_GEOAPIFY_KEY }`;
   } else if (type === "geocode") {
     const text = encodeURIComponent(params?.text);
-    url = `${ API_GEOAPIFY_URL }search?text=${ text }&apiKey=${ API_GEOAPIFY_KEY }`;
+    url += `search?text=${ text }&apiKey=${ API_GEOAPIFY_KEY }`;
   } else if (type === "reverse-geocode") {
-    url = `${ API_GEOAPIFY_URL }reverse?lat=${ params.lat }&lon=${ params.lng }&apiKey=${ API_GEOAPIFY_KEY }`;
+    url += `reverse?lat=${ params?.lat }&lon=${ params?.lng }&apiKey=${ API_GEOAPIFY_KEY }`;
   }
 
   try {
@@ -25,7 +25,7 @@ const geocode = async (params, type) => {
     } else {
       const statusCode = res.status;
       const errorMessage = await res.text();
-      console.log(`Func: searchLocationSuggestion, Status: ${ statusCode }, Error: ${ errorMessage }`);
+      console.log(`Func: geocode, Status: ${ statusCode }, Error: ${ errorMessage }`);
       return;
     }
     
