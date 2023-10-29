@@ -5,7 +5,7 @@ import { getUserSession } from '../../assets/helpers/storage.js'
 import loadIcons from '../../assets/helpers/load-icons.js'
 // Components
 import AlertPopup from '../../assets/components/AlertPopup.js'
-import { toggle } from '../../assets/components/ToggleSwitch.js'
+import { onToggle } from '../../assets/components/ToggleSwitch.js'
 
 // Variables
 const user = getUserSession()
@@ -73,10 +73,17 @@ async function displayRecentReports() {
 			report.location.address,
 			report.created_at,
 			report.images,
-			report.comment,
-			toggle
+			report.comment
 		)
-		recentReports.appendChild(hazardReport.reportContent())
+		recentReports.appendChild(hazardReport.reportContent());
+
+		document.querySelectorAll("[id^=ts]").forEach(toggleSwitch => {
+			toggleSwitch.addEventListener("change", (e) => {
+				onToggle(e);
+				// TODO: API call
+			});
+		})
+
 		loadIcons()
 	}
 }
