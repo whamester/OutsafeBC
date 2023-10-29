@@ -51,7 +51,10 @@ async function getRecentReports() {
 
 		recentReportArr.push(...result.data.results)
 	} catch (error) {
-		console.log('Could not get user reports', error)
+		alert.show(
+			'Reports unavailable at the moment, please try again later or contact support',
+			AlertPopup.error
+		)
 	}
 }
 
@@ -84,7 +87,10 @@ async function getOlderReports() {
 
 		olderReportArr.push(...result.data.results)
 	} catch (error) {
-		console.log('Could not get user reports', error)
+		alert.show(
+			'Reports unavailable at the moment, please try again later or contact support',
+			AlertPopup.error
+		)
 	}
 }
 

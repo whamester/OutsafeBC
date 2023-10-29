@@ -5,6 +5,9 @@ const errorInputHelper = () => {
 		try {
 			const icon = document.createElement('i')
 			const input = element.querySelector('input')
+			const inputContainer = element.querySelector(
+				'.form-field__input-container'
+			)
 			const inputAttributes = [...input.attributes]
 			const isDisabled = inputAttributes.find((value) => {
 				return value.name === 'disabled'
@@ -23,7 +26,8 @@ const errorInputHelper = () => {
 			] = `url(../../assets/icons/exclamation-mark.svg)`
 			icon.style['mask-size'] = 'cover'
 			icon.style['-webkit-mask-size'] = 'cover'
-			element.appendChild(icon)
+			inputContainer.appendChild(icon)
+			input.style.paddingRight = '2.2rem'
 		} catch (error) {
 			console.error(error)
 			const alert = new AlertPopup()

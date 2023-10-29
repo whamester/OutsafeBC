@@ -14,14 +14,30 @@
 	height: 100%;
 }
 
+* {
+	font-family: 'Instrument Sans', sans-serif;
+}
+
 body {
 	width: 100%;
 	height: 100%;
-	font-family: 'Instrument Sans', sans-serif;
 	color: var(--neutral-900);
 	margin: 0;
 }
 
+a[class='link'] {
+	font-weight: 700;
+	color: var(--neutral-neutral-700, #344054);
+}
+
 .hidden {
 	display: none !important;
+}
+
+.pointer {
+	cursor: pointer;
+}
+
+.text-center {
+	text-align: center;
 }
