@@ -1,8 +1,10 @@
 import ReportCard from '../helpers/card-container.js'
+import ToggleSwitch from '../components/ToggleSwitch.js'
+import { toggle } from '../components/ToggleSwitch.js'
 
 class MyReport extends ReportCard {
-	constructor(id, category, hazard, location, date, photos, comment) {
-		super(id, category, hazard, location, date, photos, comment)
+	constructor(id, category, hazard, location, date, photos, comment, togglestatus) {
+		super(id, category, hazard, location, date, photos, comment, togglestatus)
 	}
 
 	static formatDate(inputDate) {
@@ -93,7 +95,7 @@ class MyReport extends ReportCard {
 		<div class="report-card__my-reports-buttons">
 			<div class="report-card__toggle_button">
 				<label class="switch">
-					<input type="checkbox" id="toggleSwitch" checked>
+					<input type="checkbox" checked id="ts-${this.id}">
 					<span class="slider round"></span>
 				</label>
 				<span id="toggleStatus" class="text-body-3 medium">Active</span>
@@ -105,6 +107,7 @@ class MyReport extends ReportCard {
 		</div>
         `
 		divInner.querySelector('#report-card__image-gallery').appendChild(gallery)
+		divInner.querySelector(`#ts-${this.id}`).setAttribute('onchange',`(${toggle})(e)`)
 		divOuter.appendChild(divInner)
 		return divOuter
 	}
