@@ -36,6 +36,12 @@ a[class='link'] {
 	color: var(--neutral-neutral-700, #344054);
 }
 
+i[class^='icon-'] {
+	width: 20px;
+	height: 20px;
+	background-color: var(--neutral-900);
+}
+
 .hidden {
 	display: none !important;
 }
