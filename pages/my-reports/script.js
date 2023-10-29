@@ -122,7 +122,9 @@ async function displayOlderReports() {
 toggleSwitch.addEventListener('change', function () {
 	if (toggleSwitch.checked) {
 		toggleStatus.textContent = 'Ongoing'
+		toggleStatus.style.color = 'var(--success-success-500-base, #10973D)'
 	} else {
 		toggleStatus.textContent = 'Inactive'
+		toggleStatus.style.color = 'var(--warning-warning-700, #AD7311)'
 	}
 })

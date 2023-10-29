@@ -96,7 +96,7 @@ class MyReport extends ReportCard {
 					<input type="checkbox" id="toggleSwitch" checked>
 					<span class="slider round"></span>
 				</label>
-				<span id="toggleStatus">Active</span>
+				<span id="toggleStatus" class="text-body-3 medium">Active</span>
 			</div>
 			<button class="btn btn-tertiary text-body-3 medium" id="${this.id}">
 				<i class="icon-edit"></i>
