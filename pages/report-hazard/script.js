@@ -271,6 +271,9 @@ canvasContext.scale(0.5, 0.5)
 
 //Open and close the camera on a desktop browser if the device has a camera
 document.getElementById('starCameraBtn').addEventListener('click', () => {
+	if (currentReport.images.length >= 3) {
+		return
+	}
 	document.getElementById('displayCameraArea').style.display = 'block'
 	if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
 		const mediaPromise = navigator.mediaDevices.getUserMedia({ video: true })
