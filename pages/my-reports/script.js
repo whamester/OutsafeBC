@@ -4,6 +4,7 @@ import MyReport from '../../assets/components/ReportCard.js'
 import { getUserSession } from '../../assets/helpers/storage.js'
 // Components
 import AlertPopup from '../../assets/components/AlertPopup.js'
+import loadIcons from '../../assets/helpers/load-icons.js'
 
 // Variables
 const user = getUserSession()
@@ -72,6 +73,7 @@ async function displayRecentReports() {
 			report.comment
 		)
 		recentReports.appendChild(hazardReport.reportContent())
+		loadIcons()
 	}
 }
 
@@ -108,6 +110,7 @@ async function displayOlderReports() {
 			report.comment
 		)
 		olderReports.appendChild(hazardReport.reportContent())
+		loadIcons()
 	}
 	olderReportClicked = true
 }
