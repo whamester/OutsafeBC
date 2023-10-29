@@ -1,4 +1,38 @@
 .report-card__outer {
-    display: flex;
-    border: 1px solid black;
+	border-radius: 0.75rem;
+	border: 1px solid var(--neutral-neutral-300, #d0d5dd);
+	background: var(--white, #fff);
+	box-shadow: 0px 2px 1px 0px rgba(0, 0, 0, 0.05);
+}
+
+.report-card__inner {
+	margin: 1rem;
+}
+
+.report-card__heading {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	flex: 1 0 0;
+	padding: 0.5rem;
+	border-radius: 0.5rem;
+	background: var(--neutral-neutral-100, #f0f2f5);
+}
+
+.btn__icon {
+	background: var(--error-500);
+}
+
+.report-card__location {
+	display: flex;
+}
+
+.report-card__date_time {
+	display: flex;
+	justify-content: space-between;
+}
+
+.report-card__spacer-line {
+    margin: 1rem 0 1rem;
+    border-bottom: 1px solid var(--neutral-300, #d0d5dd);
 }
