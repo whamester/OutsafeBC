@@ -154,6 +154,7 @@ const getCategories = async () => {
 					(category) => category.id === selectedCategoryId
 				)
 				currentReport.category.id = selectedCategoryId
+				currentReport.category.name = category.name
 
 				const options = selectedCategory.options ?? []
 
