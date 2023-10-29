@@ -1,3 +1,5 @@
+import loadIcons from '../helpers/load-icons.js'
+
 // injects the HTML string into the DOM
 const injectHTML = (componentArray, id = 'root', position = 'beforeend') => {
 	const root = document.getElementById(id)
@@ -18,6 +20,8 @@ const injectHTML = (componentArray, id = 'root', position = 'beforeend') => {
 			})
 			?.join('')
 	)
+
+	loadIcons()
 }
 
 export default injectHTML

@@ -1,11 +1,34 @@
 header {
 	max-width: 80rem;
-	padding-top: 1rem;
-	padding-bottom: 1rem;
+	padding: 0.75rem 1rem;
 	margin: auto;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	border-bottom: 1px solid var(--neutral-300);
-	background: var(--white);
+	border-bottom: 1px solid var(--neutral-200, #e4e7ec);
+	background: var(--primary-900, #0f1815);
+}
+
+#header-nav {
+	display: flex;
+	gap: 1rem;
+	align-items: center;
+}
+
+#avatar {
+	width: 1.75rem;
+	height: 1.75rem;
+	border-radius: 50%;
+}
+
+.notification-container {
+	display: flex;
+	gap: 1rem;
+	align-items: center;
+}
+
+i[class^='icon-notification'] {
+	width: 1.5rem;
+	height: 1.5rem;
+	background-color: var(--white);
 }
