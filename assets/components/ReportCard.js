@@ -37,8 +37,17 @@ class MyReport extends ReportCard {
 		let date = MyReport.formatDate(inputDateString)
 		let time = inputDateString.substring(11, 16)
 
+		let photos = this.photos
+		let gallery = document.createElement('div')
+		gallery.setAttribute('id', 'report-card__picture-container')
 
+		for (const pic of photos) {
+			let image = document.createElement('img')
+			image.src = pic
+			gallery.appendChild(image)			
+		}
 
+		
 		let divOuter = document.createElement('div')
 		divOuter.setAttribute('id', `reportCard${this.id}`)
 		divOuter.setAttribute('class', `report-card__outer`)
@@ -73,7 +82,7 @@ class MyReport extends ReportCard {
 
 		<div class="report-card__spacer-line"></div>
 				
-		<div>${this.photos}</div>
+		<div id="report-card__image-gallery"></div>
 
 		<div class="report-card__spacer-line"></div>
 
@@ -93,6 +102,7 @@ class MyReport extends ReportCard {
 			</button>
 		</div>
         `
+		divInner.querySelector('#report-card__image-gallery').appendChild(gallery)
 		divOuter.appendChild(divInner)
 		return divOuter
 	}

@@ -24,17 +24,17 @@ recentBtn.checked = true
 displayRecentReports()
 
 recentBtn.addEventListener('click', () => {
-	recentReports.style.display = 'block'
+	recentReports.style.display = 'flex'
 	olderReports.style.display = 'none'
 })
 olderBtn.addEventListener('click', () => {
 	if (!olderReportClicked) {
 		displayOlderReports()
 		recentReports.style.display = 'none'
-		olderReports.style.display = 'block'
+		olderReports.style.display = 'flex'
 	} else {
 		recentReports.style.display = 'none'
-		olderReports.style.display = 'block'
+		olderReports.style.display = 'flex'
 	}
 })
 
