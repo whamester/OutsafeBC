@@ -2,9 +2,9 @@ import { API_URL } from '../../constants.js'
 // Helpers
 import MyReport from '../../assets/components/ReportCard.js'
 import { getUserSession } from '../../assets/helpers/storage.js'
+import loadIcons from '../../assets/helpers/load-icons.js'
 // Components
 import AlertPopup from '../../assets/components/AlertPopup.js'
-import loadIcons from '../../assets/helpers/load-icons.js'
 
 // Variables
 const user = getUserSession()

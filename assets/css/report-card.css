@@ -21,6 +21,8 @@
 
 .btn__icon {
 	background: var(--error-500);
+	width: 24px;
+	height: 24px;
 }
 
 .report-card__top-info {
@@ -30,13 +32,17 @@
 	margin-top: 1.5rem;
 }
 
-.report-card__location {
+.report-card__location,
+.report-card__date,
+.report-card__time {
 	display: flex;
+	gap: 0.5rem;
 }
 
 .report-card__date_time {
 	display: flex;
 	justify-content: space-between;
+    width: 95%;
 }
 
 .report-card__spacer-line {
@@ -44,7 +50,7 @@
 	border-bottom: 1px solid var(--neutral-300, #d0d5dd);
 }
 
-.report-card__my-reports-buttons{
-    display: flex;
-    justify-content: space-between;
+.report-card__my-reports-buttons {
+	display: flex;
+	justify-content: space-between;
 }

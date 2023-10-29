@@ -1,12 +1,44 @@
 import ReportCard from '../helpers/card-container.js'
-import loadIcons from '../helpers/load-icons.js'
 
 class MyReport extends ReportCard {
 	constructor(id, category, hazard, location, date, photos, comment) {
 		super(id, category, hazard, location, date, photos, comment)
 	}
 
+	static formatDate(inputDate) {
+		const date = new Date(inputDate)
+
+		const monthNames = [
+			'January',
+			'February',
+			'March',
+			'April',
+			'May',
+			'June',
+			'July',
+			'August',
+			'September',
+			'October',
+			'November',
+			'December',
+		]
+
+		const day = date.getUTCDate()
+		const month = monthNames[date.getUTCMonth()]
+		const year = date.getUTCFullYear()
+
+		const formattedDate = `${day} ${month} ${year}`
+
+		return formattedDate
+	}
+
 	reportContent() {
+		let inputDateString = this.date
+		let date = MyReport.formatDate(inputDateString)
+		let time = inputDateString.substring(11, 16)
+
+
+
 		let divOuter = document.createElement('div')
 		divOuter.setAttribute('id', `reportCard${this.id}`)
 		divOuter.setAttribute('class', `report-card__outer`)
@@ -15,27 +47,26 @@ class MyReport extends ReportCard {
 		divInner.innerHTML = `
 		<div class="report-card__heading">
 			<span class="btn__icon">
-				<i class="icon-${this.category}-filled"></i>
+				<i class="icon-${this.category}-filled" style="width:24px; height:24px; background-color: white"></i>
 			</span>
         	<p class="text-body-1 semibold">${this.hazard}</p>
 		</div>
 
-
 		<div class="report-card__top-info">
 			<div class="report-card__location">
-				<i class="icon-location-pin-outline"></i>
+				<i class="icon-location-pin-outline" style="background-color: var(--neutral-400)"></i>
 				<p class="text-body-2 regular">${this.location}</p>
 			</div>
 
 			<div class="report-card__date_time">
 				<div class="report-card__date">
-					<i class="icon-date"></i>
-					<p class="text-body-2 regular">${this.date}</p>
+					<i class="icon-date" style="background-color: var(--neutral-400)"></i>
+					<p class="text-body-2 regular">${date}</p>
 				</div>
 
 				<div class="report-card__time">
-					<i class="icon-time"></i>
-					<p class="text-body-2 regular">${this.date}</p>
+					<i class="icon-time" style="background-color: var(--neutral-400)"></i>
+					<p class="text-body-2 regular">${time}</p>
 				</div>
 			</div>
 		</div>
