@@ -14,7 +14,6 @@ class ReportForm {
 			address: null,
 		}
 		this.comment = null
-		//TODO: Remove default images
 		this.images = []
 	}
 }
