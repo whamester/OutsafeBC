@@ -1,59 +1,98 @@
 //Models
 import ReportForm from '../../assets/models/ReportForm.js'
 import Map from '../../assets/models/Map.js'
+
+//Constants
 import { API_URL } from '../../constants.js'
+
+//Components
 import AlertPopup from '../../assets/components/AlertPopup.js'
+import Modal from '../../assets/components/Modal.js'
+
+//Helpers
+import { getUserSession } from '../../assets/helpers/storage.js'
+import readImage from '../../assets/helpers/read-image.js'
 
 //Variable Declaration
 const currentReport = new ReportForm()
 let position = Map.DEFAULT_LOCATION
 let map = null
 let skipHazardOption = false
+const user = getUserSession()
 
 /**
  * Page Init
  */
 
 window.onload = function () {
-	displayCurrentSection()
-	window.addEventListener('hashchange', displayCurrentSection)
+	try {
+		if (!user) {
+			window.location.replace('/')
+			return
+		}
 
-	// Loads the map even if the user has not accepted the permissions
-	map = new Map(position)
-	map.setMarkerOnMap(position.latitude, position.longitude, 'You', {
-		draggable: true,
-	}) //TODO: Consult with design the message of the marker
+		displayCurrentSection()
+		window.addEventListener('hashchange', displayCurrentSection)
 
-	//Override the current location if the user accepts the permissions
-	loadGeolocation()
+		// Loads the map even if the user has not accepted the permissions
+		map = new Map(position)
+		map.setMarkerOnMap(position.latitude, position.longitude, 'You', {
+			draggable: true,
+		}) //TODO: Consult with design the message of the marker
+
+		//Override the current location if the user accepts the permissions
+		loadGeolocation()
+	} catch (error) {
+		const alert = new AlertPopup()
+		alert.show(
+			error.message || AlertPopup.SOMETHING_WENT_WRONG_MESSAGE,
+			AlertPopup.error
+		)
+	}
 }
 
 const displayCurrentSection = () => {
-	if (skipHazardOption && location.hash === '#hazard-type') {
-		window.location.hash = '#additional-details'
-	}
-
-	if (skipHazardOption && location.hash === '#review-report') {
-		document.getElementById('review-report-category').classList.add('hidden')
-	}
-
-	const allPages = document.querySelectorAll('section.page')
-
-	const pageId = location.hash ? location.hash : '#select-location'
-	for (let page of allPages) {
-		if (pageId === '#' + page.id) {
-			page.style.display = 'block'
-		} else {
-			page.style.display = 'none'
+	try {
+		if (skipHazardOption && location.hash === '#hazard-type') {
+			window.location.hash = '#additional-details'
 		}
+
+		if (skipHazardOption && location.hash === '#review-report') {
+			document.getElementById('review-report-category').classList.add('hidden')
+		}
+
+		const allPages = document.querySelectorAll('section.page')
+
+		const pageId = location.hash ? location.hash : '#select-location'
+		for (let page of allPages) {
+			if (pageId === '#' + page.id) {
+				page.style.display = 'block'
+			} else {
+				page.style.display = 'none'
+			}
+		}
+	} catch (error) {
+		const alert = new AlertPopup()
+		alert.show(
+			error.message || AlertPopup.SOMETHING_WENT_WRONG_MESSAGE,
+			AlertPopup.error
+		)
 	}
 }
 
 const loadGeolocation = async () => {
-	position = await Map.getCurrentLocation()
-	map.setMarkerOnMap(position.latitude, position.longitude, 'You', {
-		draggable: true,
-	})
+	try {
+		position = await Map.getCurrentLocation()
+		map.setMarkerOnMap(position.latitude, position.longitude, 'You', {
+			draggable: true,
+		})
+	} catch (error) {
+		const alert = new AlertPopup()
+		alert.show(
+			error.message || AlertPopup.SOMETHING_WENT_WRONG_MESSAGE,
+			AlertPopup.error
+		)
+	}
 }
 
 /**
@@ -63,6 +102,14 @@ const loadGeolocation = async () => {
 if (map) {
 	map.on('click', onSelectLocation)
 }
+
+currentReport.location = {
+	lat: position.latitude,
+	lng: position.longitude,
+	address: 'Initial Address', //TODO: Get address
+}
+
+locationAddressInput.value = `${currentReport.location.address} (${currentReport.location.lat}, ${currentReport.location.lng})`
 
 const onSelectLocation = (event) => {
 	map.removeLayer(marker)
@@ -80,7 +127,7 @@ const onSelectLocation = (event) => {
 /**
  * Step 2: Category List
  */
-let categories = []
+
 const getCategories = async () => {
 	try {
 		let response = await fetch(`${API_URL}/hazard-category`)
@@ -101,13 +148,12 @@ const getCategories = async () => {
 
 				currentReport.option.id = null
 				currentReport.option.name = null
-	
+
 				const selectedCategoryId = event.target.value
 				const selectedCategory = data.find(
 					(category) => category.id === selectedCategoryId
 				)
 				currentReport.category.id = selectedCategoryId
-				currentReport.category.name = selectedCategory.name
 
 				const options = selectedCategory.options ?? []
 
@@ -126,7 +172,11 @@ const getCategories = async () => {
 			content.appendChild(div)
 		}
 	} catch (error) {
-		console.error(error)
+		const alert = new AlertPopup()
+		alert.show(
+			error.message || AlertPopup.SOMETHING_WENT_WRONG_MESSAGE,
+			AlertPopup.error
+		)
 	}
 }
 
@@ -138,7 +188,7 @@ getCategories()
 
 const populateHazardOptions = (options) => {
 	try {
-		document.getElementById('hazard-option-content').innerHTML = ""
+		document.getElementById('hazard-option-content').innerHTML = ''
 		if (options.length === 1) {
 			currentReport.option.id = options[0].id
 			currentReport.option.name = options[0].name
@@ -168,13 +218,15 @@ const populateHazardOptions = (options) => {
 
 			div.appendChild(radio)
 			div.appendChild(label)
-			
+
 			document.getElementById('hazard-option-content').appendChild(div)
 		}
 	} catch (error) {
-		console.log(error)
 		const alert = new AlertPopup()
-		alert.show(AlertPopup.SOMETHING_WENT_WRONG_MESSAGE, AlertPopup.error)
+		alert.show(
+			error.message || AlertPopup.SOMETHING_WENT_WRONG_MESSAGE,
+			AlertPopup.error
+		)
 	}
 }
 
@@ -187,7 +239,6 @@ commentInput.addEventListener('change', (event) => {
 
 /**
  * Step 5: Images
- * Pending
  */
 
 //Checking if the user is accessing through a mobile browser or a desktop browser
@@ -201,115 +252,93 @@ function checkMobileDevice() {
 		navigator.userAgent.match(/BlackBerry/i) ||
 		navigator.userAgent.match(/Windows Phone/i)
 	) {
-		document.getElementById('desktop').style.display = 'none'
+		document.getElementById('upload-photos-desktop-content').style.display =
+			'none'
 	} else {
-		document.getElementById('mobile').style.display = 'none'
+		document.getElementById('upload-photos-mobile-content').style.display =
+			'none'
 	}
 }
 
 checkMobileDevice()
 
-let arrayPict = []
-
+//#region Desktop Images
 const video = document.getElementById('video')
-const canvas1 = document.getElementById('canvas-1')
-const context1 = canvas1.getContext('2d')
-context1.scale(0.5, 0.5)
-const startBtn = document.getElementById('starCameraBtn')
-const stopBtn = document.getElementById('stop')
-const sapBtn = document.getElementById('takePictureBtn')
+const canvasArea = document.getElementById('canvasArea')
+
+const canvasContext = canvasArea.getContext('2d')
+canvasContext.scale(0.5, 0.5)
 
 //Open and close the camera on a desktop browser if the device has a camera
-function startCamera() {
-	document.getElementById('takePhoto').style.display = 'block'
+document.getElementById('starCameraBtn').addEventListener('click', () => {
+	if (currentReport.images.length >= 3) {
+		return
+	}
+	document.getElementById('displayCameraArea').style.display = 'block'
 	if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
 		const mediaPromise = navigator.mediaDevices.getUserMedia({ video: true })
 		mediaPromise.then((stream) => {
 			video.srcObject = stream
 
-			startBtn.disabled = true
-			stopBtn.disabled = false
+			document.getElementById('starCameraBtn').disabled = true
+			document.getElementById('stopCameraBtn').disabled = false
 		})
 		mediaPromise.catch((error) => {
 			console.error(error)
-
-			context1.font = '20px Tahoma'
-			context1.fillText(error, 20, 100)
+			canvasContext.font = '20px Tahoma'
+			canvasContext.fillText(error, 20, 100)
+			const alert = new AlertPopup()
+			alert.show('Error taking the picture', AlertPopup.warning)
 		})
-		sapBtn.disabled = false
+		document.getElementById('takeDesktopPictureBtn').disabled = false
 	} else {
-		console.log("this browser doesn't support media devices")
 		const alert = new AlertPopup()
 		alert.show("This browser doesn't support media devices", AlertPopup.warning)
 	}
-}
-
-startBtn.addEventListener('click', startCamera)
-
-function stopCamera() {
-	document.getElementById('takePhoto').style.display = 'none'
-	const tracks = video.srcObject.getTracks()
-	tracks.forEach((track) => track.stop())
-	startBtn.disabled = false
-	stopBtn.disabled = true
-	sapBtn.disabled = true
-}
-
-stopBtn.addEventListener('click', stopCamera)
-
-document.getElementById('takePictureBtn').addEventListener('click', snapPhoto)
-
-function snapPhoto() {
-	if (arrayPict.length < 3) {
-		context1.drawImage(video, 0, 0)
-
-		const canvasDataURL = canvas1.toDataURL()
-
-		arrayPict.push(canvasDataURL)
-	} else {
-		console.log('You have already taken 3 pictures.')
-		const alert = new AlertPopup()
-		alert.show(
-			'You have reached the limit of pictures allowed',
-			AlertPopup.warning
-		)
-	}
-	currentReport.images = arrayPict
-}
-
-const fileInput = document.getElementById('uploadPictureInputDesktop')
-
-//Click to upload a picture
-fileInput.addEventListener('change', function () {
-	const selectedFile = fileInput.files[0]
-	if (arrayPict.length < 3) {
-		if (selectedFile) {
-			const reader = new FileReader()
-
-			reader.onload = function (e) {
-				const base64String = e.target.result.split(',')[1]
-				arrayPict.push('data:image/png;base64,' + base64String)
-			}
-
-			reader.readAsDataURL(selectedFile)
-		} else {
-			imagesFirstOutput.innerHTML = ''
-		}
-	} else {
-		console.log('You have already taken 3 pictures.')
-		const alert = new AlertPopup()
-		alert.show(
-			'You have reached the limit of pictures allowed',
-			AlertPopup.warning
-		)
-	}
 })
 
-//drag and drop option to upload picture
-const dragAndDropArea = document.getElementById('dragAndDropArea')
+const stopCamera = () => {
+	document.getElementById('displayCameraArea').style.display = 'none'
+	const tracks = video.srcObject.getTracks()
+	tracks.forEach((track) => track.stop())
+	document.getElementById('starCameraBtn').disabled = false
+	document.getElementById('stopCameraBtn').disabled = true
+	document.getElementById('takeDesktopPictureBtn').disabled = true
+}
+document.getElementById('stopCameraBtn').addEventListener('click', stopCamera)
 
-dragAndDropArea.addEventListener('dragover', (e) => {
-	e.preventDefault()
+document
+	.getElementById('takeDesktopPictureBtn')
+	.addEventListener('click', () => {
+		if (currentReport.images.length < 3) {
+			canvasContext.drawImage(video, 0, 0)
+			const canvasDataURL = canvasArea.toDataURL()
+
+			displayImages(canvasDataURL)
+		} else {
+			const alert = new AlertPopup()
+			alert.show(
+				'You have reached the limit of pictures allowed',
+				AlertPopup.warning
+			)
+		}
+	})
+
+//Click to upload a picture
+const fileInput = document.getElementById('uploadPictureDesktopInput')
+fileInput.addEventListener('click', stopCamera)
+fileInput.addEventListener('change', function () {
+	saveFile(Object.values(this.files))
+})
+
+//Drag and drop to upload picture
+const dragAndDropArea = document.getElementById('dragAndDropArea')
+dragAndDropArea.style.height = '200px'
+dragAndDropArea.style.width = '400px'
+dragAndDropArea.style.background = 'gray'
+
+dragAndDropArea.addEventListener('dragover', (event) => {
+	event.preventDefault()
 	dragAndDropArea.classList.add('active')
 })
 
@@ -317,108 +346,79 @@ dragAndDropArea.addEventListener('dragleave', () => {
 	dragAndDropArea.classList.remove('active')
 })
 
-dragAndDropArea.addEventListener('drop', (e) => {
-	e.preventDefault()
+dragAndDropArea.addEventListener('drop', (event) => {
+	event.preventDefault()
 	dragAndDropArea.classList.remove('active')
-	handleFiles(e.dataTransfer.files)
+	saveFile(Object.values(event.dataTransfer.files))
 })
 
-function handleFiles(files) {
-	for (const file of files) {
-		if (file) {
-			const reader = new FileReader()
+//#endregion
 
-			reader.onload = function (e) {
-				const base64String = e.target.result.split(',')[1]
-				arrayPict.push('data:image/png;base64,' + base64String)
-			}
-
-			reader.readAsDataURL(file)
-		} else {
-			imagesFirstOutput.innerHTML = ''
-		}
-	}
-}
-
-// Print images
-function printPhotos() {
-	imagesFirstOutput.innerHTML = ''
-
-	for (let i = 0; i < 3; i++) {
-		if (arrayPict[i]) {
-			imagesFirstOutput.innerHTML += `<img src="${arrayPict[i]}" width="150" />`
-			if (arrayPict.length > 2) {
-				document.getElementById('takePictureBtn').style.display = 'none'
-			}
-		}
-	}
-}
-
-function checkForChanges() {
-	const newArrayPict = [...arrayPict]
-	if (!arraysAreEqual(newArrayPict, previousArrayPict)) {
-		previousArrayPict = newArrayPict
-		const arrayChangeEvent = new Event('arraychange')
-		document.dispatchEvent(arrayChangeEvent)
-	}
-}
-
-function arraysAreEqual(array1, array2) {
-	if (array1.length !== array2.length) {
-		return false
-	}
-	for (let i = 0; i < array1.length; i++) {
-		if (array1[i] !== array2[i]) {
-			return false
-		}
-	}
-	return true
-}
-
-const imagesFirstOutput = document.getElementById('imagesFirstOutput')
-let previousArrayPict = []
-
-setInterval(checkForChanges, 1000)
-
-document.addEventListener('arraychange', printPhotos)
-
-printPhotos()
-
-//Mobile browser
-
-const environmentMobileInput = document.getElementById('environmentMobile')
-const uploadPictureInputMobile = document.getElementById(
-	'uploadPictureInputMobile'
+//#region  Mobile Images
+const takeMobilePictureBtnInput = document.getElementById(
+	'takeMobilePictureBtn'
 )
-const imagesFirstOutput2 = document.getElementById('imagesFirstOutput2')
-
-environmentMobileInput.addEventListener('change', handleFileSelection)
-uploadPictureInputMobile.addEventListener('change', handleFileSelection)
+const uploadPictureMobileInput = document.getElementById(
+	'uploadPictureMobileInput'
+)
+takeMobilePictureBtnInput.addEventListener('change', handleFileSelection)
+uploadPictureMobileInput.addEventListener('change', handleFileSelection)
 
 function handleFileSelection(event) {
 	const selectedFiles = event.target.files
-
-	for (let i = 0; i < selectedFiles.length; i++) {
-		if (arrayPict.length >= 3) {
-			break
-		}
-		const selectedFile = selectedFiles[i]
-		if (selectedFile.type.startsWith('image/')) {
-			const imageElement = document.createElement('img')
-			imageElement.src = URL.createObjectURL(selectedFile)
-			arrayPict.push(imageElement)
-		}
-	}
-	renderPhotos()
+	saveFile([...selectedFiles])
 }
 
-function renderPhotos() {
-	imagesFirstOutput2.innerHTML = ''
+//#endregion
 
-	for (let i = 0; i < arrayPict.length; i++) {
-		imagesFirstOutput2.appendChild(arrayPict[i])
+//#region Mobile and Desktop Image Functions
+const saveFile = (files) => {
+	if (currentReport.images.length >= 3) {
+		const alert = new AlertPopup()
+		alert.show(
+			'You have reached the limit of pictures allowed',
+			AlertPopup.warning
+		)
+		return
+	}
+	const selectedFiles = Array.isArray(files) ? files : [files]
+
+	if (selectedFiles.length > 3) {
+		const alert = new AlertPopup()
+		alert.show('You can only upload 3 images', AlertPopup.warning)
+	}
+	selectedFiles?.splice(0, 3)?.forEach((file) => {
+		try {
+			readImage(file, ({ target }) => {
+				displayImages(target.result)
+			})
+		} catch (error) {
+			const alert = new AlertPopup()
+			alert.show('Error uploading the image', AlertPopup.warning)
+		}
+	})
+}
+
+const displayImages = (base64File) => {
+	const imagesArea = document.getElementById('displayImagesArea')
+	const img = document.createElement('img')
+	img.setAttribute('src', base64File)
+	img.style.width = '200px'
+	img.style.height = '200px'
+	imagesArea.append(img)
+
+	currentReport.images.push(base64File)
+	if (currentReport.images.length === 3) {
+		document.getElementById('starCameraBtn').setAttribute('disabled', true)
+		document.getElementById('dragAndDropArea').setAttribute('disabled', true)
+		document
+			.getElementById('uploadPictureDesktopInput')
+			.setAttribute('disabled', true)
+
+		stopCamera()
 	}
 }
+//#endregion
 
 /**
  * Step 6: Show Confirmation
@@ -428,13 +428,112 @@ showConfirmationBtn.addEventListener('click', () => {
 	categoryOutput.innerHTML = currentReport.category.name
 	hazardOptionOutput.innerHTML = currentReport.option.name
 	commentOutput.innerHTML = currentReport.comment
+	imagesOutput.innerHTML = ''
+
+	currentReport.images.forEach((image) => {
+		imagesOutput.innerHTML += `<img src="${image}" width="150" />`
+	})
 })
 
 /**
  * Submit Form
  */
-reportHazardForm.addEventListener('submit', function (event) {
+reportHazardForm.addEventListener('submit', async function (event) {
 	event.preventDefault()
-	console.log(currentReport)
-	//TODO: Hit create hazard report endpoint
+
+	try {
+		if (!currentReport.images.length) {
+			const alert = new AlertPopup()
+			alert.show('Please upload at least one image', AlertPopup.warning)
+			window.location.hash = '#upload-photos'
+			return
+		}
+
+		const images = await uploadImageToStorage(currentReport.images)
+		const response = await fetch(`${API_URL}/hazard-report`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				userId: user.id,
+				hazardOptionId: currentReport.option.id,
+				location: {
+					lat: currentReport.location.lat,
+					lng: currentReport.location.lng,
+					address: currentReport.location.address,
+				},
+				comment: currentReport.comment ?? '',
+				images: images,
+			}),
+		})
+
+		if (response.ok) {
+			await response.json()
+
+			const modal = new Modal()
+
+			const button = document.createElement('button')
+			button.setAttribute('id', 'open-modal-btn')
+			button.setAttribute('class', 'btn btn-primary')
+			button.addEventListener('click', () =>
+				window.location.replace('/pages/home')
+			)
+			button.innerHTML = 'Continue Exploring'
+
+			modal.show({
+				title: 'Your report has been submitted!',
+				description:
+					'Thank you for helping others have a safe camping experience.',
+				icon: { name: 'icon-check', color: '#000000', size: '3.5rem' },
+				actions: button,
+				enableOverlayClickClose: false,
+			})
+		} else {
+			throw new Error('Failed to create report')
+		}
+	} catch (error) {
+		const alert = new AlertPopup()
+		alert.show(error.message, AlertPopup.error)
+	}
 })
+
+const uploadImageToStorage = async (images) => {
+	const fileResponses = await Promise.all(
+		images.map((image) =>
+			fetch(image)
+				.then((res) => res.blob())
+				.then((blob) => {
+					const file = new File([blob], new Date().getTime().toString(), {
+						type: image.split(';')[0].replace('data:', ''),
+					})
+
+					return file
+				})
+		)
+	)
+
+	console.log(fileResponses)
+
+	const responses = await Promise.all(
+		fileResponses.map((file) =>
+			fetch(
+				`${API_URL}/hazard-image?fileName=${file.name}.${file?.type?.replace(
+					'image/',
+					''
+				)}`,
+				{
+					method: 'POST',
+					headers: {
+						'Content-Type': file.type,
+					},
+					body: file,
+				}
+			).then((response) => response.json())
+		)
+	)
+
+	console.log({ responses })
+
+	return responses.map(({ data }) => data.url)
+}

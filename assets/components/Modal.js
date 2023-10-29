@@ -22,8 +22,7 @@ class Modal {
 			modalContainer.setAttribute('id', 'modal-portal')
 		}
 		modalContainer.innerHTML = modal
-
-		body.appendChild(modalContainer)
+		body.insertBefore(modalContainer, body.childNodes[1])
 	}
 
 	show(params) {
