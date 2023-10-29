@@ -9,6 +9,7 @@
 @import url(./modal.css);
 @import url(./navbar.css);
 @import url(./report-card.css);
+@import url(./toggle-switch.css);
 
 :root {
 	font-size: var(--font-size-base);
