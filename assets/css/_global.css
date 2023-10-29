@@ -25,6 +25,19 @@ body {
 	margin: 0;
 }
 
+a[class='link'] {
+	font-weight: 700;
+	color: var(--neutral-neutral-700, #344054);
+}
+
 .hidden {
 	display: none !important;
+}
+
+.pointer {
+	cursor: pointer;
+}
+
+.text-center {
+	text-align: center;
 }
