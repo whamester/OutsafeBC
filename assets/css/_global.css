@@ -25,6 +25,10 @@ body {
 	margin: 0;
 }
 
+#root {
+  height: 100vh;
+}
+
 a[class='link'] {
 	font-weight: 700;
 	color: var(--neutral-neutral-700, #344054);
@@ -40,4 +44,12 @@ a[class='link'] {
 
 .text-center {
 	text-align: center;
+}
+
+.d-flex {
+	display: flex;
+}
+
+.d-grid {
+	display: grid;
 }

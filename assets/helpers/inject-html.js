@@ -1,10 +1,10 @@
 // injects the HTML string into the DOM
 const injectHTML = (params) => {
 	params.forEach(comp => {
-		const root = document.getElementById(comp?.id ?? "root");
+		const root = document.querySelector(comp?.target ?? "#root");
 
 		if (!root) {
-			console.error(`${ id } element not found.`);
+			console.error(`${ comp?.target } element not found.`);
 		} else {
 			root.insertAdjacentHTML(
 				comp?.position ?? "beforeend",

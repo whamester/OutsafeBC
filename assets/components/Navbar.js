@@ -1,9 +1,10 @@
 const Navbar = () => {
 	return `
-  <header class="w-100">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand fs-1 fw-bold mx-4" href="#">Outsafe BC</a>
-      <div class="input-group">
+  <header id="header">
+    <nav class="navbar">
+      <a class="navbar--logo" href="#">
+        <img class="navbar--logo-img" src="/assets/icons/logo.svg"/>
+      </a>
     </nav>
   </header>
   `

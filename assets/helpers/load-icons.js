@@ -9,13 +9,13 @@ const loadIcons = () => {
 			const iconName = classes.find((className) => className.includes('icon-'))
 
 			if (iconName) {
-				element.style.mask = `url(../../assets/icons/${iconName.replace(
+				element.style.mask = `url(/assets/icons/${iconName.replace(
 					'icon-',
 					''
 				)}.svg)`
 				element.style[
 					'-webkit-mask-image'
-				] = `url(../../assets/icons/${iconName.replace('icon-', '')}.svg)`
+				] = `url(/assets/icons/${iconName.replace('icon-', '')}.svg)`
 				element.style['mask-size'] = 'cover'
 				element.style['-webkit-mask-size'] = 'cover'
 			}

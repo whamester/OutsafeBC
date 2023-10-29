@@ -3,7 +3,7 @@ class Map {
   map = null;
   mapLayers = {};
   currentMarker = null;
-  static CURRENT_ZOOM = 17;
+  static CURRENT_ZOOM = 12;
   static MAP_ID = "map";
   static MAX_ZOOM = 22;
   static DEFAULT_LOCATION = {
@@ -31,16 +31,18 @@ class Map {
 
   static createIcon(iconParams={}) {
     const icon = new L.Icon({
-      ...iconParams,
-      iconUrl: `/assets/img/icons/${ iconParams?.iconName ?? "icon-map-pin.png" }`,
-      iconSize: iconParams?.iconSize ?? [40, 40]
+      iconUrl: `/assets/icons/${ iconParams?.iconName ?? "location-pin-fill-red.svg" }`,
+      iconSize: [40, 40],
+      iconAnchor: [20, 40],
+		  popupAnchor: [0, -40],
+      ...iconParams
     })
     return icon;
   }
 
   createLayerGroups(hazards, markerParams={}) {
     const layers = {};
-    hazards.forEach((hazard, idx) => {
+    hazards?.forEach((hazard, idx) => {
       const pinIcon = Map.createIcon();
       const key = hazard?.hazard?.name?.toLowerCase();
       const marker = L.marker(
@@ -72,7 +74,7 @@ class Map {
     }).addTo(this.map);
   }
 
-	static async getCurrentLocation() {
+	static watchGeoLocation(success, error, customOptions={}) {
 		// check if browser supports geolocation
 		if (!('geolocation' in navigator)) {
 			console.log('Geolocation not supported on your browser.')
@@ -83,28 +85,15 @@ class Map {
 		const navigatorOptions = {
 			enableHighAccuracy: true,
 			timeout: 5000,
-			maximumAge: 0,
+			maximumAge: 10000,
+      ...customOptions
 		}
 
-    try {
-      const position = await new Promise((resolve, reject) => {
-        navigator.geolocation.watchPosition(
-          resolve,
-          reject,
-          navigatorOptions
-        );
-      });
-      // get lat, long values
-      const { latitude, longitude } = position.coords;
-      return {
-        lat: latitude,
-        lng: longitude,
-      };
-    } catch (error) {
-      console.log(error.message);
-      // default value on error
-      return Map.DEFAULT_LOCATION;
-    }
+    navigator.geolocation.watchPosition(
+      success,
+      error,
+      navigatorOptions
+    );
   }
 }
 
