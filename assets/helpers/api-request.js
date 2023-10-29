@@ -15,13 +15,13 @@ const apiRequest = (endpoint, {method, body, ...customConfig} = {}) => {
   if (["POST", "PUT", "PATCH"].includes(method)) config.body = JSON.stringify(body);
 
   return window
-    .fetch(`${ API_URL }/${ endpoint }`, config)
-    .then(async response => {
-      if (response.ok) {
-        return await response.json();
+    .fetch(customConfig?.API_URL ?? `${ API_URL }/${ endpoint }`, config)
+    .then(async res => {
+      if (res.ok) {
+        return await res.json();
       } else {
-        const statusCode = response.status;
-        const errorMessage = await response.text();
+        const statusCode = res.status;
+        const errorMessage = await res.text();
         console.log(`Status: ${ statusCode }, Error: ${ errorMessage }, Endpoint: ${ endpoint }`);
         return {};
       }
