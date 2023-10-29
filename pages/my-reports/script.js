@@ -17,6 +17,8 @@ const olderReports = document.getElementById('olderReports')
 const recentBtn = document.getElementById('recentReportsBtn')
 const olderBtn = document.getElementById('olderReportsBtn')
 const alert = new AlertPopup()
+const toggleSwitch = document.getElementById('toggleSwitch')
+const toggleStatus = document.getElementById('toggleStatus')
 
 // Checkbox toggle
 // Set the recentBtn to be checked initially
@@ -114,3 +116,13 @@ async function displayOlderReports() {
 	}
 	olderReportClicked = true
 }
+
+// Report Card Toggle Switch
+
+toggleSwitch.addEventListener('change', function () {
+	if (toggleSwitch.checked) {
+		toggleStatus.textContent = 'Ongoing'
+	} else {
+		toggleStatus.textContent = 'Inactive'
+	}
+})
