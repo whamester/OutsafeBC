@@ -23,6 +23,13 @@
 	background: var(--error-500);
 }
 
+.report-card__top-info {
+	display: flex;
+	flex-direction: column;
+	gap: 1.5rem;
+	margin-top: 1.5rem;
+}
+
 .report-card__location {
 	display: flex;
 }
@@ -33,6 +40,11 @@
 }
 
 .report-card__spacer-line {
-    margin: 1rem 0 1rem;
-    border-bottom: 1px solid var(--neutral-300, #d0d5dd);
+	margin: 1rem 0 1rem;
+	border-bottom: 1px solid var(--neutral-300, #d0d5dd);
+}
+
+.report-card__my-reports-buttons{
+    display: flex;
+    justify-content: space-between;
 }
