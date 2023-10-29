@@ -12,5 +12,3 @@ export const JAWG_ACCESS_TOKEN =
 export const API_GEOAPIFY_KEY = '73853666fca14743bb38de0027358f26'
 
 export const API_GEOAPIFY_URL = 'https://api.geoapify.com/v1/geocode/'
-
-export const API_POST_HR = 'https://enchanting-llama-6664aa.netlify.app/.netlify/functions/hazard-report'

@@ -1,11 +1,8 @@
 class ReportForm {
 	constructor() {
-		// this.category = {
-		// 	id: null,
-		// 	name: null,
-		// }
-		this.user = {
+		this.category = {
 			id: null,
+			name: null,
 		}
 		this.option = {
 			id: null,
@@ -17,6 +14,7 @@ class ReportForm {
 			address: null,
 		}
 		this.comment = null
+		//TODO: Remove default images
 		this.images = []
 	}
 }

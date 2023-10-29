@@ -23,6 +23,8 @@
 	<script type="module" src="../../global.js" defer></script>
 	<!-- Feature JS -->
 	<script type="module" src="./script.js" defer></script>
+	<!-- <script type="module" src="./handle-desktop-images.js" defer></script> -->
+
 
 	<title>Report Hazard</title>
 </head>
@@ -66,11 +68,10 @@
 				<div>
 					<div>
 						<label>Your current location is:</label>
-						<!-- <input type="text" id="locationAddressInput" required /> -->
-						<input type="text" id="locationAddressInput" /><!-- input not reqired until get address is done -->
+						<input type="text" id="locationAddressInput" required disabled />
 					</div>
 
-					<p>You can also move the pin on the map to set your location.</p>
+					<p>You can move the pin on the map to set your location.</p>
 					<div id="map"></div>
 				</div>
 
@@ -105,57 +106,55 @@
 					visually. <span>(Optional)</span>
 				</h1>
 
-				<div id="desktop">
+				<div id="upload-photos-desktop-content">
 					<label for="starCameraBtn" class="custom-file-upload">
 						<button id="starCameraBtn" type="button" style="display:none"></button>
 						<!-- TODO// Add icon here -->
 						<span>Take a picture</span>
-						<span>At the hazard site? Click a picture to add in the report.</span>
+						<span>at the hazard site? Click a picture to add in the report.</span>
 					</label>
 					<br><br>
 
 					<div id="dragAndDropArea">
 						<!-- TODO// Add icon here -->
 						<span>Drop your images here, or </span>
-						<label for="uploadPictureInputDesktop">
-							<input id="uploadPictureInputDesktop" type="file" accept="image/jpeg, image/jpg, image/png"
-								style="display:none" />
-							<span> <u>click to browse</u> </span>
+						<label for="uploadPictureDesktopInput">
+							<input id="uploadPictureDesktopInput" type="file" accept="image/jpeg, image/jpg, image/png"
+								multiple style="display:none" />
+							<span> <u class="pointer">click to browse</u> </span>
 						</label>
 						<span>File size limit: 10 MB</span>
 					</div>
 
-					<div id="takePhoto" style="display: none">
+					<div id="displayCameraArea" style="display: none">
 						<br />
 						<video id="video" width="320" height="240" autoplay></video>
 						<br />
-						<button id="takePictureBtn" disabled>Take a photo</button>
-						<button id="stop" disabled>Stop Camera</button>
+						<button type="button" id="takeDesktopPictureBtn" disabled>Take a photo</button>
+						<button type="button" id="stopCameraBtn" disabled>Stop Camera</button>
 						<br />
-						<canvas hidden id="canvas-1" width="320" height="240"></canvas>
-					</div>
-					<div id="imagesFirstOutput">
-
+						<canvas hidden id="canvasArea" width="320" height="240"></canvas>
 					</div>
 				</div>
-				<div id="mobile">
-					<label for="environmentMobile" class="custom-file-upload">
-						<input type="file" id="environmentMobile" capture="environment" accept="image/*"
+				<div id="upload-photos-mobile-content">
+					<label for="takeMobilePictureBtn" class="custom-file-upload">
+						<input type="file" id="takeMobilePictureBtn" capture="environment" accept="image/*"
 							style="display:none;" />
 						<!-- TODO// Add icon here -->
 						Take a picture<br>
 						<span>At the hazard site? Click a picture to add in the report.</span>
 					</label><br><br>
-					<label for="uploadPictureInputMobile" class="custom-file-upload2">
-						<input type="file" id="uploadPictureInputMobile" accept="image/jpeg, image/jpg, image/png"
+					<label for="uploadPictureMobileInput" class="custom-file-upload2">
+						<input type="file" id="uploadPictureMobileInput" accept="image/jpeg, image/jpg, image/png"
 							style="display:none;" />
 						<!-- TODO// Add icon here -->
 						Upload Files<br>
 						<span>File size limit: 10 MB</span>
 					</label>
-					<div id="imagesFirstOutput2">
+				</div>
 
-					</div>
+				<div id="displayImagesArea">
+
 				</div>
 
 				<a href="#review-report" id="showConfirmationBtn">Continue</a>
