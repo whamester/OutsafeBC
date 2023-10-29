@@ -1,8 +1,15 @@
 //Models
 import ReportForm from '../../assets/models/ReportForm.js'
 import Map from '../../assets/models/Map.js'
+
+//Constants
 import { API_URL } from '../../constants.js'
+
+//Components
 import AlertPopup from '../../assets/components/AlertPopup.js'
+import Modal from '../../assets/components/Modal.js'
+
+//Helpers
 import { getUserSession } from '../../assets/helpers/storage.js'
 import readImage from '../../assets/helpers/read-image.js'
 
@@ -420,13 +427,9 @@ showConfirmationBtn.addEventListener('click', () => {
 	commentOutput.innerHTML = currentReport.comment
 	imagesOutput.innerHTML = ''
 
-	for (let i = 0; i < 3; i++) {
-		if (currentReport.images[i]) {
-			imagesOutput.innerHTML += `<img src="${currentReport.images[i]}" width="150" />`
-		} else {
-			imagesOutput.innerHTML += 'No Image Provided'
-		}
-	}
+	currentReport.images.forEach((image) => {
+		imagesOutput.innerHTML += `<img src="${image}" width="150" />`
+	})
 })
 
 /**
@@ -436,36 +439,53 @@ reportHazardForm.addEventListener('submit', async function (event) {
 	event.preventDefault()
 
 	try {
-		// if (!currentReport.images.length) {
-		// 	const alert = new AlertPopup()
-		// 	alert.show('Please upload at least one image', AlertPopup.warning)
-		// 	window.location.hash = '#upload-photos'
-		// 	return
-		// }
+		if (!currentReport.images.length) {
+			const alert = new AlertPopup()
+			alert.show('Please upload at least one image', AlertPopup.warning)
+			window.location.hash = '#upload-photos'
+			return
+		}
 
-		// const images = await uploadImageToStorage(currentReport.images)
-
-		const response = await fetch(`${API_URL}/report-hazard`, {
-			method: 'PUT',
+		const images = await uploadImageToStorage(currentReport.images)
+		const response = await fetch(`${API_URL}/hazard-report`, {
+			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
 			},
-			// body: JSON.stringify({
-			// 	userId: user.id,
-			// 	hazardOptionId: currentReport.option.id,
-			// 	location: {
-			// 		lat: currentReport.location.lat,
-			// 		lng: currentReport.location.lng,
-			// 		address: currentReport.location.address,
-			// 	},
-			// 	comment: currentReport.comment,
-			// 	images: images,
-			// }),
+			body: JSON.stringify({
+				userId: user.id,
+				hazardOptionId: currentReport.option.id,
+				location: {
+					lat: currentReport.location.lat,
+					lng: currentReport.location.lng,
+					address: currentReport.location.address,
+				},
+				comment: currentReport.comment ?? '',
+				images: images,
+			}),
 		})
 
 		if (response.ok) {
-			const { data } = await response.json()
-			console.log({ data })
+			await response.json()
+
+			const modal = new Modal()
+
+			const button = document.createElement('button')
+			button.setAttribute('id', 'open-modal-btn')
+			button.setAttribute('class', 'btn btn-primary')
+			button.addEventListener('click', () =>
+				window.location.replace('/pages/home')
+			)
+			button.innerHTML = 'Continue Exploring'
+
+			modal.show({
+				title: 'Your report has been submitted!',
+				description:
+					'Thank you for helping others have a safe camping experience.',
+				icon: { name: 'icon-check', color: '#000000', size: '3.5rem' },
+				actions: button,
+				enableOverlayClickClose: false,
+			})
 		} else {
 			throw new Error('Failed to create report')
 		}
