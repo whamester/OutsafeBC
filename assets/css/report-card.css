@@ -42,7 +42,7 @@
 .report-card__date_time {
 	display: flex;
 	justify-content: space-between;
-    width: 95%;
+	width: 95%;
 }
 
 .report-card__spacer-line {
@@ -53,4 +53,19 @@
 .report-card__my-reports-buttons {
 	display: flex;
 	justify-content: space-between;
+}
+
+#report-card__image-gallery {
+	max-width: 100%;
+}
+
+#report-card__picture-container {
+	display: flex;
+	gap: 0.75rem;
+	overflow: scroll;
+}
+
+#report-card__picture-container img {
+	height: 5.125rem;
+    border-radius: 0.25rem;
 }
