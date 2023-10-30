@@ -542,8 +542,8 @@ const uploadImageToStorage = async (images) => {
 /**
  * Step 8: Update Form
  */
-
-const url = new URL(window.location.href)
+//this 2 lines are  to get the id from url
+// const url = new URL(window.location.href)
 // const idReport = url.searchParams.get("id");
 
 let idReport = '979e3cca-883f-4589-ba5a-ac313d087481'
@@ -703,3 +703,84 @@ if (idReport !== null) {
 
 	getCollection()
 }
+
+/**
+ * Step 9: Display nav
+ */
+
+const hazardCategoryElement = document.getElementById('hazardCategory')
+
+hazardCategoryElement.addEventListener('click', () => {
+	document.getElementById('hazardCategoryNav').style.display = 'block'
+})
+
+const hazardTypeeElement = document.getElementById('hazardType')
+
+hazardTypeeElement.addEventListener('click', () => {
+	document.getElementById('hazardTypeNav').style.display = 'block'
+})
+
+const hazardOptionElement = document.getElementById('selectHazardOptionLink')
+
+hazardOptionElement.addEventListener('click', () => {
+	document.getElementById('hazardDetailNav').style.display = 'block'
+})
+
+const hazardCommentElement = document.getElementById('uploadPicture')
+
+hazardCommentElement.addEventListener('click', () => {
+	document.getElementById('hazardUploadPhotosNav').style.display = 'block'
+})
+
+const hazardPhotoElement = document.getElementById('showConfirmationBtn')
+
+hazardPhotoElement.addEventListener('click', () => {
+	document.getElementById('hazardReviewReportNav').style.display = 'block'
+})
+
+// window.onbeforeunload = function () {
+// 	// return '¿Desea recargar la página web?'
+// 	// window.location.replace('/pages/home')
+// 	window.location.href = '../home/index.html'
+// }
+
+// window.onbeforeunload = function () {
+//     // Redirigir al usuario a '/pages/home' antes de mostrar el mensaje de confirmación
+//     window.location.replace('../home/index.html');
+//     // El navegador mostrará su propio mensaje de confirmación.
+// };
+
+
+// document.onkeydown = function(e){
+// 	tecla = (document.all) ? e.keyCode : e.which;
+// 	alert(tecla)
+// 	if (tecla == 116){
+// 	  if (confirm("Seguro que quieres refrescar la página ") == true) {
+// 		 return true;
+// 	   } else {
+// 		 return false;
+// 	  }
+// 	}
+//    }
+
+// // Changes you have made may not be saved
+if(confirm('Changes you have made may not be saved')){
+    // window.location.reload();  
+	// window.location.replace('/pages/home')
+	document.getElementById('hazardCategory').click();
+	document.getElementById('hazardType').click();
+	document.getElementById('selectHazardOptionLink').click();
+	document.getElementById('hazardCategory').click();
+	document.getElementById('uploadPicture').click();
+	document.getElementById('showConfirmationBtn').click();
+}
+
+
+// window.addEventListener('beforeunload', function (event) {
+//     // Este código se ejecutará antes de que el usuario recargue la página
+//     // Puedes mostrar un mensaje personalizado o realizar otras acciones aquí
+
+//     // Ejemplo de mensaje de confirmación personalizado
+//     // event.returnValue = '¿Está seguro de que desea recargar la página?';
+// 	window.location.replace('/pages/home')
+// });
