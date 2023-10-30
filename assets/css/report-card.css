@@ -19,7 +19,7 @@
 	background: var(--neutral-100, #f0f2f5);
 }
 
-.btn__icon {
+.report-card__heading__icon {
 	background: var(--error-500);
 	width: 24px;
 	height: 24px;
