@@ -1,6 +1,6 @@
 :root {
 	--primary-btn-color: var(--white);
-	--secondary-btn-color: var(--secondary-900);
+	--secondary-btn-color: var(--primary);
 	--success-btn-color: var(--success-700);
 	--warning-btn-color: var(--warning-700);
 	--error-btn-color: var(--error-700);
@@ -34,6 +34,14 @@
 	font-size: var(--body-2-size);
 	letter-spacing: var(--body-2-letter-spacing);
 	line-height: var(--body-2-line-height);
+}
+
+.btn a {
+	text-decoration: none;
+	color: inherit;
+	font-size: inherit;
+	letter-spacing: inherit;
+	line-height: inherit;
 }
 
 .btn__icon {
