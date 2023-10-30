@@ -6,13 +6,14 @@ import Map from '../../assets/models/Map.js'
 import { API_URL } from '../../constants.js'
 
 //Components
+import Header from '../../assets/components/Header.js'
 import AlertPopup from '../../assets/components/AlertPopup.js'
 import Modal from '../../assets/components/Modal.js'
 
 //Helpers
 import { getUserSession } from '../../assets/helpers/storage.js'
 import readImage from '../../assets/helpers/read-image.js'
-import injectHeader from '../../assets/helpers/inject-header.js'
+import injectHTML from '../../assets/helpers/inject-html.js'
 
 //Variable Declaration
 const currentReport = new ReportForm()
@@ -32,7 +33,9 @@ window.onload = function () {
 			return
 		}
 
-		injectHeader('report-hazard-body', 'afterbegin')
+		injectHTML([ 
+			{func: Header, target: "#report-hazard-body", position: "afterbegin"},
+		])
 
 		displayCurrentSection()
 		window.addEventListener('hashchange', displayCurrentSection)

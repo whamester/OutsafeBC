@@ -3,8 +3,9 @@ import { API_URL } from '../../constants.js'
 import MyReport from '../../assets/components/ReportCard.js'
 import { getUserSession } from '../../assets/helpers/storage.js'
 import loadIcons from '../../assets/helpers/load-icons.js'
-import injectHeader from '../../assets/helpers/inject-header.js'
+import injectHTML from '../../assets/helpers/inject-html.js'
 // Components
+import Header from '../../assets/components/Header.js'
 import AlertPopup from '../../assets/components/AlertPopup.js'
 import { onToggle } from '../../assets/components/ToggleSwitch.js'
 
@@ -24,7 +25,10 @@ const alert = new AlertPopup()
  * Page Init
  */
 window.onload = function () {
-	injectHeader('myReportsBody', 'afterbegin')
+	// Inject Header
+	injectHTML([ 
+		{func: Header, target: "#myReportsBody", position: "afterbegin"},
+	])
 
 	// Checkbox toggle
 	// Set the recentBtn to be checked initially

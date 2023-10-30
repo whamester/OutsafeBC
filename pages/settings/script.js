@@ -1,7 +1,9 @@
-import injectHeader from '../../assets/helpers/inject-header.js'
+import injectHTML from '../../assets/helpers/inject-html.js'
 import readImage from '../../assets/helpers/read-image.js'
 import { getUserSession, setUserSession } from '../../assets/helpers/storage.js'
 import { API_URL } from '../../constants.js'
+
+import Header from '../../assets/components/Header.js'
 
 const user = getUserSession()
 
@@ -22,7 +24,9 @@ let changedFields = {
  * Page Init
  */
 window.onload = function () {
-	injectHeader('profile-body', 'afterbegin')
+	injectHTML([ 
+		{func: Header, target: "#profile-body", position: "afterbegin"},
+	])
 }
 
 nameField.addEventListener('input', () => {
