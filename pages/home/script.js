@@ -1,10 +1,10 @@
-//Components
+//Component
+import Header from '../../assets/components/Header.js';
 import GeoMap from '../../assets/components/GeoMap.js'
-import HazardCard from '../../assets/components/HazardCard.js';
-import HazardFilter from '../../assets/components/HazardFilter.js';
 import SearchBar, 
 { SearchBarSuggestionCard } from '../../assets/components/SearchBar.js';
-import injectHeader from '../../assets/helpers/inject-header.js'
+import HazardCard from '../../assets/components/HazardCard.js';
+import ModalFilter from '../../assets/components/ModalFilter.js';
 //Helpers
 import injectHTML from '../../assets/helpers/inject-html.js'
 import apiRequest from "../../assets/helpers/api-request.js";
@@ -28,7 +28,6 @@ let mapOptions = {
 let flyToTrigger = true;
 const ANIMATION_DURATION = 5;
 
-injectHeader('home-body', 'afterbegin');
 const categories = await apiRequest(`hazard-category`, { method: "GET" });
 
 const markerParams = {
@@ -175,9 +174,10 @@ const searchBarParams = {
 
 injectHTML(
   [ 
+    {func: Header, target: "#home-body", position: "afterbegin"},
     {func: GeoMap},
     {func: SearchBar, args: searchBarParams, target: "header"},
-    {func: HazardFilter, args: searchBarParams.categories}
+    {func: ModalFilter, args: searchBarParams.categories}
   ]
 );
 

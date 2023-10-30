@@ -21,7 +21,13 @@ const Header = () => {
               <i class="icon-notification-no" style=""></i>
               <i class="icon-notification-yes hidden"></i>
             </div>
-            ${`<img id="avatar" class="pointer" src="${user.photo}" alt="User logo" />`}
+            ${`
+              <img
+                id="avatar"
+                class="pointer" 
+                src="${user.photo}" alt="User logo"
+                onclick="const menu = document.querySelector('#header-menu'); if (menu.classList.contains('hidden')) { menu.classList.remove('hidden'); return; }; menu.classList.add('hidden');" />`
+            }
           `
 						: `<a href="/pages/login"><button class="btn btn-secondary">Sign in</button></a>`
 				} 

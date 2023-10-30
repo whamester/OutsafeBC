@@ -1,5 +1,5 @@
 @import url(../../assets/css/hazard-card.css);
-@import url(../../assets/css/hazard-filter.css);
+@import url(../../assets/css/modal-filter.css);
 @import url(../../assets/css/searchbar.css);
 
 body {
@@ -14,4 +14,3 @@ body {
   width: 100vw;
   height: 100vh;
 }
-

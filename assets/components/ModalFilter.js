@@ -1,4 +1,4 @@
-const HazardFilter = (categories) => {
+const ModalFilter = (categories) => {
   return `
   <div
     style="display:none"
@@ -27,4 +27,4 @@ const HazardFilter = (categories) => {
   `
 }
 
-export default HazardFilter;
+export default ModalFilter;
