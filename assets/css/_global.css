@@ -8,6 +8,8 @@
 
 @import url(./alert-popup.css);
 @import url(./modal.css);
+@import url(./report-card.css);
+@import url(./toggle-switch.css);
 
 :root {
 	font-size: var(--font-size-base);
@@ -29,6 +31,12 @@ body {
 a[class='link'] {
 	font-weight: 700;
 	color: var(--neutral-neutral-700, #344054);
+}
+
+i[class^='icon-'] {
+	width: 20px;
+	height: 20px;
+	background-color: var(--neutral-900);
 }
 
 .hidden {
