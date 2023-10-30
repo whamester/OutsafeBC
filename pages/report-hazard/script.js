@@ -551,8 +551,8 @@ let idReport = '979e3cca-883f-4589-ba5a-ac313d087481'
 if (idReport !== null) {
 	document.getElementById('saveReportBtn').style.display = 'none'
 	const getCollection = async () => {
-		try {
-			let response = await fetch(`${API_URL}/hazard-report?id=${idReport}`)
+		try {//Cuando el enpoind no responda random se podra utilizar las siguientes 2 lines
+			// let response = await fetch(`${API_URL}/hazard-report?id=${idReport}`)
 			// let { data } = await response.json()
 			let data = {
 				id: '979e3cca-883f-4589-ba5a-ac313d087481',
@@ -583,27 +583,22 @@ if (idReport !== null) {
 					'https://picsum.photos/seed/pheJJ6injX/640/480',
 				],
 			}
-			console.log(data)
-			console.log(data.hazardCategory.id)
+			
 
-			// document.querySelectorAll(`input[id="category-${data.hazardCategory.id}radio"]`)[0].checked = true
+		
 
 			//*******print category******
 			setTimeout(function () {
-				// document.querySelectorAll(
-				// 	`input[value="${data.hazardCategory.id}"]`
-				// )[0].checked = true
-
+		
 				document
 					.querySelectorAll(`input[value="${data.hazardCategory.id}"]`)[0]
 					.click()
 
 				currentReport.category.name = data.hazardCategory.name
 				categoryOutput.innerHTML = currentReport.category.name
-				// const radio = document.getElementByid("category-0d14fc2d-eca3-402b-8b00-3b18215afcb4-radio")
-				// radio.click()
+			
 			}, 1000)
-			// document.querySelectorAll(`input[value="065f2d0c-40fd-490b-9381-5e932dbf80b3"]`)[0].checked = true
+		
 
 			//*******print type******
 			setTimeout(function () {
@@ -611,28 +606,17 @@ if (idReport !== null) {
 
 				currentReport.option.name = data.hazard.name
 				hazardOptionOutput.innerHTML = currentReport.option.name
-				// document
-				// 	.querySelectorAll('[name="categoryRadioBtn"]')
-				// 	.forEach((categoryElement) => {
-				// 		categoryElement.addEventListener('change', (event) => {
-				// 			console.log("listo")
-
-				// 		})
-				// 	})
-
-				// document.querySelectorAll(
-				// 	`input[value="${data.hazard.id}"]`
-				// )[0].checked = true
+				
 			}, 2000)
 
 			//*******print comment******
-			// setTimeout(function () {
+			
 			document.querySelectorAll(`textarea[id="commentInput"]`)[0].value =
 				data.comment
 
 			currentReport.comment = data.comment
 			commentOutput.innerHTML = currentReport.comment
-			// },3000)
+			
 
 			//*******print pictures******
 
