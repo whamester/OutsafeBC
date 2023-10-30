@@ -261,7 +261,7 @@ function checkMobileDevice() {
 	}
 }
 
-checkMobileDevice()
+// checkMobileDevice()
 
 //#region Desktop Images
 const video = document.getElementById('video')
