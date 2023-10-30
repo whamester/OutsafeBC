@@ -596,6 +596,9 @@ if (idReport !== null) {
 				document
 					.querySelectorAll(`input[value="${data.hazardCategory.id}"]`)[0]
 					.click()
+
+				currentReport.category.name = data.hazardCategory.name
+				categoryOutput.innerHTML = currentReport.category.name
 				// const radio = document.getElementByid("category-0d14fc2d-eca3-402b-8b00-3b18215afcb4-radio")
 				// radio.click()
 			}, 1000)
@@ -604,6 +607,9 @@ if (idReport !== null) {
 			//*******print type******
 			setTimeout(function () {
 				document.querySelectorAll(`input[value="${data.hazard.id}"]`)[0].click()
+
+				currentReport.option.name = data.hazard.name
+				hazardOptionOutput.innerHTML = currentReport.option.name
 				// document
 				// 	.querySelectorAll('[name="categoryRadioBtn"]')
 				// 	.forEach((categoryElement) => {
@@ -620,20 +626,28 @@ if (idReport !== null) {
 
 			//*******print comment******
 			// setTimeout(function () {
-			document.querySelectorAll(`textarea[id="commentInput"]`)[0].value =
-				data.comment
+			document.querySelectorAll(`textarea[id="commentInput"]`)[0].value = data.comment
+
+			currentReport.comment = data.comment
+			commentOutput.innerHTML = currentReport.comment
 			// },3000)
 
 			//*******print pictures******
+
+			const displayImagesArea = document.getElementById('displayImagesArea')
+
+			data.images.forEach((imageUrl) => {
+				const imgElement = document.createElement('img')
+				imgElement.src = imageUrl
+				displayImagesArea.appendChild(imgElement)
+			})
 			
-			const displayImagesArea = document.getElementById('displayImagesArea');
-			
-			data.images.forEach(imageUrl => {
-				const imgElement = document.createElement('img');
-				imgElement.src = imageUrl;
-				displayImagesArea.appendChild(imgElement);
-			});
-			
+			const displayImagesAreaReview = document.getElementById('imagesOutput')
+			data.images.forEach((imageUrl) => {
+				const imgElement = document.createElement('img')
+				imgElement.src = imageUrl
+				displayImagesAreaReview.appendChild(imgElement)
+			})
 
 		} catch (error) {
 			const alert = new AlertPopup()
