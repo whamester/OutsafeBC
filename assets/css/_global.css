@@ -29,7 +29,7 @@ body {
 
 a[class='link'] {
 	font-weight: 700;
-	color: var(--neutral-neutral-700, #344054);
+	color: var(--neutral-700);
 }
 
 i[class^='icon-'] {

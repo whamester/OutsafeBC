@@ -27,7 +27,7 @@
 	left: 0;
 	right: 0;
 	bottom: 0;
-	background-color: var(--warning-warning-700, #ad7311);
+	background-color: var(--warning-700, #ad7311);
 	-webkit-transition: 0.4s;
 	transition: 0.4s;
 }
@@ -45,7 +45,7 @@
 }
 
 input:checked + .slider {
-	background-color: var(--success-success-500-base, #10973d);
+	background-color: var(--success-500, #10973d);
 }
 
 input:checked + .slider:before {
@@ -64,5 +64,5 @@ input:checked + .slider:before {
 }
 
 #toggleStatus {
-	color: var(--success-success-500-base, #10973d);
+	color: var(--success, #10973d);
 }
