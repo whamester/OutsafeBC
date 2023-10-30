@@ -739,13 +739,11 @@ hazardPhotoElement.addEventListener('click', () => {
 	document.getElementById('hazardReviewReportNav').style.display = 'block'
 })
 
-
-
 //edit buttons
 const editLocationElement = document.getElementById('editLocation')
 
 editLocationElement.addEventListener('click', () => {
-	document.getElementById('hazardCategoryNav').style.display = 'none'	
+	document.getElementById('hazardCategoryNav').style.display = 'none'
 	document.getElementById('hazardTypeNav').style.display = 'none'
 	document.getElementById('hazardDetailNav').style.display = 'none'
 	document.getElementById('hazardUploadPhotosNav').style.display = 'none'
@@ -782,12 +780,11 @@ editPhotosElement.addEventListener('click', () => {
 	document.getElementById('hazardReviewReportNav').style.display = 'none'
 })
 
-
 //hide buttons when click on nav
 const hazardUploadPhotosNavElement = document.getElementById('selectLocation')
 
 hazardUploadPhotosNavElement.addEventListener('click', () => {
-	document.getElementById('hazardCategoryNav').style.display = 'none'	
+	document.getElementById('hazardCategoryNav').style.display = 'none'
 	document.getElementById('hazardTypeNav').style.display = 'none'
 	document.getElementById('hazardDetailNav').style.display = 'none'
 	document.getElementById('hazardUploadPhotosNav').style.display = 'none'
@@ -836,7 +833,6 @@ hazardUploadPhotosNavEl.addEventListener('click', () => {
 //     // El navegador mostrará su propio mensaje de confirmación.
 // };
 
-
 // document.onkeydown = function(e){
 // 	tecla = (document.all) ? e.keyCode : e.which;
 // 	alert(tecla)
@@ -851,7 +847,7 @@ hazardUploadPhotosNavEl.addEventListener('click', () => {
 
 // // Changes you have made may not be saved
 // if(confirm('Changes you have made may not be saved')){
-//     // window.location.reload();  
+//     // window.location.reload();
 // 	// window.location.replace('/pages/home')
 // 	document.getElementById('hazardCategory').click();
 // 	document.getElementById('hazardType').click();
@@ -861,7 +857,6 @@ hazardUploadPhotosNavEl.addEventListener('click', () => {
 // 	document.getElementById('showConfirmationBtn').click();
 // }
 
-
 // window.addEventListener('beforeunload', function (event) {
 //     // Este código se ejecutará antes de que el usuario recargue la página
 //     // Puedes mostrar un mensaje personalizado o realizar otras acciones aquí
@@ -870,3 +865,34 @@ hazardUploadPhotosNavEl.addEventListener('click', () => {
 //     // event.returnValue = '¿Está seguro de que desea recargar la página?';
 // 	window.location.replace('/pages/home')
 // });
+
+//Delete pictures
+var displayImagesArea = document.getElementById('displayImagesArea')
+var images = displayImagesArea.getElementsByTagName('img')
+
+const delete1Element = document.getElementById('delete1')
+
+delete1Element.addEventListener('click', () => {
+	if (images.length >= 3) {
+		var firstImage = images[0]
+		displayImagesArea.removeChild(firstImage)
+	}
+})
+
+const delete2Element = document.getElementById('delete2')
+
+delete2Element.addEventListener('click', () => {
+	if (images.length >= 3) {
+		var secondImage = images[1]
+		displayImagesArea.removeChild(secondImage)
+	}
+})
+
+const delete3Element = document.getElementById('delete3')
+
+delete3Element.addEventListener('click', () => {
+	if (images.length >= 3) {
+		var thirdImage = images[2]
+		displayImagesArea.removeChild(thirdImage)
+	}
+})
