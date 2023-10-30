@@ -621,7 +621,16 @@ if (idReport !== null) {
 				// )[0].checked = true
 			},2000)
 
-			
+			//*******print comment******
+			// setTimeout(function () {
+				document.querySelectorAll(
+					`textarea[id="commentInput"]`
+				)[0].value = data.comment
+			// },3000)
+
+
+			//*******print pictures******
+
 		} catch (error) {
 			const alert = new AlertPopup()
 			alert.show(
