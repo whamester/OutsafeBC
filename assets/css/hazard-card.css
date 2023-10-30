@@ -1,9 +1,9 @@
 .sb-cards-btn--back {
   display: flex;
   align-items: center;
-  color: var(--neutral-neutral-900);
+  color: var(--neutral-900);
   border-radius: 100px;
-  border: 1px solid var(--neutral-neutral-300);
+  border: 1px solid var(--neutral-300);
   background-color: var(--white);
   margin-bottom: 6px;
   padding: 7px 15px 7px 5px;
@@ -37,7 +37,7 @@
   padding: 12px;
   height: 200px;
   width: 70vw;
-  border: 1px solid var(--neutral-neutral-200);
+  border: 1px solid var(--neutral-200);
   background-color: var(--white);
   box-shadow: 0px 2px 1px 0px rgba(0, 0, 0, 0.05);
   border-radius: 16px;
