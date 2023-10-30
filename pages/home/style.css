@@ -1,14 +1,16 @@
+@import url(../../assets/css/report-card.css);
+
 #map {
-  width: 100vw;
-  height: 100vh;
+	width: 100vw;
+	height: 100vh;
 }
 
 .search--input {
-  border: none;
-  outline: none;
+	border: none;
+	outline: none;
 }
 
 .btn-tags {
-  width: auto !important;
-  margin-right: 10px;
+	width: auto !important;
+	margin-right: 10px;
 }

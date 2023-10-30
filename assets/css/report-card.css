@@ -1,6 +1,6 @@
 .report-card__outer {
 	border-radius: 0.75rem;
-	border: 1px solid var(--neutral-neutral-300, #d0d5dd);
+	border: 1px solid var(--neutral-300, #d0d5dd);
 	background: var(--white, #fff);
 	box-shadow: 0px 2px 1px 0px rgba(0, 0, 0, 0.05);
 }
@@ -16,10 +16,10 @@
 	flex: 1 0 0;
 	padding: 0.5rem;
 	border-radius: 0.5rem;
-	background: var(--neutral-neutral-100, #f0f2f5);
+	background: var(--neutral-100, #f0f2f5);
 }
 
-.btn__icon {
+.report-card__heading__icon {
 	background: var(--error-500);
 	width: 24px;
 	height: 24px;

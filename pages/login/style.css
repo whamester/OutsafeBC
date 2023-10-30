@@ -15,7 +15,7 @@
 }
 
 div > p {
-	color: var(--neutral-neutral-500, #667185);
+	color: var(--neutral-500, #667185);
 }
 
 h1 {
