@@ -627,7 +627,8 @@ if (idReport !== null) {
 
 			//*******print comment******
 			// setTimeout(function () {
-			document.querySelectorAll(`textarea[id="commentInput"]`)[0].value = data.comment
+			document.querySelectorAll(`textarea[id="commentInput"]`)[0].value =
+				data.comment
 
 			currentReport.comment = data.comment
 			commentOutput.innerHTML = currentReport.comment
@@ -642,7 +643,7 @@ if (idReport !== null) {
 				imgElement.src = imageUrl
 				displayImagesArea.appendChild(imgElement)
 			})
-			
+
 			const displayImagesAreaReview = document.getElementById('imagesOutput')
 			data.images.forEach((imageUrl) => {
 				const imgElement = document.createElement('img')
@@ -650,6 +651,67 @@ if (idReport !== null) {
 				displayImagesAreaReview.appendChild(imgElement)
 			})
 
+			currentReport.images = data.images
+
+			reportHazardForm.addEventListener('submit', async function (event) {
+				event.preventDefault()
+
+				try {
+					if (!currentReport.images.length) {
+						const alert = new AlertPopup()
+						alert.show('Please upload at least one image', AlertPopup.warning)
+						window.location.hash = '#upload-photos'
+						return
+					}
+
+					const images = await uploadImageToStorage(currentReport.images)
+					const response = await fetch(`${API_URL}/hazard-report?ID=${idReport}`, {
+						method: 'PUT',
+						headers: {
+							'Content-Type': 'application/json',
+						},
+						body: JSON.stringify({
+							categoryId: currentReport.category.id,
+							hazardOptionId: currentReport.option.id,
+							location: {
+								lat: currentReport.location.lat,
+								lng: currentReport.location.lng,
+								address: currentReport.location.address,
+							},
+							comment: currentReport.comment ?? '',
+							images: images,
+						}),
+					})
+
+					if (response.ok) {
+						await response.json()
+
+						const modal = new Modal()
+
+						const button = document.createElement('button')
+						button.setAttribute('id', 'open-modal-btn')
+						button.setAttribute('class', 'btn btn-primary')
+						button.addEventListener('click', () =>
+							window.location.replace('/pages/home')
+						)
+						button.innerHTML = 'Continue Exploring'
+
+						modal.show({
+							title: 'Your report has been update!',
+							description:
+								'Thank you for helping others have a safe camping experience.',
+							icon: { name: 'icon-check', color: '#000000', size: '3.5rem' },
+							actions: button,
+							enableOverlayClickClose: false,
+						})
+					} else {
+						throw new Error('Failed to update report')
+					}
+				} catch (error) {
+					const alert = new AlertPopup()
+					alert.show(error.message, AlertPopup.error)
+				}
+			})
 		} catch (error) {
 			const alert = new AlertPopup()
 			alert.show(
