@@ -549,6 +549,7 @@ const url = new URL(window.location.href)
 let idReport = '979e3cca-883f-4589-ba5a-ac313d087481'
 
 if (idReport !== null) {
+	document.getElementById('saveReportBtn').style.display = 'none'
 	const getCollection = async () => {
 		try {
 			let response = await fetch(`${API_URL}/hazard-report?id=${idReport}`)
