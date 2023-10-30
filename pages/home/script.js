@@ -1,6 +1,6 @@
 //Components
 import GeoMap from '../../assets/components/GeoMap.js'
-import Navbar from '../../assets/components/Navbar.js'
+import injectHeader from '../../assets/helpers/inject-header.js'
 //Helpers
 import injectHTML from '../../assets/helpers/inject-html.js'
 //Models
@@ -14,7 +14,7 @@ let map = null
  * Page Init
  */
 window.onload = function () {
-	injectHTML([Navbar], 'home-body', 'afterbegin')
+	injectHeader('home-body', 'afterbegin')
 	injectHTML([GeoMap])
 
 	// Loads the map even if the user has not accepted the permissions

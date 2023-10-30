@@ -2,9 +2,11 @@
 @import url(./_variables.css);
 @import url(./_typography.css);
 
+@import url(./icon.css); /* Default icon styles first so the next imports have priority */
+
 @import url(./button.css);
 @import url(./input.css);
-@import url(./navbar.css);
+@import url(./header.css);
 
 @import url(./alert-popup.css);
 @import url(./modal.css);
@@ -33,10 +35,10 @@ a[class='link'] {
 	color: var(--neutral-neutral-700, #344054);
 }
 
-i[class^='icon-'] {
-	width: 20px;
-	height: 20px;
-	background-color: var(--neutral-900);
+ul {
+	padding: 0;
+	margin: 0;
+	list-style-type: none;
 }
 
 .hidden {
