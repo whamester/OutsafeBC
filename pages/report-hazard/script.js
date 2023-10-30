@@ -12,6 +12,7 @@ import Modal from '../../assets/components/Modal.js'
 //Helpers
 import { getUserSession } from '../../assets/helpers/storage.js'
 import readImage from '../../assets/helpers/read-image.js'
+import injectHeader from '../../assets/helpers/inject-header.js'
 
 //Variable Declaration
 const currentReport = new ReportForm()
@@ -30,6 +31,8 @@ window.onload = function () {
 			window.location.replace('/')
 			return
 		}
+
+		injectHeader('report-hazard-body', 'afterbegin')
 
 		displayCurrentSection()
 		window.addEventListener('hashchange', displayCurrentSection)

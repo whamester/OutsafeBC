@@ -1,3 +1,5 @@
+import loadIcons from '../helpers/load-icons.js'
+
 // injects the HTML string into the DOM
 const injectHTML = (params) => {
 	params.forEach(comp => {

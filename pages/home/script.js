@@ -1,10 +1,10 @@
 //Components
 import GeoMap from '../../assets/components/GeoMap.js'
-import Navbar from '../../assets/components/Navbar.js'
 import HazardCard from '../../assets/components/HazardCard.js';
 import HazardFilter from '../../assets/components/HazardFilter.js';
 import SearchBar, 
 { SearchBarSuggestionCard } from '../../assets/components/SearchBar.js';
+import injectHeader from '../../assets/helpers/inject-header.js'
 //Helpers
 import injectHTML from '../../assets/helpers/inject-html.js'
 import apiRequest from "../../assets/helpers/api-request.js";
@@ -28,6 +28,7 @@ let mapOptions = {
 let flyToTrigger = true;
 const ANIMATION_DURATION = 5;
 
+injectHeader('home-body', 'afterbegin');
 const categories = await apiRequest(`hazard-category`, { method: "GET" });
 
 const markerParams = {
@@ -46,7 +47,7 @@ const closeSearchSuggestion = (e) => {
   boxSuggestion.style.display = e?.target?.closest(".sb-search-box") ? "block" : "none";
 };
 
-const getReportApiCall = async (lat, lng, cursor=0) => {
+const getReportApiCall = async (lat, lng, cursor) => {
   const url = `hazard-report?cursor=${ cursor }&size=10&lat=${ lat }&lng=${ lng }`;
   reports = await apiRequest(url, { method: "GET" });
   hazardCardParams["reports"] = reports.data?.results;
@@ -100,7 +101,7 @@ const suggestionOnClick = () => {
 
 const getReports = async (lat, lng, cursor=0) => {
   document.querySelector(".btn-report-hazard").style.display = "none";
-  await getReportApiCall();
+  await getReportApiCall(lat, lng, cursor);
   document.querySelector(".sb-cards")?.remove();
   Object.keys(geoMap.mapLayers)?.forEach((key) => {
     geoMap.map?.removeLayer(geoMap.mapLayers[key]);
@@ -174,7 +175,6 @@ const searchBarParams = {
 
 injectHTML(
   [ 
-    {func: Navbar},
     {func: GeoMap},
     {func: SearchBar, args: searchBarParams, target: "header"},
     {func: HazardFilter, args: searchBarParams.categories}
