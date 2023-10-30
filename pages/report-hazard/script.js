@@ -586,16 +586,27 @@ if (idReport !== null) {
 			console.log(data.hazardCategory.id)
 
 			// document.querySelectorAll(`input[id="category-${data.hazardCategory.id}radio"]`)[0].checked = true
+			
+			//*******print category******
 			setTimeout(function () {
+				// document.querySelectorAll(
+				// 	`input[value="${data.hazardCategory.id}"]`
+				// )[0].checked = true
+
 				document.querySelectorAll(
 					`input[value="${data.hazardCategory.id}"]`
-				)[0].checked = true
-				const options = selectedCategory.options ?? []
-console.log(options)
-				populateHazardOptions(options)
-			}, 5000)
+				)[0].click()
+				// const radio = document.getElementByid("category-0d14fc2d-eca3-402b-8b00-3b18215afcb4-radio")
+				// radio.click()
+				
+			}, 1000)
 			// document.querySelectorAll(`input[value="065f2d0c-40fd-490b-9381-5e932dbf80b3"]`)[0].checked = true
+			
+			//*******print type******
 			setTimeout(function () {
+				document.querySelectorAll(
+					`input[value="${data.hazard.id}"]`
+				)[0].click()
 				// document
 				// 	.querySelectorAll('[name="categoryRadioBtn"]')
 				// 	.forEach((categoryElement) => {
@@ -608,7 +619,9 @@ console.log(options)
 				// document.querySelectorAll(
 				// 	`input[value="${data.hazard.id}"]`
 				// )[0].checked = true
-			}, 10000)
+			},2000)
+
+			
 		} catch (error) {
 			const alert = new AlertPopup()
 			alert.show(
