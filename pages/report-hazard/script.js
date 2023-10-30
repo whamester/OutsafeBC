@@ -8,12 +8,11 @@ import { API_URL } from '../../constants.js'
 //Components
 import AlertPopup from '../../assets/components/AlertPopup.js'
 import Modal from '../../assets/components/Modal.js'
-import Navbar from '../../assets/components/Navbar.js'
 
 //Helpers
 import { getUserSession } from '../../assets/helpers/storage.js'
 import readImage from '../../assets/helpers/read-image.js'
-import injectHTML from '../../assets/helpers/inject-html.js'
+import injectHeader from '../../assets/helpers/inject-header.js'
 
 //Variable Declaration
 const currentReport = new ReportForm()
@@ -33,7 +32,7 @@ window.onload = function () {
 			return
 		}
 
-		injectHTML([Navbar], 'report-hazard-body', 'afterbegin')
+		injectHeader('report-hazard-body', 'afterbegin')
 
 		displayCurrentSection()
 		window.addEventListener('hashchange', displayCurrentSection)
