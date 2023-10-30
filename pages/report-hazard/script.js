@@ -157,7 +157,7 @@ const getCategories = async () => {
 				currentReport.category.name = category.name
 
 				const options = selectedCategory.options ?? []
-
+console.log(options)
 				populateHazardOptions(options)
 			})
 
@@ -437,7 +437,7 @@ showConfirmationBtn.addEventListener('click', () => {
 })
 
 /**
- * Submit Form
+ * Step 7: Submit Form
  */
 reportHazardForm.addEventListener('submit', async function (event) {
 	event.preventDefault()
@@ -537,4 +537,86 @@ const uploadImageToStorage = async (images) => {
 	console.log({ responses })
 
 	return responses.map(({ data }) => data.url)
+}
+
+/**
+ * Step 8: Update Form
+ */
+
+const url = new URL(window.location.href)
+// const idReport = url.searchParams.get("id");
+
+let idReport = '979e3cca-883f-4589-ba5a-ac313d087481'
+
+if (idReport !== null) {
+	const getCollection = async () => {
+		try {
+			let response = await fetch(`${API_URL}/hazard-report?id=${idReport}`)
+			// let { data } = await response.json()
+			let data = {
+				id: '979e3cca-883f-4589-ba5a-ac313d087481',
+				location: {
+					lat: -19.8372,
+					lng: 119.0947,
+					address: 'Southwest',
+				},
+				hazardCategory: {
+					id: '0d14fc2d-eca3-402b-8b00-3b18215afcb4',
+					name: 'Infrascructure',
+					hasOptions: true,
+				},
+				hazard: {
+					id: '97d27217-2b43-41a8-8e31-396610d3a75c',
+					name: 'Damaged Bridge',
+				},
+				comment: 'No comments',
+				created_at: '2023-10-30T05:22:20.829Z',
+				updated_at: '2023-10-30T05:22:20.829Z',
+				user: {
+					email: 'Roger59@hotmail.com',
+					name: 'Veronica Walter III',
+				},
+				images: [
+					'https://picsum.photos/seed/09RV1lC/640/480',
+					'https://picsum.photos/seed/a3wEOHgCD6/640/480',
+					'https://picsum.photos/seed/pheJJ6injX/640/480',
+				],
+			}
+			console.log(data)
+			console.log(data.hazardCategory.id)
+
+			// document.querySelectorAll(`input[id="category-${data.hazardCategory.id}radio"]`)[0].checked = true
+			setTimeout(function () {
+				document.querySelectorAll(
+					`input[value="${data.hazardCategory.id}"]`
+				)[0].checked = true
+				const options = selectedCategory.options ?? []
+console.log(options)
+				populateHazardOptions(options)
+			}, 5000)
+			// document.querySelectorAll(`input[value="065f2d0c-40fd-490b-9381-5e932dbf80b3"]`)[0].checked = true
+			setTimeout(function () {
+				// document
+				// 	.querySelectorAll('[name="categoryRadioBtn"]')
+				// 	.forEach((categoryElement) => {
+				// 		categoryElement.addEventListener('change', (event) => {
+				// 			console.log("listo")
+
+				// 		})
+				// 	})
+				
+				// document.querySelectorAll(
+				// 	`input[value="${data.hazard.id}"]`
+				// )[0].checked = true
+			}, 10000)
+		} catch (error) {
+			const alert = new AlertPopup()
+			alert.show(
+				error.message || AlertPopup.SOMETHING_WENT_WRONG_MESSAGE,
+				AlertPopup.error
+			)
+		}
+	}
+
+	getCollection()
 }
