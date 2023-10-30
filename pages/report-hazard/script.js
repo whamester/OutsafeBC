@@ -708,6 +708,7 @@ if (idReport !== null) {
  * Step 9: Display nav
  */
 
+//show buttons when continue
 const hazardCategoryElement = document.getElementById('hazardCategory')
 
 hazardCategoryElement.addEventListener('click', () => {
@@ -738,6 +739,91 @@ hazardPhotoElement.addEventListener('click', () => {
 	document.getElementById('hazardReviewReportNav').style.display = 'block'
 })
 
+
+
+//edit buttons
+const editLocationElement = document.getElementById('editLocation')
+
+editLocationElement.addEventListener('click', () => {
+	document.getElementById('hazardCategoryNav').style.display = 'none'	
+	document.getElementById('hazardTypeNav').style.display = 'none'
+	document.getElementById('hazardDetailNav').style.display = 'none'
+	document.getElementById('hazardUploadPhotosNav').style.display = 'none'
+	document.getElementById('hazardReviewReportNav').style.display = 'none'
+})
+
+const editCategoryElement = document.getElementById('editCategory')
+
+editCategoryElement.addEventListener('click', () => {
+	document.getElementById('hazardTypeNav').style.display = 'none'
+	document.getElementById('hazardDetailNav').style.display = 'none'
+	document.getElementById('hazardUploadPhotosNav').style.display = 'none'
+	document.getElementById('hazardReviewReportNav').style.display = 'none'
+})
+
+const editTypeElement = document.getElementById('editType')
+
+editTypeElement.addEventListener('click', () => {
+	document.getElementById('hazardDetailNav').style.display = 'none'
+	document.getElementById('hazardUploadPhotosNav').style.display = 'none'
+	document.getElementById('hazardReviewReportNav').style.display = 'none'
+})
+
+const editDetailsElement = document.getElementById('editDetails')
+
+editDetailsElement.addEventListener('click', () => {
+	document.getElementById('hazardUploadPhotosNav').style.display = 'none'
+	document.getElementById('hazardReviewReportNav').style.display = 'none'
+})
+
+const editPhotosElement = document.getElementById('editPhotos')
+
+editPhotosElement.addEventListener('click', () => {
+	document.getElementById('hazardReviewReportNav').style.display = 'none'
+})
+
+
+//hide buttons when click on nav
+const hazardUploadPhotosNavElement = document.getElementById('selectLocation')
+
+hazardUploadPhotosNavElement.addEventListener('click', () => {
+	document.getElementById('hazardCategoryNav').style.display = 'none'	
+	document.getElementById('hazardTypeNav').style.display = 'none'
+	document.getElementById('hazardDetailNav').style.display = 'none'
+	document.getElementById('hazardUploadPhotosNav').style.display = 'none'
+	document.getElementById('hazardReviewReportNav').style.display = 'none'
+})
+
+const hazardCategoryNavElement = document.getElementById('hazardCategoryNav')
+
+hazardCategoryNavElement.addEventListener('click', () => {
+	document.getElementById('hazardTypeNav').style.display = 'none'
+	document.getElementById('hazardDetailNav').style.display = 'none'
+	document.getElementById('hazardUploadPhotosNav').style.display = 'none'
+	document.getElementById('hazardReviewReportNav').style.display = 'none'
+})
+
+const hazardTypeNavElement = document.getElementById('hazardTypeNav')
+
+hazardTypeNavElement.addEventListener('click', () => {
+	document.getElementById('hazardDetailNav').style.display = 'none'
+	document.getElementById('hazardUploadPhotosNav').style.display = 'none'
+	document.getElementById('hazardReviewReportNav').style.display = 'none'
+})
+
+const hazardDetailNavElement = document.getElementById('hazardDetailNav')
+
+hazardDetailNavElement.addEventListener('click', () => {
+	document.getElementById('hazardUploadPhotosNav').style.display = 'none'
+	document.getElementById('hazardReviewReportNav').style.display = 'none'
+})
+
+const hazardUploadPhotosNavEl = document.getElementById('hazardUploadPhotosNav')
+
+hazardUploadPhotosNavEl.addEventListener('click', () => {
+	document.getElementById('hazardReviewReportNav').style.display = 'none'
+})
+
 // window.onbeforeunload = function () {
 // 	// return '¿Desea recargar la página web?'
 // 	// window.location.replace('/pages/home')
@@ -764,16 +850,16 @@ hazardPhotoElement.addEventListener('click', () => {
 //    }
 
 // // Changes you have made may not be saved
-if(confirm('Changes you have made may not be saved')){
-    // window.location.reload();  
-	// window.location.replace('/pages/home')
-	document.getElementById('hazardCategory').click();
-	document.getElementById('hazardType').click();
-	document.getElementById('selectHazardOptionLink').click();
-	document.getElementById('hazardCategory').click();
-	document.getElementById('uploadPicture').click();
-	document.getElementById('showConfirmationBtn').click();
-}
+// if(confirm('Changes you have made may not be saved')){
+//     // window.location.reload();  
+// 	// window.location.replace('/pages/home')
+// 	document.getElementById('hazardCategory').click();
+// 	document.getElementById('hazardType').click();
+// 	document.getElementById('selectHazardOptionLink').click();
+// 	document.getElementById('hazardCategory').click();
+// 	document.getElementById('uploadPicture').click();
+// 	document.getElementById('showConfirmationBtn').click();
+// }
 
 
 // window.addEventListener('beforeunload', function (event) {
