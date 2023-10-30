@@ -551,7 +551,8 @@ let idReport = '979e3cca-883f-4589-ba5a-ac313d087481'
 if (idReport !== null) {
 	document.getElementById('saveReportBtn').style.display = 'none'
 	const getCollection = async () => {
-		try {//Cuando el enpoind no responda random se podra utilizar las siguientes 2 lines
+		try {
+			//Cuando el enpoind no responda random se podra utilizar las siguientes 2 lines
 			// let response = await fetch(`${API_URL}/hazard-report?id=${idReport}`)
 			// let { data } = await response.json()
 			let data = {
@@ -583,22 +584,16 @@ if (idReport !== null) {
 					'https://picsum.photos/seed/pheJJ6injX/640/480',
 				],
 			}
-			
-
-		
 
 			//*******print category******
 			setTimeout(function () {
-		
 				document
 					.querySelectorAll(`input[value="${data.hazardCategory.id}"]`)[0]
 					.click()
 
 				currentReport.category.name = data.hazardCategory.name
 				categoryOutput.innerHTML = currentReport.category.name
-			
 			}, 1000)
-		
 
 			//*******print type******
 			setTimeout(function () {
@@ -606,17 +601,15 @@ if (idReport !== null) {
 
 				currentReport.option.name = data.hazard.name
 				hazardOptionOutput.innerHTML = currentReport.option.name
-				
 			}, 2000)
 
 			//*******print comment******
-			
+
 			document.querySelectorAll(`textarea[id="commentInput"]`)[0].value =
 				data.comment
 
 			currentReport.comment = data.comment
 			commentOutput.innerHTML = currentReport.comment
-			
 
 			//*******print pictures******
 
@@ -649,23 +642,26 @@ if (idReport !== null) {
 					}
 
 					const images = await uploadImageToStorage(currentReport.images)
-					const response = await fetch(`${API_URL}/hazard-report?ID=${idReport}`, {
-						method: 'PUT',
-						headers: {
-							'Content-Type': 'application/json',
-						},
-						body: JSON.stringify({
-							categoryId: currentReport.category.id,
-							hazardOptionId: currentReport.option.id,
-							location: {
-								lat: currentReport.location.lat,
-								lng: currentReport.location.lng,
-								address: currentReport.location.address,
+					const response = await fetch(
+						`${API_URL}/hazard-report?ID=${idReport}`,
+						{
+							method: 'PUT',
+							headers: {
+								'Content-Type': 'application/json',
 							},
-							comment: currentReport.comment ?? '',
-							images: images,
-						}),
-					})
+							body: JSON.stringify({
+								categoryId: currentReport.category.id,
+								hazardOptionId: currentReport.option.id,
+								location: {
+									lat: currentReport.location.lat,
+									lng: currentReport.location.lng,
+									address: currentReport.location.address,
+								},
+								comment: currentReport.comment ?? '',
+								images: images,
+							}),
+						}
+					)
 
 					if (response.ok) {
 						await response.json()
