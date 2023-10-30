@@ -1,0 +1,68 @@
+.report-card__toggle_button {
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+.switch {
+	position: relative;
+	display: inline-block;
+	width: 3.0625rem;
+	height: 1.6875rem;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+	opacity: 0;
+	width: 0;
+	height: 0;
+}
+
+/* The slider */
+.slider {
+	position: absolute;
+	cursor: pointer;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: var(--warning-warning-700, #ad7311);
+	-webkit-transition: 0.4s;
+	transition: 0.4s;
+}
+
+.slider:before {
+	position: absolute;
+	content: '';
+	width: 1.4375rem;
+	height: 1.4375rem;
+	left: 0.13rem;
+	bottom: 0.13rem;
+	background-color: white;
+	-webkit-transition: 0.4s;
+	transition: 0.4s;
+}
+
+input:checked + .slider {
+	background-color: var(--success-success-500-base, #10973d);
+}
+
+input:checked + .slider:before {
+	-webkit-transform: translateX(1.37rem);
+	-ms-transform: translateX(1.37rem);
+	transform: translateX(1.37rem);
+}
+
+/* Rounded sliders */
+.slider.round {
+	border-radius: 1.375rem;
+}
+
+.slider.round:before {
+	border-radius: 1.375rem;
+}
+
+#toggleStatus {
+	color: var(--success-success-500-base, #10973d);
+}
