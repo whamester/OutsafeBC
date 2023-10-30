@@ -157,7 +157,7 @@ const getCategories = async () => {
 				currentReport.category.name = category.name
 
 				const options = selectedCategory.options ?? []
-console.log(options)
+				console.log(options)
 				populateHazardOptions(options)
 			})
 
@@ -586,27 +586,24 @@ if (idReport !== null) {
 			console.log(data.hazardCategory.id)
 
 			// document.querySelectorAll(`input[id="category-${data.hazardCategory.id}radio"]`)[0].checked = true
-			
+
 			//*******print category******
 			setTimeout(function () {
 				// document.querySelectorAll(
 				// 	`input[value="${data.hazardCategory.id}"]`
 				// )[0].checked = true
 
-				document.querySelectorAll(
-					`input[value="${data.hazardCategory.id}"]`
-				)[0].click()
+				document
+					.querySelectorAll(`input[value="${data.hazardCategory.id}"]`)[0]
+					.click()
 				// const radio = document.getElementByid("category-0d14fc2d-eca3-402b-8b00-3b18215afcb4-radio")
 				// radio.click()
-				
 			}, 1000)
 			// document.querySelectorAll(`input[value="065f2d0c-40fd-490b-9381-5e932dbf80b3"]`)[0].checked = true
-			
+
 			//*******print type******
 			setTimeout(function () {
-				document.querySelectorAll(
-					`input[value="${data.hazard.id}"]`
-				)[0].click()
+				document.querySelectorAll(`input[value="${data.hazard.id}"]`)[0].click()
 				// document
 				// 	.querySelectorAll('[name="categoryRadioBtn"]')
 				// 	.forEach((categoryElement) => {
@@ -615,21 +612,28 @@ if (idReport !== null) {
 
 				// 		})
 				// 	})
-				
+
 				// document.querySelectorAll(
 				// 	`input[value="${data.hazard.id}"]`
 				// )[0].checked = true
-			},2000)
+			}, 2000)
 
 			//*******print comment******
 			// setTimeout(function () {
-				document.querySelectorAll(
-					`textarea[id="commentInput"]`
-				)[0].value = data.comment
+			document.querySelectorAll(`textarea[id="commentInput"]`)[0].value =
+				data.comment
 			// },3000)
 
-
 			//*******print pictures******
+			
+			const displayImagesArea = document.getElementById('displayImagesArea');
+			
+			data.images.forEach(imageUrl => {
+				const imgElement = document.createElement('img');
+				imgElement.src = imageUrl;
+				displayImagesArea.appendChild(imgElement);
+			});
+			
 
 		} catch (error) {
 			const alert = new AlertPopup()
