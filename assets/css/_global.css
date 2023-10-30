@@ -34,7 +34,13 @@ body {
 
 a[class='link'] {
 	font-weight: 700;
-	color: var(--neutral-neutral-700, #344054);
+	color: var(--neutral-700);
+}
+
+i[class^='icon-'] {
+	width: 20px;
+	height: 20px;
+	background-color: var(--neutral-900);
 }
 
 i[class^='icon-'] {
