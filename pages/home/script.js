@@ -42,7 +42,7 @@ const markerParams = {
 };
 
 const closeSearchSuggestion = (e) => {
-  const boxSuggestion = document.querySelector(".sb-sugguestion");
+  const boxSuggestion = document.querySelector(".sb-suggestion-wrapper");
   boxSuggestion.style.display = e?.target?.closest(".sb-search-box") ? "block" : "none";
 };
 
@@ -140,10 +140,13 @@ const loadGeolocation = async () => {
 };
 
 const onSearchInput = debounce(async ({ target }) => {
-  const boxSuggestion = document.querySelector(".sb-sugguestion");
+  const boxSuggestion = document.querySelector(".sb-suggestion-wrapper");
+
+  boxSuggestion.style.width = searchInput.closest(".sb-search-box").scrollWidth + "px"
+
+  console.log(searchInput.closest(".sb-search-box").scrollWidth)
   // clear previous search suggestions
   boxSuggestion.innerHTML = "";
-  boxSuggestion.style.display = "block";
 
   const searchTerm = target?.value;
   
@@ -152,20 +155,20 @@ const onSearchInput = debounce(async ({ target }) => {
   else
     searchSuggestions = [];
 
-  searchSuggestions?.unshift(positionObj);
-
   // inject search suggestions
   injectHTML(
     searchSuggestions?.map(item => {
       return { 
         func: SearchBarSuggestionCard, 
         args: item, 
-        target: ".sb-sugguestion"
+        target: ".sb-suggestion-wrapper"
       }
     }) ?? []
   );
 
   suggestionOnClick();
+
+  boxSuggestion.style.display = "block";
 });
 
 const searchBarParams = {

@@ -1,5 +1,4 @@
 header {
-	background: var(--primary-900, #0f1815);
 	border-bottom: 1px solid var(--neutral-200, #e4e7ec);
 	top: 0;
 	left: 0;
@@ -9,6 +8,7 @@ header {
 }
 
 #header-content {
+	background: var(--primary-900, #0f1815);
 	padding: 0.75rem 1rem;
 	display: flex;
 	justify-content: space-between;
