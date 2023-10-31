@@ -10,9 +10,7 @@
 }
 
 #alert {
-  min-width: 300px;
   background: gray;
-
   display: flex;
   align-items: center;
   gap: 1rem;
@@ -35,6 +33,13 @@
   height: 3rem;
   display: flex;
   align-items: center;
+
+  /* Text ellipsis */
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  height: auto;
 }
 
 #alert #alert-icon {
@@ -88,5 +93,10 @@
     left: auto;
     margin-left: 0;
     margin-right: 0;
+    min-width: 300px;
+  }
+
+  #alert #alert-message {
+    max-width: 400px;
   }
 }
