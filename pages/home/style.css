@@ -3,18 +3,20 @@
 @import url(../../assets/css/searchbar.css);
 
 body {
-	overflow: hidden;
+  overflow: hidden;
 }
 
 #root {
-	position: relative;
+  position: relative;
+  margin: 0;
+  max-width: max-content;
 }
 
 #map {
-	width: 100vw;
-	height: 100vh;
+  width: 100vw;
+  height: 100vh;
 }
 
 .btn-report-hazard {
-	z-index: 2;
+  z-index: 2;
 }
