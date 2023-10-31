@@ -33,16 +33,16 @@ window.onload = function () {
 			return
 		}
 
-		injectHTML([ 
-			{func: Header, target: "#report-hazard-body", position: "afterbegin"},
+		injectHTML([
+			{ func: Header, target: '#report-hazard-body', position: 'afterbegin' },
 		])
 
 		displayCurrentSection()
 		window.addEventListener('hashchange', displayCurrentSection)
 
 		// Loads the map even if the user has not accepted the permissions
-		map = new Map(position)
-		map.setMarkerOnMap(position.latitude, position.longitude, 'You', {
+		map = new Map(position.lat, position.lng)
+		map.setMarkerOnMap(position.lat, position.lng, 'You', {
 			draggable: true,
 		}) //TODO: Consult with design the message of the marker
 
@@ -52,7 +52,8 @@ window.onload = function () {
 		const alert = new AlertPopup()
 		alert.show(
 			error.message || AlertPopup.SOMETHING_WENT_WRONG_MESSAGE,
-			AlertPopup.error
+			AlertPopup.error,
+			500
 		)
 	}
 }
@@ -89,7 +90,7 @@ const displayCurrentSection = () => {
 const loadGeolocation = async () => {
 	try {
 		position = await Map.getCurrentLocation()
-		map.setMarkerOnMap(position.latitude, position.longitude, 'You', {
+		map.setMarkerOnMap(position.lat, position.lng, 'You', {
 			draggable: true,
 		})
 	} catch (error) {
@@ -110,8 +111,8 @@ if (map) {
 }
 
 currentReport.location = {
-	lat: position.latitude,
-	lng: position.longitude,
+	lat: position.lat,
+	lng: position.lng,
 	address: 'Initial Address', //TODO: Get address
 }
 

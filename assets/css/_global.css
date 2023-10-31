@@ -28,10 +28,17 @@ body {
 	height: 100%;
 	color: var(--neutral-900);
 	margin: 0;
+	overflow: hidden;
+}
+
+main {
+	overflow: auto;
+	height: calc(100vh - 60px);
+	/* 100vh minus the header height */
 }
 
 #root {
-  height: 100vh;
+	height: 100vh;
 }
 
 a[class='link'] {
@@ -39,10 +46,10 @@ a[class='link'] {
 	color: var(--neutral-700);
 }
 
-i[class^='icon-'] {
-	width: 20px;
-	height: 20px;
-	background-color: var(--neutral-900);
+ul {
+	padding: 0;
+	margin: 0;
+	list-style-type: none;
 }
 
 ul {
