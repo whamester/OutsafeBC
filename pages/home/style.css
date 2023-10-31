@@ -1,14 +1,16 @@
+@import url(../../assets/css/hazard-card.css);
+@import url(../../assets/css/modal-filter.css);
+@import url(../../assets/css/searchbar.css);
+
+body {
+  overflow: hidden;
+}
+
+#root {
+  position: relative;
+}
+
 #map {
   width: 100vw;
   height: 100vh;
-}
-
-.search--input {
-  border: none;
-  outline: none;
-}
-
-.btn-tags {
-  width: auto !important;
-  margin-right: 10px;
 }

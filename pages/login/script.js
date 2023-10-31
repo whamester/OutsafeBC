@@ -3,8 +3,8 @@ import { API_URL, GOOGLE_ID } from '../../constants.js'
 import { getUserSession, setUserSession } from '../../assets/helpers/storage.js'
 import injectHTML from '../../assets/helpers/inject-html.js'
 //Components
+import Header from '../../assets/components/Header.js'
 import AlertPopup from '../../assets/components/AlertPopup.js'
-import Navbar from '../../assets/components/Navbar.js'
 //Variables
 const alert = new AlertPopup()
 const password = document.getElementById('password-input')
@@ -15,8 +15,10 @@ const hidePw = document.getElementById('hide-pw')
  * Google Auth Setup
  */
 window.onload = function () {
-	// Inject Navbar
-	injectHTML([Navbar], 'home-body', 'afterbegin')
+	// Inject Header
+	injectHTML([ 
+		{func: Header, target: "#login-body", position: "afterbegin"},
+	])
 
 	const user = getUserSession()
 

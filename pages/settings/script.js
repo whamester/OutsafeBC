@@ -1,10 +1,9 @@
+import injectHTML from '../../assets/helpers/inject-html.js'
 import readImage from '../../assets/helpers/read-image.js'
-import {
-	getUserSession,
-	setUserSession,
-	clearUserSession,
-} from '../../assets/helpers/storage.js'
+import { getUserSession, setUserSession } from '../../assets/helpers/storage.js'
 import { API_URL } from '../../constants.js'
+
+import Header from '../../assets/components/Header.js'
 
 const user = getUserSession()
 
@@ -19,6 +18,15 @@ let picture
 let changedFields = {
 	name: false,
 	photo: false,
+}
+
+/**
+ * Page Init
+ */
+window.onload = function () {
+	injectHTML([ 
+		{func: Header, target: "#profile-body", position: "afterbegin"},
+	])
 }
 
 nameField.addEventListener('input', () => {
@@ -193,8 +201,7 @@ async function deleteAccount() {
 		console.log('Account deleted successfully', data, message)
 
 		toggleDelModal()
-		clearUserSession()
-		window.location.replace('/')
+		window.location.replace('/pages/logout')
 	} catch (error) {
 		console.log('Could not delete account', error)
 	}
@@ -279,6 +286,5 @@ async function setNotificationSettings() {
 pushNotificationSwitch.addEventListener('change', setNotificationSettings)
 
 logOutBtn.addEventListener('click', () => {
-	clearUserSession()
-	window.location.replace('/')
+	window.location.replace('/pages/logout')
 })

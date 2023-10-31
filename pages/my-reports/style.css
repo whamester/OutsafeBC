@@ -1,0 +1,9 @@
+@import url(../../assets/css/report-card.css);
+
+#recentReports,
+#olderReports {
+	display: flex;
+	flex-direction: column;
+	gap: 1.5rem;
+	margin: 1rem;
+}

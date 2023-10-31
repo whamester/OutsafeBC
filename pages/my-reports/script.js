@@ -1,9 +1,13 @@
 import { API_URL } from '../../constants.js'
 // Helpers
-import MyReport from '../../assets/helpers/report-card.js'
+import MyReport from '../../assets/components/ReportCard.js'
 import { getUserSession } from '../../assets/helpers/storage.js'
+import loadIcons from '../../assets/helpers/load-icons.js'
+import injectHTML from '../../assets/helpers/inject-html.js'
 // Components
+import Header from '../../assets/components/Header.js'
 import AlertPopup from '../../assets/components/AlertPopup.js'
+import { onToggle } from '../../assets/components/ToggleSwitch.js'
 
 // Variables
 const user = getUserSession()
@@ -17,23 +21,33 @@ const recentBtn = document.getElementById('recentReportsBtn')
 const olderBtn = document.getElementById('olderReportsBtn')
 const alert = new AlertPopup()
 
-// Checkbox toggle
-// Set the recentBtn to be checked initially
-recentBtn.checked = true
-displayRecentReports()
+/**
+ * Page Init
+ */
+window.onload = function () {
+	// Inject Header
+	injectHTML([ 
+		{func: Header, target: "#myReportsBody", position: "afterbegin"},
+	])
+
+	// Checkbox toggle
+	// Set the recentBtn to be checked initially
+	recentBtn.checked = true
+	displayRecentReports()
+}
 
 recentBtn.addEventListener('click', () => {
-	recentReports.style.display = 'block'
+	recentReports.style.display = 'flex'
 	olderReports.style.display = 'none'
 })
 olderBtn.addEventListener('click', () => {
 	if (!olderReportClicked) {
 		displayOlderReports()
 		recentReports.style.display = 'none'
-		olderReports.style.display = 'block'
+		olderReports.style.display = 'flex'
 	} else {
 		recentReports.style.display = 'none'
-		olderReports.style.display = 'block'
+		olderReports.style.display = 'flex'
 	}
 })
 
@@ -72,6 +86,15 @@ async function displayRecentReports() {
 			report.comment
 		)
 		recentReports.appendChild(hazardReport.reportContent())
+
+		document.querySelectorAll('[id^=ts]').forEach((toggleSwitch) => {
+			toggleSwitch.addEventListener('change', (e) => {
+				onToggle(e)
+				// TODO: API call
+			})
+		})
+
+		loadIcons()
 	}
 }
 
@@ -108,6 +131,7 @@ async function displayOlderReports() {
 			report.comment
 		)
 		olderReports.appendChild(hazardReport.reportContent())
+		loadIcons()
 	}
 	olderReportClicked = true
 }

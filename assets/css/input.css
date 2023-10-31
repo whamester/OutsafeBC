@@ -50,7 +50,7 @@
 	font-size: var(--body-2-size);
 	letter-spacing: var(--body-2-letter-spacing);
 	line-height: var(--body-2-line-height);
-	color: var(--neutral-neutral-400, #98a2b3);
+	color: var(--neutral-400, #98a2b3);
 }
 
 .form-field .form-field__input-container {
