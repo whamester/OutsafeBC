@@ -434,6 +434,7 @@ showConfirmationBtn.addEventListener('click', () => {
 	currentReport.images.forEach((image) => {
 		imagesOutput.innerHTML += `<img src="${image}" width="150" />`
 	})
+	console.log(currentReport)
 })
 
 /**
@@ -546,7 +547,8 @@ const uploadImageToStorage = async (images) => {
 // const url = new URL(window.location.href)
 // const idReport = url.searchParams.get("id");
 
-let idReport = '979e3cca-883f-4589-ba5a-ac313d087481'
+// let idReport = '979e3cca-883f-4589-ba5a-ac313d087481'
+let idReport = null
 
 if (idReport !== null) {
 	document.getElementById('saveReportBtn').style.display = 'none'
@@ -868,31 +870,102 @@ hazardUploadPhotosNavEl.addEventListener('click', () => {
 
 //Delete pictures
 var displayImagesArea = document.getElementById('displayImagesArea')
+// var displayImagesAreaReview = document.getElementById('imagesOutput')
 var images = displayImagesArea.getElementsByTagName('img')
+// var images2 = displayImagesAreaReview.getElementsByTagName('img')
 
 const delete1Element = document.getElementById('delete1')
 
 delete1Element.addEventListener('click', () => {
-	if (images.length >= 3) {
-		var firstImage = images[0]
-		displayImagesArea.removeChild(firstImage)
+	// if (images.length >= 3) {
+	var firstImage = images[0]
+	// displayImagesArea.removeChild(firstImage)
+	// var noImageText = document.createTextNode('<img No image />')
+	// displayImagesArea.replaceChild(noImageText, firstImage)
+
+	var noImageText = document.createElement('img')
+	displayImagesArea.replaceChild(noImageText, firstImage)
+
+	// document.getElementById('delete3').style.display = 'none'
+	var index = 0
+	if (index !== -1) {
+		// currentReport.images.splice(index, 1)
+		currentReport.images[0] = null
 	}
+	// var firstImageRe = images2[0]
+	// displayImagesAreaReview.removeChild(firstImageRe)
+	// console.log(currentReport)
+	document.getElementById('delete1').style.display = 'none'
+	// }
 })
 
 const delete2Element = document.getElementById('delete2')
 
 delete2Element.addEventListener('click', () => {
-	if (images.length >= 3) {
-		var secondImage = images[1]
-		displayImagesArea.removeChild(secondImage)
+	// if (images.length >= 3) {
+	var secondImage = images[1]
+	// displayImagesArea.removeChild(secondImage)
+	// document.getElementById('delete3').style.display = 'none'
+	// }
+	
+	var noImageText = document.createElement('img')
+	displayImagesArea.replaceChild(noImageText, secondImage)
+
+	// document.getElementById('delete3').style.display = 'none'
+	var index = 1
+	if (index !== -1) {
+		// currentReport.images.splice(index, 1)
+		currentReport.images[1] = null
 	}
+	// var firstImageRe = images2[0]
+	// displayImagesAreaReview.removeChild(firstImageRe)
+	// console.log(currentReport)
+	document.getElementById('delete2').style.display = 'none'
 })
 
 const delete3Element = document.getElementById('delete3')
 
 delete3Element.addEventListener('click', () => {
-	if (images.length >= 3) {
-		var thirdImage = images[2]
-		displayImagesArea.removeChild(thirdImage)
+	// if (images.length >= 3) {
+	var thirdImage = images[2]
+	// displayImagesArea.removeChild(thirdImage)
+	// document.getElementById('delete3').style.display = 'none'
+	// }
+	
+	var noImageText = document.createElement('img')
+	displayImagesArea.replaceChild(noImageText, thirdImage)
+
+	// document.getElementById('delete3').style.display = 'none'
+	var index = 2
+	if (index !== -1) {
+		// currentReport.images.splice(index, 1)
+		currentReport.images[2] = null
 	}
+	// var firstImageRe = images2[0]
+	// displayImagesAreaReview.removeChild(firstImageRe)
+	// console.log(currentReport)
+	document.getElementById('delete3').style.display = 'none'
 })
+
+
+
+
+// const delete2Element = document.getElementById('delete2')
+
+// delete2Element.addEventListener('click', () => {
+// 	// if (images.length >= 3) {
+// 	var secondImage = images[1]
+// 	displayImagesArea.removeChild(secondImage)
+// 	// document.getElementById('delete3').style.display = 'none'
+// 	// }
+// })
+
+// const delete3Element = document.getElementById('delete3')
+
+// delete3Element.addEventListener('click', () => {
+// 	// if (images.length >= 3) {
+// 	var thirdImage = images[2]
+// 	displayImagesArea.removeChild(thirdImage)
+// 	// document.getElementById('delete3').style.display = 'none'
+// 	// }
+// })
