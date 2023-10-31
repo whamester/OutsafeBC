@@ -33,8 +33,8 @@ window.onload = function () {
 			return
 		}
 
-		injectHTML([ 
-			{func: Header, target: "#report-hazard-body", position: "afterbegin"},
+		injectHTML([
+			{ func: Header, target: '#report-hazard-body', position: 'afterbegin' },
 		])
 
 		displayCurrentSection()
@@ -560,7 +560,7 @@ if (idReport !== null) {
 	document.getElementById('saveReportBtn').style.display = 'none'
 	const getCollection = async () => {
 		try {
-			//Cuando el enpoind no responda random se podra utilizar las siguientes 2 lines
+			//wHEN THE ENDPINT WORKS FINE WE CAN USE THE NEXT 2 LINES
 			// let response = await fetch(`${API_URL}/hazard-report?id=${idReport}`)
 			// let { data } = await response.json()
 			let data = {
@@ -829,149 +829,55 @@ hazardUploadPhotosNavEl.addEventListener('click', () => {
 	document.getElementById('hazardReviewReportNav').style.display = 'none'
 })
 
-// window.onbeforeunload = function () {
-// 	// return '¿Desea recargar la página web?'
-// 	// window.location.replace('/pages/home')
-// 	window.location.href = '../home/index.html'
-// }
-
-// window.onbeforeunload = function () {
-//     // Redirigir al usuario a '/pages/home' antes de mostrar el mensaje de confirmación
-//     window.location.replace('../home/index.html');
-//     // El navegador mostrará su propio mensaje de confirmación.
-// };
-
-// document.onkeydown = function(e){
-// 	tecla = (document.all) ? e.keyCode : e.which;
-// 	alert(tecla)
-// 	if (tecla == 116){
-// 	  if (confirm("Seguro que quieres refrescar la página ") == true) {
-// 		 return true;
-// 	   } else {
-// 		 return false;
-// 	  }
-// 	}
-//    }
-
-// // Changes you have made may not be saved
-// if(confirm('Changes you have made may not be saved')){
-//     // window.location.reload();
-// 	// window.location.replace('/pages/home')
-// 	document.getElementById('hazardCategory').click();
-// 	document.getElementById('hazardType').click();
-// 	document.getElementById('selectHazardOptionLink').click();
-// 	document.getElementById('hazardCategory').click();
-// 	document.getElementById('uploadPicture').click();
-// 	document.getElementById('showConfirmationBtn').click();
-// }
-
-// window.addEventListener('beforeunload', function (event) {
-//     // Este código se ejecutará antes de que el usuario recargue la página
-//     // Puedes mostrar un mensaje personalizado o realizar otras acciones aquí
-
-//     // Ejemplo de mensaje de confirmación personalizado
-//     // event.returnValue = '¿Está seguro de que desea recargar la página?';
-// 	window.location.replace('/pages/home')
-// });
 
 //Delete pictures
 var displayImagesArea = document.getElementById('displayImagesArea')
-// var displayImagesAreaReview = document.getElementById('imagesOutput')
 var images = displayImagesArea.getElementsByTagName('img')
-// var images2 = displayImagesAreaReview.getElementsByTagName('img')
-
 const delete1Element = document.getElementById('delete1')
 
 delete1Element.addEventListener('click', () => {
-	// if (images.length >= 3) {
+	
 	var firstImage = images[0]
-	// displayImagesArea.removeChild(firstImage)
-	// var noImageText = document.createTextNode('<img No image />')
-	// displayImagesArea.replaceChild(noImageText, firstImage)
-
 	var noImageText = document.createElement('img')
 	displayImagesArea.replaceChild(noImageText, firstImage)
 
-	// document.getElementById('delete3').style.display = 'none'
 	var index = 0
 	if (index !== -1) {
-		// currentReport.images.splice(index, 1)
 		currentReport.images[0] = null
 	}
-	// var firstImageRe = images2[0]
-	// displayImagesAreaReview.removeChild(firstImageRe)
-	// console.log(currentReport)
 	document.getElementById('delete1').style.display = 'none'
-	// }
+
 })
 
 const delete2Element = document.getElementById('delete2')
 
 delete2Element.addEventListener('click', () => {
-	// if (images.length >= 3) {
+
 	var secondImage = images[1]
-	// displayImagesArea.removeChild(secondImage)
-	// document.getElementById('delete3').style.display = 'none'
-	// }
-	
 	var noImageText = document.createElement('img')
 	displayImagesArea.replaceChild(noImageText, secondImage)
 
-	// document.getElementById('delete3').style.display = 'none'
 	var index = 1
 	if (index !== -1) {
-		// currentReport.images.splice(index, 1)
+
 		currentReport.images[1] = null
 	}
-	// var firstImageRe = images2[0]
-	// displayImagesAreaReview.removeChild(firstImageRe)
-	// console.log(currentReport)
 	document.getElementById('delete2').style.display = 'none'
 })
 
 const delete3Element = document.getElementById('delete3')
 
 delete3Element.addEventListener('click', () => {
-	// if (images.length >= 3) {
+
 	var thirdImage = images[2]
-	// displayImagesArea.removeChild(thirdImage)
-	// document.getElementById('delete3').style.display = 'none'
-	// }
-	
+
 	var noImageText = document.createElement('img')
 	displayImagesArea.replaceChild(noImageText, thirdImage)
 
-	// document.getElementById('delete3').style.display = 'none'
 	var index = 2
 	if (index !== -1) {
-		// currentReport.images.splice(index, 1)
 		currentReport.images[2] = null
 	}
-	// var firstImageRe = images2[0]
-	// displayImagesAreaReview.removeChild(firstImageRe)
-	// console.log(currentReport)
 	document.getElementById('delete3').style.display = 'none'
 })
 
-
-
-
-// const delete2Element = document.getElementById('delete2')
-
-// delete2Element.addEventListener('click', () => {
-// 	// if (images.length >= 3) {
-// 	var secondImage = images[1]
-// 	displayImagesArea.removeChild(secondImage)
-// 	// document.getElementById('delete3').style.display = 'none'
-// 	// }
-// })
-
-// const delete3Element = document.getElementById('delete3')
-
-// delete3Element.addEventListener('click', () => {
-// 	// if (images.length >= 3) {
-// 	var thirdImage = images[2]
-// 	displayImagesArea.removeChild(thirdImage)
-// 	// document.getElementById('delete3').style.display = 'none'
-// 	// }
-// })
