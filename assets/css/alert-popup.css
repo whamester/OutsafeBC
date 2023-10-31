@@ -1,67 +1,92 @@
+#alert-portal {
+  position: absolute;
+  top: 0;
+  max-width: 80rem;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  right: 0;
+  left: 0;
+}
+
 #alert {
-	min-width: 300px;
-	background: gray;
-	position: absolute;
-	top: 2rem;
-	right: 2rem;
-	display: flex;
-	align-items: center;
-	gap: 1rem;
-	padding: 1.5rem;
-	border-radius: 1rem;
-	font-weight: 500;
-	z-index: 2;
+  min-width: 300px;
+  background: gray;
+
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  font-weight: 500;
+  z-index: 2;
+
+  position: absolute;
+  top: 4.5rem;
+  right: 0;
+  left: 0;
+  margin-left: 1rem;
+  margin-right: 1rem;
 }
 
 #alert #alert-message {
-	margin: 0;
-	padding: 0;
-	height: 3rem;
-	display: flex;
-	align-items: center;
+  margin: 0;
+  padding: 0;
+  height: 3rem;
+  display: flex;
+  align-items: center;
 }
 
 #alert #alert-icon {
-	width: 3rem;
-	height: 3rem;
-	border-radius: 6.25rem;
-	flex-shrink: 0;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 6.25rem;
+  flex-shrink: 0;
 }
 
 #alert.success #alert-icon {
-	border: 1px solid var(--success-500);
-	background: var(--white);
+  border: 1px solid var(--success-500);
+  background: var(--white);
 }
 
 #alert.warning #alert-icon {
-	border: 1px solid var(--warning-500);
-	background: var(--white);
+  border: 1px solid var(--warning-500);
+  background: var(--white);
 }
 
 #alert.error #alert-icon {
-	border: 1px solid var(--error-500);
-	background: var(--white);
+  border: 1px solid var(--error-500);
+  background: var(--white);
 }
 
 #alert.dismiss {
-	transform: translateY(-200px);
-	transition: all ease 0.5s;
+  transform: translateY(-200px);
+  transition: all ease 0.5s;
 }
 
 #alert.success {
-	border: 1px solid var(--success);
-	background: var(--success-50);
-	color: var(--success-900);
+  border: 1px solid var(--success);
+  background: var(--success-50);
+  color: var(--success-900);
 }
 
 #alert.warning {
-	border: 1px solid var(--warning);
-	background: var(--warning-50);
-	color: var(--warning-900);
+  border: 1px solid var(--warning);
+  background: var(--warning-50);
+  color: var(--warning-900);
 }
 
 #alert.error {
-	border: 1px solid var(--error);
-	background: var(--error-50);
-	color: var(--error-900);
+  border: 1px solid var(--error);
+  background: var(--error-50);
+  color: var(--error-900);
+}
+
+@media screen and (min-width: 500px) {
+  #alert {
+    right: 0.75rem;
+    left: auto;
+    margin-left: 0;
+    margin-right: 0;
+  }
 }
