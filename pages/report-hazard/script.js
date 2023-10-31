@@ -93,6 +93,10 @@ const loadGeolocation = async () => {
 		map.setMarkerOnMap(position.lat, position.lng, 'You', {
 			draggable: true,
 		})
+		map.map.flyTo([position.lat, position.lng], 17, {
+			animate: true,
+			duration: 2,
+		})
 	} catch (error) {
 		const alert = new AlertPopup()
 		alert.show(
@@ -520,8 +524,6 @@ const uploadImageToStorage = async (images) => {
 		)
 	)
 
-	console.log(fileResponses)
-
 	const responses = await Promise.all(
 		fileResponses.map((file) =>
 			fetch(
@@ -539,8 +541,6 @@ const uploadImageToStorage = async (images) => {
 			).then((response) => response.json())
 		)
 	)
-
-	console.log({ responses })
 
 	return responses.map(({ data }) => data.url)
 }
