@@ -1,7 +1,6 @@
 import { API_URL, GOOGLE_ID } from '../../constants.js'
 //Helpers
 import { getUserSession, setUserSession } from '../../assets/helpers/storage.js'
-import injectHTML from '../../assets/helpers/inject-html.js'
 //Components
 import Header from '../../assets/components/Header.js'
 import AlertPopup from '../../assets/components/AlertPopup.js'

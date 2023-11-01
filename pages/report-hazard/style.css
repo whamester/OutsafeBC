@@ -1,13 +1,14 @@
 #map {
 	height: 400px;
-	width: 100vw;
+	width: 100%;
 }
 
-#dragAndDropArea, .custom-file-upload2{
+#dragAndDropArea,
+.custom-file-upload2 {
 	border: dashed;
 }
 
-.custom-file-upload{
+.custom-file-upload {
 	border: solid;
 }
 
@@ -18,7 +19,7 @@
 	grid-template-columns: 1fr;
 }
 
-img{
+img {
 	width: 10%;
 	height: auto;
 }
