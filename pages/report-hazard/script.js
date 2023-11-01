@@ -14,11 +14,13 @@ import Modal from '../../assets/components/Modal.js';
 import { getUserSession } from '../../assets/helpers/storage.js';
 import readImage from '../../assets/helpers/read-image.js';
 import injectHTML from '../../assets/helpers/inject-html.js';
+import geocode from '../../assets/helpers/geocode.js';
 
 //Variable Declaration
 const currentReport = new ReportForm();
 let position = Map.DEFAULT_LOCATION;
-let map = null;
+
+let mapInstance = null;
 let skipHazardOption = false;
 const user = getUserSession();
 
@@ -29,7 +31,7 @@ const idReport = url.searchParams.get('id');
  * Page Init
  */
 
-window.onload = function () {
+window.onload = async function () {
   try {
     if (!user) {
       window.location.replace('/');
@@ -44,11 +46,16 @@ window.onload = function () {
     window.addEventListener('hashchange', displayCurrentSection);
 
     // Loads the map even if the user has not accepted the permissions
-    map = new Map(position.lat, position.lng);
-    map.setMarkerOnMap(position.lat, position.lng, 'You', {
+    mapInstance = new Map(position.lat, position.lng);
+    mapInstance.setMarkerOnMap(position.lat, position.lng, {
       draggable: true,
     }); //TODO: Consult with design the message of the marker
 
+    if (mapInstance) {
+      mapInstance.map.on('click', onSelectLocation);
+    }
+
+    await updateCurrentReportLocation(position);
     //Override the current location if the user accepts the permissions
     loadGeolocation();
 
@@ -61,6 +68,18 @@ window.onload = function () {
       500
     );
   }
+};
+
+const updateCurrentReportLocation = async (params) => {
+  const address = await getAddressFromCoordinates(params);
+
+  currentReport.location = {
+    lat: params.lat,
+    lng: params.lng,
+    address: address,
+  };
+
+  locationAddressInput.value = `${currentReport.location.address} (${currentReport.location.lat}, ${currentReport.location.lng})`;
 };
 
 const displayCurrentSection = () => {
@@ -95,9 +114,14 @@ const displayCurrentSection = () => {
 const loadGeolocation = async () => {
   try {
     position = await Map.getCurrentLocation();
-    map.setMarkerOnMap(position.lat, position.lng, 'You', {
+    await updateCurrentReportLocation(position);
+    mapInstance.setMarkerOnMap(position.lat, position.lng, {
       draggable: true,
     });
+    // mapInstance.map.flyTo([position.lat, position.lng], Map.CURRENT_ZOOM, {
+    //   animate: true,
+    //   duration: 2,
+    // });
   } catch (error) {
     console.log(error);
 
@@ -177,33 +201,31 @@ const populateReport = async () => {
   }
 };
 
+const getAddressFromCoordinates = async (params) => {
+  try {
+    const data = await geocode(params, 'reverse-geocode');
+
+    const properties = data?.[0].properties;
+    const address = [properties?.address_line1, properties?.address_line2]
+      .filter((value) => !!value)
+      .join(' ');
+
+    return address;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+
 /**
  * Step 1: Location
  */
 
-if (map) {
-  map.on('click', onSelectLocation);
-}
-
-currentReport.location = {
-  lat: position.lat,
-  lng: position.lng,
-  address: 'Initial Address', //TODO: Get address
-};
-
-locationAddressInput.value = `${currentReport.location.address} (${currentReport.location.lat}, ${currentReport.location.lng})`;
-
-const onSelectLocation = (event) => {
-  map.removeLayer(marker);
-  map.setMarkerOnMap(event.latlng.lat, event.latlng.lng, 'Location selected', {
+const onSelectLocation = async (event) => {
+  mapInstance.setMarkerOnMap(event.latlng.lat, event.latlng.lng, {
     draggable: true,
   });
-
-  currentReport.location = {
-    lat: event.latlng.lat,
-    lng: event.latlng.lng,
-    address: 'Fake address', //TODO: Get address
-  };
+  await updateCurrentReportLocation(event.latlng);
 };
 
 /**
