@@ -22,6 +22,9 @@ let map = null;
 let skipHazardOption = false;
 const user = getUserSession();
 
+const url = new URL(window.location.href);
+const idReport = url.searchParams.get('id');
+
 /**
  * Page Init
  */
@@ -48,6 +51,8 @@ window.onload = function () {
 
     //Override the current location if the user accepts the permissions
     loadGeolocation();
+
+    populateReport();
   } catch (error) {
     const alert = new AlertPopup();
     alert.show(
@@ -101,6 +106,74 @@ const loadGeolocation = async () => {
       error.message || AlertPopup.SOMETHING_WENT_WRONG_MESSAGE,
       AlertPopup.error
     );
+  }
+};
+
+const populateReport = async () => {
+  if (idReport !== null) {
+    document.getElementById('saveReportBtn').style.display = 'none';
+    document.getElementById('updateReportBtn').style.display = 'initial';
+
+    const getCollection = async () => {
+      try {
+        let response = await fetch(`${API_URL}/hazard-report?id=${idReport}`);
+        let { data } = await response.json();
+
+        //******* display location ******
+        currentReport.location = data.location;
+
+        //******* display category ******
+
+        document
+          .querySelectorAll(`input[value="${data.hazardCategory.id}"]`)[0]
+          .click();
+
+        currentReport.category.name = data.hazardCategory.name;
+        categoryOutput.innerHTML = currentReport.category.name;
+
+        //******* display type ******
+        setTimeout(function () {
+          document
+            .querySelectorAll(`input[value="${data.hazard.id}"]`)[0]
+            .click();
+
+          currentReport.option.name = data.hazard.name;
+          hazardOptionOutput.innerHTML = currentReport.option.name;
+        }, 50);
+
+        //******* display comment ******
+
+        commentInput.value = data.comment;
+        currentReport.comment = data.comment;
+        commentOutput.innerHTML = currentReport.comment;
+
+        //******* display pictures ******
+
+        data.images.forEach((imageUrl) => {
+          displayImages(imageUrl);
+        });
+
+        const displayImagesAreaReview = document.getElementById('imagesOutput');
+        data.images.forEach((imageUrl) => {
+          const imgElement = document.createElement('img');
+          imgElement.src = imageUrl;
+          displayImagesAreaReview.appendChild(imgElement);
+        });
+      } catch (error) {
+        console.log({ error });
+        const alert = new AlertPopup();
+        alert.show(
+          error.message || AlertPopup.SOMETHING_WENT_WRONG_MESSAGE,
+          AlertPopup.error,
+          6000
+        );
+      }
+    };
+
+    getCollection();
+  } else {
+    document.getElementById('updateReportBtn').style.display = 'none';
+    document.getElementById('saveReportBtn').style.display = 'initial';
   }
 };
 
@@ -421,6 +494,7 @@ const displayImages = (base64File) => {
   imagesArea.append(img);
 
   currentReport.images.push(base64File);
+
   if (currentReport.images.length === 3) {
     document.getElementById('starCameraBtn').setAttribute('disabled', true);
     document.getElementById('dragAndDropArea').setAttribute('disabled', true);
@@ -454,17 +528,59 @@ showConfirmationBtn.addEventListener('click', () => {
 reportHazardForm.addEventListener('submit', async function (event) {
   event.preventDefault();
 
+  console.log({ currentReport });
   try {
-    if (!currentReport.images.length) {
-      const alert = new AlertPopup();
-      alert.show('Please upload at least one image', AlertPopup.warning);
-      window.location.hash = '#upload-photos';
+    const images = await uploadImageToStorage(currentReport.images);
+    //CREATE
+    if (!idReport) {
+      const response = await fetch(`${API_URL}/hazard-report`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId: user.id,
+          hazardOptionId: currentReport.option.id,
+          location: {
+            lat: currentReport.location.lat,
+            lng: currentReport.location.lng,
+            address: currentReport.location.address,
+          },
+          comment: currentReport.comment ?? '',
+          images: images,
+        }),
+      });
+
+      if (response.ok) {
+        await response.json();
+
+        const modal = new Modal();
+
+        const button = document.createElement('button');
+        button.setAttribute('id', 'open-modal-btn');
+        button.setAttribute('class', 'btn btn-primary');
+        button.addEventListener('click', () =>
+          window.location.replace('/pages/home')
+        );
+        button.innerHTML = 'Continue Exploring';
+
+        modal.show({
+          title: 'Your report has been submitted!',
+          description:
+            'Thank you for helping others have a safe camping experience.',
+          icon: { name: 'icon-check', color: '#000000', size: '3.5rem' },
+          actions: button,
+          enableOverlayClickClose: false,
+        });
+      } else {
+        throw new Error('Failed to create report');
+      }
       return;
     }
 
-    const images = await uploadImageToStorage(currentReport.images);
-    const response = await fetch(`${API_URL}/hazard-report`, {
-      method: 'POST',
+    //UPDATE
+    const response = await fetch(`${API_URL}/hazard-report?id=${idReport}`, {
+      method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -490,12 +606,12 @@ reportHazardForm.addEventListener('submit', async function (event) {
       button.setAttribute('id', 'open-modal-btn');
       button.setAttribute('class', 'btn btn-primary');
       button.addEventListener('click', () =>
-        window.location.replace('/pages/home')
+        window.location.replace('/pages/my-reports')
       );
-      button.innerHTML = 'Continue Exploring';
+      button.innerHTML = 'Back to My Reports';
 
       modal.show({
-        title: 'Your report has been submitted!',
+        title: 'Your report has been updated!',
         description:
           'Thank you for helping others have a safe camping experience.',
         icon: { name: 'icon-check', color: '#000000', size: '3.5rem' },
@@ -544,181 +660,11 @@ const uploadImageToStorage = async (images) => {
     )
   );
 
-  console.log({ responses });
-
   return responses.map(({ data }) => data.url);
 };
 
 /**
- * Step 8: Update Form
- */
-//this 2 lines are  to get the id from url
-// const url = new URL(window.location.href)
-// const idReport = url.searchParams.get("id");
-
-// let idReport = '979e3cca-883f-4589-ba5a-ac313d087481'
-let idReport = null;
-
-if (idReport !== null) {
-  document.getElementById('saveReportBtn').style.display = 'none';
-  const getCollection = async () => {
-    try {
-      //wHEN THE ENDPINT WORKS FINE WE CAN USE THE NEXT 2 LINES
-      // let response = await fetch(`${API_URL}/hazard-report?id=${idReport}`)
-      // let { data } = await response.json()
-      let data = {
-        id: '979e3cca-883f-4589-ba5a-ac313d087481',
-        location: {
-          lat: -19.8372,
-          lng: 119.0947,
-          address: 'Southwest',
-        },
-        hazardCategory: {
-          id: '0d14fc2d-eca3-402b-8b00-3b18215afcb4',
-          name: 'Infrascructure',
-          hasOptions: true,
-        },
-        hazard: {
-          id: '97d27217-2b43-41a8-8e31-396610d3a75c',
-          name: 'Damaged Bridge',
-        },
-        comment: 'No comments',
-        created_at: '2023-10-30T05:22:20.829Z',
-        updated_at: '2023-10-30T05:22:20.829Z',
-        user: {
-          email: 'Roger59@hotmail.com',
-          name: 'Veronica Walter III',
-        },
-        images: [
-          'https://picsum.photos/seed/09RV1lC/640/480',
-          'https://picsum.photos/seed/a3wEOHgCD6/640/480',
-          'https://picsum.photos/seed/pheJJ6injX/640/480',
-        ],
-      };
-
-      //*******print category******
-      setTimeout(function () {
-        document
-          .querySelectorAll(`input[value="${data.hazardCategory.id}"]`)[0]
-          .click();
-
-        currentReport.category.name = data.hazardCategory.name;
-        categoryOutput.innerHTML = currentReport.category.name;
-      }, 1000);
-
-      //*******print type******
-      setTimeout(function () {
-        document
-          .querySelectorAll(`input[value="${data.hazard.id}"]`)[0]
-          .click();
-
-        currentReport.option.name = data.hazard.name;
-        hazardOptionOutput.innerHTML = currentReport.option.name;
-      }, 2000);
-
-      //*******print comment******
-
-      document.querySelectorAll(`textarea[id="commentInput"]`)[0].value =
-        data.comment;
-
-      currentReport.comment = data.comment;
-      commentOutput.innerHTML = currentReport.comment;
-
-      //*******print pictures******
-
-      const displayImagesArea = document.getElementById('displayImagesArea');
-
-      data.images.forEach((imageUrl) => {
-        const imgElement = document.createElement('img');
-        imgElement.src = imageUrl;
-        displayImagesArea.appendChild(imgElement);
-      });
-
-      const displayImagesAreaReview = document.getElementById('imagesOutput');
-      data.images.forEach((imageUrl) => {
-        const imgElement = document.createElement('img');
-        imgElement.src = imageUrl;
-        displayImagesAreaReview.appendChild(imgElement);
-      });
-
-      currentReport.images = data.images;
-
-      reportHazardForm.addEventListener('submit', async function (event) {
-        event.preventDefault();
-
-        try {
-          if (!currentReport.images.length) {
-            const alert = new AlertPopup();
-            alert.show('Please upload at least one image', AlertPopup.warning);
-            window.location.hash = '#upload-photos';
-            return;
-          }
-
-          const images = await uploadImageToStorage(currentReport.images);
-          const response = await fetch(
-            `${API_URL}/hazard-report?ID=${idReport}`,
-            {
-              method: 'PUT',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                categoryId: currentReport.category.id,
-                hazardOptionId: currentReport.option.id,
-                location: {
-                  lat: currentReport.location.lat,
-                  lng: currentReport.location.lng,
-                  address: currentReport.location.address,
-                },
-                comment: currentReport.comment ?? '',
-                images: images,
-              }),
-            }
-          );
-
-          if (response.ok) {
-            await response.json();
-
-            const modal = new Modal();
-
-            const button = document.createElement('button');
-            button.setAttribute('id', 'open-modal-btn');
-            button.setAttribute('class', 'btn btn-primary');
-            button.addEventListener('click', () =>
-              window.location.replace('/pages/home')
-            );
-            button.innerHTML = 'Continue Exploring';
-
-            modal.show({
-              title: 'Your report has been update!',
-              description:
-                'Thank you for helping others have a safe camping experience.',
-              icon: { name: 'icon-check', color: '#000000', size: '3.5rem' },
-              actions: button,
-              enableOverlayClickClose: false,
-            });
-          } else {
-            throw new Error('Failed to update report');
-          }
-        } catch (error) {
-          const alert = new AlertPopup();
-          alert.show(error.message, AlertPopup.error);
-        }
-      });
-    } catch (error) {
-      const alert = new AlertPopup();
-      alert.show(
-        error.message || AlertPopup.SOMETHING_WENT_WRONG_MESSAGE,
-        AlertPopup.error
-      );
-    }
-  };
-
-  getCollection();
-}
-
-/**
- * Step 9: Display nav
+ *  Display nav
  */
 
 //show buttons when continue
