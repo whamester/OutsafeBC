@@ -8,9 +8,15 @@ body {
 
 #root {
   position: relative;
+  margin: 0;
+  max-width: max-content;
 }
 
 #map {
   width: 100vw;
   height: 100vh;
+}
+
+.btn-report-hazard {
+  z-index: 2;
 }
