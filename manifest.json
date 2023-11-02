@@ -1,32 +1,31 @@
 {
-    "name":"Outsafe BC",
-    "short_name":"Outsafe BC",
-    "start_url":"/index.html",
-    "display":"standalone",
-    "background_color":"#FFFFFF",
-    "theme_color":"#000000",
-    "orientation":"portrait-primary",
-    "icons":[
-        {
-            "src":"/assets/img/icons/icon-72x72.png",
-            "type": "image/png",
-            "sizes":"72x72"
-        },
-        {
-            "src":"/assets/img/icons/icon-96x96.png",
-            "type": "image/png",
-            "sizes":"96x96"
-        },
-        {
-            "src":"/assets/img/icons/icon-128x128.png",
-            "type": "image/png",
-            "sizes":"128x128"
-        },
-        {
-            "src":"/assets/img/icons/icon-256x256.png",
-            "type": "image/png",
-            "sizes":"256x256"
-        }
-    ]
-
+  "name": "Outsafe BC",
+  "short_name": "Outsafe BC",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#FFFFFF",
+  "theme_color": "#000000",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/assets/img/icons/appicon-72.png",
+      "type": "image/png",
+      "sizes": "72x72"
+    },
+    {
+      "src": "/assets/img/icons/appicon-96.png",
+      "type": "image/png",
+      "sizes": "96x96"
+    },
+    {
+      "src": "/assets/img/icons/appicon-128.png",
+      "type": "image/png",
+      "sizes": "128x128"
+    },
+    {
+      "src": "/assets/img/icons/appicon-256.png",
+      "type": "image/png",
+      "sizes": "256x256"
+    }
+  ]
 }
