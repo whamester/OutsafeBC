@@ -21,5 +21,8 @@ channel.bind('new-report', function (data) {
     displayNotificationItem({ ...data, read: false });
     checkIfAllNotificationsAreRead();
     loadIcons();
+    const emptyDiv = document.getElementById('empty-notifications');
+
+    emptyDiv.innerHTML = '';
   }
 });

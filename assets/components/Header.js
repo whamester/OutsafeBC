@@ -18,15 +18,43 @@ const Header = () => {
           user
             ? `
             <div class="notification-container pointer">
-              <i id="no-notifications" class="icon-notification-no"  onclick="const menu = document.querySelector('#notifications-popup'); if (menu.classList.contains('hidden')) { menu.classList.remove('hidden'); return; }; menu.classList.add('hidden');"></i>
-              <i id="with-notifications" class="icon-notification-yes hidden"  onclick="const menu = document.querySelector('#notifications-popup'); if (menu.classList.contains('hidden')) { menu.classList.remove('hidden'); return; }; menu.classList.add('hidden');"></i>
+              <i id="no-notifications" class="icon-notification-no"  onclick="
+                    const menu = document.querySelector('#notifications-popup');
+                    document.querySelector('#header-menu').classList.add('hidden');
+                    
+                    if (menu.classList.contains('hidden')) { 
+                        menu.classList.remove('hidden'); 
+                        return; 
+                    }; 
+                    menu.classList.add('hidden');
+
+                  "></i>
+              <i id="with-notifications" class="icon-notification-yes hidden"  onclick="
+                    const menu = document.querySelector('#notifications-popup'); 
+                    document.querySelector('#header-menu').classList.add('hidden');
+
+                    if (menu.classList.contains('hidden')) { 
+                      menu.classList.remove('hidden'); 
+                      return; 
+                    }; 
+                    menu.classList.add('hidden');
+                  "></i>
             </div>
             ${`
               <img
                 id="avatar"
                 class="pointer" 
                 src="${user.photo}" alt="User logo"
-                onclick="const menu = document.querySelector('#header-menu'); if (menu.classList.contains('hidden')) { menu.classList.remove('hidden'); return; }; menu.classList.add('hidden');" />`}
+                onclick="
+                const menu = document.querySelector('#header-menu'); 
+                document.querySelector('#notifications-popup').classList.add('hidden');
+
+                if (menu.classList.contains('hidden')) { 
+                  menu.classList.remove('hidden'); 
+                  return; 
+                }; 
+                menu.classList.add('hidden');
+                " />`}
           `
             : `<a href="/pages/login"><button class="btn btn-secondary">Sign in</button></a>`
         } 
@@ -56,12 +84,14 @@ const Header = () => {
 
     <div id="notifications-popup" class="hidden">
       <div class="notifications-popup__container">
-        <div class="notifications-popup__header text-body-1">
-          Notifications <span id="notification-count"></span>
+        <div class="notifications-popup__header">
+          <p class="text-body-1">Notifications <span id="notification-count"></span><p>
+          <span aria-label="Close notifications panel" class="notification-popup__header__close pointer" onclick="const menu = document.querySelector('#notifications-popup'); menu.classList.add('hidden');" > <i class="icon-close-square"> </i></span>
         </div>
         <ul>
           
         </ul>
+        <div id="empty-notifications"></div>
         <div id="markAllAsReadAction" class="notifications-popup__footer text-body-4 medium pointer">
           <i class="icon-mark-as-read"></i> Mark all as read
         </div>

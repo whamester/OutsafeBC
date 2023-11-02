@@ -44,6 +44,26 @@
   font-weight: 600;
   padding: 0.75rem 1rem 0.5rem 1rem;
   border-radius: 1rem 1rem 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.notification-popup__header__close {
+  display: flex;
+  padding: 0.4rem;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  border-radius: 6.25rem;
+  border: 1px solid var(--neutral-300, #d0d5dd);
+  background: var(--white, #fff);
+}
+
+.notification-popup__header__close i {
+  background-color: var(--neutral-500);
+  width: 1.2rem;
+  height: 1.2rem;
 }
 
 .notifications-popup__header #notification-count {

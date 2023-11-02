@@ -3,11 +3,11 @@ import { API_URL } from '../../constants.js';
 import MyReport from '../../assets/components/ReportCard.js';
 import { getUserSession } from '../../assets/helpers/storage.js';
 import loadIcons from '../../assets/helpers/load-icons.js';
-import injectHTML from '../../assets/helpers/inject-html.js';
 // Components
 import Header from '../../assets/components/Header.js';
 import AlertPopup from '../../assets/components/AlertPopup.js';
 import { onToggle } from '../../assets/components/ToggleSwitch.js';
+import injectHeader from '../../assets/helpers/inject-header.js';
 
 // Variables
 const user = getUserSession();
@@ -26,7 +26,7 @@ const alert = new AlertPopup();
  */
 window.onload = function () {
   // Inject Header
-  injectHTML([
+  injectHeader([
     { func: Header, target: '#myReportsBody', position: 'afterbegin' },
   ]);
 

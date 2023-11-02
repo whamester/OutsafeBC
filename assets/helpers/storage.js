@@ -35,7 +35,7 @@ export const addNotification = (data) => {
     if (Array.isArray(notifications)) {
       localStorage.setItem(
         'notifications',
-        JSON.stringify([...notifications, data])
+        JSON.stringify([...notifications.splice(0, 4), data])
       );
     } else {
       localStorage.setItem('notifications', JSON.stringify([data]));

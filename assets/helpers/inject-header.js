@@ -1,31 +1,29 @@
 import AlertPopup from '../components/AlertPopup.js';
 import NotificationItem from '../components/NotificationItem.js';
+import NotificationsEmpty from '../components/NotificationsEmpty.js';
 import loadIcons from '../helpers/load-icons.js';
+import injectHTML from './inject-html.js';
 import { getNotifications, updateNotificationAsRead } from './storage.js';
 
-// injects the HTML string into the DOM
 const injectHeader = (params) => {
-  params.forEach((comp) => {
-    const root = document.querySelector(comp?.target ?? '#root');
-
-    if (!root) {
-      console.error(`${comp?.target} element not found.`);
-    } else {
-      root.insertAdjacentHTML(
-        comp?.position ?? 'beforeend',
-        comp?.func(comp?.args)
-      );
-    }
-  });
+  injectHTML(params);
   loadIcons();
 
   const notifications = getNotifications();
-  if (Array.isArray(notifications) && notifications.length) {
-    const list = document.querySelector('#notifications-popup ul');
 
-    checkIfAllNotificationsAreRead();
+  const list = document.querySelector('#notifications-popup ul');
 
-    if (list) {
+  checkIfAllNotificationsAreRead();
+
+  if (list) {
+    if (!notifications?.length) {
+      const emptyDiv = document.getElementById('empty-notifications');
+      const empty = new NotificationsEmpty();
+      emptyDiv.innerHTML = empty.getHTML();
+      return;
+    }
+
+    if (Array.isArray(notifications)) {
       for (let i = 0; i < notifications.length; i++) {
         const element = notifications[i];
         displayNotificationItem(element);
@@ -121,7 +119,7 @@ export const checkIfAllNotificationsAreRead = () => {
     const countElement = document.getElementById('notification-count');
     const count = notifications.filter((n) => !n.read).length;
     if (countElement) {
-      countElement.innerHTML = `(${count})`;
+      countElement.innerHTML = count > 0 ? `(${count})` : '';
     }
   }
 };
