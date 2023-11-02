@@ -44,7 +44,10 @@ const Header = () => {
               <img
                 id="avatar"
                 class="pointer" 
-                src="${user.photo}" alt="User logo"
+                src="${
+                  user.photo || '../../assets/img/default-nav-image.png'
+                }" alt="User logo"
+                onerror="this.src = '../../assets/img/default-nav-image.png'"
                 onclick="
                 const menu = document.querySelector('#header-menu'); 
                 document.querySelector('#notifications-popup').classList.add('hidden');
