@@ -1,7 +1,7 @@
 import ReportCard from '../helpers/card-container.js'
 import ToggleSwitch from '../components/ToggleSwitch.js'
 
-class MyReport extends ReportCard {
+class MyReportCard extends ReportCard {
 	constructor(id, category, hazard, location, date, photos, comment) {
 		super(id, category, hazard, location, date, photos, comment)
 	}
@@ -35,7 +35,7 @@ class MyReport extends ReportCard {
 
 	reportContent() {
 		let inputDateString = this.date
-		let date = MyReport.formatDate(inputDateString)
+		let date = MyReportCard.formatDate(inputDateString)
 		let time = inputDateString.substring(11, 16)
 
 		let photos = this.photos
@@ -107,4 +107,4 @@ class MyReport extends ReportCard {
 	}
 }
 
-export default MyReport
+export default MyReportCard
