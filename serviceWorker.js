@@ -21,7 +21,7 @@ self.addEventListener('push', function (event) {
     self.registration.showNotification(notification.title, {
       body: notification.body,
       tag: data.id,
-      icon: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Flat_tick_icon.svg/1024px-Flat_tick_icon.svg.png', //TODO: Replace image with our logo
+      icon: '../assets/img/icons/logo-square.png', //TODO: Replace image with our logo
     });
   } else {
     console.log('Push event but no data');
