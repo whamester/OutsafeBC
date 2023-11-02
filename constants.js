@@ -1,7 +1,7 @@
-// export const API_URL =
-// 	'https://enchanting-llama-6664aa.netlify.app/.netlify/functions'
+export const API_URL =
+  'https://enchanting-llama-6664aa.netlify.app/.netlify/functions';
 
-export const API_URL = 'http://localhost:8888/.netlify/functions';
+// export const API_URL = 'http://localhost:8888/.netlify/functions';
 
 export const USER_STORAGE = 'user';
 
