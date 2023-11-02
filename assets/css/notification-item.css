@@ -1,0 +1,117 @@
+#notifications-popup {
+  background-color: var(--white);
+}
+
+#notifications-popup .notifications-popup__container {
+  width: 26.5rem;
+  border-radius: 1rem;
+  position: absolute;
+  float: right;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  border: 1px solid var(--neutral-200, #e4e7ec);
+  background: var(--white, #fff);
+  box-shadow: 0px 5px 15px 0px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+#notifications-popup .notifications-popup__container ul {
+  overflow-y: auto;
+  width: 26.5rem;
+  max-height: 300px;
+}
+
+#notifications-popup .notifications-popup ul li:not(:last-child) {
+  border-bottom: 1px solid var(--neutral-200);
+}
+
+#notifications-popup .badge {
+  margin-top: 0.3rem;
+}
+
+#notifications-popup span {
+  color: var(--neutral-500);
+}
+
+#notifications-popup strong {
+  color: var(--neutral-900);
+}
+
+.notifications-popup__header {
+  background-color: var(--neutral-50);
+  color: var(--neutral-900);
+  font-weight: 600;
+  padding: 0.75rem 1rem 0.5rem 1rem;
+  border-radius: 1rem 1rem 0 0;
+}
+
+.notifications-popup__header #notification-count {
+  color: var(--neutral-900);
+  font-weight: 600;
+}
+
+.notifications-popup__footer {
+  background-color: var(--neutral-50);
+  padding: 1rem 1.5rem 1rem 1.5rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.notifications-popup__container ul {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background-color: var(--white);
+}
+
+.notifications-popup__container ul li {
+  padding: 1rem;
+}
+
+.notification-modal {
+  display: flex;
+  gap: 1rem;
+}
+
+.notification__icon {
+  border-radius: 0.25rem;
+  background: var(--error-error-500-base, #d42621);
+  display: flex;
+  width: 1.75rem;
+  height: 1.75rem;
+  padding: 0.125rem;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.notification__body {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.notification__body__content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.notification__body__button {
+  width: max-content;
+}
+
+.notification__item--read .badge {
+  visibility: hidden;
+}
+
+@media screen and (min-width: 500px) {
+  #notifications-popup .notifications-popup__container {
+    right: 26.5rem;
+    left: unset;
+    right: 0.3rem;
+    margin-top: 0.3rem;
+  }
+}

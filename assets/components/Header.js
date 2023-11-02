@@ -1,39 +1,38 @@
-import { getUserSession } from '../helpers/storage.js'
+import { getUserSession } from '../helpers/storage.js';
 
 const Header = () => {
-	const user = getUserSession()
-	const showNavigation =
-		!window.location.pathname.includes('/pages/login') &&
-		!window.location.pathname.includes('/pages/signup')
+  const user = getUserSession();
+  const showNavigation =
+    !window.location.pathname.includes('/pages/login') &&
+    !window.location.pathname.includes('/pages/signup');
 
-	return `
+  return `
   <header>
     <div id="header-content">
       <a href="/pages/home"><img src="../../assets/img/header-logo-dark.svg" style="width:8.06rem; height:100%" alt="Outsafe BC logo" /></a>
       ${
-				!!showNavigation
-					? ` <nav id="header-nav">
+        !!showNavigation
+          ? ` <nav id="header-nav">
     
         ${
-					user
-						? `
+          user
+            ? `
             <div class="notification-container pointer">
-              <i class="icon-notification-no" style=""></i>
-              <i class="icon-notification-yes hidden"></i>
+              <i id="no-notifications" class="icon-notification-no"  onclick="const menu = document.querySelector('#notifications-popup'); if (menu.classList.contains('hidden')) { menu.classList.remove('hidden'); return; }; menu.classList.add('hidden');"></i>
+              <i id="with-notifications" class="icon-notification-yes hidden"  onclick="const menu = document.querySelector('#notifications-popup'); if (menu.classList.contains('hidden')) { menu.classList.remove('hidden'); return; }; menu.classList.add('hidden');"></i>
             </div>
             ${`
               <img
                 id="avatar"
                 class="pointer" 
                 src="${user.photo}" alt="User logo"
-                onclick="const menu = document.querySelector('#header-menu'); if (menu.classList.contains('hidden')) { menu.classList.remove('hidden'); return; }; menu.classList.add('hidden');" />`
-            }
+                onclick="const menu = document.querySelector('#header-menu'); if (menu.classList.contains('hidden')) { menu.classList.remove('hidden'); return; }; menu.classList.add('hidden');" />`}
           `
-						: `<a href="/pages/login"><button class="btn btn-secondary">Sign in</button></a>`
-				} 
+            : `<a href="/pages/login"><button class="btn btn-secondary">Sign in</button></a>`
+        } 
       </nav>`
-					: ``
-			}
+          : ``
+      }
     </div>
 
    <nav id="header-menu" class="hidden">
@@ -54,8 +53,22 @@ const Header = () => {
         </ul>
       </div>
     </nav>
-  </header>
-  `
-}
 
-export default Header
+    <div id="notifications-popup" class="hidden">
+      <div class="notifications-popup__container">
+        <div class="notifications-popup__header text-body-1">
+          Notifications <span id="notification-count"></span>
+        </div>
+        <ul>
+          
+        </ul>
+        <div id="markAllAsReadAction" class="notifications-popup__footer text-body-4 medium pointer">
+          <i class="icon-mark-as-read"></i> Mark all as read
+        </div>
+      </div>
+    </div>
+  </header>
+  `;
+};
+
+export default Header;
