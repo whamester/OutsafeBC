@@ -1,5 +1,9 @@
 #notifications-popup {
   background-color: var(--white);
+  max-width: 80rem;
+  /* MAX WIDTH */
+  margin: auto;
+  position: relative;
 }
 
 #notifications-popup .notifications-popup__container {
@@ -132,6 +136,7 @@
     left: unset;
     right: 0.3rem;
     margin-top: 0.3rem;
+    width: -webkit-fill-available;
   }
 
   #notifications-popup .notifications-popup__container ul {
