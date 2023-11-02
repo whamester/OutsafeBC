@@ -14,6 +14,8 @@ const injectHTML = (params) => {
 			)
 		}
 	});
+
+	loadIcons()
 }
 
 export default injectHTML
