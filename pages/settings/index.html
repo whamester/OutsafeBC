@@ -28,6 +28,15 @@
   <body id="profile-body">
     <main>
       <h1>Account Settings</h1>
+
+      <label for="dropdownMenu">Choose a menu item:</label>
+      <select name="dropdownMenu" id="dropdownMenu">
+        <option value="basicInfoOptn" selected>Basic Info</option>
+        <option value="passwordOptn">Password</option>
+        <option value="notificationsOtp">Notifications</option>
+        <option value="securityOtn">Security</option>
+      </select>
+
       <section id="basicInfoSettings">
         <h2>Basic Info</h2>
 
@@ -64,7 +73,10 @@
 
       <section id="notificationsSettings">
         <h2>Notifications</h2>
-        <img src="../../assets/icons/notification-no.svg" alt="Notification bell icon">
+        <img
+          src="../../assets/icons/notification-no.svg"
+          alt="Notification bell icon"
+        />
         <h3>Allow Push Notifications</h3>
         <p>Get real-time updats for nearby reported hazards.</p>
         <div id="permissionStatus"></div>
@@ -95,7 +107,6 @@
           <button id="deleteAccountNoBtn">No</button>
         </div>
       </section>
-
     </main>
   </body>
 </html>
