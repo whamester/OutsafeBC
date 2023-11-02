@@ -16,7 +16,7 @@ var channel = pusher.subscribe('reports-channel');
 channel.bind('new-report', function (data) {
   const user = getUserSession();
 
-  if (user.email !== data.email) {
+  if (!!user && user.email !== data?.user?.email) {
     addNotification({ ...data, read: false });
     displayNotificationItem({ ...data, read: false });
     checkIfAllNotificationsAreRead();
