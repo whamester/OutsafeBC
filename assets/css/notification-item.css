@@ -3,7 +3,7 @@
 }
 
 #notifications-popup .notifications-popup__container {
-  width: 26.5rem;
+  max-width: 26.5rem;
   border-radius: 1rem;
   position: absolute;
   float: right;
@@ -18,8 +18,7 @@
 
 #notifications-popup .notifications-popup__container ul {
   overflow-y: auto;
-  width: 26.5rem;
-  max-height: 300px;
+  max-width: 26.5rem;
 }
 
 #notifications-popup .notifications-popup ul li:not(:last-child) {
@@ -133,5 +132,9 @@
     left: unset;
     right: 0.3rem;
     margin-top: 0.3rem;
+  }
+
+  #notifications-popup .notifications-popup__container ul {
+    max-height: 300px;
   }
 }
