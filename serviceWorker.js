@@ -1,4 +1,4 @@
-// lister for install service worker event
+import { getUserSession } from './assets/helpers/storage';
 
 self.addEventListener('install', (event) => {
   // console.log("Service worker installed",event)
@@ -18,11 +18,15 @@ self.addEventListener('push', function (event) {
     console.log('Push event!! ', event.data.json());
     const { notification, data } = event.data.json();
 
-    self.registration.showNotification(notification.title, {
-      body: notification.body,
-      tag: data.id,
-      icon: '../assets/img/icons/logo-square.png', //TODO: Replace image with our logo
-    });
+    const user = getUserSession();
+
+    if (!!user?.notifications_enabled) {
+      self.registration.showNotification(notification.title, {
+        body: notification.body,
+        tag: data.id,
+        icon: '../assets/img/icons/logo-square.png', //TODO: Replace image with our logo
+      });
+    }
   } else {
     console.log('Push event but no data');
   }

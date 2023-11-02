@@ -29,28 +29,30 @@ export const clearUserSession = () => {
 
 //NOTIFICATIONS
 
-export const addNotification = (data) => {
+const getNotificationsKey = (id) => `notifications-${id}`;
+
+export const addNotification = (userId, data) => {
   try {
     const notifications = getNotifications();
     if (Array.isArray(notifications)) {
       localStorage.setItem(
-        'notifications',
+        getNotificationsKey(userId),
         JSON.stringify([...notifications.splice(0, 4), data])
       );
     } else {
-      localStorage.setItem('notifications', JSON.stringify([data]));
+      localStorage.setItem(getNotificationsKey(userId), JSON.stringify([data]));
     }
   } catch (error) {
     console.debug(error);
   }
 };
 
-export const updateNotificationAsRead = (id) => {
+export const updateNotificationAsRead = (userId, id) => {
   try {
     const notifications = getNotifications();
     if (Array.isArray(notifications)) {
       localStorage.setItem(
-        'notifications',
+        getNotificationsKey(userId),
         JSON.stringify(
           notifications.map((n) => ({
             ...n,
@@ -64,9 +66,9 @@ export const updateNotificationAsRead = (id) => {
   }
 };
 
-export const getNotifications = () => {
+export const getNotifications = (userId) => {
   try {
-    const notifications = localStorage.getItem('notifications');
+    const notifications = localStorage.getItem(getNotificationsKey(userId));
     if (notifications) {
       return JSON.parse(notifications);
     }

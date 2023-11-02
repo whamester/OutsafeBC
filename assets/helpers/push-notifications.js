@@ -17,7 +17,7 @@ channel.bind('new-report', function (data) {
   const user = getUserSession();
 
   if (!!user && user.email !== data?.user?.email) {
-    addNotification({ ...data, read: false });
+    addNotification(user.id, { ...data, read: false });
     displayNotificationItem({ ...data, read: false });
     checkIfAllNotificationsAreRead();
     loadIcons();

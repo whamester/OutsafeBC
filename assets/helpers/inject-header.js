@@ -3,13 +3,19 @@ import NotificationItem from '../components/NotificationItem.js';
 import NotificationsEmpty from '../components/NotificationsEmpty.js';
 import loadIcons from '../helpers/load-icons.js';
 import injectHTML from './inject-html.js';
-import { getNotifications, updateNotificationAsRead } from './storage.js';
+import {
+  getNotifications,
+  getUserSession,
+  updateNotificationAsRead,
+} from './storage.js';
+
+const user = getUserSession();
 
 const injectHeader = (params) => {
   injectHTML(params);
   loadIcons();
 
-  const notifications = getNotifications();
+  const notifications = getNotifications(user.id);
 
   const list = document.querySelector('#notifications-popup ul');
 
@@ -33,11 +39,11 @@ const injectHeader = (params) => {
 
   if (markAllAsReadAction) {
     markAllAsReadAction.addEventListener('click', () => {
-      const notifications = getNotifications();
+      const notifications = getNotifications(user.id);
 
       if (Array.isArray(notifications)) {
         notifications.forEach((notification) => {
-          updateNotificationAsRead(notification.id);
+          updateNotificationAsRead(user.id, notification.id);
         });
 
         const listItems = document.querySelectorAll(
@@ -78,9 +84,8 @@ export const displayNotificationItem = (report) => {
 
     if (detailsButton) {
       detailsButton.addEventListener('click', () => {
-        console.log('here');
         insertedElement.classList.add('notification__item--read');
-        updateNotificationAsRead(report.id);
+        updateNotificationAsRead(user.id, report.id);
         window.location.replace(`/pages/home/index.html?${report.id}`);
 
         checkIfAllNotificationsAreRead();
@@ -96,7 +101,7 @@ export const checkIfAllNotificationsAreRead = () => {
   const noNotificationsIcon = document.getElementById('no-notifications');
   const withNotificationsIcon = document.getElementById('with-notifications');
 
-  const notifications = getNotifications();
+  const notifications = getNotifications(user.id);
 
   if (
     Array.isArray(notifications) &&
