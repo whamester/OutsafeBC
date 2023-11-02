@@ -28,36 +28,43 @@
 </head>
 
 <body id="report-hazard-body">
+
 	<main>
 		<nav>
-			<ul>
+			<ul id="navMenu">
 				<li>
-					<a title="Select the location" href="#select-location">Select Location</a>
+					<a id="selectLocation" title="Select the location" href="#select-location">Select Location</a>
 				</li>
 
 				<li>
-					<a title="What type of hazard would you like to report?" href="#hazard-category">Hazard Category</a>
+					<a id="hazardCategoryNav" title="What type of hazard would you like to report?"
+						href="#hazard-category" style="display: none;">Hazard Category</a>
 				</li>
 
 				<li>
-					<a title="What type of wild animal did you spot?" href="#hazard-type">Hazard Type</a>
+					<a id="hazardTypeNav" title="What type of wild animal did you spot?" href="#hazard-type"
+						style="display: none;">Hazard Type</a>
 				</li>
 
 				<li>
-					<a title="Would you like to mention any further details?" href="#additional-details">Additional
+					<a id="hazardDetailNav" title="Would you like to mention any further details?"
+						href="#additional-details" style="display: none;">Additional
 						Details</a>
 				</li>
 
 				<li>
-					<a title="Please upload photos to help others see the reported hazard visually"
-						href="#upload-photos">Upload Photos</a>
+					<a id="hazardUploadPhotosNav"
+						title="Please upload photos to help others see the reported hazard visually"
+						href="#upload-photos" style="display: none;">Upload Photos</a>
 				</li>
 
 				<li>
-					<a title="Review the report before submitting." href="#review-report">Review Report</a>
+					<a id="hazardReviewReportNav" title="Review the report before submitting." href="#review-report"
+						style="display: none;">Review Report</a>
 				</li>
 			</ul>
 		</nav>
+
 
 		<form id="reportHazardForm">
 			<section id="select-location" class="page">
@@ -73,13 +80,13 @@
 					<div id="map"></div>
 				</div>
 
-				<a href="#hazard-category">Continue</a>
+				<a id="hazardCategory" href="#hazard-category">Continue</a>
 			</section>
 
 			<section id="hazard-category" class="page">
 				<h1>2. What type of hazard would you like to report?</h1>
 				<div id="hazard-category-content"></div>
-				<a href="#hazard-type">Continue</a>
+				<a id="hazardType" href="#hazard-type">Continue</a>
 			</section>
 
 			<section id="hazard-type" class="page">
@@ -95,7 +102,7 @@
 					<textarea id="commentInput"></textarea>
 				</div>
 
-				<a href="#upload-photos">Continue</a>
+				<a id="uploadPicture" href="#upload-photos">Continue</a>
 			</section>
 
 			<section id="upload-photos" class="page">
@@ -155,6 +162,10 @@
 
 				</div>
 
+				<input id="delete1" type="reset" value="1">
+				<input id="delete2" type="reset" value="2">
+				<input id="delete3" type="reset" value="3">
+
 				<a href="#review-report" id="showConfirmationBtn">Continue</a>
 			</section>
 
@@ -167,7 +178,7 @@
 
 						<div>
 							<p id="locationOutput"></p>
-							<a href="#select-location">Edit</a>
+							<a id="editLocation" href="#select-location">Edit</a>
 						</div>
 					</div>
 
@@ -176,7 +187,7 @@
 
 						<div>
 							<p id="categoryOutput"></p>
-							<a href="#hazard-category">Edit</a>
+							<a id="editCategory" href="#hazard-category">Edit</a>
 						</div>
 					</div>
 
@@ -185,7 +196,7 @@
 
 						<div>
 							<p id="hazardOptionOutput"></p>
-							<a href="#hazard-type">Edit</a>
+							<a id="editType" href="#hazard-type">Edit</a>
 						</div>
 					</div>
 
@@ -194,7 +205,7 @@
 
 						<div>
 							<p id="commentOutput"></p>
-							<a href="#additional-details">Edit</a>
+							<a id="editDetails" href="#additional-details">Edit</a>
 						</div>
 					</div>
 
@@ -203,13 +214,17 @@
 
 						<div>
 							<p id="imagesOutput"></p>
-							<a href="#upload-photos">Edit</a>
+							<a id="editPhotos" href="#upload-photos">Edit</a>
 						</div>
 					</div>
 				</div>
 
 				<button id="saveReportBtn" type="submit" class="submit">
 					Submit Report
+				</button>
+
+				<button id="updateReportBtn" type="submit" class="submit">
+					Update Report
 				</button>
 			</section>
 		</form>

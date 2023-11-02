@@ -14,19 +14,24 @@ import Modal from '../../assets/components/Modal.js';
 import { getUserSession } from '../../assets/helpers/storage.js';
 import readImage from '../../assets/helpers/read-image.js';
 import injectHTML from '../../assets/helpers/inject-html.js';
+import geocode from '../../assets/helpers/geocode.js';
 
 //Variable Declaration
 const currentReport = new ReportForm();
 let position = Map.DEFAULT_LOCATION;
-let map = null;
+
+let mapInstance = null;
 let skipHazardOption = false;
 const user = getUserSession();
+
+const url = new URL(window.location.href);
+const idReport = url.searchParams.get('id');
 
 /**
  * Page Init
  */
 
-window.onload = function () {
+window.onload = async function () {
   try {
     if (!user) {
       window.location.replace('/');
@@ -41,13 +46,20 @@ window.onload = function () {
     window.addEventListener('hashchange', displayCurrentSection);
 
     // Loads the map even if the user has not accepted the permissions
-    map = new Map(position.lat, position.lng);
-    map.setMarkerOnMap(position.lat, position.lng, 'You', {
+    mapInstance = new Map(position.lat, position.lng);
+    mapInstance.setMarkerOnMap(position.lat, position.lng, {
       draggable: true,
     }); //TODO: Consult with design the message of the marker
 
+    if (mapInstance) {
+      mapInstance.map.on('click', onSelectLocation);
+    }
+
+    await updateCurrentReportLocation(position);
     //Override the current location if the user accepts the permissions
     loadGeolocation();
+
+    populateReport();
   } catch (error) {
     const alert = new AlertPopup();
     alert.show(
@@ -56,6 +68,18 @@ window.onload = function () {
       500
     );
   }
+};
+
+const updateCurrentReportLocation = async (params) => {
+  const address = await getAddressFromCoordinates(params);
+
+  currentReport.location = {
+    lat: params.lat,
+    lng: params.lng,
+    address: address,
+  };
+
+  locationAddressInput.value = `${currentReport.location.address} (${currentReport.location.lat}, ${currentReport.location.lng})`;
 };
 
 const displayCurrentSection = () => {
@@ -90,9 +114,14 @@ const displayCurrentSection = () => {
 const loadGeolocation = async () => {
   try {
     position = await Map.getCurrentLocation();
-    map.setMarkerOnMap(position.lat, position.lng, 'You', {
+    await updateCurrentReportLocation(position);
+    mapInstance.setMarkerOnMap(position.lat, position.lng, {
       draggable: true,
     });
+    // mapInstance.map.flyTo([position.lat, position.lng], Map.CURRENT_ZOOM, {
+    //   animate: true,
+    //   duration: 2,
+    // });
   } catch (error) {
     console.log(error);
 
@@ -104,33 +133,99 @@ const loadGeolocation = async () => {
   }
 };
 
+const populateReport = async () => {
+  if (idReport !== null) {
+    document.getElementById('saveReportBtn').style.display = 'none';
+    document.getElementById('updateReportBtn').style.display = 'initial';
+
+    const getCollection = async () => {
+      try {
+        let response = await fetch(`${API_URL}/hazard-report?id=${idReport}`);
+        let { data } = await response.json();
+
+        //******* display location ******
+        currentReport.location = data.location;
+
+        //******* display category ******
+
+        document
+          .querySelectorAll(`input[value="${data.hazardCategory.id}"]`)[0]
+          .click();
+
+        currentReport.category.name = data.hazardCategory.name;
+        categoryOutput.innerHTML = currentReport.category.name;
+
+        //******* display type ******
+        setTimeout(function () {
+          document
+            .querySelectorAll(`input[value="${data.hazard.id}"]`)[0]
+            .click();
+
+          currentReport.option.name = data.hazard.name;
+          hazardOptionOutput.innerHTML = currentReport.option.name;
+        }, 50);
+
+        //******* display comment ******
+
+        commentInput.value = data.comment;
+        currentReport.comment = data.comment;
+        commentOutput.innerHTML = currentReport.comment;
+
+        //******* display pictures ******
+
+        data.images.forEach((imageUrl) => {
+          displayImages(imageUrl);
+        });
+
+        const displayImagesAreaReview = document.getElementById('imagesOutput');
+        data.images.forEach((imageUrl) => {
+          const imgElement = document.createElement('img');
+          imgElement.src = imageUrl;
+          displayImagesAreaReview.appendChild(imgElement);
+        });
+      } catch (error) {
+        console.log({ error });
+        const alert = new AlertPopup();
+        alert.show(
+          error.message || AlertPopup.SOMETHING_WENT_WRONG_MESSAGE,
+          AlertPopup.error,
+          6000
+        );
+      }
+    };
+
+    getCollection();
+  } else {
+    document.getElementById('updateReportBtn').style.display = 'none';
+    document.getElementById('saveReportBtn').style.display = 'initial';
+  }
+};
+
+const getAddressFromCoordinates = async (params) => {
+  try {
+    const data = await geocode(params, 'reverse-geocode');
+
+    const properties = data?.[0].properties;
+    const address = [properties?.address_line1, properties?.address_line2]
+      .filter((value) => !!value)
+      .join(' ');
+
+    return address;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+
 /**
  * Step 1: Location
  */
 
-if (map) {
-  map.on('click', onSelectLocation);
-}
-
-currentReport.location = {
-  lat: position.lat,
-  lng: position.lng,
-  address: 'Initial Address', //TODO: Get address
-};
-
-locationAddressInput.value = `${currentReport.location.address} (${currentReport.location.lat}, ${currentReport.location.lng})`;
-
-const onSelectLocation = (event) => {
-  map.removeLayer(marker);
-  map.setMarkerOnMap(event.latlng.lat, event.latlng.lng, 'Location selected', {
+const onSelectLocation = async (event) => {
+  mapInstance.setMarkerOnMap(event.latlng.lat, event.latlng.lng, {
     draggable: true,
   });
-
-  currentReport.location = {
-    lat: event.latlng.lat,
-    lng: event.latlng.lng,
-    address: 'Fake address', //TODO: Get address
-  };
+  await updateCurrentReportLocation(event.latlng);
 };
 
 /**
@@ -163,6 +258,7 @@ const getCategories = async () => {
           (category) => category.id === selectedCategoryId
         );
         currentReport.category.id = selectedCategoryId;
+        currentReport.category.name = category.name;
 
         const options = selectedCategory.options ?? [];
 
@@ -420,6 +516,7 @@ const displayImages = (base64File) => {
   imagesArea.append(img);
 
   currentReport.images.push(base64File);
+
   if (currentReport.images.length === 3) {
     document.getElementById('starCameraBtn').setAttribute('disabled', true);
     document.getElementById('dragAndDropArea').setAttribute('disabled', true);
@@ -448,22 +545,64 @@ showConfirmationBtn.addEventListener('click', () => {
 });
 
 /**
- * Submit Form
+ * Step 7: Submit Form
  */
 reportHazardForm.addEventListener('submit', async function (event) {
   event.preventDefault();
 
+  console.log({ currentReport });
   try {
-    if (!currentReport.images.length) {
-      const alert = new AlertPopup();
-      alert.show('Please upload at least one image', AlertPopup.warning);
-      window.location.hash = '#upload-photos';
+    const images = await uploadImageToStorage(currentReport.images);
+    //CREATE
+    if (!idReport) {
+      const response = await fetch(`${API_URL}/hazard-report`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId: user.id,
+          hazardOptionId: currentReport.option.id,
+          location: {
+            lat: currentReport.location.lat,
+            lng: currentReport.location.lng,
+            address: currentReport.location.address,
+          },
+          comment: currentReport.comment ?? '',
+          images: images,
+        }),
+      });
+
+      if (response.ok) {
+        await response.json();
+
+        const modal = new Modal();
+
+        const button = document.createElement('button');
+        button.setAttribute('id', 'open-modal-btn');
+        button.setAttribute('class', 'btn btn-primary');
+        button.addEventListener('click', () =>
+          window.location.replace('/pages/home')
+        );
+        button.innerHTML = 'Continue Exploring';
+
+        modal.show({
+          title: 'Your report has been submitted!',
+          description:
+            'Thank you for helping others have a safe camping experience.',
+          icon: { name: 'icon-check', color: '#000000', size: '3.5rem' },
+          actions: button,
+          enableOverlayClickClose: false,
+        });
+      } else {
+        throw new Error('Failed to create report');
+      }
       return;
     }
 
-    const images = await uploadImageToStorage(currentReport.images);
-    const response = await fetch(`${API_URL}/hazard-report`, {
-      method: 'POST',
+    //UPDATE
+    const response = await fetch(`${API_URL}/hazard-report?id=${idReport}`, {
+      method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -489,12 +628,12 @@ reportHazardForm.addEventListener('submit', async function (event) {
       button.setAttribute('id', 'open-modal-btn');
       button.setAttribute('class', 'btn btn-primary');
       button.addEventListener('click', () =>
-        window.location.replace('/pages/home')
+        window.location.replace('/pages/my-reports')
       );
-      button.innerHTML = 'Continue Exploring';
+      button.innerHTML = 'Back to My Reports';
 
       modal.show({
-        title: 'Your report has been submitted!',
+        title: 'Your report has been updated!',
         description:
           'Thank you for helping others have a safe camping experience.',
         icon: { name: 'icon-check', color: '#000000', size: '3.5rem' },
@@ -545,3 +684,168 @@ const uploadImageToStorage = async (images) => {
 
   return responses.map(({ data }) => data.url);
 };
+
+/**
+ *  Display nav
+ */
+
+//show buttons when continue
+const hazardCategoryElement = document.getElementById('hazardCategory');
+
+hazardCategoryElement.addEventListener('click', () => {
+  document.getElementById('hazardCategoryNav').style.display = 'block';
+});
+
+const hazardTypeeElement = document.getElementById('hazardType');
+
+hazardTypeeElement.addEventListener('click', () => {
+  document.getElementById('hazardTypeNav').style.display = 'block';
+});
+
+const hazardOptionElement = document.getElementById('selectHazardOptionLink');
+
+hazardOptionElement.addEventListener('click', () => {
+  document.getElementById('hazardDetailNav').style.display = 'block';
+});
+
+const hazardCommentElement = document.getElementById('uploadPicture');
+
+hazardCommentElement.addEventListener('click', () => {
+  document.getElementById('hazardUploadPhotosNav').style.display = 'block';
+});
+
+const hazardPhotoElement = document.getElementById('showConfirmationBtn');
+
+hazardPhotoElement.addEventListener('click', () => {
+  document.getElementById('hazardReviewReportNav').style.display = 'block';
+});
+
+//edit buttons
+const editLocationElement = document.getElementById('editLocation');
+
+editLocationElement.addEventListener('click', () => {
+  document.getElementById('hazardCategoryNav').style.display = 'none';
+  document.getElementById('hazardTypeNav').style.display = 'none';
+  document.getElementById('hazardDetailNav').style.display = 'none';
+  document.getElementById('hazardUploadPhotosNav').style.display = 'none';
+  document.getElementById('hazardReviewReportNav').style.display = 'none';
+});
+
+const editCategoryElement = document.getElementById('editCategory');
+
+editCategoryElement.addEventListener('click', () => {
+  document.getElementById('hazardTypeNav').style.display = 'none';
+  document.getElementById('hazardDetailNav').style.display = 'none';
+  document.getElementById('hazardUploadPhotosNav').style.display = 'none';
+  document.getElementById('hazardReviewReportNav').style.display = 'none';
+});
+
+const editTypeElement = document.getElementById('editType');
+
+editTypeElement.addEventListener('click', () => {
+  document.getElementById('hazardDetailNav').style.display = 'none';
+  document.getElementById('hazardUploadPhotosNav').style.display = 'none';
+  document.getElementById('hazardReviewReportNav').style.display = 'none';
+});
+
+const editDetailsElement = document.getElementById('editDetails');
+
+editDetailsElement.addEventListener('click', () => {
+  document.getElementById('hazardUploadPhotosNav').style.display = 'none';
+  document.getElementById('hazardReviewReportNav').style.display = 'none';
+});
+
+const editPhotosElement = document.getElementById('editPhotos');
+
+editPhotosElement.addEventListener('click', () => {
+  document.getElementById('hazardReviewReportNav').style.display = 'none';
+});
+
+//hide buttons when click on nav
+const hazardUploadPhotosNavElement = document.getElementById('selectLocation');
+
+hazardUploadPhotosNavElement.addEventListener('click', () => {
+  document.getElementById('hazardCategoryNav').style.display = 'none';
+  document.getElementById('hazardTypeNav').style.display = 'none';
+  document.getElementById('hazardDetailNav').style.display = 'none';
+  document.getElementById('hazardUploadPhotosNav').style.display = 'none';
+  document.getElementById('hazardReviewReportNav').style.display = 'none';
+});
+
+const hazardCategoryNavElement = document.getElementById('hazardCategoryNav');
+
+hazardCategoryNavElement.addEventListener('click', () => {
+  document.getElementById('hazardTypeNav').style.display = 'none';
+  document.getElementById('hazardDetailNav').style.display = 'none';
+  document.getElementById('hazardUploadPhotosNav').style.display = 'none';
+  document.getElementById('hazardReviewReportNav').style.display = 'none';
+});
+
+const hazardTypeNavElement = document.getElementById('hazardTypeNav');
+
+hazardTypeNavElement.addEventListener('click', () => {
+  document.getElementById('hazardDetailNav').style.display = 'none';
+  document.getElementById('hazardUploadPhotosNav').style.display = 'none';
+  document.getElementById('hazardReviewReportNav').style.display = 'none';
+});
+
+const hazardDetailNavElement = document.getElementById('hazardDetailNav');
+
+hazardDetailNavElement.addEventListener('click', () => {
+  document.getElementById('hazardUploadPhotosNav').style.display = 'none';
+  document.getElementById('hazardReviewReportNav').style.display = 'none';
+});
+
+const hazardUploadPhotosNavEl = document.getElementById(
+  'hazardUploadPhotosNav'
+);
+
+hazardUploadPhotosNavEl.addEventListener('click', () => {
+  document.getElementById('hazardReviewReportNav').style.display = 'none';
+});
+
+//Delete pictures
+var displayImagesArea = document.getElementById('displayImagesArea');
+var images = displayImagesArea.getElementsByTagName('img');
+const delete1Element = document.getElementById('delete1');
+
+delete1Element.addEventListener('click', () => {
+  var firstImage = images[0];
+  var noImageText = document.createElement('img');
+  displayImagesArea.replaceChild(noImageText, firstImage);
+
+  var index = 0;
+  if (index !== -1) {
+    currentReport.images[0] = null;
+  }
+  document.getElementById('delete1').style.display = 'none';
+});
+
+const delete2Element = document.getElementById('delete2');
+
+delete2Element.addEventListener('click', () => {
+  var secondImage = images[1];
+  var noImageText = document.createElement('img');
+  displayImagesArea.replaceChild(noImageText, secondImage);
+
+  var index = 1;
+  if (index !== -1) {
+    currentReport.images[1] = null;
+  }
+  document.getElementById('delete2').style.display = 'none';
+});
+
+const delete3Element = document.getElementById('delete3');
+
+delete3Element.addEventListener('click', () => {
+  var thirdImage = images[2];
+
+  var noImageText = document.createElement('img');
+  displayImagesArea.replaceChild(noImageText, thirdImage);
+
+  var index = 2;
+  if (index !== -1) {
+    currentReport.images[2] = null;
+  }
+  document.getElementById('delete3').style.display = 'none';
+});
