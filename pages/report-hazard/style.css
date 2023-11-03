@@ -1,38 +1,38 @@
 #map {
-	height: 400px;
-	width: 100%;
+  height: 400px;
+  width: 100%;
 }
 
 #dragAndDropArea,
 .custom-file-upload2 {
-	border: dashed;
+  border: dashed;
 }
 
 .custom-file-upload {
-	border: solid;
+  border: solid;
 }
 
 /* /For easy testing on a mobile browser, this property is temporary */
 
 #imagesFirstOutput2 > img {
-	display: grid;
-	grid-template-columns: 1fr;
+  display: grid;
+  grid-template-columns: 1fr;
 }
 
 img {
-	width: 10%;
-	height: auto;
+  width: 10%;
+  height: auto;
 }
 
-.breadbrumb-desktop{
-	display: none;
+.breadbrumb-desktop {
+  display: none;
 }
 
-@media screen and (min-width: 800px){
-	.breadbrumb-desktop{
-		display: block;
-	}
-	.back-button-mobile{
-		display: none;
-	}
+@media screen and (min-width: 800px) {
+  .breadbrumb-desktop {
+    display: block;
+  }
+  .back-button-mobile {
+    display: none;
+  }
 }
