@@ -1,8 +1,9 @@
 export const SearchBarSuggestionCard = ({ properties }) => {
   return `
     <div
-      class="sb-suggestion-item" 
-      data-value='${ JSON.stringify({ lat: properties?.lat , lng: properties?.lon }) }'>
+      class="sb-suggestion-item"
+        data-addr1='${ properties?.address_line1 }'
+        data-latlng='${ JSON.stringify({ lat: properties?.lat , lng: properties?.lon }) }'>
         <div class="sb-suggestion-item-wrapper">
           <img 
             class="sb-suggestion-icon"
@@ -30,13 +31,13 @@ const SearchBar = ({ categories }) => {
               placeholder="Search location"/>
           </div>
           <button 
-            class="sb-search-box--filter">
+            class="sb-search-box--filter-btn">
             <img src="/assets/icons/filters.svg"/>
           </button>
         </div>
 
         <div class="sb-suggestion">
-          <div class="sb-suggestion-wrapper"></div>
+          <div class="sb-suggestion-wrapper" style="display: none"></div>
         </div>
       </div>
 

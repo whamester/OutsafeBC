@@ -11,10 +11,10 @@ class Map {
     lng: -123.12,
   };
 
-  constructor(lat, lng, customConfig) {
+  constructor(lat, lng, customConfig={}) {
     this.map = L.map(Map.MAP_ID, { ...customConfig }).setView(
       [lat, lng],
-      Map.CURRENT_ZOOM
+      customConfig.CURRENT_ZOOM ?? Map.CURRENT_ZOOM
     );
 
     L.tileLayer(

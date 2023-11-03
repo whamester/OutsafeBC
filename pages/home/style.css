@@ -3,7 +3,23 @@
 @import url(../../assets/css/searchbar.css);
 
 body {
+  position: relative;
   overflow: hidden;
+}
+
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  border-bottom: none;
+  background-color: transparent;
+  width: 100%;
+}
+
+#header-content {
+  border-bottom: 1px solid var(--neutral-200, #e4e7ec);
+  background: var(--primary-900);
 }
 
 #root {
