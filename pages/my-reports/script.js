@@ -1,6 +1,6 @@
 import { API_URL } from '../../constants.js';
 // Helpers
-import MyReport from '../../assets/components/ReportCard.js';
+import MyReportCard from '../../assets/components/ReportCard.js';
 import { getUserSession } from '../../assets/helpers/storage.js';
 import loadIcons from '../../assets/helpers/load-icons.js';
 import injectHTML from '../../assets/helpers/inject-html.js';
@@ -77,7 +77,7 @@ async function displayRecentReports() {
   await getRecentReports();
 
   for (const report of recentReportArr) {
-    let hazardReport = new MyReport(
+    let hazardReport = new MyReportCard(
       report.id,
       report.hazardCategory.name,
       report.hazard.name,
@@ -123,7 +123,7 @@ async function displayOlderReports() {
   await getOlderReports();
 
   for (const report of olderReportArr) {
-    let hazardReport = new MyReport(
+    let hazardReport = new MyReportCard(
       report.id,
       report.hazardCategory.name,
       report.hazard.name,
