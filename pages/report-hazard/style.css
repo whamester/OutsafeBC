@@ -24,15 +24,15 @@ img {
 	height: auto;
 }
 
-.desktop{
+.breadbrumb-desktop{
 	display: none;
 }
 
 @media screen and (min-width: 800px){
-	.desktop{
+	.breadbrumb-desktop{
 		display: block;
 	}
-	.mobile{
+	.back-button-mobile{
 		display: none;
 	}
 }
