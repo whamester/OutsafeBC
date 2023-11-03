@@ -30,7 +30,7 @@
 <body id="report-hazard-body">
 
 	<main>
-		<nav>
+		<nav class="desktop">
 			<ul id="navMenu">
 				<li>
 					<a id="selectLocation" title="Select the location" href="#select-location">Select Location</a>
@@ -64,7 +64,7 @@
 				</li>
 			</ul>
 		</nav>
-		<button id="backButton">&lt; Back</button>
+		<button id="backButton" class="mobile">&lt; Back</button>
 
 		<form id="reportHazardForm">
 			<section id="select-location" class="page">
@@ -116,7 +116,7 @@
 						<button id="starCameraBtn" type="button" style="display:none"></button>
 						<!-- TODO// Add icon here -->
 						<span>Take a picture</span>
-						<span>at the hazard site? Click a picture to add in the report.</span>
+						<span>At the hazard site? Take a picture to add in the report.</span>
 					</label>
 					<br><br>
 
@@ -147,7 +147,7 @@
 							style="display:none;" />
 						<!-- TODO// Add icon here -->
 						Take a picture<br>
-						<span>At the hazard site? Click a picture to add in the report.</span>
+						<span>At the hazard site? Take a picture to add in the report.</span>
 					</label><br><br>
 					<label for="uploadPictureMobileInput" class="custom-file-upload2">
 						<input type="file" id="uploadPictureMobileInput" accept="image/jpeg, image/jpg, image/png"

@@ -23,3 +23,16 @@ img {
 	width: 10%;
 	height: auto;
 }
+
+.desktop{
+	display: none;
+}
+
+@media screen and (min-width: 800px){
+	.desktop{
+		display: block;
+	}
+	.mobile{
+		display: none;
+	}
+}

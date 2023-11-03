@@ -689,7 +689,7 @@ const uploadImageToStorage = async (images) => {
 };
 
 /**
- *  Display nav
+ *  Display nav (Breadcrumb)
  */
 
 //show buttons when continue
