@@ -266,8 +266,8 @@ const getCategories = async () => {
 
         populateHazardOptions(options, selectedOptionQuestion);
 
-        var enlace = document.getElementById("hazardType");
-        enlace.setAttribute("href", "#hazard-type");
+        var enlace = document.getElementById('hazardType');
+        enlace.setAttribute('onclick', 'location.href="#hazard-type"');
       });
 
       const label = document.createElement('label');
@@ -286,7 +286,7 @@ const getCategories = async () => {
     alert.show(
       error.message || AlertPopup.SOMETHING_WENT_WRONG_MESSAGE,
       AlertPopup.error
-    );
+      );
   }
 };
 
@@ -323,8 +323,8 @@ const populateHazardOptions = (options, selectedOptionQuestion) => {
         currentReport.option.id = event.target.value;
         currentReport.option.name = option.name;
 
-        var enlace = document.getElementById("selectHazardOptionLink");
-        enlace.setAttribute("href", "#additional-details");
+        var enlace = document.getElementById('selectHazardOptionLink');
+        enlace.setAttribute('onclick', 'location.href="#additional-details"');
       });
 
       const label = document.createElement('label');
@@ -710,16 +710,16 @@ hazardCategoryElement.addEventListener('click', () => {
 const hazardTypeeElement = document.getElementById('hazardType');
 
 hazardTypeeElement.addEventListener('click', () => {
-  if(currentReport.category.id != null){
-  document.getElementById('hazardTypeNav').style.display = 'block';
+  if (currentReport.category.id != null) {
+    document.getElementById('hazardTypeNav').style.display = 'block';
   }
 });
 
 const hazardOptionElement = document.getElementById('selectHazardOptionLink');
 
 hazardOptionElement.addEventListener('click', () => {
-  if(currentReport.option.id != null){
-  document.getElementById('hazardDetailNav').style.display = 'block';
+  if (currentReport.option.id != null) {
+    document.getElementById('hazardDetailNav').style.display = 'block';
   }
 });
 
@@ -910,7 +910,6 @@ document.getElementById('backButton').addEventListener('click', () => {
 /**
  *  Continue Button
  */
-console.log(currentReport.location)
-if (currentReport){
-
+console.log(currentReport.location);
+if (currentReport) {
 }
