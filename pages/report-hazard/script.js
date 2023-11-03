@@ -880,7 +880,7 @@ document.getElementById('backButton').addEventListener('click', () => {
       url.hash = previousHash;
       window.location.href = url.href;
     } else {
-      window.location.replace('/');
+      window.location.replace('/pages/home/index.html');
     }
   } else if (currentHash === '#additional-details') {
     const previousIndex = currentIndex - 2;
