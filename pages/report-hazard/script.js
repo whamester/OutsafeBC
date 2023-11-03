@@ -261,8 +261,9 @@ const getCategories = async () => {
         currentReport.category.name = category.name;
 
         const options = selectedCategory.options ?? [];
+		const electedOptionQuestion = selectedCategory.ui_settings.report_hazard_question ?? [];
 
-        populateHazardOptions(options);
+        populateHazardOptions(options, electedOptionQuestion);
       });
 
       const label = document.createElement('label');
@@ -291,7 +292,7 @@ getCategories();
  * Step 3: Hazard Options List
  */
 
-const populateHazardOptions = (options) => {
+const populateHazardOptions = (options, electedOptionQuestion) => {
   try {
     document.getElementById('hazard-option-content').innerHTML = '';
     if (options.length === 1) {
@@ -300,6 +301,8 @@ const populateHazardOptions = (options) => {
       skipHazardOption = true;
     }
 
+	document.getElementById('hazardTypeQuestion').innerHTML = electedOptionQuestion;
+	
     for (let i = 0; i < options.length; i++) {
       const option = options[i];
 
