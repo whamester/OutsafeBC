@@ -265,6 +265,9 @@ const getCategories = async () => {
           selectedCategory.ui_settings.report_hazard_question ?? [];
 
         populateHazardOptions(options, selectedOptionQuestion);
+
+        var enlace = document.getElementById("hazardType");
+        enlace.setAttribute("href", "#hazard-type");
       });
 
       const label = document.createElement('label');
@@ -319,6 +322,9 @@ const populateHazardOptions = (options, selectedOptionQuestion) => {
       radio.addEventListener('change', (event) => {
         currentReport.option.id = event.target.value;
         currentReport.option.name = option.name;
+
+        var enlace = document.getElementById("selectHazardOptionLink");
+        enlace.setAttribute("href", "#additional-details");
       });
 
       const label = document.createElement('label');
@@ -704,13 +710,17 @@ hazardCategoryElement.addEventListener('click', () => {
 const hazardTypeeElement = document.getElementById('hazardType');
 
 hazardTypeeElement.addEventListener('click', () => {
+  if(currentReport.category.id != null){
   document.getElementById('hazardTypeNav').style.display = 'block';
+  }
 });
 
 const hazardOptionElement = document.getElementById('selectHazardOptionLink');
 
 hazardOptionElement.addEventListener('click', () => {
+  if(currentReport.option.id != null){
   document.getElementById('hazardDetailNav').style.display = 'block';
+  }
 });
 
 const hazardCommentElement = document.getElementById('uploadPicture');
@@ -896,3 +906,11 @@ document.getElementById('backButton').addEventListener('click', () => {
     window.location.href = url.href;
   }
 });
+
+/**
+ *  Continue Button
+ */
+console.log(currentReport.location)
+if (currentReport){
+
+}
