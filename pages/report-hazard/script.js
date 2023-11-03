@@ -872,13 +872,27 @@ document.getElementById('backButton').addEventListener('click', () => {
   const currentHash = url.hash;
   const currentIndex = array.indexOf(currentHash);
 
-  if (currentIndex > 0) {
-    const previousIndex = currentIndex - 1;
+  if (currentReport.category.id != '01d364cd-5ba6-4386-a4fb-a0bef8c28a1d') {
+    if (currentIndex > 0) {
+      const previousIndex = currentIndex - 1;
+      const previousHash = array[previousIndex];
+
+      url.hash = previousHash;
+      window.location.href = url.href;
+    } else {
+      window.location.replace('/');
+    }
+  } else if (currentHash === '#additional-details') {
+    const previousIndex = currentIndex - 2;
     const previousHash = array[previousIndex];
 
     url.hash = previousHash;
     window.location.href = url.href;
   } else {
-    window.location.replace('/')
+    const previousIndex = currentIndex - 1;
+    const previousHash = array[previousIndex];
+
+    url.hash = previousHash;
+    window.location.href = url.href;
   }
 });
