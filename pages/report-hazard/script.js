@@ -852,3 +852,31 @@ delete3Element.addEventListener('click', () => {
   }
   document.getElementById('delete3').style.display = 'none';
 });
+
+/**
+ *  Back Button
+ */
+
+document.getElementById('backButton').addEventListener('click', () => {
+	const url = new URL(window.location.href)
+	const array = [
+		'#select-location',
+		'#hazard-category',
+		'#hazard-type',
+		'#additional-details',
+		'#upload-photos',
+		'#review-report',
+	]
+	const currentHash = url.hash
+	const currentIndex = array.indexOf(currentHash)
+
+	if (currentIndex > 0) {
+		const previousIndex = currentIndex - 1
+		const previousHash = array[previousIndex]
+
+		url.hash = previousHash
+		window.location.href = url.href
+	} else {
+		window.location.href = 'http://127.0.0.1:5500/pages/home/'
+	}
+})
