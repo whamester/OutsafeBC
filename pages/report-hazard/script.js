@@ -261,7 +261,8 @@ const getCategories = async () => {
         currentReport.category.name = category.name;
 
         const options = selectedCategory.options ?? [];
-		const electedOptionQuestion = selectedCategory.ui_settings.report_hazard_question ?? [];
+        const electedOptionQuestion =
+          selectedCategory.ui_settings.report_hazard_question ?? [];
 
         populateHazardOptions(options, electedOptionQuestion);
       });
@@ -301,8 +302,9 @@ const populateHazardOptions = (options, electedOptionQuestion) => {
       skipHazardOption = true;
     }
 
-	document.getElementById('hazardTypeQuestion').innerHTML = electedOptionQuestion;
-	
+    document.getElementById('hazardTypeQuestion').innerHTML =
+      electedOptionQuestion;
+
     for (let i = 0; i < options.length; i++) {
       const option = options[i];
 
@@ -858,25 +860,25 @@ delete3Element.addEventListener('click', () => {
  */
 
 document.getElementById('backButton').addEventListener('click', () => {
-	const url = new URL(window.location.href)
-	const array = [
-		'#select-location',
-		'#hazard-category',
-		'#hazard-type',
-		'#additional-details',
-		'#upload-photos',
-		'#review-report',
-	]
-	const currentHash = url.hash
-	const currentIndex = array.indexOf(currentHash)
+  const url = new URL(window.location.href);
+  const array = [
+    '#select-location',
+    '#hazard-category',
+    '#hazard-type',
+    '#additional-details',
+    '#upload-photos',
+    '#review-report',
+  ];
+  const currentHash = url.hash;
+  const currentIndex = array.indexOf(currentHash);
 
-	if (currentIndex > 0) {
-		const previousIndex = currentIndex - 1
-		const previousHash = array[previousIndex]
+  if (currentIndex > 0) {
+    const previousIndex = currentIndex - 1;
+    const previousHash = array[previousIndex];
 
-		url.hash = previousHash
-		window.location.href = url.href
-	} else {
-		window.location.href = 'http://127.0.0.1:5500/pages/home/'
-	}
-})
+    url.hash = previousHash;
+    window.location.href = url.href;
+  } else {
+    window.location.href = 'http://127.0.0.1:5500/pages/home/';
+  }
+});
