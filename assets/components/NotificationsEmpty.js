@@ -8,7 +8,7 @@ class NotificationsEmpty {
 
                 <div style="display:flex; flex-direction:column; gap:0.75rem;">
                         <h2 class="text-center">No notifications</h2>
-                        <p class="text-body-2 text-center" style="color:var(--neutral-600)">Go explore the nature<p>
+                        <p class="text-body-2 text-center" style="color:var(--neutral-600)">Go out and explore nature!<p>
                 </div>
         </div>
         

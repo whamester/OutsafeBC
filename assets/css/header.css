@@ -28,7 +28,7 @@ header {
 #avatar {
   width: 1.75rem;
   height: 1.75rem;
-  border-radius: 0.5rem;
+  border-radius: 0.8rem;
 }
 
 i[class^='icon-notification'] {
