@@ -15,7 +15,7 @@ const injectHeader = (params) => {
   injectHTML(params);
   loadIcons();
 
-  const notifications = getNotifications(user.id);
+  const notifications = user ? getNotifications(user.id) : [];
 
   const list = document.querySelector('#notifications-popup ul');
 
@@ -39,7 +39,7 @@ const injectHeader = (params) => {
 
   if (markAllAsReadAction) {
     markAllAsReadAction.addEventListener('click', () => {
-      const notifications = getNotifications(user.id);
+      const notifications = user ? getNotifications(user.id) : [];
 
       if (Array.isArray(notifications)) {
         notifications.forEach((notification) => {
@@ -86,7 +86,9 @@ export const displayNotificationItem = (report) => {
       detailsButton.addEventListener('click', () => {
         insertedElement.classList.add('notification__item--read');
         updateNotificationAsRead(user.id, report.id);
-        window.location.replace(`/pages/home/index.html?${report.id}`);
+        window.location.replace(
+          `/pages/home/index.html?id=${report.id}&open=true`
+        );
 
         checkIfAllNotificationsAreRead();
       });
@@ -101,7 +103,7 @@ export const checkIfAllNotificationsAreRead = () => {
   const noNotificationsIcon = document.getElementById('no-notifications');
   const withNotificationsIcon = document.getElementById('with-notifications');
 
-  const notifications = getNotifications(user.id);
+  const notifications = user ? getNotifications(user.id) : [];
 
   if (
     Array.isArray(notifications) &&

@@ -7,6 +7,15 @@ export const setUserSession = (user) => {
   }
 };
 
+export const updateUserSession = (user) => {
+  try {
+    const prev = getUserSession();
+    localStorage.setItem('user', JSON.stringify({ ...prev, ...user }));
+  } catch (error) {
+    console.debug(error);
+  }
+};
+
 export const getUserSession = () => {
   try {
     const user = localStorage.getItem('user');
@@ -33,7 +42,7 @@ const getNotificationsKey = (id) => `notifications-${id}`;
 
 export const addNotification = (userId, data) => {
   try {
-    const notifications = getNotifications();
+    const notifications = userId ? getNotifications(userId) : undefined;
     if (Array.isArray(notifications)) {
       localStorage.setItem(
         getNotificationsKey(userId),
@@ -49,7 +58,7 @@ export const addNotification = (userId, data) => {
 
 export const updateNotificationAsRead = (userId, id) => {
   try {
-    const notifications = getNotifications();
+    const notifications = userId ? getNotifications(userId) : [];
     if (Array.isArray(notifications)) {
       localStorage.setItem(
         getNotificationsKey(userId),

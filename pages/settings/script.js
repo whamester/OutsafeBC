@@ -2,11 +2,13 @@ import readImage from '../../assets/helpers/read-image.js';
 import {
   getUserSession,
   setUserSession,
+  updateUserSession,
 } from '../../assets/helpers/storage.js';
 import { API_URL } from '../../constants.js';
 
 import Header from '../../assets/components/Header.js';
 import injectHeader from '../../assets/helpers/inject-header.js';
+import AlertPopup from '../../assets/components/AlertPopup.js';
 
 const user = getUserSession();
 
@@ -264,6 +266,9 @@ getNotificationSettings();
 // Toggle push notification setting
 async function setNotificationSettings() {
   try {
+    if (!userID) {
+      return;
+    }
     const response = await fetch(`${API_URL}/notification?user_id=${userID}`, {
       method: 'PUT',
       headers: {
@@ -281,8 +286,18 @@ async function setNotificationSettings() {
       return;
     }
 
+    updateUserSession({
+      notifications_enabled: !!pushNotificationSwitch.checked,
+    });
+
+    const alert = new AlertPopup();
+    alert.show(
+      `Notifications turned ${!!pushNotificationSwitch.checked ? 'on' : 'off'}`
+    );
     console.log('Notifications turned on', data, message);
   } catch (error) {
+    const alert = new AlertPopup();
+    alert.show(AlertPopup.SOMETHING_WENT_WRONG_MESSAGE, AlertPopup.error);
     console.log('Notifications turned off', error);
   }
 }

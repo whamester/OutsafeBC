@@ -20,7 +20,7 @@ const hidePw = document.getElementById('hide-pw');
 window.onload = function () {
   // Inject Header
   injectHeader([
-    { func: Header, target: '#home-body', position: 'afterbegin' },
+    { func: Header, target: '#login-body', position: 'afterbegin' },
   ]);
 
   const user = getUserSession();
