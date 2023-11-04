@@ -1,64 +1,45 @@
-import ReportCard from '../helpers/card-container.js'
-import ToggleSwitch from '../components/ToggleSwitch.js'
+import ReportCard from '../helpers/card-container.js';
+import ToggleSwitch from '../components/ToggleSwitch.js';
 
 class MyReportCard extends ReportCard {
-	constructor(id, category, hazard, location, date, photos, comment) {
-		super(id, category, hazard, location, date, photos, comment)
-	}
+  constructor(id, category, hazard, location, date, photos, comment) {
+    super(id, category, hazard, location, date, photos, comment);
+  }
 
-	static formatDate(inputDate) {
-		const date = new Date(inputDate)
+  reportContent() {
+    const dateObj = new Date(this.date);
+    const date = dateObj.toLocaleString('default', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    });
+    const time = dateObj.toLocaleTimeString('default', {
+      hour: '2-digit',
+      minute: '2-digit',
+      timeZoneName: 'short',
+    });
 
-		const monthNames = [
-			'January',
-			'February',
-			'March',
-			'April',
-			'May',
-			'June',
-			'July',
-			'August',
-			'September',
-			'October',
-			'November',
-			'December',
-		]
+    let photos = this.photos;
+    let gallery = document.createElement('div');
+    gallery.setAttribute('id', 'report-card__picture-container');
 
-		const day = date.getUTCDate()
-		const month = monthNames[date.getUTCMonth()]
-		const year = date.getUTCFullYear()
+    for (const pic of photos) {
+      let image = document.createElement('img');
+      image.src = pic;
+      gallery.appendChild(image);
+    }
 
-		const formattedDate = `${day} ${month} ${year}`
-
-		return formattedDate
-	}
-
-	reportContent() {
-		let inputDateString = this.date
-		let date = MyReportCard.formatDate(inputDateString)
-		let time = inputDateString.substring(11, 16)
-
-		let photos = this.photos
-		let gallery = document.createElement('div')
-		gallery.setAttribute('id', 'report-card__picture-container')
-
-		for (const pic of photos) {
-			let image = document.createElement('img')
-			image.src = pic
-			gallery.appendChild(image)
-		}
-
-		let divOuter = document.createElement('div')
-		divOuter.setAttribute('id', `reportCard${this.id}`)
-		divOuter.setAttribute('class', `report-card__outer`)
-		let divInner = document.createElement('div')
-		divInner.setAttribute('class', `report-card__inner`)
-		divInner.innerHTML = `
+    let divOuter = document.createElement('div');
+    divOuter.setAttribute('id', `reportCard${this.id}`);
+    divOuter.setAttribute('class', `report-card__outer`);
+    let divInner = document.createElement('div');
+    divInner.setAttribute('class', `report-card__inner`);
+    divInner.innerHTML = `
 		<div class="report-card__heading">
 			<span class="btn__icon report-card__heading__icon">
 				<i class="icon-${
-					this.category
-				}-filled" style="width:24px; height:24px; background-color: white"></i>
+          this.category
+        }-filled" style="width:24px; height:24px; background-color: white"></i>
 			</span>
         	<p class="text-body-1 semibold">${this.hazard}</p>
 		</div>
@@ -100,11 +81,11 @@ class MyReportCard extends ReportCard {
 				Edit Report
 			</button>
 		</div>
-        `
-		divInner.querySelector('#report-card__image-gallery').appendChild(gallery)
-		divOuter.appendChild(divInner)
-		return divOuter
-	}
+        `;
+    divInner.querySelector('#report-card__image-gallery').appendChild(gallery);
+    divOuter.appendChild(divInner);
+    return divOuter;
+  }
 }
 
-export default MyReportCard
+export default MyReportCard;
