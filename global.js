@@ -29,7 +29,6 @@ if ('serviceWorker' in navigator) {
     });
 
     const user = getUserSession();
-    console.log(user);
 
     beamsClient
       .start()
@@ -39,9 +38,10 @@ if ('serviceWorker' in navigator) {
       )
       .then((data) =>
         user?.notifications_enabled
-          ? beamsClient.addDeviceInterest('all')
+          ? beamsClient.addDeviceInterest(user?.id)
           : data
       )
+      .then(() => beamsClient.removeDeviceInterest('all'))
       .then(() => beamsClient.getDeviceInterests())
       .then((interests) => console.log('Current interests:', interests))
       .catch(console.error);
