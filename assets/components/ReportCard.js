@@ -76,7 +76,7 @@ class MyReportCard extends ReportCard {
 
 		<div class="report-card__my-reports-buttons">
 			${ToggleSwitch(this.id)}
-			<button class="btn btn-tertiary text-body-3 medium" id="${this.id}">
+			<button class="btn btn-tertiary text-body-3 medium" onclick="window.location.href='/pages/report-hazard/index.html?id=${this.id}'">
 				<i class="icon-edit"></i>
 				Edit Report
 			</button>
