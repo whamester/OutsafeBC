@@ -1,4 +1,4 @@
-import { getUserSession } from './assets/helpers/storage';
+import { getUserSession } from './assets/helpers/storage.js';
 
 self.addEventListener('install', (event) => {
   // console.log("Service worker installed",event)
