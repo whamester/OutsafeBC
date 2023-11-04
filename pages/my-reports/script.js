@@ -3,11 +3,13 @@ import { API_URL } from '../../constants.js';
 import MyReportCard from '../../assets/components/ReportCard.js';
 import { getUserSession } from '../../assets/helpers/storage.js';
 import loadIcons from '../../assets/helpers/load-icons.js';
-import injectHTML from '../../assets/helpers/inject-html.js';
+import injectHeader from '../../assets/helpers/inject-header.js';
 // Components
 import Header from '../../assets/components/Header.js';
 import AlertPopup from '../../assets/components/AlertPopup.js';
 import { onToggle } from '../../assets/components/ToggleSwitch.js';
+import ReportsEmpty from '../../assets/components/ReportsEmpty.js';
+
 
 // Variables
 const user = getUserSession();
@@ -20,13 +22,14 @@ const olderReports = document.getElementById('olderReports');
 const recentBtn = document.getElementById('recentReportsBtn');
 const olderBtn = document.getElementById('olderReportsBtn');
 const alert = new AlertPopup();
+const empty = new ReportsEmpty();
 
 /**
  * Page Init
  */
 window.onload = function () {
   // Inject Header
-  injectHTML([
+  injectHeader([
     { func: Header, target: '#myReportsBody', position: 'afterbegin' },
   ]);
 
@@ -75,27 +78,30 @@ async function getRecentReports() {
 
 async function displayRecentReports() {
   await getRecentReports();
+  if (recentReportArr.length < 1) {
+    recentReports.innerHTML = empty.getHTML();
+  } else {
+    for (const report of recentReportArr) {
+      let hazardReport = new MyReportCard(
+        report.id,
+        report.hazardCategory.name,
+        report.hazard.name,
+        report.location.address,
+        report.created_at,
+        report.images,
+        report.comment
+      );
+      recentReports.appendChild(hazardReport.reportContent());
 
-  for (const report of recentReportArr) {
-    let hazardReport = new MyReportCard(
-      report.id,
-      report.hazardCategory.name,
-      report.hazard.name,
-      report.location.address,
-      report.created_at,
-      report.images,
-      report.comment
-    );
-    recentReports.appendChild(hazardReport.reportContent());
-
-    document.querySelectorAll('[id^=ts]').forEach((toggleSwitch) => {
-      toggleSwitch.addEventListener('change', (e) => {
-        onToggle(e);
-        // TODO: API call
+      document.querySelectorAll('[id^=ts]').forEach((toggleSwitch) => {
+        toggleSwitch.addEventListener('change', (e) => {
+          onToggle(e);
+          // TODO: API call
+        });
       });
-    });
 
-    loadIcons();
+      loadIcons();
+    }
   }
 }
 
@@ -122,18 +128,22 @@ async function getOlderReports() {
 async function displayOlderReports() {
   await getOlderReports();
 
-  for (const report of olderReportArr) {
-    let hazardReport = new MyReportCard(
-      report.id,
-      report.hazardCategory.name,
-      report.hazard.name,
-      report.location.address,
-      report.created_at,
-      report.images,
-      report.comment
-    );
-    olderReports.appendChild(hazardReport.reportContent());
-    loadIcons();
+  if (olderReportArr.length < 1) {
+    olderReports.innerHTML = empty.getHTML();
+  } else {
+    for (const report of olderReportArr) {
+      let hazardReport = new MyReportCard(
+        report.id,
+        report.hazardCategory.name,
+        report.hazard.name,
+        report.location.address,
+        report.created_at,
+        report.images,
+        report.comment
+      );
+      olderReports.appendChild(hazardReport.reportContent());
+      loadIcons();
+    }
   }
   olderReportClicked = true;
 }
