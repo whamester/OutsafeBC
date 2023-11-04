@@ -80,6 +80,8 @@ const updateCurrentReportLocation = async (params) => {
   };
 
   locationAddressInput.value = `${currentReport.location.address} (${currentReport.location.lat}, ${currentReport.location.lng})`;
+  var enlace = document.getElementById('hazardCategory');
+  enlace.setAttribute('onclick', 'location.href="#hazard-category"');
 };
 
 const displayCurrentSection = () => {
@@ -261,8 +263,13 @@ const getCategories = async () => {
         currentReport.category.name = category.name;
 
         const options = selectedCategory.options ?? [];
+        const selectedOptionQuestion =
+          selectedCategory.ui_settings.report_hazard_question ?? [];
 
-        populateHazardOptions(options);
+        populateHazardOptions(options, selectedOptionQuestion);
+
+        var enlace = document.getElementById('hazardType');
+        enlace.setAttribute('onclick', 'location.href="#hazard-type"');
       });
 
       const label = document.createElement('label');
@@ -291,7 +298,7 @@ getCategories();
  * Step 3: Hazard Options List
  */
 
-const populateHazardOptions = (options) => {
+const populateHazardOptions = (options, selectedOptionQuestion) => {
   try {
     document.getElementById('hazard-option-content').innerHTML = '';
     if (options.length === 1) {
@@ -299,6 +306,9 @@ const populateHazardOptions = (options) => {
       currentReport.option.name = options[0].name;
       skipHazardOption = true;
     }
+
+    document.getElementById('hazardTypeQuestion').innerHTML =
+      selectedOptionQuestion;
 
     for (let i = 0; i < options.length; i++) {
       const option = options[i];
@@ -314,6 +324,9 @@ const populateHazardOptions = (options) => {
       radio.addEventListener('change', (event) => {
         currentReport.option.id = event.target.value;
         currentReport.option.name = option.name;
+
+        var enlace = document.getElementById('selectHazardOptionLink');
+        enlace.setAttribute('onclick', 'location.href="#additional-details"');
       });
 
       const label = document.createElement('label');
@@ -341,6 +354,9 @@ const populateHazardOptions = (options) => {
 commentInput.addEventListener('change', (event) => {
   currentReport.comment = event.target.value;
 });
+
+var enlace = document.getElementById('uploadPicture');
+enlace.setAttribute('onclick', 'location.href="#upload-photos"');
 
 /**
  * Step 5: Images
@@ -527,6 +543,9 @@ const displayImages = (base64File) => {
     stopCamera();
   }
 };
+
+var enlace = document.getElementById('showConfirmationBtn');
+enlace.setAttribute('onclick', 'location.href="#review-report"');
 //#endregion
 
 /**
@@ -686,7 +705,7 @@ const uploadImageToStorage = async (images) => {
 };
 
 /**
- *  Display nav
+ *  Display nav (Breadcrumb)
  */
 
 //show buttons when continue
@@ -699,13 +718,17 @@ hazardCategoryElement.addEventListener('click', () => {
 const hazardTypeeElement = document.getElementById('hazardType');
 
 hazardTypeeElement.addEventListener('click', () => {
-  document.getElementById('hazardTypeNav').style.display = 'block';
+  if (currentReport.category.id != null) {
+    document.getElementById('hazardTypeNav').style.display = 'block';
+  }
 });
 
 const hazardOptionElement = document.getElementById('selectHazardOptionLink');
 
 hazardOptionElement.addEventListener('click', () => {
-  document.getElementById('hazardDetailNav').style.display = 'block';
+  if (currentReport.option.id != null) {
+    document.getElementById('hazardDetailNav').style.display = 'block';
+  }
 });
 
 const hazardCommentElement = document.getElementById('uploadPicture');
@@ -848,4 +871,46 @@ delete3Element.addEventListener('click', () => {
     currentReport.images[2] = null;
   }
   document.getElementById('delete3').style.display = 'none';
+});
+
+/**
+ *  Back Button
+ */
+
+document.getElementById('backButton').addEventListener('click', () => {
+  const url = new URL(window.location.href);
+  const array = [
+    '#select-location',
+    '#hazard-category',
+    '#hazard-type',
+    '#additional-details',
+    '#upload-photos',
+    '#review-report',
+  ];
+  const currentHash = url.hash;
+  const currentIndex = array.indexOf(currentHash);
+
+  if (currentReport.category.id != '01d364cd-5ba6-4386-a4fb-a0bef8c28a1d') {
+    if (currentIndex > 0) {
+      const previousIndex = currentIndex - 1;
+      const previousHash = array[previousIndex];
+
+      url.hash = previousHash;
+      window.location.href = url.href;
+    } else {
+      window.location.replace('/pages/home/index.html');
+    }
+  } else if (currentHash === '#additional-details') {
+    const previousIndex = currentIndex - 2;
+    const previousHash = array[previousIndex];
+
+    url.hash = previousHash;
+    window.location.href = url.href;
+  } else {
+    const previousIndex = currentIndex - 1;
+    const previousHash = array[previousIndex];
+
+    url.hash = previousHash;
+    window.location.href = url.href;
+  }
 });
