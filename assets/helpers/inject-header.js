@@ -13,7 +13,6 @@ const user = getUserSession();
 
 const injectHeader = (params) => {
   injectHTML(params);
-  loadIcons();
 
   const notifications = user ? getNotifications(user.id) : [];
 
@@ -58,6 +57,8 @@ const injectHeader = (params) => {
       }
     });
   }
+
+  loadIcons();
 };
 
 export const displayNotificationItem = (report) => {
