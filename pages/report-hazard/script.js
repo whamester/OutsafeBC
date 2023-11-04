@@ -13,8 +13,8 @@ import Modal from '../../assets/components/Modal.js';
 //Helpers
 import { getUserSession } from '../../assets/helpers/storage.js';
 import readImage from '../../assets/helpers/read-image.js';
-import injectHTML from '../../assets/helpers/inject-html.js';
 import geocode from '../../assets/helpers/geocode.js';
+import injectHeader from '../../assets/helpers/inject-header.js';
 
 //Variable Declaration
 const currentReport = new ReportForm();
@@ -38,7 +38,7 @@ window.onload = async function () {
       return;
     }
 
-    injectHTML([
+    injectHeader([
       { func: Header, target: '#report-hazard-body', position: 'afterbegin' },
     ]);
 
