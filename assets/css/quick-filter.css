@@ -1,0 +1,52 @@
+[id^='quick-filter-'] {
+  border-radius: 0.5rem;
+  border: 1px solid var(--neutral-300, #d0d5dd);
+  background: var(--white, #fff);
+  box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.15);
+
+  display: inline-flex;
+  padding: 0.5rem;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+[id^='quick-filter-'] .quick-filter__name {
+  color: var(--neutral-500);
+}
+
+[id^='quick-filter-'] .quick-filter__icon {
+  background-color: var(--neutral-500);
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+[id^='quick-filter-']:hover {
+  border-radius: 0.5rem;
+  border: 1px solid var(--neutral-500, #667185);
+  background: var(--white, #fff);
+  box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.15);
+}
+
+[id^='quick-filter-']:hover .quick-filter__name {
+  color: var(--neutral-700);
+}
+
+[id^='quick-filter-']:hover .quick-filter__icon {
+  background-color: var(--neutral-700);
+}
+
+[id^='quick-filter-'].selected {
+  border-radius: 0.5rem;
+  background: var(--primary-900, #0f1815);
+  box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.15);
+}
+
+[id^='quick-filter-'].selected .quick-filter__name {
+  color: var(--white);
+}
+
+[id^='quick-filter-'].selected .quick-filter__icon {
+  background-color: var(--white);
+}
+
+/* TODO: Styles for Desktop here */

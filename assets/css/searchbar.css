@@ -1,5 +1,7 @@
 .sb {
   background-color: transparent;
+  position: absolute;
+  z-index: 2;
 }
 
 .sb-search {
@@ -93,6 +95,8 @@
   overflow-x: auto;
   scrollbar-width: none;
   white-space: nowrap;
+  display: flex;
+  gap: 0.5rem;
 }
 
 .sb-suggestion-wrapper::-webkit-scrollbar,
@@ -149,5 +153,4 @@
     transform: none;
     width: 248px;
   }
-
 }

@@ -1,13 +1,14 @@
 @import url(../../assets/css/hazard-card.css);
 @import url(../../assets/css/modal-filter.css);
 @import url(../../assets/css/searchbar.css);
+@import url(../../assets/css/quick-filter.css);
 
 body {
   position: relative;
   overflow: hidden;
 }
 
-header {
+/* header {
   position: fixed;
   top: 0;
   left: 0;
@@ -15,6 +16,11 @@ header {
   border-bottom: none;
   background-color: transparent;
   width: 100%;
+} */
+
+#search-bar {
+  width: 100%;
+  position: relative;
 }
 
 #header-content {
