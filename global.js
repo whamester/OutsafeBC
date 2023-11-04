@@ -1,5 +1,6 @@
 import errorInputHelper from './assets/helpers/error-input-helper.js';
 import loadIcons from './assets/helpers/load-icons.js';
+import { getUserSession } from './assets/helpers/storage.js';
 
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker
@@ -27,13 +28,20 @@ if ('serviceWorker' in navigator) {
       serviceWorkerRegistration: registration,
     });
 
+    const user = getUserSession();
+    console.log(user);
+
     beamsClient
       .start()
       .then((beamsClient) => beamsClient.getDeviceId())
       .then((deviceId) =>
         console.log('Successfully registered with Beams. Device ID:', deviceId)
       )
-      .then(() => beamsClient.addDeviceInterest('all'))
+      .then((data) =>
+        user?.notifications_enabled
+          ? beamsClient.addDeviceInterest('all')
+          : data
+      )
       .then(() => beamsClient.getDeviceInterests())
       .then((interests) => console.log('Current interests:', interests))
       .catch(console.error);
