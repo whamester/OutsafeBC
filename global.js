@@ -47,6 +47,7 @@ if ('serviceWorker' in navigator) {
       )
       .then(() => beamsClient.removeDeviceInterest('all'))
       .then(() => beamsClient.getDeviceInterests())
+      .then((data) => (!user ? beamsClient.clearDeviceInterests() : data))
       .then((interests) => console.log('Current interests:', interests))
       .catch(console.error);
   });
