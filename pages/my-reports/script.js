@@ -3,12 +3,13 @@ import { API_URL } from '../../constants.js';
 import MyReportCard from '../../assets/components/ReportCard.js';
 import { getUserSession } from '../../assets/helpers/storage.js';
 import loadIcons from '../../assets/helpers/load-icons.js';
-import injectHTML from '../../assets/helpers/inject-html.js';
+import injectHeader from '../../assets/helpers/inject-header.js';
 // Components
 import Header from '../../assets/components/Header.js';
 import AlertPopup from '../../assets/components/AlertPopup.js';
 import { onToggle } from '../../assets/components/ToggleSwitch.js';
 import ReportsEmpty from '../../assets/components/ReportsEmpty.js';
+
 
 // Variables
 const user = getUserSession();
@@ -28,7 +29,7 @@ const empty = new ReportsEmpty();
  */
 window.onload = function () {
   // Inject Header
-  injectHTML([
+  injectHeader([
     { func: Header, target: '#myReportsBody', position: 'afterbegin' },
   ]);
 
