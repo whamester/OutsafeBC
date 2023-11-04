@@ -914,3 +914,34 @@ document.getElementById('backButton').addEventListener('click', () => {
     window.location.href = url.href;
   }
 });
+
+/**
+ *  Reload when is even
+ */
+
+var reloadCount = parseInt(getCookie('reloadCount')) || 0;
+
+reloadCount++;
+
+setCookie('reloadCount', reloadCount, 365);
+console.log(reloadCount);
+// Redirect only on even recharges
+if (reloadCount % 2 === 0) {
+  window.location.href = '/pages/home/index.html';
+}
+
+function getCookie(name) {
+  var value = '; ' + document.cookie;
+  var parts = value.split('; ' + name + '=');
+  if (parts.length == 2) return parts.pop().split(';').shift();
+}
+
+function setCookie(name, value, days) {
+  var expires = '';
+  if (days) {
+    var date = new Date();
+    date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+    expires = '; expires=' + date.toUTCString();
+  }
+  document.cookie = name + '=' + value + expires + '; path=/';
+}
