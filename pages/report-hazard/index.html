@@ -109,20 +109,17 @@
             <div id="map"></div>
           </div>
 
-          <a id="hazardCategory" href="#hazard-category">Continue</a>
+          <button type="button" id="hazardCategory" class="btn btn-primary">
+            Continue
+            <span class="btn__icon">
+              <i class="icon-arrow-right"></i>
+            </span>
+          </button>
         </section>
 
         <section id="hazard-category" class="page">
           <h1>2. What type of hazard would you like to report?</h1>
           <div id="hazard-category-content"></div>
-          <!-- <a id="hazardType" href="#hazard-type">Continue</a> -->
-
-          <!-- <a id="hazardType" class="btn btn-primary">
-            Continue
-            <span class="btn__icon">
-              <i class="icon-arrow-right"></i>
-            </span>
-          </a> -->
 
           <button type="button" id="hazardType" class="btn btn-primary">
             Continue
@@ -135,22 +132,17 @@
         <section id="hazard-type" class="page">
           <h1 id="hazardTypeQuestion"></h1>
           <div id="hazard-option-content"></div>
-          <!-- <a id="selectHazardOptionLink" href="#additional-details">Continue</a> -->
-          
-          <!-- <a id="selectHazardOptionLink" class="btn btn-primary">
-            Continue
-            <span class="btn__icon">
-              <i class="icon-arrow-right"></i>
-            </span>
-          </a> -->
 
-          <button type="button" id="selectHazardOptionLink" class="btn btn-primary">
+          <button
+            type="button"
+            id="selectHazardOptionLink"
+            class="btn btn-primary"
+          >
             Continue
             <span class="btn__icon">
               <i class="icon-arrow-right"></i>
             </span>
           </button>
-
         </section>
 
         <section id="additional-details" class="page">
@@ -160,7 +152,12 @@
             <textarea id="commentInput"></textarea>
           </div>
 
-          <a id="uploadPicture" href="#upload-photos">Continue</a>
+          <button type="button" id="uploadPicture" class="btn btn-primary">
+            Continue
+            <span class="btn__icon">
+              <i class="icon-arrow-right"></i>
+            </span>
+          </button>
         </section>
 
         <section id="upload-photos" class="page">
@@ -248,7 +245,16 @@
           <input id="delete2" type="reset" value="2" />
           <input id="delete3" type="reset" value="3" />
 
-          <a href="#review-report" id="showConfirmationBtn">Continue</a>
+          <button
+            type="button"
+            id="showConfirmationBtn"
+            class="btn btn-primary"
+          >
+            Continue
+            <span class="btn__icon">
+              <i class="icon-arrow-right"></i>
+            </span>
+          </button>
         </section>
 
         <section id="review-report" class="page">

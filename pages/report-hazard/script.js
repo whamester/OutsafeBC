@@ -80,6 +80,8 @@ const updateCurrentReportLocation = async (params) => {
   };
 
   locationAddressInput.value = `${currentReport.location.address} (${currentReport.location.lat}, ${currentReport.location.lng})`;
+  var enlace = document.getElementById('hazardCategory');
+  enlace.setAttribute('onclick', 'location.href="#hazard-category"');
 };
 
 const displayCurrentSection = () => {
@@ -286,7 +288,7 @@ const getCategories = async () => {
     alert.show(
       error.message || AlertPopup.SOMETHING_WENT_WRONG_MESSAGE,
       AlertPopup.error
-      );
+    );
   }
 };
 
@@ -352,6 +354,9 @@ const populateHazardOptions = (options, selectedOptionQuestion) => {
 commentInput.addEventListener('change', (event) => {
   currentReport.comment = event.target.value;
 });
+
+var enlace = document.getElementById('uploadPicture');
+enlace.setAttribute('onclick', 'location.href="#upload-photos"');
 
 /**
  * Step 5: Images
@@ -538,6 +543,9 @@ const displayImages = (base64File) => {
     stopCamera();
   }
 };
+
+var enlace = document.getElementById('showConfirmationBtn');
+enlace.setAttribute('onclick', 'location.href="#review-report"');
 //#endregion
 
 /**
@@ -906,10 +914,3 @@ document.getElementById('backButton').addEventListener('click', () => {
     window.location.href = url.href;
   }
 });
-
-/**
- *  Continue Button
- */
-console.log(currentReport.location);
-if (currentReport) {
-}
