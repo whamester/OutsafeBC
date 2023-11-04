@@ -8,6 +8,7 @@ import HazardCard from '../../assets/components/HazardCard.js';
 import ModalFilter from '../../assets/components/ModalFilter.js';
 //Helpers
 import injectHTML from '../../assets/helpers/inject-html.js';
+import injectHeader from '../../assets/helpers/inject-header.js';
 import apiRequest from '../../assets/helpers/api-request.js';
 import debounce from '../../assets/helpers/debounce.js';
 import geocode from '../../assets/helpers/geocode.js';
@@ -175,8 +176,9 @@ const searchBarParams = {
   categories: categories.data,
 };
 
+injectHeader([{ func: Header, target: '#home-body', position: 'afterbegin' }]);
+
 injectHTML([
-  { func: Header, target: '#home-body', position: 'afterbegin' },
   { func: GeoMap },
   { func: SearchBar, args: searchBarParams, target: 'header' },
   { func: ModalFilter, args: searchBarParams.categories },

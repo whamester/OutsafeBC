@@ -1,0 +1,7 @@
+.badge {
+  width: 0.625rem;
+  height: 0.625rem;
+  background-color: var(--success-500);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
