@@ -89,7 +89,8 @@ async function displayRecentReports() {
         report.location.address,
         report.created_at,
         report.images,
-        report.comment
+        report.comment,
+        report.hazardCategory.settings
       );
       recentReports.appendChild(hazardReport.reportContent());
 
@@ -139,7 +140,8 @@ async function displayOlderReports() {
         report.location.address,
         report.created_at,
         report.images,
-        report.comment
+        report.comment,
+        report.hazardCategory.settings
       );
       olderReports.appendChild(hazardReport.reportContent());
       loadIcons();
