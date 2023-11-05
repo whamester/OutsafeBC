@@ -40,8 +40,7 @@ const categories = await apiRequest(`hazard-category`, { method: 'GET' });
 const markerParams = {
   event: 'click',
   func: async (idx) => {
-    await getReports(position.lat, position.lng);
-    const cardWrapper = document.querySelector('.sb-cards-wrapper');
+    await getReports(position.lat, position.lng, categoryFilters);
     const card = document.getElementById(`sb-card-${idx + 1}`);
 
     card.scrollIntoView({
@@ -49,6 +48,12 @@ const markerParams = {
       behavior: 'smooth',
     });
   },
+};
+
+const removePreviousMarkers = () => {
+  Object.keys(geoMap.mapLayers).forEach(key => {
+    geoMap.map.removeLayer(geoMap.mapLayers[key])
+  })
 };
 
 const closeSearchSuggestion = (e) => {
@@ -120,6 +125,8 @@ const quickFiltersOnClick = async({ target }) => {
       // clear previous reports
       hazardCardParams['reports'] = [];
       document.querySelector('.btn-report-hazard').style.display = 'flex';
+      removePreviousMarkers();
+      await getReportApiCall(position.lat, position.lng, categoryFilters);
       return;
     }
 
@@ -136,11 +143,9 @@ const quickFiltersOnClick = async({ target }) => {
 const getReports = async (lat, lng, categoryFilters=[],cursor = 0) => {
   document.querySelector('.btn-report-hazard').style.display = 'none';
   document.querySelector('.sb-cards')?.remove();
+  removePreviousMarkers();
 
   await getReportApiCall(lat, lng, categoryFilters, cursor);
-  Object.keys(geoMap.mapLayers)?.forEach((key) => {
-    geoMap.map?.removeLayer(geoMap.mapLayers[key]);
-  });
   injectHTML([
     { func: HazardCard, args: hazardCardParams, target: '#hazard-comp' },
   ]);
@@ -152,7 +157,7 @@ const watchGeoLocationSuccess = async ({ coords }) => {
   const lat = coords?.latitude;
   const lng = coords?.longitude;
   geoMap.setMarkerOnMap(lat, lng);
-  await getReportApiCall(lat, lng);
+  await getReportApiCall(lat, lng, categoryFilters);
 
   // update current user position 
   position = {
@@ -174,6 +179,7 @@ const watchGeoLocationError = async (err) => {
     `ERROR(${err.code}): ${err.message}`,
     AlertPopup.error
   );
+  await getReportApiCall(position.lat, position.lng, categoryFilters);
 };
 
 const loadGeolocation = async () => {
