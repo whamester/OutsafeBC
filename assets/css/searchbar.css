@@ -15,29 +15,28 @@
 
 .sb-search-box {
   display: flex;
-  align-items: center;
   position: relative;
+  align-items: center;
   margin-right: 12px;
   box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.15);
   border: 1px solid var(--neutral-300);
-  background-color: var(--white);
   border-radius: 8px;
+  background-color: var(--white);
   padding-right: 15px;
   width: calc(100% - 12px - 44px);
   height: 44px;
 }
 
 .sb-search-box--icon {
+  margin-left: 10px;
   width: 20px;
   height: 20px;
-  margin-left: 10px;
 }
 
 .sb-search-box--input {
   outline: none;
   border: none;
   background-color: transparent;
-  width: 100%;
   height: 100%;
   text-indent: 2px;
 }
@@ -48,6 +47,8 @@
   border: 1px solid var(--neutral-200);
   border-radius: 8px;
   background-color: var(--white);
+  width: 44px;
+  height: 44px;
 }
 
 .sb-suggestion {
@@ -57,6 +58,9 @@
 }
 
 .sb-suggestion-wrapper {
+  box-shadow: 0px 2px 1px 0px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--neutral-300);
+  border-radius: 12px;
   background-color: var(--white);
   scrollbar-width: none;
   white-space: nowrap;
@@ -80,6 +84,10 @@
   height: 74px;
   align-items: center;
   display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--neutral-200);
+  width: 100%;
+  height: 80px;
   overflow: hidden;
   white-space: nowrap;
   border-bottom: 1px solid var(--neutral-200);
@@ -98,10 +106,10 @@
 }
 
 .sb-suggestion-txt--addr2 {
-  overflow: hidden;
   display: inline-block;
-  text-overflow: ellipsis;
   width: 90%;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .sb-categories-btn {
@@ -158,6 +166,15 @@
   
   .report-hazard-box-wrapper {
     max-width: 80rem;
+  }
+
+  .sb-suggestion {
+    margin: auto;
+    width: calc(100% - 44px - 12px);
+  }
+
+  .sb-categories-wrapper {
+    margin: auto;
   }
 
   .btn-report-hazard {

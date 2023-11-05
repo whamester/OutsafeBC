@@ -26,9 +26,11 @@ let reports = [];
 let mapOptions = {
   zoomControl: false,
   doubleClickZoom: false,
+  CURRENT_ZOOM: 4
 };
 let flyToTrigger = true;
-const ANIMATION_DURATION = 3;
+const FLY_TO_ZOOM = 12;
+const ANIMATION_DURATION = 4;
 
 const categories = await apiRequest(`hazard-category`, { method: 'GET' });
 
@@ -36,9 +38,12 @@ const markerParams = {
   event: 'click',
   func: async (idx) => {
     await getReports(position.lat, position.lng);
+    const cardWrapper = document.querySelector(".sb-cards-wrapper");
     const card = document.getElementById(`sb-card-${idx + 1}`);
+    
     card.scrollIntoView({
-      behavior: 'smooth',
+      block: 'end',
+      behavior: 'smooth'
     });
   },
 };
@@ -48,10 +53,11 @@ const closeSearchSuggestion = (e) => {
   boxSuggestion.style.display = e?.target?.closest(".sb-search-box") ? "block" : "none";
 };
 
-const getReportApiCall = async (lat, lng, cursor) => {
-  const url = `hazard-report?cursor=${cursor}&size=10&lat=${lat}&lng=${lng}`;
+const getReportApiCall = async (lat, lng, cursor=0) => {
+  const url = `hazard-report?cursor=${cursor}&size=10`;
   reports = await apiRequest(url, { method: 'GET' });
   hazardCardParams['reports'] = reports.data?.results;
+  geoMap.createLayerGroups(hazardCardParams.reports, markerParams);
 };
 
 const getLocationApiCall = async (lat, lng) => {
@@ -72,10 +78,12 @@ const cardsOnClick = () => {
   document.querySelectorAll('.sb-cards--item').forEach((card) => {
     card.addEventListener('click', function () {
       const details = JSON.parse(this.dataset.details);
-      geoMap.map.flyTo([details.location?.lat, details.location?.lng], 17, {
-        animate: true,
-        duration: ANIMATION_DURATION,
-      });
+      geoMap.map.flyTo([details.location?.lat, details.location?.lng], 
+        FLY_TO_ZOOM, 
+        {
+          animate: true,
+          duration: ANIMATION_DURATION,
+        });
     });
   });
 };
@@ -83,13 +91,17 @@ const cardsOnClick = () => {
 const suggestionOnClick = () => {
   document.querySelectorAll('.sb-suggestion-item').forEach((card) => {
     card.addEventListener('click', async ({ target }) => {
-      searchInput.value = target.innerText;
-      const latLng = JSON.parse(target.dataset?.value);
+      const suggestionItem = target.closest(".sb-suggestion-item");
 
-      geoMap.map.flyTo([latLng.lat, latLng.lng], Map.CURRENT_ZOOM, {
-        animate: true,
-        duration: ANIMATION_DURATION,
-      });
+      searchInput.value = suggestionItem?.dataset?.addr1
+      const latLng = JSON.parse(suggestionItem?.dataset?.latlng);
+
+      geoMap.map.flyTo([latLng.lat, latLng.lng], 
+        FLY_TO_ZOOM, 
+        {
+          animate: true,
+          duration: ANIMATION_DURATION,
+        });
 
       closeSearchSuggestion();
       await getReports(latLng.lat, latLng.lng);
@@ -104,7 +116,6 @@ const getReports = async (lat, lng, cursor = 0) => {
   Object.keys(geoMap.mapLayers)?.forEach((key) => {
     geoMap.map?.removeLayer(geoMap.mapLayers[key]);
   });
-  geoMap.createLayerGroups(hazardCardParams.reports, markerParams);
   injectHTML([
     { func: HazardCard, args: hazardCardParams, target: '#hazard-comp' },
   ]);
@@ -119,7 +130,7 @@ const watchGeoLocationSuccess = async ({ coords }) => {
   await getLocationApiCall(lat, lng);
   await getReportApiCall(position.lat, position.lng);
   if (flyToTrigger) {
-    geoMap.map.flyTo([lat, lng], geoMap.CURRENT_ZOOM, {
+    geoMap.map.flyTo([lat, lng], FLY_TO_ZOOM, {
       animate: true,
       duration: ANIMATION_DURATION,
     });
