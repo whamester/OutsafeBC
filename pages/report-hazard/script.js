@@ -15,7 +15,6 @@ import { getUserSession } from '../../assets/helpers/storage.js';
 import readImage from '../../assets/helpers/read-image.js';
 import geocode from '../../assets/helpers/geocode.js';
 import injectHeader from '../../assets/helpers/inject-header.js';
-import loadIcons from '../../assets/helpers/load-icons.js';
 
 //Variable Declaration
 const currentReport = new ReportForm();
@@ -39,7 +38,11 @@ window.onload = async function () {
       return;
     }
 
-    window.location.hash = '#select-location';
+    if (idReport) {
+      window.location.hash = '#review-report';
+    } else {
+      window.location.hash = '#select-location';
+    }
 
     injectHeader([
       { func: Header, target: '#report-hazard-body', position: 'afterbegin' },
@@ -64,11 +67,11 @@ window.onload = async function () {
 
     populateReport();
 
-    reportHazardForm.classList.remove('hidden')
-    backButton.classList.remove('hidden')
-    fullNavMenu.classList.remove('hidden')
-    reportHazardForm.classList.remove('hidden')
-    loadingSection.classList.add('hidden')
+    reportHazardForm.classList.remove('hidden');
+    backButton.classList.remove('hidden');
+    fullNavMenu.classList.remove('hidden');
+    reportHazardForm.classList.remove('hidden');
+    loadingSection.classList.add('hidden');
   } catch (error) {
     const alert = new AlertPopup();
     alert.show(
@@ -89,7 +92,6 @@ window.addEventListener('beforeunload', function (e) {
   ];
 
   if (values.some((value) => !!value)) {
-
     e.preventDefault();
     e.returnValue = '';
   }
