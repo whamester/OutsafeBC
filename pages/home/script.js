@@ -1,4 +1,4 @@
-//Component
+//Components
 import Header from '../../assets/components/Header.js';
 import GeoMap from '../../assets/components/GeoMap.js';
 import SearchBar, {
@@ -6,6 +6,7 @@ import SearchBar, {
 } from '../../assets/components/SearchBar.js';
 import HazardCard from '../../assets/components/HazardCard.js';
 import ModalFilter from '../../assets/components/ModalFilter.js';
+import AlertPopup from '../../assets/components/AlertPopup.js';
 //Helpers
 import injectHTML from '../../assets/helpers/inject-html.js';
 import injectHeader from '../../assets/helpers/inject-header.js';
@@ -26,69 +27,78 @@ let reports = [];
 let mapOptions = {
   zoomControl: false,
   doubleClickZoom: false,
+  CURRENT_ZOOM: 4,
 };
+let categoryFilters = [];
 let flyToTrigger = true;
-const ANIMATION_DURATION = 3;
+const FLY_TO_ZOOM = 12;
+const ANIMATION_DURATION = 4;
+const alert = new AlertPopup();
 
 const categories = await apiRequest(`hazard-category`, { method: 'GET' });
 
 const markerParams = {
   event: 'click',
   func: async (idx) => {
-    await getReports(position.lat, position.lng);
+    await getReports(position.lat, position.lng, categoryFilters);
     const card = document.getElementById(`sb-card-${idx + 1}`);
+
     card.scrollIntoView({
+      block: 'end',
       behavior: 'smooth',
     });
   },
 };
 
+const removePreviousMarkers = () => {
+  Object.keys(geoMap.mapLayers).forEach(key => {
+    geoMap.map.removeLayer(geoMap.mapLayers[key])
+  })
+};
+
 const closeSearchSuggestion = (e) => {
-  const boxSuggestion = document.querySelector('.sb-sugguestion');
+  const boxSuggestion = document.querySelector('.sb-suggestion-wrapper');
   boxSuggestion.style.display = e?.target?.closest('.sb-search-box')
     ? 'block'
     : 'none';
+
+  document.querySelector('.sb-categories-wrapper').style.display = 'flex';
 };
 
-const getReportApiCall = async (lat, lng, cursor) => {
-  const url = `hazard-report?cursor=${cursor}&size=10&lat=${lat}&lng=${lng}`;
+const getReportApiCall = async (lat, lng, categoryFilters=[], cursor=0) => {
+  // clear previous reports
+  hazardCardParams['reports'] = [];
+  const url = `hazard-report?cursor=${cursor}&size=10&lat=${lat}&lan=${lng}&category_ids=${categoryFilters.join(",")}`;
   reports = await apiRequest(url, { method: 'GET' });
   hazardCardParams['reports'] = reports.data?.results;
-};
-
-const getLocationApiCall = async (lat, lng) => {
-  const locationArray = await geocode({ lat, lng }, 'reverse-geocode');
-  locationDetails = `${locationArray[0]?.properties?.address_line1}, ${locationArray[0]?.properties?.address_line2}`;
-
-  positionObj = {
-    properties: {
-      lat: lat,
-      lon: lng,
-      address_line1: locationDetails,
-      address_line2: 'Current Location',
-    },
-  };
+  geoMap.createLayerGroups(hazardCardParams.reports, markerParams);
 };
 
 const cardsOnClick = () => {
   document.querySelectorAll('.sb-cards--item').forEach((card) => {
     card.addEventListener('click', function () {
       const details = JSON.parse(this.dataset.details);
-      geoMap.map.flyTo([details.location?.lat, details.location?.lng], 17, {
-        animate: true,
-        duration: ANIMATION_DURATION,
-      });
+      geoMap.map.flyTo(
+        [details.location?.lat, details.location?.lng],
+        FLY_TO_ZOOM,
+        {
+          animate: true,
+          duration: ANIMATION_DURATION,
+        }
+      );
     });
   });
 };
 
 const suggestionOnClick = () => {
-  document.querySelectorAll('.sb-sugguestion--item').forEach((card) => {
+  document.querySelectorAll('.sb-suggestion-item').forEach((card) => {
     card.addEventListener('click', async ({ target }) => {
-      searchInput.value = target.innerText;
-      const latLng = JSON.parse(target.dataset?.value);
+      const suggestionItem = target.closest('.sb-suggestion-item');
 
-      geoMap.map.flyTo([latLng.lat, latLng.lng], Map.CURRENT_ZOOM, {
+      searchInput.value = suggestionItem?.dataset?.addr1;
+      const latLng = JSON.parse(suggestionItem?.dataset?.latlng);
+
+      geoMap.map.flyTo([latLng.lat, latLng.lng], FLY_TO_ZOOM, {
         animate: true,
         duration: ANIMATION_DURATION,
       });
@@ -99,14 +109,43 @@ const suggestionOnClick = () => {
   });
 };
 
-const getReports = async (lat, lng, cursor = 0) => {
-  document.querySelector('.btn-report-hazard').style.display = 'none';
-  await getReportApiCall(lat, lng, cursor);
+const quickFiltersOnClick = async({ target }) => {
   document.querySelector('.sb-cards')?.remove();
-  Object.keys(geoMap.mapLayers)?.forEach((key) => {
-    geoMap.map?.removeLayer(geoMap.mapLayers[key]);
-  });
-  geoMap.createLayerGroups(hazardCardParams.reports, markerParams);
+  const quickFilter = target.closest('.quick-filter');
+  const categoryId = quickFilter.dataset.categoryId;
+
+  categoryFilters = [
+    ...categoryFilters.filter((f) => f !== categoryId)
+  ];
+
+  if(quickFilter.classList.contains('selected')) {
+    quickFilter.classList.remove('selected');
+    // all filters are de-selected
+    if (categoryFilters.length === 0) {
+      // clear previous reports
+      hazardCardParams['reports'] = [];
+      document.querySelector('.btn-report-hazard').style.display = 'flex';
+      removePreviousMarkers();
+      await getReportApiCall(position.lat, position.lng, categoryFilters);
+      return;
+    }
+
+    await getReports(position.lat, position.lng, categoryFilters);
+    return;
+  }
+
+  quickFilter.classList.add('selected');
+  categoryFilters.push(categoryId);
+
+  await getReports(position.lat, position.lng, categoryFilters);
+}
+
+const getReports = async (lat, lng, categoryFilters=[],cursor = 0) => {
+  document.querySelector('.btn-report-hazard').style.display = 'none';
+  document.querySelector('.sb-cards')?.remove();
+  removePreviousMarkers();
+
+  await getReportApiCall(lat, lng, categoryFilters, cursor);
   injectHTML([
     { func: HazardCard, args: hazardCardParams, target: '#hazard-comp' },
   ]);
@@ -118,10 +157,16 @@ const watchGeoLocationSuccess = async ({ coords }) => {
   const lat = coords?.latitude;
   const lng = coords?.longitude;
   geoMap.setMarkerOnMap(lat, lng);
-  await getLocationApiCall(lat, lng);
-  await getReportApiCall(position.lat, position.lng);
+  await getReportApiCall(lat, lng, categoryFilters);
+
+  // update current user position 
+  position = {
+    lat,
+    lng
+  }
+
   if (flyToTrigger) {
-    geoMap.map.flyTo([lat, lng], geoMap.CURRENT_ZOOM, {
+    geoMap.map.flyTo([lat, lng], FLY_TO_ZOOM, {
       animate: true,
       duration: ANIMATION_DURATION,
     });
@@ -130,8 +175,11 @@ const watchGeoLocationSuccess = async ({ coords }) => {
 };
 
 const watchGeoLocationError = async (err) => {
-  console.error(`ERROR(${err.code}): ${err.message}`);
-  await getLocationApiCall(position.lat, position.lng);
+  alert.show(
+    `ERROR(${err.code}): ${err.message}`,
+    AlertPopup.error
+  );
+  await getReportApiCall(position.lat, position.lng, categoryFilters);
 };
 
 const loadGeolocation = async () => {
@@ -144,10 +192,10 @@ const loadGeolocation = async () => {
 };
 
 const onSearchInput = debounce(async ({ target }) => {
-  const boxSuggestion = document.querySelector('.sb-sugguestion');
+  const boxSuggestion = document.querySelector('.sb-suggestion-wrapper');
+  const boxCategories = document.querySelector('.sb-categories-wrapper');
   // clear previous search suggestions
   boxSuggestion.innerHTML = '';
-  boxSuggestion.style.display = 'block';
 
   const searchTerm = target?.value;
 
@@ -155,20 +203,23 @@ const onSearchInput = debounce(async ({ target }) => {
     searchSuggestions = await geocode({ searchTerm }, 'autocomplete');
   else searchSuggestions = [];
 
-  searchSuggestions?.unshift(positionObj);
+  if(searchSuggestions.length > 0) {
+    // inject search suggestions
+    injectHTML(
+      searchSuggestions?.map((item) => {
+        return {
+          func: SearchBarSuggestionCard,
+          args: item,
+          target: '.sb-suggestion-wrapper',
+        };
+      }) ?? []
+    );
 
-  // inject search suggestions
-  injectHTML(
-    searchSuggestions?.map((item) => {
-      return {
-        func: SearchBarSuggestionCard,
-        args: item,
-        target: '.sb-sugguestion',
-      };
-    }) ?? []
-  );
-
-  suggestionOnClick();
+    suggestionOnClick();
+    
+    boxSuggestion.style.display = 'block';
+    boxCategories.style.display = 'none';
+  }
 });
 
 const searchBarParams = {
@@ -179,7 +230,7 @@ injectHeader([{ func: Header, target: '#home-body', position: 'afterbegin' }]);
 
 injectHTML([
   { func: GeoMap },
-  { func: SearchBar, args: searchBarParams, target: 'header' },
+  { func: SearchBar, args: searchBarParams },
   { func: ModalFilter, args: searchBarParams.categories },
 ]);
 
@@ -194,7 +245,7 @@ const toggleFilterModal = () => {
 };
 
 document
-  .querySelector('.sb-search-box--filter')
+  .querySelector('.sb-search-box--filter-btn')
   .addEventListener('click', toggleFilterModal);
 
 document
@@ -213,5 +264,8 @@ document
   });
 
 document.getElementById('map').addEventListener('click', closeSearchSuggestion);
+
+document.querySelectorAll('.quick-filter')
+  .forEach((filter) => filter.addEventListener('click', quickFiltersOnClick));
 
 loadIcons();
