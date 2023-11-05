@@ -81,7 +81,7 @@ const cardsOnClick = () => {
 };
 
 const suggestionOnClick = () => {
-  document.querySelectorAll('.sb-sugguestion--item').forEach((card) => {
+  document.querySelectorAll('.sb-suggestion-item').forEach((card) => {
     card.addEventListener('click', async ({ target }) => {
       searchInput.value = target.innerText;
       const latLng = JSON.parse(target.dataset?.value);
@@ -144,9 +144,6 @@ const loadGeolocation = async () => {
 const onSearchInput = debounce(async ({ target }) => {
   const boxSuggestion = document.querySelector(".sb-suggestion-wrapper");
 
-  boxSuggestion.style.width = searchInput.closest(".sb-search-box").scrollWidth + "px"
-
-  console.log(searchInput.closest(".sb-search-box").scrollWidth)
   // clear previous search suggestions
   boxSuggestion.innerHTML = "";
 
@@ -180,7 +177,7 @@ injectHeader([{ func: Header, target: '#home-body', position: 'afterbegin' }]);
 
 injectHTML([
   { func: GeoMap },
-  { func: SearchBar, args: searchBarParams, target: 'header' },
+  { func: SearchBar, args: searchBarParams },
   { func: ModalFilter, args: searchBarParams.categories },
 ]);
 
@@ -195,7 +192,7 @@ const toggleFilterModal = () => {
 };
 
 document
-  .querySelector('.sb-search-box--filter')
+  .querySelector('.sb-search-box--filter-btn')
   .addEventListener('click', toggleFilterModal);
 
 document

@@ -19,45 +19,53 @@ export const SearchBarSuggestionCard = ({ properties }) => {
 const SearchBar = ({ categories }) => {
   return `
     <div class="sb">
-      <div class="sb-search">
-        <div class="d-flex">
-          <div class="sb-search-box">
-            <img
-              class="sb-search-box--icon" 
-              src="/assets/icons/search.svg"/>
-            <input
-              class="sb-search-box--input"
-              placeholder="Search location"/>
+      <div class="sb-wrapper-outer">
+        <div class="sb-wrapper-inner">
+          <div class="sb-search">
+            <div class="d-flex">
+              <div class="sb-search-box">
+                <img
+                  class="sb-search-box--icon" 
+                  src="/assets/icons/search.svg"/>
+                <input
+                  class="sb-search-box--input"
+                  placeholder="Search location"/>
+              </div>
+              <button 
+                class="sb-search-box--filter-btn">
+                <img src="/assets/icons/filters.svg"/>
+              </button>
+            </div>
+          
+            <div class="sb-suggestion">
+              <div class="sb-suggestion-wrapper" style="display:none"></div>
+            </div>
           </div>
-          <button 
-            class="sb-search-box--filter">
-            <img src="/assets/icons/filters.svg"/>
-          </button>
-        </div>
-
-        <div class="sb-suggestion">
-          <div class="sb-suggestion-wrapper"></div>
-        </div>
-      </div>
-
-      <div class="sb-categories">
-        <div class="sb-categories-wrapper">
-          ${ categories?.map(item => {
-            return `<button class="sb-categories-btn">${ item?.name }</button>`
-          }).join("") }
+          
+          <div class="sb-categories">
+            <div class="sb-categories-wrapper">
+              ${ categories?.map(item => {
+                return `<button class="sb-categories-btn">${ item?.name }</button>`
+              }).join("") }
+            </div>
+          </div>
         </div>
       </div>
     </div>
 
     <div id="hazard-comp"></div>
-    <button
-      onclick="window.location='/pages/report-hazard'"
-      class="btn btn-primary btn-report-hazard">
-      Report Hazard
-      <span class="btn__icon">
-        <i class="icon-arrow-right"></i>
-      </span>
-    </button>
+    <div class="report-hazard-box">
+      <div class="report-hazard-box-wrapper">
+        <button
+          onclick="window.location='/pages/report-hazard'"
+          class="btn btn-primary btn-report-hazard">
+          Report Hazard
+          <span class="btn__icon">
+            <i class="icon-arrow-right"></i>
+          </span>
+        </button>
+      </div>
+    </div>
   </div>
   `
 }

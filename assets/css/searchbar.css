@@ -1,9 +1,16 @@
 .sb {
-  background-color: transparent;
+  width: 100%;
+  position: absolute;
+  top: 60px;
+  left: 0;
+}
+
+.sb-wrapper-outer {
+  padding: 18px 16px;
 }
 
 .sb-search {
-  padding: 18px;
+  padding-bottom: 18px;
 }
 
 .sb-search-box {
@@ -16,7 +23,7 @@
   background-color: var(--white);
   border-radius: 8px;
   padding-right: 15px;
-  width: 100%;
+  width: calc(100% - 12px - 44px);
   height: 44px;
 }
 
@@ -35,7 +42,9 @@
   text-indent: 2px;
 }
 
-.sb-search-box--filter {
+.sb-search-box--filter-btn {
+  width: 44px;
+  height: 44px;
   border: 1px solid var(--neutral-200);
   border-radius: 8px;
   background-color: var(--white);
@@ -43,17 +52,15 @@
 
 .sb-suggestion {
   position: absolute;
-  top: 125px;
-  left: 0;
-  padding-left: 18px;
+  width: calc(100% - 32px);
+  top: 75px;
 }
 
 .sb-suggestion-wrapper {
   background-color: var(--white);
-  width: 100%;
   scrollbar-width: none;
   white-space: nowrap;
-  max-height: 200px;
+  max-height: 148px;
   overflow-y: auto;
   border-radius: 12px;
   border: 1px solid var(--neutral-300);
@@ -70,18 +77,16 @@
 
 .sb-suggestion-item-wrapper {
   width: 100%;
+  height: 74px;
   align-items: center;
   display: flex;
   overflow: hidden;
   white-space: nowrap;
-  padding-top: 16px;
-  padding-bottom: 16px;
   border-bottom: 1px solid var(--neutral-200);
 }
 
 .sb-categories-wrapper {
   -ms-overflow-style: none;
-  margin-left: 18px;
   overflow-x: auto;
   scrollbar-width: none;
   white-space: nowrap;
@@ -109,28 +114,54 @@
   padding: 8px;
 }
 
+.report-hazard-box {
+  position: absolute;
+  left: 0;
+  bottom: 25px;
+  width: 100%;
+}
+
+.report-hazard-box-wrapper {
+  margin: auto;
+  padding-inline: 16px;
+}
+
 .btn-report-hazard {
-  position: fixed;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 90%;
+  width: 100%;
 }
 
 @media only screen and (min-width: 768px) {
   .sb {
-    width: 490px;
-    margin-left: 80px;
+    top: 90px;
+  }
+  
+  .sb-wrapper-outer {
+    margin: auto;
+    width: 80rem;
   }
 
-  .sb-search {
-    padding: 18px 0;
+  .sb-wrapper-inner {
+    padding: 0;
+    width: 490px;
+  }
+
+  .sb-suggestion-wrapper {
+    width: calc(490px - 12px - 44px);
+  }
+
+  .report-hazard-box {
+    position: absolute;
+    left: 0;
+    bottom: 60px;
+    width: 100%;
+  }
+  
+  .report-hazard-box-wrapper {
+    max-width: 80rem;
   }
 
   .btn-report-hazard {
     width: 248px;
-    left: 80px;
-    transform: none;
   }
 
 }
