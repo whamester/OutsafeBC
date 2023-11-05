@@ -1,8 +1,8 @@
 .sb {
-  width: 100%;
   position: absolute;
   top: 60px;
   left: 0;
+  width: 100%;
 }
 
 .sb-wrapper-outer {
@@ -37,38 +37,39 @@
   outline: none;
   border: none;
   background-color: transparent;
+  width: 100%;
   height: 100%;
   text-indent: 2px;
 }
 
 .sb-search-box--filter-btn {
-  width: 44px;
-  height: 44px;
   border: 1px solid var(--neutral-200);
   border-radius: 8px;
   background-color: var(--white);
   width: 44px;
+  width: 44px;
+  height: 44px;
   height: 44px;
 }
 
 .sb-suggestion {
   position: absolute;
-  width: calc(100% - 32px);
   top: 75px;
+  width: calc(100% - 32px);
 }
 
 .sb-suggestion-wrapper {
   box-shadow: 0px 2px 1px 0px rgba(0, 0, 0, 0.05);
+  box-shadow: 0px 2px 1px 0px rgba(0, 0, 0, 0.05);
   border: 1px solid var(--neutral-300);
+  border: 1px solid var(--neutral-300);
+  border-radius: 12px;
   border-radius: 12px;
   background-color: var(--white);
-  scrollbar-width: none;
-  white-space: nowrap;
   max-height: 148px;
   overflow-y: auto;
-  border-radius: 12px;
-  border: 1px solid var(--neutral-300);
-  box-shadow: 0px 2px 1px 0px rgba(0, 0, 0, 0.05);
+  scrollbar-width: none;
+  white-space: nowrap;
 }
 
 .sb-suggestion-item {
@@ -80,17 +81,17 @@
 }
 
 .sb-suggestion-item-wrapper {
-  width: 100%;
-  height: 74px;
-  align-items: center;
   display: flex;
   align-items: center;
+  align-items: center;
+  border-bottom: 1px solid var(--neutral-200);
   border-bottom: 1px solid var(--neutral-200);
   width: 100%;
+  width: 100%;
+  height: 74px;
   height: 80px;
   overflow: hidden;
   white-space: nowrap;
-  border-bottom: 1px solid var(--neutral-200);
 }
 
 .sb-categories-wrapper {
@@ -124,8 +125,8 @@
 
 .report-hazard-box {
   position: absolute;
-  left: 0;
   bottom: 25px;
+  left: 0;
   width: 100%;
 }
 
@@ -145,7 +146,7 @@
   
   .sb-wrapper-outer {
     margin: auto;
-    width: 80rem;
+    max-width: 80rem;
   }
 
   .sb-wrapper-inner {
@@ -159,8 +160,8 @@
 
   .report-hazard-box {
     position: absolute;
-    left: 0;
     bottom: 60px;
+    left: 0;
     width: 100%;
   }
   

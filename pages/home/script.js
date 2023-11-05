@@ -54,7 +54,7 @@ const closeSearchSuggestion = (e) => {
 };
 
 const getReportApiCall = async (lat, lng, cursor=0) => {
-  const url = `hazard-report?cursor=${cursor}&size=10`;
+  const url = `hazard-report?cursor=${cursor}&size=10&lat=${lat}&lan=${lng}`;
   reports = await apiRequest(url, { method: 'GET' });
   hazardCardParams['reports'] = reports.data?.results;
   geoMap.createLayerGroups(hazardCardParams.reports, markerParams);

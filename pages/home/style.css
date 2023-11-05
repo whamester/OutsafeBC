@@ -16,17 +16,9 @@ header {
   width: 100%;
 }
 
-#root {
-  max-width: max-content;
-}
-
 #map {
+  position: relative;
   width: 100vw;
   height: 100vh;
   height: 100dvh;
-  position: relative;
-}
-
-@media only screen and (min-width: 768px) {
-  
 }
