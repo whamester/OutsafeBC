@@ -18,7 +18,6 @@
 
 .sb-cards {
   margin: auto;
-  padding-right: 16px;
   padding-left: 16px;
   max-width: 80rem;
   overflow: hidden;
@@ -49,6 +48,10 @@
   width: 70vw;
   height: 200px;
   scroll-margin-right: 150px;
+}
+
+.sb-cards--item:last-of-type {
+  margin-right: 16px;
 }
 
 .sb-card-header--box {
