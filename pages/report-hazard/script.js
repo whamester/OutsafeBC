@@ -38,6 +38,8 @@ window.onload = async function () {
       return;
     }
 
+    window.location.hash = '#select-location';
+
     injectHeader([
       { func: Header, target: '#report-hazard-body', position: 'afterbegin' },
     ]);
@@ -69,6 +71,22 @@ window.onload = async function () {
     );
   }
 };
+
+// Event listener for the 'beforeunload' event
+window.addEventListener('beforeunload', function (e) {
+  const values = [
+    currentReport.category.id,
+    currentReport.comment,
+    currentReport.images.length,
+    currentReport.option.id,
+  ];
+
+  if (values.some((value) => !!value)) {
+
+    e.preventDefault();
+    e.returnValue = '';
+  }
+});
 
 const updateCurrentReportLocation = async (params) => {
   const address = await getAddressFromCoordinates(params);
