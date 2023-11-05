@@ -1,20 +1,25 @@
+import QuickFilter from './QuickFilter.js';
+
 export const SearchBarSuggestionCard = ({ properties }) => {
   return `
     <div
       class="sb-suggestion-item"
-        data-addr1='${ properties?.address_line1 }'
-        data-latlng='${ JSON.stringify({ lat: properties?.lat , lng: properties?.lon }) }'>
+        data-addr1='${properties?.address_line1}'
+        data-latlng='${JSON.stringify({
+          lat: properties?.lat,
+          lng: properties?.lon,
+        })}'>
         <div class="sb-suggestion-item-wrapper">
           <img 
             class="sb-suggestion-icon"
             src="/assets/icons/location-pin-outline.svg"/>
           <div class="sb-suggestion-txt--box">
-            <p class="sb-suggestion-txt--addr1">${ properties?.address_line1 }</p>
-            <p class="sb-suggestion-txt--addr2">${ properties?.address_line2 }</p>
+            <p class="sb-suggestion-txt--addr1">${properties?.address_line1}</p>
+            <p class="sb-suggestion-txt--addr2">${properties?.address_line2}</p>
           </div>
         </div>
     </div>
-  `
+  `;
 };
 
 const SearchBar = ({ categories }) => {
@@ -45,9 +50,16 @@ const SearchBar = ({ categories }) => {
           
           <div class="sb-categories">
             <div class="sb-categories-wrapper">
-              ${ categories?.map(item => {
-                return `<button class="sb-categories-btn">${ item?.name }</button>`
-              }).join("") }
+            ${categories
+              ?.map((item) => {
+                const quickFilter = new QuickFilter({
+                  id: item.id,
+                  name: item.name,
+                  icon: item?.ui_settings?.icon ?? 'icon-location-pin-outline',
+                });
+                return quickFilter.getHTML();
+              })
+              .join('')}
             </div>
           </div>
         </div>
@@ -68,7 +80,7 @@ const SearchBar = ({ categories }) => {
       </div>
     </div>
   </div>
-  `
-}
+  `;
+};
 
 export default SearchBar;

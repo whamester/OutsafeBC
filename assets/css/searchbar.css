@@ -99,6 +99,8 @@
   overflow-x: auto;
   scrollbar-width: none;
   white-space: nowrap;
+  display: flex;
+  gap: 0.5rem;
 }
 
 .sb-suggestion-wrapper::-webkit-scrollbar,
@@ -181,5 +183,4 @@
   .btn-report-hazard {
     width: 248px;
   }
-
 }
