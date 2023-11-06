@@ -4,30 +4,28 @@ class ReportCard {
     this.category = category;
     this.hazard = hazard;
     this.location = location;
-    this.date = date;
+    this.date = new Date(date); 
     this.photos = photos;
     this.comment = comment;
     this.settings = settings;
   }
 
   getDateFormatted(){
-    const dateObj = new Date(this.date);
-    const date = dateObj.toLocaleString('default', {
+    const date = this.date.toLocaleString('default', {
       day: 'numeric',
       month: 'long',
       year: 'numeric',
     });
-    return date
+    return date;
   }
 
   getTimeFormatted(){
-    const dateObj = new Date(this.date);
-    const time = dateObj.toLocaleTimeString('default', {
+    const time = this.date.toLocaleTimeString('default', {
       hour: '2-digit',
       minute: '2-digit',
       timeZoneName: 'short',
     });
-    return time
+    return time;
   }
 
   getGallery(){
@@ -40,9 +38,9 @@ class ReportCard {
       image.src = pic;
       gallery.appendChild(image);
     }
-    return gallery
+    return gallery;
   }
-
 }
+
 
 export default ReportCard;
