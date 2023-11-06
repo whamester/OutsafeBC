@@ -36,7 +36,8 @@
 
 <body id="report-hazard-body">
   <main>
-    <nav id="fullNavMenu" class="breadbrumb-desktop hidden">
+    <div class="lds-ring loader" id="loader"><div></div><div></div><div></div><div></div></div>
+    <nav id="fullNavMenu" class="breadbrumb-desktop">
       <ul id="navMenu">
         <li>
           <a id="selectLocation" title="Select the location" href="#select-location">Select Location</a>
@@ -68,10 +69,10 @@
         </li>
       </ul>
     </nav>
-    <div id="loadingSection">Loading...</div>
-    <button id="backButton" class="back-button-mobile hidden" >&lt; Back</button>
+    <!-- <div id="loadingSection">Loading...</div> -->
+    <button id="backButton" class="back-button-mobile " >&lt; Back</button>
 
-    <form id="reportHazardForm" class="hidden">
+    <form id="reportHazardForm">
       <section id="select-location" class="page">
         <h1>1. Select the location.</h1>
 

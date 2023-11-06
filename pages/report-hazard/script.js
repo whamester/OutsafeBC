@@ -31,6 +31,11 @@ const idReport = url.searchParams.get('id');
  * Page Init
  */
 
+window.addEventListener("load", function(){
+  // this.console.log("listo")
+  document.getElementById('loader').classList.toggle('loader2')
+})
+
 window.onload = async function () {
   try {
     if (!user) {
@@ -67,11 +72,11 @@ window.onload = async function () {
 
     populateReport();
 
-    reportHazardForm.classList.remove('hidden');
-    backButton.classList.remove('hidden');
-    fullNavMenu.classList.remove('hidden');
-    reportHazardForm.classList.remove('hidden');
-    loadingSection.classList.add('hidden');
+    // reportHazardForm.classList.remove('hidden');
+    // backButton.classList.remove('hidden');
+    // fullNavMenu.classList.remove('hidden');
+    // reportHazardForm.classList.remove('hidden');
+    // loadingSection.classList.add('hidden');
   } catch (error) {
     const alert = new AlertPopup();
     alert.show(
