@@ -9,6 +9,27 @@ class ReportCard {
     this.comment = comment;
     this.settings = settings;
   }
+
+  getDateFormatted(){
+    const dateObj = new Date(this.date);
+    const date = dateObj.toLocaleString('default', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    });
+    return date
+  }
+
+  getTimeFormatted(){
+    const dateObj = new Date(this.date);
+    const time = dateObj.toLocaleTimeString('default', {
+      hour: '2-digit',
+      minute: '2-digit',
+      timeZoneName: 'short',
+    });
+    return time
+  }
+
 }
 
 export default ReportCard;

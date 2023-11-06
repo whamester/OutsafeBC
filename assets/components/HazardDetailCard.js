@@ -1,12 +1,34 @@
 import ReportCard from '../helpers/card-container.js';
-import ToggleSwitch from '../components/ToggleSwitch.js';
 
-class MyReportCard extends ReportCard {
-  constructor(id, category, hazard, location, date, photos, comment, icon) {
+class HazardDetailCard extends ReportCard {
+  constructor(
+    id,
+    category,
+    hazard,
+    location,
+    date,
+    photos,
+    comment,
+    icon,
+    distance,
+    user
+  ) {
     super(id, category, hazard, location, date, photos, comment, icon);
   }
 
-  reportContent() {
+  cardContent() {
+    const dateObj = new Date(this.date);
+    const date = dateObj.toLocaleString('default', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    });
+    const time = dateObj.toLocaleTimeString('default', {
+      hour: '2-digit',
+      minute: '2-digit',
+      timeZoneName: 'short',
+    });
+
     let photos = this.photos;
     let gallery = document.createElement('div');
     gallery.setAttribute('id', 'report-card__picture-container');
@@ -43,12 +65,12 @@ class MyReportCard extends ReportCard {
 			<div class="report-card__date_time">
 				<div class="report-card__date">
 					<i class="icon-date" style="background-color: var(--neutral-400)"></i>
-					<p class="text-body-2 regular">${super.getDateFormatted()}</p>
+					<p class="text-body-2 regular">${date}</p>
 				</div>
 
 				<div class="report-card__time">
 					<i class="icon-time" style="background-color: var(--neutral-400)"></i>
-					<p class="text-body-2 regular">${super.getTimeFormatted()}</p>
+					<p class="text-body-2 regular">${time}</p>
 				</div>
 			</div>
 		</div>
@@ -66,9 +88,7 @@ class MyReportCard extends ReportCard {
 
 		<div class="report-card__my-reports-buttons">
 			${ToggleSwitch(this.id)}
-			<button class="btn btn-tertiary text-body-3 medium" onclick="window.location.href='/pages/report-hazard/index.html?id=${
-        this.id
-      }#review-report'">
+			<button class="btn btn-tertiary text-body-3 medium" onclick="window.location.href='/pages/report-hazard/index.html?id=${this.id}#review-report'">
 				<i class="icon-edit"></i>
 				Edit Report
 			</button>
@@ -78,6 +98,8 @@ class MyReportCard extends ReportCard {
     divOuter.appendChild(divInner);
     return divOuter;
   }
+
+  
 }
 
-export default MyReportCard;
+export default HazardDetailCard;
