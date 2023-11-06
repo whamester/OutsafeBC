@@ -30,6 +30,19 @@ class ReportCard {
     return time
   }
 
+  getGallery(){
+    let photos = this.photos;
+    let gallery = document.createElement('div');
+    gallery.setAttribute('id', 'report-card__picture-container');
+
+    for (const pic of photos) {
+      let image = document.createElement('img');
+      image.src = pic;
+      gallery.appendChild(image);
+    }
+    return gallery
+  }
+
 }
 
 export default ReportCard;

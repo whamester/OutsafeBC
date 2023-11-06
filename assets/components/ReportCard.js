@@ -7,16 +7,6 @@ class MyReportCard extends ReportCard {
   }
 
   reportContent() {
-    let photos = this.photos;
-    let gallery = document.createElement('div');
-    gallery.setAttribute('id', 'report-card__picture-container');
-
-    for (const pic of photos) {
-      let image = document.createElement('img');
-      image.src = pic;
-      gallery.appendChild(image);
-    }
-
     let divOuter = document.createElement('div');
     divOuter.setAttribute('id', `reportCard${this.id}`);
     divOuter.setAttribute('class', `report-card__outer`);
@@ -74,7 +64,9 @@ class MyReportCard extends ReportCard {
 			</button>
 		</div>
         `;
-    divInner.querySelector('#report-card__image-gallery').appendChild(gallery);
+    divInner
+      .querySelector('#report-card__image-gallery')
+      .appendChild(super.getGallery());
     divOuter.appendChild(divInner);
     return divOuter;
   }
