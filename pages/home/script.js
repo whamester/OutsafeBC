@@ -19,8 +19,7 @@ import Map from '../../assets/models/Map.js';
 //Variable Declaration
 let geoMap;
 let position = Map.DEFAULT_LOCATION;
-let positionObj = {};
-let locationDetails = '';
+let positionSecondary = {};
 let hazardCardParams = {};
 let searchSuggestions = [];
 let reports = [];
@@ -31,30 +30,29 @@ let mapOptions = {
 };
 let categoryFilters = [];
 let flyToTrigger = true;
-const FLY_TO_ZOOM = 12;
-const ANIMATION_DURATION = 4;
 const alert = new AlertPopup();
 
 const categories = await apiRequest(`hazard-category`, { method: 'GET' });
 
 const markerParams = {
   event: 'click',
-  func: async (idx) => {
-    await getReports(position.lat, position.lng, categoryFilters);
+  func: async (idx, lat, lng) => {
+    await getReportApiCall(position.lat, position.lng, categoryFilters);
+    injectCards();
     const card = document.getElementById(`sb-card-${idx + 1}`);
 
     card.scrollIntoView({
       block: 'end',
       behavior: 'smooth',
     });
+
+    flyTo(lat, lng);
   },
 };
 
-const removePreviousMarkers = () => {
-  Object.keys(geoMap.mapLayers).forEach(key => {
-    geoMap.map.removeLayer(geoMap.mapLayers[key])
-  })
-};
+const flyTo = (lat, lng) => {
+  geoMap.map.flyTo([lat, lng], 12, {animate: true});
+}
 
 const closeSearchSuggestion = (e) => {
   const boxSuggestion = document.querySelector('.sb-suggestion-wrapper');
@@ -68,7 +66,7 @@ const closeSearchSuggestion = (e) => {
 const getReportApiCall = async (lat, lng, categoryFilters=[], cursor=0) => {
   // clear previous reports
   hazardCardParams['reports'] = [];
-  const url = `hazard-report?cursor=${cursor}&size=10&lat=${lat}&lan=${lng}&category_ids=${categoryFilters.join(",")}`;
+  const url = `hazard-report?cursor=${cursor}&size=1000&lat=${lat}&lan=${lng}&category_ids=${categoryFilters.join(",")}`;
   reports = await apiRequest(url, { method: 'GET' });
   hazardCardParams['reports'] = reports.data?.results;
   geoMap.createLayerGroups(hazardCardParams.reports, markerParams);
@@ -78,14 +76,7 @@ const cardsOnClick = () => {
   document.querySelectorAll('.sb-cards--item').forEach((card) => {
     card.addEventListener('click', function () {
       const details = JSON.parse(this.dataset.details);
-      geoMap.map.flyTo(
-        [details.location?.lat, details.location?.lng],
-        FLY_TO_ZOOM,
-        {
-          animate: true,
-          duration: ANIMATION_DURATION,
-        }
-      );
+      flyTo(details.location?.lat, details.location?.lng);
     });
   });
 };
@@ -98,19 +89,16 @@ const suggestionOnClick = () => {
       searchInput.value = suggestionItem?.dataset?.addr1;
       const latLng = JSON.parse(suggestionItem?.dataset?.latlng);
 
-      geoMap.map.flyTo([latLng.lat, latLng.lng], FLY_TO_ZOOM, {
-        animate: true,
-        duration: ANIMATION_DURATION,
-      });
-
+      flyTo(latLng.lat, latLng.lng);
       closeSearchSuggestion();
-      await getReports(latLng.lat, latLng.lng);
+      await getReportApiCall(latLng.lat, latLng.lng, categoryFilters);
+      injectCards();
     });
   });
 };
 
 const quickFiltersOnClick = async({ target }) => {
-  document.querySelector('.sb-cards')?.remove();
+  geoMap.mapLayers.clearLayers();
   const quickFilter = target.closest('.quick-filter');
   const categoryId = quickFilter.dataset.categoryId;
 
@@ -118,40 +106,38 @@ const quickFiltersOnClick = async({ target }) => {
     ...categoryFilters.filter((f) => f !== categoryId)
   ];
 
-  if(quickFilter.classList.contains('selected')) {
+  if (quickFilter.classList.contains('selected')) {
     quickFilter.classList.remove('selected');
     // all filters are de-selected
     if (categoryFilters.length === 0) {
-      // clear previous reports
-      hazardCardParams['reports'] = [];
-      document.querySelector('.btn-report-hazard').style.display = 'flex';
-      removePreviousMarkers();
       await getReportApiCall(position.lat, position.lng, categoryFilters);
+      if (document.querySelector('.sb-cards')) injectCards();
       return;
     }
 
-    await getReports(position.lat, position.lng, categoryFilters);
+    await getReportApiCall(position.lat, position.lng, categoryFilters);
+    if (document.querySelector('.sb-cards')) injectCards();
     return;
   }
 
   quickFilter.classList.add('selected');
   categoryFilters.push(categoryId);
 
-  await getReports(position.lat, position.lng, categoryFilters);
+  await getReportApiCall(position.lat, position.lng, categoryFilters);
+  if (document.querySelector('.sb-cards')) injectCards();
 }
 
-const getReports = async (lat, lng, categoryFilters=[],cursor = 0) => {
+const injectCards = () => {
   document.querySelector('.btn-report-hazard').style.display = 'none';
   document.querySelector('.sb-cards')?.remove();
-  removePreviousMarkers();
 
-  await getReportApiCall(lat, lng, categoryFilters, cursor);
   injectHTML([
     { func: HazardCard, args: hazardCardParams, target: '#hazard-comp' },
   ]);
+
   loadIcons();
   cardsOnClick();
-};
+}
 
 const watchGeoLocationSuccess = async ({ coords }) => {
   const lat = coords?.latitude;
@@ -166,17 +152,15 @@ const watchGeoLocationSuccess = async ({ coords }) => {
   }
 
   if (flyToTrigger) {
-    geoMap.map.flyTo([lat, lng], FLY_TO_ZOOM, {
-      animate: true,
-      duration: ANIMATION_DURATION,
-    });
+    flyTo(lat, lng);
     flyToTrigger = false;
   }
 };
 
 const watchGeoLocationError = async (err) => {
+  console.error(`ERROR(${err.code}): ${err.message}`);
   alert.show(
-    `ERROR(${err.code}): ${err.message}`,
+    `Error while trying to get location`,
     AlertPopup.error
   );
   await getReportApiCall(position.lat, position.lng, categoryFilters);
@@ -216,9 +200,10 @@ const onSearchInput = debounce(async ({ target }) => {
     );
 
     suggestionOnClick();
-    
     boxSuggestion.style.display = 'block';
     boxCategories.style.display = 'none';
+  } else {
+    boxSuggestion.style.display = 'none';
   }
 });
 
@@ -254,7 +239,7 @@ document
 
 document
   .querySelector('.sb-search-box--input')
-  .addEventListener('input', (e) => onSearchInput(e));
+  .addEventListener('input', onSearchInput);
 
 document
   .querySelector('.sb-search-box--input')
