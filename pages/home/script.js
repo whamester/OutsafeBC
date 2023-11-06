@@ -144,7 +144,19 @@ window.onload = async function () {
       }
     }
 
-const categories = await apiRequest(`hazard-category`, { method: 'GET' });
+    if (openDetail) {
+      //TODO: Open pull-up card
+      //Remove temporary modal
+
+      const modal = new Modal();
+      modal.show({
+        title: 'Hazard Detail',
+        description: `${hazardDetail.location.address}`,
+        enableOverlayClickClose: true,
+      });
+
+      return;
+    }
   } catch (error) {
     console.error(error);
     alert.show(
