@@ -10,9 +10,7 @@ export const SearchBarSuggestionCard = ({ properties }) => {
           lng: properties?.lon,
         })}'>
         <div class="sb-suggestion-item-wrapper">
-          <img 
-            class="sb-suggestion-icon"
-            src="/assets/icons/location-pin-outline.svg"/>
+          <i class="icon-location-pin-outline sb-suggestion-icon"></i>
           <div class="sb-suggestion-txt--box">
             <p class="sb-suggestion-txt--addr1">${properties?.address_line1}</p>
             <p class="sb-suggestion-txt--addr2">${properties?.address_line2}</p>
@@ -30,16 +28,14 @@ const SearchBar = ({ categories }) => {
           <div class="sb-search">
             <div class="d-flex">
               <div class="sb-search-box">
-                <img
-                  class="sb-search-box--icon" 
-                  src="/assets/icons/search.svg"/>
+                <i class="icon-search sb-search-box--icon"></i>
                 <input
                   class="sb-search-box--input"
                   placeholder="Search location"/>
               </div>
               <button 
                 class="sb-search-box--filter-btn">
-                <img src="/assets/icons/filters.svg"/>
+                <i class="icon-filters sb-search-box--filter-btn--icon"></i>
               </button>
             </div>
           

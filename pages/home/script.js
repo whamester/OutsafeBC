@@ -187,24 +187,26 @@ const onSearchInput = debounce(async ({ target }) => {
     searchSuggestions = await geocode({ searchTerm }, 'autocomplete');
   else searchSuggestions = [];
 
-  if(searchSuggestions.length > 0) {
-    // inject search suggestions
-    injectHTML(
-      searchSuggestions?.map((item) => {
-        return {
-          func: SearchBarSuggestionCard,
-          args: item,
-          target: '.sb-suggestion-wrapper',
-        };
-      }) ?? []
-    );
-
-    suggestionOnClick();
-    boxSuggestion.style.display = 'block';
-    boxCategories.style.display = 'none';
-  } else {
+  if(!searchSuggestions.length) {
     boxSuggestion.style.display = 'none';
+    return;
   }
+  
+  // inject search suggestions
+  injectHTML(
+    searchSuggestions?.map((item) => {
+      return {
+        func: SearchBarSuggestionCard,
+        args: item,
+        target: '.sb-suggestion-wrapper',
+      };
+    }) ?? []
+  );
+
+  suggestionOnClick();
+  boxSuggestion.style.display = 'block';
+  boxCategories.style.display = 'none';
+
 });
 
 const searchBarParams = {
