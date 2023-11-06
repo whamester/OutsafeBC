@@ -19,7 +19,6 @@ import loadIcons from '../../assets/helpers/load-icons.js';
 import Map from '../../assets/models/Map.js';
 import HazardReport from '../../assets/models/HazardReport.js';
 import getHazardDetail from '../../assets/helpers/get-hazard-detail.js';
-import safeNumber from '../../assets/helpers/safe-number.js';
 
 // URL params
 const url = new URL(window.location.href);
@@ -27,8 +26,8 @@ const idReport = url.searchParams.get('id');
 const openDetail = url.searchParams.get('open') === 'true' && !!idReport;
 const focusMarker = url.searchParams.get('focus') === 'true' && !!idReport;
 const zoom = url.searchParams.get('zoom') ?? 4;
-const latitude = safeNumber(url.searchParams.get('lat'), null);
-const longitude = safeNumber(url.searchParams.get('lng'), null);
+const latitude = Number(url.searchParams.get('lat')) || null;
+const longitude = Number(url.searchParams.get('lng')) || null;
 
 //Variable Declaration
 let geoMap;
