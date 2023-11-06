@@ -9,7 +9,7 @@ const Header = () => {
   return `
   <header>
     <div id="header-content">
-      <a href="/pages/home"><img src="../../assets/img/header-logo-dark.svg" style="width:8.06rem; height:100%" alt="Outsafe BC logo" /></a>
+      <a href="/pages/home/index.html"><img src="../../assets/img/header-logo-dark.svg" style="width:8.06rem; height:100%" alt="Outsafe BC logo" /></a>
       ${
         !!showNavigation
           ? ` <nav id="header-nav">

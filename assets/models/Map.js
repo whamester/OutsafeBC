@@ -6,12 +6,13 @@ class Map {
   static CURRENT_ZOOM = 12;
   static MAP_ID = 'map';
   static MAX_ZOOM = 22;
+  static DEFAULT_MAP_ZOOM = 12; // If we don't set the zoom level, 12 is the default of Leaflet
   static DEFAULT_LOCATION = {
     lat: 49.2,
     lng: -123.12,
   };
 
-  constructor(lat, lng, customConfig={}) {
+  constructor(lat, lng, customConfig = {}) {
     this.map = L.map(Map.MAP_ID, { ...customConfig }).setView(
       [lat, lng],
       customConfig.CURRENT_ZOOM ?? Map.CURRENT_ZOOM

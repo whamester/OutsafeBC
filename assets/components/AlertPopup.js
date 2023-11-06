@@ -26,7 +26,7 @@ class AlertPopup {
     body.appendChild(alertContainer);
   }
 
-  show(message, type = AlertPopup.success, delay = 1500) {
+  show(message, type = AlertPopup.success, delay = 3000) {
     if (!message) {
       throw new Error('message is required');
     }

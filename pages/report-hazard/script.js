@@ -27,6 +27,8 @@ const user = getUserSession();
 const url = new URL(window.location.href);
 const idReport = url.searchParams.get('id');
 
+let allowRedirect = false;
+
 const FLY_TO_ZOOM = 12;
 const ANIMATION_DURATION = 4;
 
@@ -94,7 +96,7 @@ window.addEventListener('beforeunload', function (e) {
     currentReport.option.id,
   ];
 
-  if (values.some((value) => !!value)) {
+  if (values.some((value) => !!value) && !allowRedirect) {
     e.preventDefault();
     e.returnValue = '';
   }
@@ -603,7 +605,6 @@ showConfirmationBtn.addEventListener('click', () => {
 reportHazardForm.addEventListener('submit', async function (event) {
   event.preventDefault();
 
-  console.log({ currentReport });
   try {
     const images = await uploadImageToStorage(currentReport.images);
     //CREATE
@@ -627,7 +628,8 @@ reportHazardForm.addEventListener('submit', async function (event) {
       });
 
       if (response.ok) {
-        await response.json();
+        allowRedirect = true;
+        const { data } = await response.json();
 
         const modal = new Modal();
 
@@ -635,7 +637,9 @@ reportHazardForm.addEventListener('submit', async function (event) {
         button.setAttribute('id', 'open-modal-btn');
         button.setAttribute('class', 'btn btn-primary');
         button.addEventListener('click', () =>
-          window.location.replace('/pages/home')
+          window.location.assign(
+            `/pages/home/index.html?id=${data.id}&focus=true&zoom=${Map.DEFAULT_MAP_ZOOM}&lat=${data?.location?.lat}&lng=${data?.location?.lng}`
+          )
         );
         button.innerHTML = 'Continue Exploring';
 
@@ -674,14 +678,14 @@ reportHazardForm.addEventListener('submit', async function (event) {
 
     if (response.ok) {
       await response.json();
-
+      allowRedirect = true;
       const modal = new Modal();
 
       const button = document.createElement('button');
       button.setAttribute('id', 'open-modal-btn');
       button.setAttribute('class', 'btn btn-primary');
       button.addEventListener('click', () =>
-        window.location.replace('/pages/my-reports')
+        window.location.replace('/pages/my-reports/index.html')
       );
       button.innerHTML = 'Back to My Reports';
 
