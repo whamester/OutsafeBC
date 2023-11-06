@@ -27,14 +27,17 @@ const user = getUserSession();
 const url = new URL(window.location.href);
 const idReport = url.searchParams.get('id');
 
+const FLY_TO_ZOOM = 12;
+const ANIMATION_DURATION = 4;
+
 /**
  * Page Init
  */
 
-window.addEventListener("load", function(){
+window.addEventListener('load', function () {
   // this.console.log("listo")
-  document.getElementById('loader').classList.toggle('loader2')
-})
+  document.getElementById('loader').classList.toggle('loader2');
+});
 
 window.onload = async function () {
   try {
@@ -156,6 +159,11 @@ const loadGeolocation = async () => {
     //   animate: true,
     //   duration: 2,
     // });
+    mapInstance.map.flyTo([position.lat, position.lng], FLY_TO_ZOOM, {
+        animate: true,
+        duration: ANIMATION_DURATION,
+      }
+    );
   } catch (error) {
     console.log(error);
 
