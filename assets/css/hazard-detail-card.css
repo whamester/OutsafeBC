@@ -1,6 +1,6 @@
 #hazard-card__container {
   position: absolute;
-  z-index: 1;
+  z-index: 9;
 }
 
 #hazard-card__outer {
