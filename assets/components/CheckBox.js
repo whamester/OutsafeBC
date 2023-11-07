@@ -3,9 +3,9 @@ const CheckBox = (id, label) => {
     <div class="checkbox">
       <input
         type="checkbox"
-        data-checkbox-for="${ id }"
-        id="checkbox-for-${ id }" />
-      <label>${ label }</label>
+        data-id="${ id }"
+        id="cb-id-${ id }" />
+      <label for="cb-id-${ id }">${ label }</label>
     </div>
   `
 }

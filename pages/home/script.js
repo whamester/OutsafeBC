@@ -36,8 +36,7 @@ let position =
     ? { lat: latitude, lng: longitude }
     : Map.DEFAULT_LOCATION;
 
-// let positionObj = {};
-// let locationDetails = '';
+let positionSecondary = {};
 let hazardCardParams = {};
 let searchSuggestions = [];
 let reports = [];
@@ -88,7 +87,7 @@ window.onload = async function () {
       .addEventListener('click', toggleFilterModal);
 
     document
-      .querySelector('.modal-filter--close')
+      .querySelector('.modal-filter--close-btn')
       .addEventListener('click', toggleFilterModal);
 
     document
@@ -129,16 +128,7 @@ window.onload = async function () {
 
     if (focusMarker || openDetail) {
       geoMap.createLayerGroups([hazardDetail], markerParams);
-
-      if (
-        hazardDetail.location?.lat !== position.lat ||
-        hazardDetail.location?.lng !== position.lng
-      ) {
-        geoMap.map.flyTo(
-          [hazardDetail.location?.lat, hazardDetail.location?.lng],
-          FLY_TO_ZOOM
-        );
-      }
+      flyTo(hazardDetail.location?.lat, hazardDetail.location?.lng)
     }
 
     if (openDetail) {
@@ -196,7 +186,9 @@ const closeSearchSuggestion = (e) => {
 const getReportApiCall = async (lat, lng, categoryFilters = [], cursor = 0) => {
   // clear previous reports
   hazardCardParams['reports'] = [];
-  const url = `hazard-report?cursor=${cursor}&size=10&lat=${lat}&lan=${lng}&category_ids=${categoryFilters.join(
+
+  const positionChange = searchInput.dataset.positionChange === 'true';
+  const url = `hazard-report?cursor=${cursor}&size=10&lat=${positionChange ? positionSecondary.lat : lat}&lng=${positionChange ? positionSecondary.lng : lng}&category_ids=${categoryFilters.join(
     ','
   )}`;
   reports = await apiRequest(url, { method: 'GET' });
@@ -219,10 +211,12 @@ const suggestionOnClick = () => {
     card.addEventListener('click', async ({ target }) => {
       const suggestionItem = target.closest('.sb-suggestion-item');
 
-      const searchInput = document.querySelector('.sb-search-box--input');
       searchInput.value = suggestionItem?.dataset?.addr1;
       const latLng = JSON.parse(suggestionItem?.dataset?.latlng);
 
+      // change user location
+      searchInput.dataset.positionChange = 'true';
+      positionSecondary = latLng;
       flyTo(latLng.lat, latLng.lng);
       closeSearchSuggestion();
       await getReportApiCall(latLng.lat, latLng.lng, categoryFilters);
@@ -286,7 +280,7 @@ const watchGeoLocationSuccess = async ({ coords }) => {
   // If there is a report id in the query params and the focus param is set, don't pan to the user's location
   // but to the report's location
   if (flyToTrigger && !(!!idReport && (!!focusMarker || !!openDetail))) {
-    geoMap.map.flyTo([lat, lng], FLY_TO_ZOOM);
+    flyTo(lat, lng);
     flyToTrigger = false;
   }
 };

@@ -3,7 +3,7 @@ import CheckBox from "./CheckBox.js";
 const ModalFilter = (categories) => {
   return `
     <div
-      class="modal-filter">
+      class="modal-filter" style="display:none;">
       <div class="modal-filter--top">
         <button 
           class="modal-filter--close-btn">
