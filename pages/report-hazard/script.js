@@ -29,10 +29,19 @@ const idReport = url.searchParams.get('id');
 
 let allowRedirect = false;
 
+const FLY_TO_ZOOM = 12;
+const ANIMATION_DURATION = 4;
+
 /**
  * Page Init
  */
 
+//loading animation
+window.addEventListener('load', function () {
+  document.getElementById('loader').classList.toggle('loader2');
+});
+
+//to display the correct section
 window.onload = async function () {
   try {
     if (!user) {
@@ -68,12 +77,6 @@ window.onload = async function () {
     loadGeolocation();
 
     populateReport();
-
-    reportHazardForm.classList.remove('hidden');
-    backButton.classList.remove('hidden');
-    fullNavMenu.classList.remove('hidden');
-    reportHazardForm.classList.remove('hidden');
-    loadingSection.classList.add('hidden');
   } catch (error) {
     const alert = new AlertPopup();
     alert.show(
@@ -153,6 +156,10 @@ const loadGeolocation = async () => {
     //   animate: true,
     //   duration: 2,
     // });
+    mapInstance.map.flyTo([position.lat, position.lng], FLY_TO_ZOOM, {
+      animate: true,
+      duration: ANIMATION_DURATION,
+    });
   } catch (error) {
     console.log(error);
 

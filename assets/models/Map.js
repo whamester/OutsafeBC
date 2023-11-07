@@ -1,7 +1,7 @@
 import { JAWG_ACCESS_TOKEN } from '../../constants.js';
 class Map {
   map = null;
-  mapLayers = {};
+  mapLayers = new L.LayerGroup();
   currentMarker = null;
   watcherLocation = null;
   static CURRENT_ZOOM = 12;
@@ -9,8 +9,8 @@ class Map {
   static MAX_ZOOM = 22;
   static DEFAULT_MAP_ZOOM = 12; // If we don't set the zoom level, 12 is the default of Leaflet
   static DEFAULT_LOCATION = {
-    lat: 49.2,
-    lng: -123.12,
+    lat: 55.72,
+    lng: -127.64,
   };
 
   constructor(lat, lng, customConfig = {}) {
@@ -47,25 +47,24 @@ class Map {
   }
 
   createLayerGroups(hazards, markerParams = {}) {
-    const layers = {};
     hazards?.forEach((hazard, idx) => {
       const pinIcon = Map.createIcon();
-      const key = hazard?.hazard?.name?.toLowerCase();
+      const category = hazard?.hazard?.name?.toLowerCase();
+      const subCategory = hazard?.hazardCategory?.name?.toLowerCase();
       const marker = L.marker([hazard?.location?.lat, hazard?.location?.lng], {
         icon: pinIcon,
       });
 
-      if (markerParams.event)
-        marker.on(markerParams.event, () => markerParams.func(idx));
+      marker.category = category;
+      marker.sub_category = subCategory;
 
-      if (layers[key]) layers[key].push(marker);
-      else layers[key] = [marker];
+      if (markerParams.event)
+        marker.on(markerParams.event, () => markerParams.func(idx, hazard?.location?.lat, hazard?.location?.lng));
+
+      this.mapLayers.addLayer(marker);
     });
 
-    for (const key in layers)
-      layers[key] = L.layerGroup(layers[key]).addTo(this.map);
-
-    this.mapLayers = layers;
+    this.mapLayers.addTo(this.map);
   }
 
   setMarkerOnMap(lat, lng, markerParams = {}) {

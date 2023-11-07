@@ -11,15 +11,17 @@ body {
   overflow: hidden;
 }
 
-/* header {
+header {
   position: fixed;
+  top: 0;
+  left: 0;
   z-index: 1;
   width: 100%;
-} */
+}
 
 #search-bar {
-  width: 100%;
   position: relative;
+  width: 100%;
 }
 
 #map {
