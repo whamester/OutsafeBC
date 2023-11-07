@@ -280,43 +280,51 @@ async function getHazardReport() {
   try {
     const response = await fetch(
       `${API_URL}/hazard-report?id=${hazardReportID}`
-    );
-
-    const result = await response.json();
-    currentReport = result.data;
-  } catch (error) {
-    alert.show(
-      'Report unavailable at the moment, please try again later or contact support',
-      AlertPopup.error
-    );
-  }
-}
-
-// Insert the report
-async function displayCurrentReport() {
-  await getHazardReport();
-
-  (async () => {
-    try {
-      let hazardReport = new HazardDetailCard(
-        currentReport.id,
-        currentReport.hazardCategory.name,
-        currentReport.hazard.name,
-        currentReport.location.address,
-        currentReport.created_at,
-        currentReport.images,
-        currentReport.comment,
-        currentReport.hazardCategory.settings,
-        calcHazardDistance(
-          currentReport.location.lat,
-          currentReport.location.lng,
-          Map.watcherLocation.latitude,
-          Map.watcherLocation.longitude
-        ),
-        currentReport.user
       );
-      body.insertBefore(hazardReport.hazardCardContent(), body.childNodes[1]);
-      loadIcons();
+      
+      const result = await response.json();
+      currentReport = result.data;
+    } catch (error) {
+      alert.show(
+        'Report unavailable at the moment, please try again later or contact support',
+        AlertPopup.error
+        );
+      }
+    }
+
+    // Insert the report
+    async function displayCurrentReport() {
+      await getHazardReport();
+      
+      (async () => {
+        try {
+          let hazardReport = new HazardDetailCard(
+            currentReport.id,
+            currentReport.hazardCategory.name,
+            currentReport.hazard.name,
+            currentReport.location.address,
+            currentReport.created_at,
+            currentReport.images,
+            currentReport.comment,
+            currentReport.hazardCategory.settings,
+            calcHazardDistance(
+              currentReport.location.lat,
+              currentReport.location.lng,
+              Map.watcherLocation?.latitude,
+              Map.watcherLocation?.longitude
+              ),
+              currentReport.user
+              );
+              let hazardReportPopulated = hazardReport.hazardCardContent()
+              body.insertBefore(hazardReportPopulated, body.childNodes[1]);
+              loadIcons();
+              // Close report card
+              const reportCloseBtn = document.getElementById('reportCloseBtn');
+              reportCloseBtn.addEventListener('click', ()=>{
+                if (hazardReportPopulated.parentNode){
+                  hazardReportPopulated.parentNode.removeChild(hazardReportPopulated)
+                }
+              })
     } catch (error) {
       console.error('Error:', error);
     }
@@ -347,3 +355,4 @@ function calcHazardDistance(lat1, lon1, lat2, lon2) {
 
   return distance.toFixed(1);
 }
+

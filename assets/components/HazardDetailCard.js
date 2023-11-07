@@ -31,7 +31,7 @@ class HazardDetailCard extends ReportCard {
     divInner.setAttribute('class', `report-card__inner`);
     divInner.innerHTML = `
   <div class="report-card__top-controls">
-  <div class="circle-border">
+  <div class="circle-border" id="reportCloseBtn">
   <i class="icon-close-square" style="background-color: var(--neutral-500)"></i>
   </div>
   <div class="circle-border">
