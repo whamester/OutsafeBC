@@ -25,18 +25,18 @@ class MyReportCard extends ReportCard {
 		</div>
 
 		<div class="report-card__top-info">
-			<div class="report-card__location">
+			<div class="report-card__details">
 				<i class="icon-location-pin-outline" style="background-color: var(--neutral-400)"></i>
 				<p class="text-body-2 regular">${this.location}</p>
 			</div>
 
 			<div class="report-card__date_time">
-				<div class="report-card__date">
+				<div class="report-card__details">
 					<i class="icon-date" style="background-color: var(--neutral-400)"></i>
 					<p class="text-body-2 regular">${super.getDateFormatted()}</p>
 				</div>
 
-				<div class="report-card__time">
+				<div class="report-card__details">
 					<i class="icon-time" style="background-color: var(--neutral-400)"></i>
 					<p class="text-body-2 regular">${super.getTimeFormatted()}</p>
 				</div>

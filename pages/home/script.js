@@ -1,3 +1,4 @@
+import { API_URL } from '../../constants.js';
 //Components
 import Header from '../../assets/components/Header.js';
 import GeoMap from '../../assets/components/GeoMap.js';
@@ -14,6 +15,7 @@ import apiRequest from '../../assets/helpers/api-request.js';
 import debounce from '../../assets/helpers/debounce.js';
 import geocode from '../../assets/helpers/geocode.js';
 import loadIcons from '../../assets/helpers/load-icons.js';
+import HazardDetailCard from '../../assets/components/HazardDetailCard.js';
 //Models
 import Map from '../../assets/models/Map.js';
 //Variable Declaration
@@ -51,9 +53,9 @@ const markerParams = {
 };
 
 const removePreviousMarkers = () => {
-  Object.keys(geoMap.mapLayers).forEach(key => {
-    geoMap.map.removeLayer(geoMap.mapLayers[key])
-  })
+  Object.keys(geoMap.mapLayers).forEach((key) => {
+    geoMap.map.removeLayer(geoMap.mapLayers[key]);
+  });
 };
 
 const closeSearchSuggestion = (e) => {
@@ -65,10 +67,12 @@ const closeSearchSuggestion = (e) => {
   document.querySelector('.sb-categories-wrapper').style.display = 'flex';
 };
 
-const getReportApiCall = async (lat, lng, categoryFilters=[], cursor=0) => {
+const getReportApiCall = async (lat, lng, categoryFilters = [], cursor = 0) => {
   // clear previous reports
   hazardCardParams['reports'] = [];
-  const url = `hazard-report?cursor=${cursor}&size=10&lat=${lat}&lan=${lng}&category_ids=${categoryFilters.join(",")}`;
+  const url = `hazard-report?cursor=${cursor}&size=10&lat=${lat}&lan=${lng}&category_ids=${categoryFilters.join(
+    ','
+  )}`;
   reports = await apiRequest(url, { method: 'GET' });
   hazardCardParams['reports'] = reports.data?.results;
   geoMap.createLayerGroups(hazardCardParams.reports, markerParams);
@@ -109,16 +113,14 @@ const suggestionOnClick = () => {
   });
 };
 
-const quickFiltersOnClick = async({ target }) => {
+const quickFiltersOnClick = async ({ target }) => {
   document.querySelector('.sb-cards')?.remove();
   const quickFilter = target.closest('.quick-filter');
   const categoryId = quickFilter.dataset.categoryId;
 
-  categoryFilters = [
-    ...categoryFilters.filter((f) => f !== categoryId)
-  ];
+  categoryFilters = [...categoryFilters.filter((f) => f !== categoryId)];
 
-  if(quickFilter.classList.contains('selected')) {
+  if (quickFilter.classList.contains('selected')) {
     quickFilter.classList.remove('selected');
     // all filters are de-selected
     if (categoryFilters.length === 0) {
@@ -138,9 +140,9 @@ const quickFiltersOnClick = async({ target }) => {
   categoryFilters.push(categoryId);
 
   await getReports(position.lat, position.lng, categoryFilters);
-}
+};
 
-const getReports = async (lat, lng, categoryFilters=[],cursor = 0) => {
+const getReports = async (lat, lng, categoryFilters = [], cursor = 0) => {
   document.querySelector('.btn-report-hazard').style.display = 'none';
   document.querySelector('.sb-cards')?.remove();
   removePreviousMarkers();
@@ -159,11 +161,11 @@ const watchGeoLocationSuccess = async ({ coords }) => {
   geoMap.setMarkerOnMap(lat, lng);
   await getReportApiCall(lat, lng, categoryFilters);
 
-  // update current user position 
+  // update current user position
   position = {
     lat,
-    lng
-  }
+    lng,
+  };
 
   if (flyToTrigger) {
     geoMap.map.flyTo([lat, lng], FLY_TO_ZOOM, {
@@ -175,10 +177,7 @@ const watchGeoLocationSuccess = async ({ coords }) => {
 };
 
 const watchGeoLocationError = async (err) => {
-  alert.show(
-    `ERROR(${err.code}): ${err.message}`,
-    AlertPopup.error
-  );
+  alert.show(`ERROR(${err.code}): ${err.message}`, AlertPopup.error);
   await getReportApiCall(position.lat, position.lng, categoryFilters);
 };
 
@@ -203,7 +202,7 @@ const onSearchInput = debounce(async ({ target }) => {
     searchSuggestions = await geocode({ searchTerm }, 'autocomplete');
   else searchSuggestions = [];
 
-  if(searchSuggestions.length > 0) {
+  if (searchSuggestions.length > 0) {
     // inject search suggestions
     injectHTML(
       searchSuggestions?.map((item) => {
@@ -216,7 +215,7 @@ const onSearchInput = debounce(async ({ target }) => {
     );
 
     suggestionOnClick();
-    
+
     boxSuggestion.style.display = 'block';
     boxCategories.style.display = 'none';
   }
@@ -265,7 +264,72 @@ document
 
 document.getElementById('map').addEventListener('click', closeSearchSuggestion);
 
-document.querySelectorAll('.quick-filter')
+document
+  .querySelectorAll('.quick-filter')
   .forEach((filter) => filter.addEventListener('click', quickFiltersOnClick));
 
 loadIcons();
+
+// Load Hazard Detail Card
+let hazardReportID = '16cde280-ac58-467b-888e-dd0549274b6e';
+let currentReport = {};
+const body = document.getElementById('home-body');
+
+// Get the report
+async function getHazardReport() {
+  try {
+    const response = await fetch(
+      `${API_URL}/hazard-report?id=${hazardReportID}`
+    );
+
+    const result = await response.json();
+    currentReport = result.data;
+  } catch (error) {
+    alert.show(
+      'Report unavailable at the moment, please try again later or contact support',
+      AlertPopup.error
+    );
+  }
+}
+
+// Insert the report
+async function displayCurrentReport() {
+  await getHazardReport();
+
+  let hazardReport = new HazardDetailCard(
+    currentReport.id,
+    currentReport.hazardCategory.name,
+    currentReport.hazard.name,
+    currentReport.location.address,
+    currentReport.created_at,
+    currentReport.images,
+    currentReport.comment,
+    currentReport.hazardCategory.settings,
+    calcHazardDistance(currentReport.location.lat,currentReport.location.lng,position.lat, position.lng),
+    currentReport.user
+  );
+  body.insertBefore(hazardReport.hazardCardContent(), body.childNodes[1]);
+  loadIcons();
+  console.log(hazardReport);
+}
+
+displayCurrentReport();
+
+// Calculate distance from user to hazard with Haversine foruma
+function calcHazardDistance(lat1, lon1, lat2, lon2){
+  const earthRadius = 6371; 
+
+  const lat1Rad = (lat1 * Math.PI) / 180;
+  const lon1Rad = (lon1 * Math.PI) / 180;
+  const lat2Rad = (lat2 * Math.PI) / 180;
+  const lon2Rad = (lon2 * Math.PI) / 180;
+
+  const dLat = lat2Rad - lat1Rad;
+  const dLon = lon2Rad - lon1Rad;
+  const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(lat1Rad) * Math.cos(lat2Rad) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  const distance = earthRadius * c;
+
+  return distance;
+}
+
