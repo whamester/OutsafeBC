@@ -2,7 +2,7 @@ const HazardCard = ({ reports }) => {
   return reports ?
   `<div class="sb-cards">
     <button class="sb-cards-btn--back"
-      onclick="document.querySelector('.sb-cards').remove(); document.querySelector('.btn-report-hazard').style.display = 'flex'">
+      onclick="document.querySelector('.sb-cards').remove(); document.querySelector('.btn-report-hazard').style.display = 'flex'; searchInput.value=''; searchInput.dataset.positionChange='false'">
       <img src="/assets/icons/chevron-left.svg" />Back
     </button>
     <div class="sb-cards-wrapper d-grid">
