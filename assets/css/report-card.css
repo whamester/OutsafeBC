@@ -75,3 +75,9 @@
 	background: none;
 	border: none;
 }
+
+.report-card__location-text {
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}

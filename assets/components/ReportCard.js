@@ -49,7 +49,7 @@ class MyReportCard extends ReportCard {
 		<div class="report-card__top-info">
 			<div class="report-card__location">
 				<i class="icon-location-pin-outline" style="background-color: var(--neutral-400)"></i>
-				<p class="text-body-2 regular">${this.location}</p>
+				<p class="text-body-2 regular report-card__location-text">${this.location}</p>
 			</div>
 
 			<div class="report-card__date_time">
