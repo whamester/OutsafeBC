@@ -1,5 +1,5 @@
-import { clearUserSession } from '../../assets/helpers/storage.js'
+import { clearUserSession } from '../../assets/helpers/storage.js';
 
-clearUserSession()
+clearUserSession();
 
-window.location.replace('/pages/home')
+window.location.replace('/pages/home');

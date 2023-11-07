@@ -7,20 +7,24 @@ self.addEventListener('activate', async (event) => {
   // console.log("Service worker activated",event)
 });
 
-self.addEventListener('fetch', (event) => {
-  // console.log('[FETCH]', event)
-});
+self.addEventListener('fetch', (event) => {});
 
 self.addEventListener('push', function (event) {
   if (event.data) {
     console.log('Push event!! ', event.data.json());
     const { notification, data } = event.data.json();
+    try {
+      self.registration.showNotification(notification.title, {
+        body: notification.body,
+        tag: `${data.id}---${new Date().getTime()}`,
+        icon: '../assets/img/icons/logo-square.png', //TODO: Replace image with our logo
+      });
 
-    self.registration.showNotification(notification.title, {
-      body: notification.body,
-      tag: `${data.id}---${new Date().getTime()}`,
-      icon: '../assets/img/icons/logo-square.png', //TODO: Replace image with our logo
-    });
+      const channel = new BroadcastChannel('new-report-created');
+      channel.postMessage({ ...data });
+    } catch (error) {
+      console.log({ error });
+    }
   } else {
     console.log('Push event but no data');
   }

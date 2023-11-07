@@ -29,7 +29,6 @@
   <!-- Notifications JS -->
   <script src="https://js.pusher.com/beams/1.0/push-notifications-cdn.js"></script>
   <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
-  <script src="../../assets/helpers/push-notifications.js" type="module"></script>
   <!-- End Notifications JS -->
 
   <title>Report Hazard</title>
@@ -37,7 +36,7 @@
 
 <body id="report-hazard-body">
   <main>
-    <nav class="breadbrumb-desktop">
+    <nav id="fullNavMenu" class="breadbrumb-desktop hidden">
       <ul id="navMenu">
         <li>
           <a id="selectLocation" title="Select the location" href="#select-location">Select Location</a>
@@ -69,9 +68,10 @@
         </li>
       </ul>
     </nav>
-    <button id="backButton" class="back-button-mobile">&lt; Back</button>
+    <div id="loadingSection">Loading...</div>
+    <button id="backButton" class="back-button-mobile hidden" >&lt; Back</button>
 
-    <form id="reportHazardForm">
+    <form id="reportHazardForm" class="hidden">
       <section id="select-location" class="page">
         <h1>1. Select the location.</h1>
 

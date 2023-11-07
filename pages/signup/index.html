@@ -33,7 +33,6 @@
 	<!-- Notifications JS -->
 	<script src="https://js.pusher.com/beams/1.0/push-notifications-cdn.js"></script>
 	<script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
-	<script src="../../assets/helpers/push-notifications.js" type="module"></script>
 	<!-- End Notifications JS -->
 
 	<title>Sign Up</title>
@@ -57,7 +56,7 @@
 				<div class="form-field">
 					<label for="email-input" class="text-body-2 medium">Email*</label>
 					<div class="form-field__input-container">
-						<input id="email-input" autocomplete="username" type="email" required />
+						<input id="email-input" autocomplete="email" type="email" required />
 					</div>
 				</div>
 
@@ -66,7 +65,7 @@
 					<div class="form-field__input-container">
 						<i class="icon-password-close pointer right" id="show-pw"></i>
 						<i class="icon-password-visible pointer right hidden" id="hide-pw"></i>
-						<input id="password-input" type="password" required />
+						<input id="password-input" autocomplete="new-password" type="password" required />
 					</div>
 					<span class="form-field__helper">Must be at least 8 characters</span>
 				</div>

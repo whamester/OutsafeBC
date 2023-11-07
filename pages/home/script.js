@@ -4,6 +4,7 @@ import GeoMap from '../../assets/components/GeoMap.js';
 import SearchBar, {
   SearchBarSuggestionCard,
 } from '../../assets/components/SearchBar.js';
+import Modal from '../../assets/components/Modal.js';
 import HazardCard from '../../assets/components/HazardCard.js';
 import ModalFilter from '../../assets/components/ModalFilter.js';
 import AlertPopup from '../../assets/components/AlertPopup.js';
@@ -16,23 +17,152 @@ import geocode from '../../assets/helpers/geocode.js';
 import loadIcons from '../../assets/helpers/load-icons.js';
 //Models
 import Map from '../../assets/models/Map.js';
+import HazardReport from '../../assets/models/HazardReport.js';
+import getHazardDetail from '../../assets/helpers/get-hazard-detail.js';
+
+// URL params
+const url = new URL(window.location.href);
+const idReport = url.searchParams.get('id');
+const openDetail = url.searchParams.get('open') === 'true' && !!idReport;
+const focusMarker = url.searchParams.get('focus') === 'true' && !!idReport;
+const zoom = url.searchParams.get('zoom') ?? 4;
+const latitude = Number(url.searchParams.get('lat')) || null;
+const longitude = Number(url.searchParams.get('lng')) || null;
+
 //Variable Declaration
 let geoMap;
-let position = Map.DEFAULT_LOCATION;
-let positionSecondary = {};
+let position =
+  latitude && longitude
+    ? { lat: latitude, lng: longitude }
+    : Map.DEFAULT_LOCATION;
+
+// let positionObj = {};
+// let locationDetails = '';
 let hazardCardParams = {};
 let searchSuggestions = [];
 let reports = [];
-let mapOptions = {
-  zoomControl: false,
-  doubleClickZoom: false,
-  CURRENT_ZOOM: 4,
-};
 let categoryFilters = [];
 let flyToTrigger = true;
 const alert = new AlertPopup();
 
-const categories = await apiRequest(`hazard-category`, { method: 'GET' });
+let mapOptions = {
+  zoomControl: false,
+  doubleClickZoom: false,
+  CURRENT_ZOOM: zoom,
+};
+
+let hazardDetail = new HazardReport();
+
+const searchBarParams = {
+  categories: [],
+};
+
+/**
+ * Page Init
+ */
+
+window.onload = async function () {
+  try {
+    const { data } = await apiRequest(`hazard-category`, { method: 'GET' });
+
+    searchBarParams.categories = data;
+
+    injectHeader([
+      { func: Header, target: '#home-body', position: 'afterbegin' },
+    ]);
+
+    injectHTML([
+      { func: GeoMap },
+      { func: SearchBar, args: searchBarParams },
+      { func: ModalFilter, args: searchBarParams.categories },
+    ]);
+
+    const toggleFilterModal = () => {
+      const filterModalStyle = document.querySelector('.modal-filter').style;
+      filterModalStyle.display =
+        filterModalStyle.display === 'block' ? 'none' : 'block';
+    };
+
+    document
+      .querySelector('.sb-search-box--filter-btn')
+      .addEventListener('click', toggleFilterModal);
+
+    document
+      .querySelector('.modal-filter--close')
+      .addEventListener('click', toggleFilterModal);
+
+    document
+      .querySelector('.sb-search-box--input')
+      .addEventListener('input', (e) => onSearchInput(e));
+
+    document
+      .querySelector('.sb-search-box--input')
+      .addEventListener('focus', (e) => {
+        onSearchInput(e);
+        e.target.select();
+      });
+
+    document
+      .getElementById('map')
+      .addEventListener('click', closeSearchSuggestion);
+
+    document
+      .querySelectorAll('.quick-filter')
+      .forEach((filter) =>
+        filter.addEventListener('click', quickFiltersOnClick)
+      );
+
+    loadIcons();
+
+    await loadGeolocation();
+  } catch (error) {
+    console.error(error);
+
+    alert.show('Error loading categories', AlertPopup.error, 500);
+  }
+
+  try {
+    if (!idReport) {
+      return;
+    }
+    hazardDetail = await getHazardDetail(idReport);
+
+    if (focusMarker || openDetail) {
+      geoMap.createLayerGroups([hazardDetail], markerParams);
+
+      if (
+        hazardDetail.location?.lat !== position.lat ||
+        hazardDetail.location?.lng !== position.lng
+      ) {
+        geoMap.map.flyTo(
+          [hazardDetail.location?.lat, hazardDetail.location?.lng],
+          FLY_TO_ZOOM
+        );
+      }
+    }
+
+    if (openDetail) {
+      //TODO: Open pull-up card
+      //Remove temporary modal
+
+      const modal = new Modal();
+      modal.show({
+        title: 'Hazard Detail',
+        description: `${hazardDetail.location.address}`,
+        enableOverlayClickClose: true,
+      });
+
+      return;
+    }
+  } catch (error) {
+    console.error(error);
+    alert.show(
+      error.message || AlertPopup.SOMETHING_WENT_WRONG_MESSAGE,
+      AlertPopup.error,
+      500
+    );
+  }
+};
 
 const markerParams = {
   event: 'click',
@@ -63,12 +193,15 @@ const closeSearchSuggestion = (e) => {
   document.querySelector('.sb-categories-wrapper').style.display = 'flex';
 };
 
-const getReportApiCall = async (lat, lng, categoryFilters=[], cursor=0) => {
+const getReportApiCall = async (lat, lng, categoryFilters = [], cursor = 0) => {
   // clear previous reports
   hazardCardParams['reports'] = [];
-  const url = `hazard-report?cursor=${cursor}&size=1000&lat=${lat}&lan=${lng}&category_ids=${categoryFilters.join(",")}`;
+  const url = `hazard-report?cursor=${cursor}&size=10&lat=${lat}&lan=${lng}&category_ids=${categoryFilters.join(
+    ','
+  )}`;
   reports = await apiRequest(url, { method: 'GET' });
   hazardCardParams['reports'] = reports.data?.results;
+
   geoMap.createLayerGroups(hazardCardParams.reports, markerParams);
 };
 
@@ -86,6 +219,7 @@ const suggestionOnClick = () => {
     card.addEventListener('click', async ({ target }) => {
       const suggestionItem = target.closest('.sb-suggestion-item');
 
+      const searchInput = document.querySelector('.sb-search-box--input');
       searchInput.value = suggestionItem?.dataset?.addr1;
       const latLng = JSON.parse(suggestionItem?.dataset?.latlng);
 
@@ -102,9 +236,7 @@ const quickFiltersOnClick = async({ target }) => {
   const quickFilter = target.closest('.quick-filter');
   const categoryId = quickFilter.dataset.categoryId;
 
-  categoryFilters = [
-    ...categoryFilters.filter((f) => f !== categoryId)
-  ];
+  categoryFilters = [...categoryFilters.filter((f) => f !== categoryId)];
 
   if (quickFilter.classList.contains('selected')) {
     quickFilter.classList.remove('selected');
@@ -145,33 +277,27 @@ const watchGeoLocationSuccess = async ({ coords }) => {
   geoMap.setMarkerOnMap(lat, lng);
   await getReportApiCall(lat, lng, categoryFilters);
 
-  // update current user position 
+  // update current user position
   position = {
     lat,
-    lng
-  }
+    lng,
+  };
 
-  if (flyToTrigger) {
-    flyTo(lat, lng);
+  // If there is a report id in the query params and the focus param is set, don't pan to the user's location
+  // but to the report's location
+  if (flyToTrigger && !(!!idReport && (!!focusMarker || !!openDetail))) {
+    geoMap.map.flyTo([lat, lng], FLY_TO_ZOOM);
     flyToTrigger = false;
   }
 };
 
 const watchGeoLocationError = async (err) => {
-  console.error(`ERROR(${err.code}): ${err.message}`);
-  alert.show(
-    `Error while trying to get location`,
-    AlertPopup.error
-  );
+  alert.show(`ERROR(${err.code}): ${err.message}`, AlertPopup.error);
   await getReportApiCall(position.lat, position.lng, categoryFilters);
 };
 
 const loadGeolocation = async () => {
-  geoMap = new Map(
-    Map.DEFAULT_LOCATION.lat,
-    Map.DEFAULT_LOCATION.lng,
-    mapOptions
-  );
+  geoMap = new Map(position.lat, position.lng, mapOptions);
   Map.watchGeoLocation(watchGeoLocationSuccess, watchGeoLocationError);
 };
 
@@ -208,51 +334,3 @@ const onSearchInput = debounce(async ({ target }) => {
   boxCategories.style.display = 'none';
 
 });
-
-const searchBarParams = {
-  categories: categories.data,
-};
-
-injectHeader([{ func: Header, target: '#home-body', position: 'afterbegin' }]);
-
-injectHTML([
-  { func: GeoMap },
-  { func: SearchBar, args: searchBarParams },
-  { func: ModalFilter, args: searchBarParams.categories },
-]);
-
-await loadGeolocation();
-
-const searchInput = document.querySelector('.sb-search-box--input');
-
-const toggleFilterModal = () => {
-  const filterModalStyle = document.querySelector('.modal-filter').style;
-  filterModalStyle.display =
-    filterModalStyle.display === 'block' ? 'none' : 'block';
-};
-
-document
-  .querySelector('.sb-search-box--filter-btn')
-  .addEventListener('click', toggleFilterModal);
-
-document
-  .querySelector('.modal-filter--close')
-  .addEventListener('click', toggleFilterModal);
-
-document
-  .querySelector('.sb-search-box--input')
-  .addEventListener('input', onSearchInput);
-
-document
-  .querySelector('.sb-search-box--input')
-  .addEventListener('focus', (e) => {
-    onSearchInput(e);
-    e.target.select();
-  });
-
-document.getElementById('map').addEventListener('click', closeSearchSuggestion);
-
-document.querySelectorAll('.quick-filter')
-  .forEach((filter) => filter.addEventListener('click', quickFiltersOnClick));
-
-loadIcons();

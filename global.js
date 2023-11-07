@@ -1,6 +1,10 @@
 import errorInputHelper from './assets/helpers/error-input-helper.js';
+import {
+  checkIfAllNotificationsAreRead,
+  displayNotificationItem,
+} from './assets/helpers/inject-header.js';
 import loadIcons from './assets/helpers/load-icons.js';
-import { getUserSession } from './assets/helpers/storage.js';
+import { addNotification, getUserSession } from './assets/helpers/storage.js';
 
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker
@@ -29,7 +33,6 @@ if ('serviceWorker' in navigator) {
     });
 
     const user = getUserSession();
-    console.log(user);
 
     beamsClient
       .start()
@@ -39,14 +42,35 @@ if ('serviceWorker' in navigator) {
       )
       .then((data) =>
         user?.notifications_enabled
-          ? beamsClient.addDeviceInterest('all')
+          ? beamsClient.addDeviceInterest(user?.id)
           : data
       )
+      .then(() => beamsClient.removeDeviceInterest('all'))
       .then(() => beamsClient.getDeviceInterests())
+      .then((data) => (!user ? beamsClient.clearDeviceInterests() : data))
       .then((interests) => console.log('Current interests:', interests))
       .catch(console.error);
   });
 }
+
+const channel = new BroadcastChannel('new-report-created');
+channel.addEventListener('message', (event) => {
+  console.log('Received', event.data);
+
+  const data = event.data;
+  const user = getUserSession();
+
+  console.log(user.email, data?.user?.email);
+  if (!!user && user.email !== data?.user?.email) {
+    addNotification(user.id, { ...data, read: false });
+    displayNotificationItem({ ...data, read: false });
+    checkIfAllNotificationsAreRead();
+    loadIcons();
+    const emptyDiv = document.getElementById('empty-notifications');
+
+    emptyDiv.innerHTML = '';
+  }
+});
 
 loadIcons();
 

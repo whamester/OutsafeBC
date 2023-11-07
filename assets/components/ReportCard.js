@@ -2,8 +2,8 @@ import ReportCard from '../helpers/card-container.js';
 import ToggleSwitch from '../components/ToggleSwitch.js';
 
 class MyReportCard extends ReportCard {
-  constructor(id, category, hazard, location, date, photos, comment) {
-    super(id, category, hazard, location, date, photos, comment);
+  constructor(id, category, hazard, location, date, photos, comment, icon) {
+    super(id, category, hazard, location, date, photos, comment, icon);
   }
 
   reportContent() {
@@ -36,10 +36,12 @@ class MyReportCard extends ReportCard {
     divInner.setAttribute('class', `report-card__inner`);
     divInner.innerHTML = `
 		<div class="report-card__heading">
-			<span class="btn__icon report-card__heading__icon">
-				<i class="icon-${
-          this.category
-        }-filled" style="width:24px; height:24px; background-color: white"></i>
+			<span class="btn__icon report-card__heading__icon" style="background-color: ${
+        this.settings.iconBackround
+      }">
+				<i class="${
+          this.settings.icon
+        }" style="width:24px; height:24px; background-color: white"></i>
 			</span>
         	<p class="text-body-1 semibold">${this.hazard}</p>
 		</div>
@@ -76,7 +78,7 @@ class MyReportCard extends ReportCard {
 
 		<div class="report-card__my-reports-buttons">
 			${ToggleSwitch(this.id)}
-			<button class="btn btn-tertiary text-body-3 medium" onclick="window.location.href='/pages/report-hazard/index.html?id=${this.id}'">
+			<button class="btn btn-tertiary text-body-3 medium" onclick="window.location.href='/pages/report-hazard/index.html?id=${this.id}#review-report'">
 				<i class="icon-edit"></i>
 				Edit Report
 			</button>
