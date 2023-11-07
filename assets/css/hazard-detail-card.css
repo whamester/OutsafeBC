@@ -36,3 +36,16 @@
   align-self: stretch;
   flex-wrap: wrap;
 }
+
+.report-card__user-details {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  align-self: stretch;
+}
+
+#user-image {
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 6.25rem;
+}

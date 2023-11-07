@@ -69,7 +69,7 @@ class HazardDetailCard extends ReportCard {
     
     <div class="report-card__details">
     <i class="icon-distance" style="background-color: var(--neutral-400)"></i>
-    <p class="text-body-2 regular">${this.distance}</p>
+    <p class="text-body-2 regular">${this.distance} km away</p>
   </div>
     
   </div>
@@ -85,7 +85,10 @@ class HazardDetailCard extends ReportCard {
 
   <div class="report-card__spacer-line"></div>
   <p class="text-body-3 regular">Reported by</p>
+  <div class="report-card__user-details">
+  <img id="user-image" src="${this.user.photo || '../../assets/img/default-nav-image.png'}" alt="User photo">
   <p class="text-body-2 regular">${this.user.name}</p>
+  </div>
   
   <div class="report-card__spacer-line"></div>
 

@@ -330,6 +330,6 @@ function calcHazardDistance(lat1, lon1, lat2, lon2){
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   const distance = earthRadius * c;
 
-  return distance;
+  console.log(position);
+  return distance.toFixed(1);
 }
-
