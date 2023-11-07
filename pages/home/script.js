@@ -296,28 +296,38 @@ async function getHazardReport() {
 async function displayCurrentReport() {
   await getHazardReport();
 
-  let hazardReport = new HazardDetailCard(
-    currentReport.id,
-    currentReport.hazardCategory.name,
-    currentReport.hazard.name,
-    currentReport.location.address,
-    currentReport.created_at,
-    currentReport.images,
-    currentReport.comment,
-    currentReport.hazardCategory.settings,
-    calcHazardDistance(currentReport.location.lat,currentReport.location.lng,position.lat, position.lng),
-    currentReport.user
-  );
-  body.insertBefore(hazardReport.hazardCardContent(), body.childNodes[1]);
-  loadIcons();
-  console.log(hazardReport);
+  (async () => {
+    try {
+      let hazardReport = new HazardDetailCard(
+        currentReport.id,
+        currentReport.hazardCategory.name,
+        currentReport.hazard.name,
+        currentReport.location.address,
+        currentReport.created_at,
+        currentReport.images,
+        currentReport.comment,
+        currentReport.hazardCategory.settings,
+        calcHazardDistance(
+          currentReport.location.lat,
+          currentReport.location.lng,
+          Map.watcherLocation.latitude,
+          Map.watcherLocation.longitude
+        ),
+        currentReport.user
+      );
+      body.insertBefore(hazardReport.hazardCardContent(), body.childNodes[1]);
+      loadIcons();
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  })();
 }
 
 displayCurrentReport();
 
 // Calculate distance from user to hazard with Haversine foruma
-function calcHazardDistance(lat1, lon1, lat2, lon2){
-  const earthRadius = 6371; 
+function calcHazardDistance(lat1, lon1, lat2, lon2) {
+  const earthRadius = 6371;
 
   const lat1Rad = (lat1 * Math.PI) / 180;
   const lon1Rad = (lon1 * Math.PI) / 180;
@@ -326,10 +336,14 @@ function calcHazardDistance(lat1, lon1, lat2, lon2){
 
   const dLat = lat2Rad - lat1Rad;
   const dLon = lon2Rad - lon1Rad;
-  const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(lat1Rad) * Math.cos(lat2Rad) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(lat1Rad) *
+      Math.cos(lat2Rad) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   const distance = earthRadius * c;
 
-  console.log(position);
   return distance.toFixed(1);
 }

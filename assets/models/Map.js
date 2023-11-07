@@ -3,6 +3,7 @@ class Map {
   map = null;
   mapLayers = {};
   currentMarker = null;
+  watcherLocation = null;
   static CURRENT_ZOOM = 12;
   static MAP_ID = 'map';
   static MAX_ZOOM = 22;
@@ -11,7 +12,7 @@ class Map {
     lng: -123.12,
   };
 
-  constructor(lat, lng, customConfig={}) {
+  constructor(lat, lng, customConfig = {}) {
     this.map = L.map(Map.MAP_ID, { ...customConfig }).setView(
       [lat, lng],
       customConfig.CURRENT_ZOOM ?? Map.CURRENT_ZOOM
@@ -76,14 +77,14 @@ class Map {
     }).addTo(this.map);
   }
 
-  static watchGeoLocation(success, error, customOptions = {}) {
-    // check if browser supports geolocation
+  static async watchGeoLocation(customOptions = {}) {
+    // Check if browser supports geolocation
     if (!('geolocation' in navigator)) {
       console.log('Geolocation not supported on your browser.');
-      return;
+      throw new Error('Geolocation not supported');
     }
 
-    // navigator options for better accuracy
+    // Navigator options for better accuracy
     const navigatorOptions = {
       enableHighAccuracy: true,
       timeout: 5000,
@@ -91,7 +92,26 @@ class Map {
       ...customOptions,
     };
 
-    navigator.geolocation.watchPosition(success, error, navigatorOptions);
+    try {
+      const data = await new Promise((resolve, reject) => {
+        const watchId = navigator.geolocation.watchPosition(
+          (position) => {
+            const { coords } = position;
+            this.watcherLocation = coords;
+            navigator.geolocation.clearWatch(watchId);
+            resolve(position);
+          },
+          (error) => {
+            reject(error);
+          },
+          navigatorOptions
+        );
+      });
+
+      return data;
+    } catch (error) {
+      throw error;
+    }
   }
 
   static async getCurrentLocation() {
