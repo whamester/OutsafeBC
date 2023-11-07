@@ -346,3 +346,89 @@ const onSearchInput = debounce(async ({ target }) => {
     boxCategories.style.display = 'none';
   }
 });
+
+// Load Hazard Detail Card
+let hazardReportID = '16cde280-ac58-467b-888e-dd0549274b6e';
+let currentReport = {};
+const body = document.getElementById('home-body');
+
+// Get the report
+async function getHazardReport() {
+  try {
+    const response = await fetch(
+      `${API_URL}/hazard-report?id=${hazardReportID}`
+      );
+      
+      const result = await response.json();
+      currentReport = result.data;
+    } catch (error) {
+      alert.show(
+        'Report unavailable at the moment, please try again later or contact support',
+        AlertPopup.error
+        );
+      }
+    }
+
+    // Insert the report
+    async function displayCurrentReport() {
+      await getHazardReport();
+      
+      (async () => {
+        try {
+          let hazardReport = new HazardDetailCard(
+            currentReport.id,
+            currentReport.hazardCategory.name,
+            currentReport.hazard.name,
+            currentReport.location.address,
+            currentReport.created_at,
+            currentReport.images,
+            currentReport.comment,
+            currentReport.hazardCategory.settings,
+            calcHazardDistance(
+              currentReport.location.lat,
+              currentReport.location.lng,
+              Map.watcherLocation?.latitude,
+              Map.watcherLocation?.longitude
+              ),
+              currentReport.user
+              );
+              let hazardReportPopulated = hazardReport.hazardCardContent()
+              body.insertBefore(hazardReportPopulated, body.childNodes[1]);
+              loadIcons();
+              // Close report card
+              const reportCloseBtn = document.getElementById('reportCloseBtn');
+              reportCloseBtn.addEventListener('click', ()=>{
+                if (hazardReportPopulated.parentNode){
+                  hazardReportPopulated.parentNode.removeChild(hazardReportPopulated)
+                }
+              })
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  })();
+}
+
+displayCurrentReport();
+
+// Calculate distance from user to hazard with Haversine foruma
+function calcHazardDistance(lat1, lon1, lat2, lon2) {
+  const earthRadius = 6371;
+
+  const lat1Rad = (lat1 * Math.PI) / 180;
+  const lon1Rad = (lon1 * Math.PI) / 180;
+  const lat2Rad = (lat2 * Math.PI) / 180;
+  const lon2Rad = (lon2 * Math.PI) / 180;
+
+  const dLat = lat2Rad - lat1Rad;
+  const dLon = lon2Rad - lon1Rad;
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(lat1Rad) *
+      Math.cos(lat2Rad) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  const distance = earthRadius * c;
+
+  return distance.toFixed(1);
+}
