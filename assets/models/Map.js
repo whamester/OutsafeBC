@@ -77,14 +77,14 @@ class Map {
     }).addTo(this.map);
   }
 
-  static async watchGeoLocation(customOptions = {}) {
-    // Check if browser supports geolocation
+  static watchGeoLocation(success, error, customOptions = {}) {
+    // check if browser supports geolocation
     if (!('geolocation' in navigator)) {
       console.log('Geolocation not supported on your browser.');
-      throw new Error('Geolocation not supported');
+      return;
     }
 
-    // Navigator options for better accuracy
+    // navigator options for better accuracy
     const navigatorOptions = {
       enableHighAccuracy: true,
       timeout: 5000,
@@ -92,26 +92,15 @@ class Map {
       ...customOptions,
     };
 
-    try {
-      const data = await new Promise((resolve, reject) => {
-        const watchId = navigator.geolocation.watchPosition(
-          (position) => {
-            const { coords } = position;
-            this.watcherLocation = coords;
-            navigator.geolocation.clearWatch(watchId);
-            resolve(position);
-          },
-          (error) => {
-            reject(error);
-          },
-          navigatorOptions
-        );
-      });
-
-      return data;
-    } catch (error) {
-      throw error;
-    }
+    navigator.geolocation.watchPosition(
+      async (data) => {
+        const { coords } = data;
+        this.watcherLocation = coords;
+        success(data)
+      },
+      error,
+      navigatorOptions
+    );
   }
 
   static async getCurrentLocation() {
