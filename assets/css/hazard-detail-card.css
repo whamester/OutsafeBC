@@ -1,18 +1,19 @@
 #hazard-card__container {
   width: 100%;
-  position: absolute;
-  z-index: 9;
+  height: 100%;
+  position: relative;
 }
 
 #hazard-card__outer {
   width: 100%;
   max-width: 30.625rem;
   position: absolute;
+  bottom: 0;
+ z-index: 9;
 }
 
 .report-card__top-controls {
   display: flex;
-  width: 21.4375rem;
   justify-content: space-between;
   align-items: flex-start;
   margin-bottom: 1rem;

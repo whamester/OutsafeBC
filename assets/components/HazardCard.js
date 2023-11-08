@@ -1,4 +1,6 @@
-const HazardCard = ({ reports }) => {
+import geolocationDistance from "../helpers/geolocation-distance.js";
+
+const HazardCard = ({ reports, position }) => {
   return reports
     ? `<div class="sb-cards">
     <button class="sb-cards-btn--back"
@@ -6,40 +8,54 @@ const HazardCard = ({ reports }) => {
       <img src="/assets/icons/chevron-left.svg" />Back
     </button>
     <div class="sb-cards-wrapper d-grid">
-      ${reports
-        ?.map((item, idx) => {
-          const location =
-            item?.location?.address ??
-            `${item?.location?.lat}, ${item?.location?.lng}`;
-          const dateObj = new Date(item.created_at);
-          const date = dateObj.toLocaleString('default', {
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric',
-          });
-          const time = dateObj.toLocaleTimeString('default', {
-            hour: '2-digit',
-            minute: '2-digit',
-            timeZoneName: 'short',
-          });
+      ${ reports?.map((item, idx) => {
+        const location = item?.location?.address ?? `${ item?.location?.lat }, ${ item?.location?.lng }`;
+        const dateObj = new Date(item.created_at);
+        const date = dateObj.toLocaleString("default", { day: "numeric", month: "long", year: "numeric" });
+        const time = dateObj.toLocaleTimeString("default", { hour: "2-digit", minute: "2-digit", timeZoneName: "short" });
 
-          return `
+        return `
           <div
             class="sb-cards--item"
             id="sb-card-${idx + 1}"  
             data-details='${JSON.stringify(item)}'>
-            <div class="sb-card-header--box">
-              <h2 class="sb-card-header--txt">${item.hazardCategory?.name}</h2>
+
+            <div class="report-card__heading">
+              <span class="btn__icon report-card__heading__icon" style="background-color: ${
+                item.hazardCategory.settings.iconBackround
+              }">
+                <i class="${
+                  item.hazardCategory.settings.icon
+                }-outline" style="width:24px; height:24px; background-color: white"></i>
+              </span>
+                  <p class="text-body-1 semibold">${item.hazardCategory.name}</p>
+            </div>
+            <div class="report-card__details sb-cards-info--box">
+              <i class="icon-location-pin-outline" style="background-color: var(--neutral-400)"></i>
+              <p class="text-body-2 regular">${location}</p>
             </div>
 
-            <div class="sb-cards-info--box">
-              <p>${location}</p>
-              <p>${date + '&nbsp;' + time}</p>
-              <button class="btn btn-secondary" id="viewDetailsBtn">
+            <div class="report-card__date_time sb-cards-info--box">
+              <div class="report-card__details">
+                <i class="icon-date" style="background-color: var(--neutral-400)"></i>
+                <p class="text-body-2 regular">${date}</p>
+              </div>
+            
+              <div class="report-card__details">
+                <i class="icon-time" style="background-color: var(--neutral-400)"></i>
+                <p class="text-body-2 regular">${time}</p>
+              </div>
+            </div>
+
+            <div class="report-card__details sb-cards-info--box">
+              <i class="icon-distance" style="background-color: var(--neutral-400)"></i>
+              <p class="text-body-2 regular">${geolocationDistance(item.location.lat, item.location.lng, position.lat, position.lng)} km away</p>
+            </div>
+
+            <button data-idx="${idx}" class="btn btn-secondary view-details" id="viewDetailsBtn">
                 <i class="icon-plus"></i>
                 View Deatils
-              </button>
-            </div>
+            </button>
           </div>
         `;
         })
