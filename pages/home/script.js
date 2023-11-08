@@ -309,7 +309,6 @@ const watchGeoLocationSuccess = async ({ coords }) => {
   // but to the report's location
   if (flyToTrigger && !(!!idReport && (!!focusMarker || !!openDetail))) {
     await getReportApiCall(lat, lng, categoryFilters, hazardFilters);
-    console.log("HERE")
     flyTo(lat, lng);
     flyToTrigger = false;
   }
