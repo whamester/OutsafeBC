@@ -271,32 +271,58 @@ const getCategories = async () => {
     let response = await fetch(`${API_URL}/hazard-category`);
     let { data } = await response.json();
     const content = document.getElementById('hazard-category-content');
+    console.log(data);
+    let arrayIcons = [];
+
+    data.forEach((category) => {
+      if (category.name && category.ui_settings.icon) {
+        const iconParts = category.ui_settings.icon.toLowerCase().split('-');
+        if (iconParts.length >= 2) {
+          arrayIcons.push(iconParts[1]);
+        }
+      }
+    });
+
+    console.log(arrayIcons);
 
     for (let i = 0; i < data.length; i++) {
       const category = data[i];
       const div = document.createElement('div');
-      const radio = document.createElement('input');
+      const button = document.createElement('button');
+      button.setAttribute('type', 'button');
+      button.setAttribute('id', `category-${category.id}-button`);
+      button.classList.add('category-button');
 
-      radio.setAttribute('type', 'radio');
-      radio.setAttribute('name', 'categoryRadioBtn');
-      radio.setAttribute('id', `category-${category.id}-radio`);
-      radio.setAttribute('value', category.id);
-      radio.addEventListener('change', (event) => {
+      const icon = document.createElement('i');
+      icon.classList.add('category-icon');
+      // icon.innerHTML = '<img src="../../assets/icons/insects-outline.svg">';
+      // icon.innerHTML = '<img src="../../assets/icons/${arrayIcons[i]}-outline.svg">';
+      icon.innerHTML = `<img src="../../assets/icons/${arrayIcons[i]}-outline.svg" alt="${arrayIcons[i]}">`;
+
+
+      const categoryDescription = document.createElement('p');
+      //descomentar la siguiente linea cuando endpoitn este respondiendo con descripcion
+      // categoryDescription.innerHTML = category.description || '';
+      //siguiente linea es temporal
+      // categoryDescription.innerHTML = category.description || 'null';
+      categoryDescription.innerHTML = `<p>Report any ${arrayIcons[i]} you see while camping.</p>`;
+
+      const categoryName = document.createElement('span');
+      categoryName.innerHTML = category.name;
+
+      button.addEventListener('click', (event) => {
         skipHazardOption = false;
 
         currentReport.option.id = null;
         currentReport.option.name = null;
 
-        const selectedCategoryId = event.target.value;
-        const selectedCategory = data.find(
-          (category) => category.id === selectedCategoryId
-        );
+        const selectedCategoryId = category.id;
         currentReport.category.id = selectedCategoryId;
         currentReport.category.name = category.name;
 
-        const options = selectedCategory.options ?? [];
+        const options = category.options ?? [];
         const selectedOptionQuestion =
-          selectedCategory.ui_settings.report_hazard_question ?? [];
+          category.ui_settings.report_hazard_question ?? [];
 
         populateHazardOptions(options, selectedOptionQuestion);
 
@@ -304,15 +330,11 @@ const getCategories = async () => {
         enlace.setAttribute('onclick', 'location.href="#hazard-type"');
       });
 
-      const label = document.createElement('label');
+      button.appendChild(icon);
+      button.appendChild(categoryName);
+      button.appendChild(categoryDescription);
 
-      label.setAttribute('id', `category-${category.id}-label`);
-      label.setAttribute('for', `category-${category.id}-radio`);
-      label.innerHTML = category.name;
-
-      div.appendChild(radio);
-      div.appendChild(label);
-
+      div.appendChild(button);
       content.appendChild(div);
     }
   } catch (error) {
