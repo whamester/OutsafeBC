@@ -152,10 +152,6 @@ const loadGeolocation = async () => {
     mapInstance.setMarkerOnMap(position.lat, position.lng, {
       draggable: true,
     });
-    // mapInstance.map.flyTo([position.lat, position.lng], Map.CURRENT_ZOOM, {
-    //   animate: true,
-    //   duration: 2,
-    // });
     mapInstance.map.flyTo([position.lat, position.lng], FLY_TO_ZOOM, {
       animate: true,
       duration: ANIMATION_DURATION,
