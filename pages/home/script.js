@@ -112,9 +112,12 @@ window.onload = async function () {
 
     loadIcons();
 
-    await loadGeolocation();
+    geoMap = new Map(position.lat, position.lng, mapOptions);
+    await getReportApiCall(position.lat, position.lng);
+
+    Map.watchGeoLocation(watchGeoLocationSuccess, watchGeoLocationError);
   } catch (error) {
-    console.error(error);
+    console.error(error, error.message);
 
     alert.show('Error loading categories', AlertPopup.error, 500);
   }
@@ -179,8 +182,6 @@ const markerParams = {
     if (hazardReportPopulated && hazardReportPopulated.parentNode) {
       hazardReportPopulated.parentNode.removeChild(hazardReportPopulated);
     }
-    await getReportApiCall(position.lat, position.lng, categoryFilters, hazardFilters);
-
     await showHazardDetails(idx);
   },
 };
@@ -210,6 +211,7 @@ const getReportApiCall = async (lat, lng, categoryFilters=[], hazardFilters=[], 
   }&category_ids=${categoryFilters.join(',')}&hazard_option_ids=${hazardFilters.join(",")}&${countOnly ? `count_only=${countOnly}` : ''}`;
 
   const res = await apiRequest(url, { method: 'GET' });
+
   if (countOnly) return res.data?.total;
 
   hazardCardParams['reports'] = res.data?.results;
@@ -296,7 +298,6 @@ const watchGeoLocationSuccess = async ({ coords }) => {
   const lat = coords?.latitude;
   const lng = coords?.longitude;
   geoMap.setMarkerOnMap(lat, lng);
-  await getReportApiCall(lat, lng, categoryFilters, hazardFilters);
 
   // update current user position
   position = {
@@ -307,6 +308,8 @@ const watchGeoLocationSuccess = async ({ coords }) => {
   // If there is a report id in the query params and the focus param is set, don't pan to the user's location
   // but to the report's location
   if (flyToTrigger && !(!!idReport && (!!focusMarker || !!openDetail))) {
+    await getReportApiCall(lat, lng, categoryFilters, hazardFilters);
+    console.log("HERE")
     flyTo(lat, lng);
     flyToTrigger = false;
   }
@@ -315,11 +318,6 @@ const watchGeoLocationSuccess = async ({ coords }) => {
 const watchGeoLocationError = async (err) => {
   alert.show(`ERROR(${err.code}): ${err.message}`, AlertPopup.error);
   await getReportApiCall(position.lat, position.lng, categoryFilters);
-};
-
-const loadGeolocation = async () => {
-  geoMap = new Map(position.lat, position.lng, mapOptions);
-  Map.watchGeoLocation(watchGeoLocationSuccess, watchGeoLocationError);
 };
 
 const onSearchInput = debounce(async ({ target }) => {
