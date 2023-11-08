@@ -1,9 +1,12 @@
 #hazard-card__container {
+  width: 100%;
   position: absolute;
   z-index: 9;
 }
 
 #hazard-card__outer {
+  width: 100%;
+  max-width: 30.625rem;
   position: absolute;
 }
 
