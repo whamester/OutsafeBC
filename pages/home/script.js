@@ -41,8 +41,10 @@ let position =
 let positionSecondary = {};
 let hazardCardParams = {};
 let searchSuggestions = [];
-let reports = [];
 let categoryFilters = [];
+let hazardTempFilters = [];
+let hazardFilters = [];
+let hazardShowCount = 0;
 let flyToTrigger = true;
 const alert = new AlertPopup();
 
@@ -79,19 +81,13 @@ window.onload = async function () {
       { func: ModalFilter, args: searchBarParams.categories },
     ]);
 
-    const toggleFilterModal = () => {
-      const filterModalStyle = document.querySelector('.modal-filter').style;
-      filterModalStyle.display =
-        filterModalStyle.display === 'block' ? 'none' : 'block';
-    };
-
     document
       .querySelector('.sb-search-box--filter-btn')
-      .addEventListener('click', toggleFilterModal);
+      .addEventListener('click', () => toggleFilterModal(false));
 
     document
       .querySelector('.modal-filter--close-btn')
-      .addEventListener('click', toggleFilterModal);
+      .addEventListener('click', () => toggleFilterModal(true));
 
     document
       .querySelector('.sb-search-box--input')
@@ -157,13 +153,33 @@ window.onload = async function () {
   }
 };
 
+const toggleFilterModal = async (flag) => {
+  const filterModal = document.querySelector('.modal-filter');
+  filterModal.classList.toggle("hidden", flag);
+
+  document.querySelectorAll(".cb").forEach(checkbox => {
+    checkbox.addEventListener('change', hazardFilterTempApply, false);
+    checkbox.checked = hazardFilters.includes(checkbox.dataset?.id);
+    checkbox.classList.toggle("selected", checkbox.checked);
+  });
+
+  if(!flag) {
+    filterModal.querySelector(".modal-filter--wrapper-outer").scrollTop = 0;
+    showReportsBtn.innerText = `Show ${Number(hazardShowCount) || ''} reports`;
+    showReportsBtn.checked = !!Number(hazardShowCount);
+  }
+
+  showReportsBtn?.addEventListener('click', hazardFilterApply, false);
+  clearReportsBtn?.addEventListener('click', clearHazardFilter, false);
+};
+
 const markerParams = {
   event: 'click',
   func: async (idx, lat, lng) => {
     if (hazardReportPopulated && hazardReportPopulated.parentNode) {
       hazardReportPopulated.parentNode.removeChild(hazardReportPopulated);
     }
-    await getReportApiCall(position.lat, position.lng, categoryFilters);
+    await getReportApiCall(position.lat, position.lng, categoryFilters, hazardFilters);
 
     await showHazardDetails(idx);
   },
@@ -182,18 +198,21 @@ const closeSearchSuggestion = (e) => {
   document.querySelector('.sb-categories-wrapper').style.display = 'flex';
 };
 
-const getReportApiCall = async (lat, lng, categoryFilters = [], cursor = 0) => {
+const getReportApiCall = async (lat, lng, categoryFilters=[], hazardFilters=[], countOnly=false, cursor = 0) => {
   // clear previous reports
   hazardCardParams['reports'] = [];
 
   const positionChange = searchInput.dataset.positionChange === 'true';
-  const url = `hazard-report?cursor=${cursor}&size=10&lat=${
+  const url = `hazard-report?cursor=${cursor}&size=1000&lat=${
     positionChange ? positionSecondary.lat : lat
   }&lng=${
     positionChange ? positionSecondary.lng : lng
-  }&category_ids=${categoryFilters.join(',')}`;
-  reports = await apiRequest(url, { method: 'GET' });
-  hazardCardParams['reports'] = reports.data?.results;
+  }&category_ids=${categoryFilters.join(',')}&hazard_option_ids=${hazardFilters.join(",")}&${countOnly ? `count_only=${countOnly}` : ''}`;
+
+  const res = await apiRequest(url, { method: 'GET' });
+  if (countOnly) return res.data?.total;
+
+  hazardCardParams['reports'] = res.data?.results;
   hazardCardParams['position'] = position;
 
   geoMap.createLayerGroups(hazardCardParams.reports, markerParams);
@@ -221,13 +240,14 @@ const suggestionOnClick = () => {
       positionSecondary = latLng;
       flyTo(latLng.lat, latLng.lng);
       closeSearchSuggestion();
-      await getReportApiCall(latLng.lat, latLng.lng, categoryFilters);
+      await getReportApiCall(latLng.lat, latLng.lng, categoryFilters, hazardFilters);
       injectCards();
     });
   });
 };
 
 const quickFiltersOnClick = async ({ target }) => {
+  hazardFilters = [];
   geoMap.mapLayers.clearLayers();
   const quickFilter = target.closest('.quick-filter');
   const categoryId = quickFilter.dataset.categoryId;
@@ -276,7 +296,7 @@ const watchGeoLocationSuccess = async ({ coords }) => {
   const lat = coords?.latitude;
   const lng = coords?.longitude;
   geoMap.setMarkerOnMap(lat, lng);
-  await getReportApiCall(lat, lng, categoryFilters);
+  await getReportApiCall(lat, lng, categoryFilters, hazardFilters);
 
   // update current user position
   position = {
@@ -371,4 +391,61 @@ const showHazardDetails = async(idx) => {
   } catch (error) {
     console.error('Error:', error);
   }
+}
+
+const hazardFilterTempApply = async ({target}) => {
+  categoryFilters = [];
+
+  const hazardId = target?.dataset?.id;
+  hazardTempFilters = [...hazardTempFilters.filter((f) => f !== hazardId)];
+
+  if (target?.classList?.contains('selected')) {
+    target.classList.remove('selected');
+    // all filters are de-selected
+
+    if (hazardTempFilters.length === 0) {
+      showReportsBtn.innerText = `Show reports`;
+      showReportsBtn.disabled = true;
+      return;
+    }
+    hazardShowCount = await getReportApiCall(position.lat, position.lng, categoryFilters, hazardTempFilters, true);
+    showReportsBtn.innerText = `Show ${Number(hazardShowCount) || ''} reports`;
+    showReportsBtn.disabled = Number(hazardShowCount) ? false : true;
+    return;
+  }
+
+  if (!!target) {
+    target.classList.add('selected');
+    hazardTempFilters.push(hazardId);
+  }
+
+  hazardShowCount = await getReportApiCall(position.lat, position.lng, categoryFilters, hazardTempFilters, true);
+  showReportsBtn.innerText = `Show ${Number(hazardShowCount) || ''} reports`;
+  showReportsBtn.disabled = Number(hazardShowCount) ? false : true;
+}
+
+const hazardFilterApply = async () => {
+  // clear all quick filters
+  document.querySelectorAll('.quick-filter')
+    ?.forEach(filterElem => {
+    filterElem.classList.remove("selected");
+  });
+
+  geoMap.mapLayers.clearLayers();
+  hazardFilters = hazardTempFilters;
+  await getReportApiCall(position.lat, position.lng, categoryFilters, hazardFilters);
+  if (document.querySelector('.sb-cards')) injectCards();
+  toggleFilterModal(true);
+}
+
+const clearHazardFilter = async () => {
+  hazardFilters = [];
+
+  // clear checkboxes
+  document.querySelectorAll(".cb").forEach(checkbox => {
+    checkbox.checked = false;
+  });
+
+  await getReportApiCall(position.lat, position.lng, categoryFilters, hazardFilters);
+  if (document.querySelector('.sb-cards')) injectCards();
 }
