@@ -9,6 +9,7 @@ import { API_URL } from '../../constants.js';
 import Header from '../../assets/components/Header.js';
 import AlertPopup from '../../assets/components/AlertPopup.js';
 import Modal from '../../assets/components/Modal.js';
+import LoaderAnimation from '../../assets/components/WhiteTransition.js';
 
 //Helpers
 import { getUserSession } from '../../assets/helpers/storage.js';
@@ -35,11 +36,7 @@ const ANIMATION_DURATION = 4;
 /**
  * Page Init
  */
-
-//loading animation
-window.addEventListener('load', function () {
-  document.getElementById('loader').classList.toggle('loader2');
-});
+const loader = new LoaderAnimation();
 
 //to display the correct section
 window.onload = async function () {
@@ -152,10 +149,6 @@ const loadGeolocation = async () => {
     mapInstance.setMarkerOnMap(position.lat, position.lng, {
       draggable: true,
     });
-    // mapInstance.map.flyTo([position.lat, position.lng], Map.CURRENT_ZOOM, {
-    //   animate: true,
-    //   duration: 2,
-    // });
     mapInstance.map.flyTo([position.lat, position.lng], FLY_TO_ZOOM, {
       animate: true,
       duration: ANIMATION_DURATION,
