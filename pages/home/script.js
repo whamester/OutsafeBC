@@ -263,10 +263,10 @@ const injectCards = () => {
     { func: HazardCard, args: hazardCardParams, target: '#hazard-comp' },
   ]);
 
-  document.querySelectorAll(".view-details")?.forEach(detailBtn => {
-    const idx = detailBtn.dataset.idx
+  document.querySelectorAll('.view-details')?.forEach((detailBtn) => {
+    const idx = detailBtn.dataset.idx;
     detailBtn.addEventListener('click', () => showHazardDetails(idx));
-  })
+  });
 
   loadIcons();
   cardsOnClick();
@@ -337,7 +337,7 @@ const onSearchInput = debounce(async ({ target }) => {
 
 const body = document.getElementById('home-body');
 
-const showHazardDetails = async(idx) => {
+const showHazardDetails = async (idx) => {
   try {
     let hazardReport = new HazardDetailCard(
       hazardCardParams['reports'][idx].id,
@@ -358,9 +358,14 @@ const showHazardDetails = async(idx) => {
     );
     // Create a new hazardReportPopulated
     hazardReportPopulated = hazardReport.hazardCardContent();
-    body.insertBefore(hazardReportPopulated, body.childNodes[1]);
+    const root = document.getElementById('root');
+
+    root.insertBefore(
+      hazardReportPopulated,
+      document.getElementById('hazard-comp')
+    );
     loadIcons();
-    
+
     // Close report card
     const reportCloseBtn = document.getElementById('reportCloseBtn');
     reportCloseBtn.addEventListener('click', () => {
@@ -371,4 +376,4 @@ const showHazardDetails = async(idx) => {
   } catch (error) {
     console.error('Error:', error);
   }
-}
+};
