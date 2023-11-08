@@ -3,6 +3,7 @@ class Map {
   map = null;
   mapLayers = new L.LayerGroup();
   currentMarker = null;
+  watcherLocation = null;
   static CURRENT_ZOOM = 12;
   static MAP_ID = 'map';
   static MAX_ZOOM = 22;
@@ -91,7 +92,15 @@ class Map {
       ...customOptions,
     };
 
-    navigator.geolocation.watchPosition(success, error, navigatorOptions);
+    navigator.geolocation.watchPosition(
+      async (data) => {
+        const { coords } = data;
+        this.watcherLocation = coords;
+        success(data)
+      },
+      error,
+      navigatorOptions
+    );
   }
 
   static async getCurrentLocation() {
