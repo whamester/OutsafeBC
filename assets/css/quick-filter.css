@@ -24,10 +24,6 @@
   height: 1.25rem;
 }
 
-.quick-filter.selected .quick-filter__icon {
-  background-color: var(--white) !important;
-}
-
 .quick-filter:hover {
   border: 1px solid var(--neutral-500, #667185);
   background: var(--white, #fff);
@@ -39,6 +35,10 @@
 
 .quick-filter:hover .quick-filter__icon {
   background-color: var(--neutral-700);
+}
+
+.quick-filter.selected .quick-filter__icon {
+  background-color: var(--white);
 }
 
 .quick-filter.selected {
