@@ -47,9 +47,11 @@ class Map {
 
   createLayerGroups(hazards, markerParams = {}) {
     hazards?.forEach((hazard, idx) => {
-      const pinIcon = Map.createIcon();
       const category = hazard?.hazard?.name?.toLowerCase();
       const subCategory = hazard?.hazardCategory?.name?.toLowerCase();
+      const iconName = `marker/${hazard?.hazardCategory?.settings?.icon}.svg`
+      const pinIcon = Map.createIcon({iconName});
+      
       const marker = L.marker([hazard?.location?.lat, hazard?.location?.lng], {
         icon: pinIcon,
       });

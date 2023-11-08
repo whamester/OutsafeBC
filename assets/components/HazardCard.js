@@ -8,8 +8,8 @@ const HazardCard = ({ reports }) => {
     <div class="sb-cards-wrapper d-grid">
       ${ reports?.map((item, idx) => {
         const location = item?.location?.address ?? `${ item?.location?.lat }, ${ item?.location?.lng }`;
-        const dateObj = new Date(item.updated_at);
-        const date = dateObj.toLocaleString("default", { day: "numeric", weekday: "long", year: "numeric" });
+        const dateObj = new Date(item.created_at);
+        const date = dateObj.toLocaleString("default", { day: "numeric", month: "long", year: "numeric" });
         const time = dateObj.toLocaleTimeString("default", { hour: "2-digit", minute: "2-digit", timeZoneName: "short" });
       
         return `
