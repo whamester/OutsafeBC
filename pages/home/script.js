@@ -1,3 +1,4 @@
+import { API_URL } from '../../constants.js';
 //Components
 import Header from '../../assets/components/Header.js';
 import GeoMap from '../../assets/components/GeoMap.js';
@@ -15,6 +16,7 @@ import apiRequest from '../../assets/helpers/api-request.js';
 import debounce from '../../assets/helpers/debounce.js';
 import geocode from '../../assets/helpers/geocode.js';
 import loadIcons from '../../assets/helpers/load-icons.js';
+import HazardDetailCard from '../../assets/components/HazardDetailCard.js';
 //Models
 import Map from '../../assets/models/Map.js';
 import HazardReport from '../../assets/models/HazardReport.js';
@@ -36,15 +38,12 @@ let position =
     ? { lat: latitude, lng: longitude }
     : Map.DEFAULT_LOCATION;
 
-// let positionObj = {};
-// let locationDetails = '';
+let positionSecondary = {};
 let hazardCardParams = {};
 let searchSuggestions = [];
 let reports = [];
 let categoryFilters = [];
 let flyToTrigger = true;
-const FLY_TO_ZOOM = 12;
-const ANIMATION_DURATION = 4;
 const alert = new AlertPopup();
 
 let mapOptions = {
@@ -54,6 +53,7 @@ let mapOptions = {
 };
 
 let hazardDetail = new HazardReport();
+let hazardReportPopulated;
 
 const searchBarParams = {
   categories: [],
@@ -90,7 +90,7 @@ window.onload = async function () {
       .addEventListener('click', toggleFilterModal);
 
     document
-      .querySelector('.modal-filter--close')
+      .querySelector('.modal-filter--close-btn')
       .addEventListener('click', toggleFilterModal);
 
     document
@@ -131,16 +131,7 @@ window.onload = async function () {
 
     if (focusMarker || openDetail) {
       geoMap.createLayerGroups([hazardDetail], markerParams);
-
-      if (
-        hazardDetail.location?.lat !== position.lat ||
-        hazardDetail.location?.lng !== position.lng
-      ) {
-        geoMap.map.flyTo(
-          [hazardDetail.location?.lat, hazardDetail.location?.lng],
-          FLY_TO_ZOOM
-        );
-      }
+      flyTo(hazardDetail.location?.lat, hazardDetail.location?.lng);
     }
 
     if (openDetail) {
@@ -168,21 +159,53 @@ window.onload = async function () {
 
 const markerParams = {
   event: 'click',
-  func: async (idx) => {
-    await getReports(position.lat, position.lng, categoryFilters);
-    const card = document.getElementById(`sb-card-${idx + 1}`);
+  func: async (idx, lat, lng) => {
+    if (hazardReportPopulated && hazardReportPopulated.parentNode) {
+      hazardReportPopulated.parentNode.removeChild(hazardReportPopulated);
+    }
 
-    card.scrollIntoView({
-      block: 'end',
-      behavior: 'smooth',
-    });
+    await getReportApiCall(position.lat, position.lng, categoryFilters);
+
+    (async () => {
+      try {
+        let hazardReport = new HazardDetailCard(
+          hazardCardParams['reports'][idx].id,
+          hazardCardParams['reports'][idx].hazardCategory.name,
+          hazardCardParams['reports'][idx].hazard.name,
+          hazardCardParams['reports'][idx].location.address,
+          hazardCardParams['reports'][idx].created_at,
+          hazardCardParams['reports'][idx].images,
+          hazardCardParams['reports'][idx].comment,
+          hazardCardParams['reports'][idx].hazardCategory.settings,
+          calcHazardDistance(
+            hazardCardParams['reports'][idx].location.lat,
+            hazardCardParams['reports'][idx].location.lng,
+            Map.watcherLocation?.latitude,
+            Map.watcherLocation?.longitude
+          ),
+          hazardCardParams['reports'][idx].user
+        );
+        // Create a new hazardReportPopulated
+        hazardReportPopulated = hazardReport.hazardCardContent();
+        body.insertBefore(hazardReportPopulated, body.childNodes[1]);
+        loadIcons();
+        
+        // Close report card
+        const reportCloseBtn = document.getElementById('reportCloseBtn');
+        reportCloseBtn.addEventListener('click', () => {
+          if (hazardReportPopulated.parentNode) {
+            hazardReportPopulated.parentNode.removeChild(hazardReportPopulated);
+          }
+        });
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    })();
   },
 };
 
-const removePreviousMarkers = () => {
-  Object.keys(geoMap.mapLayers).forEach((key) => {
-    geoMap.map.removeLayer(geoMap.mapLayers[key]);
-  });
+const flyTo = (lat, lng) => {
+  geoMap.map.flyTo([lat, lng], 12, { animate: true });
 };
 
 const closeSearchSuggestion = (e) => {
@@ -197,9 +220,13 @@ const closeSearchSuggestion = (e) => {
 const getReportApiCall = async (lat, lng, categoryFilters = [], cursor = 0) => {
   // clear previous reports
   hazardCardParams['reports'] = [];
-  const url = `hazard-report?cursor=${cursor}&size=10&lat=${lat}&lan=${lng}&category_ids=${categoryFilters.join(
-    ','
-  )}`;
+
+  const positionChange = searchInput.dataset.positionChange === 'true';
+  const url = `hazard-report?cursor=${cursor}&size=10&lat=${
+    positionChange ? positionSecondary.lat : lat
+  }&lng=${
+    positionChange ? positionSecondary.lng : lng
+  }&category_ids=${categoryFilters.join(',')}`;
   reports = await apiRequest(url, { method: 'GET' });
   hazardCardParams['reports'] = reports.data?.results;
 
@@ -210,14 +237,7 @@ const cardsOnClick = () => {
   document.querySelectorAll('.sb-cards--item').forEach((card) => {
     card.addEventListener('click', function () {
       const details = JSON.parse(this.dataset.details);
-      geoMap.map.flyTo(
-        [details.location?.lat, details.location?.lng],
-        FLY_TO_ZOOM,
-        {
-          animate: true,
-          duration: ANIMATION_DURATION,
-        }
-      );
+      flyTo(details.location?.lat, details.location?.lng);
     });
   });
 };
@@ -227,23 +247,22 @@ const suggestionOnClick = () => {
     card.addEventListener('click', async ({ target }) => {
       const suggestionItem = target.closest('.sb-suggestion-item');
 
-      const searchInput = document.querySelector('.sb-search-box--input');
       searchInput.value = suggestionItem?.dataset?.addr1;
       const latLng = JSON.parse(suggestionItem?.dataset?.latlng);
 
-      geoMap.map.flyTo([latLng.lat, latLng.lng], FLY_TO_ZOOM, {
-        animate: true,
-        duration: ANIMATION_DURATION,
-      });
-
+      // change user location
+      searchInput.dataset.positionChange = 'true';
+      positionSecondary = latLng;
+      flyTo(latLng.lat, latLng.lng);
       closeSearchSuggestion();
-      await getReports(latLng.lat, latLng.lng);
+      await getReportApiCall(latLng.lat, latLng.lng, categoryFilters);
+      injectCards();
     });
   });
 };
 
 const quickFiltersOnClick = async ({ target }) => {
-  document.querySelector('.sb-cards')?.remove();
+  geoMap.mapLayers.clearLayers();
   const quickFilter = target.closest('.quick-filter');
   const categoryId = quickFilter.dataset.categoryId;
 
@@ -253,33 +272,31 @@ const quickFiltersOnClick = async ({ target }) => {
     quickFilter.classList.remove('selected');
     // all filters are de-selected
     if (categoryFilters.length === 0) {
-      // clear previous reports
-      hazardCardParams['reports'] = [];
-      document.querySelector('.btn-report-hazard').style.display = 'flex';
-      removePreviousMarkers();
       await getReportApiCall(position.lat, position.lng, categoryFilters);
+      if (document.querySelector('.sb-cards')) injectCards();
       return;
     }
 
-    await getReports(position.lat, position.lng, categoryFilters);
+    await getReportApiCall(position.lat, position.lng, categoryFilters);
+    if (document.querySelector('.sb-cards')) injectCards();
     return;
   }
 
   quickFilter.classList.add('selected');
   categoryFilters.push(categoryId);
 
-  await getReports(position.lat, position.lng, categoryFilters);
+  await getReportApiCall(position.lat, position.lng, categoryFilters);
+  if (document.querySelector('.sb-cards')) injectCards();
 };
 
-const getReports = async (lat, lng, categoryFilters = [], cursor = 0) => {
+const injectCards = () => {
   document.querySelector('.btn-report-hazard').style.display = 'none';
   document.querySelector('.sb-cards')?.remove();
-  removePreviousMarkers();
 
-  await getReportApiCall(lat, lng, categoryFilters, cursor);
   injectHTML([
     { func: HazardCard, args: hazardCardParams, target: '#hazard-comp' },
   ]);
+
   loadIcons();
   cardsOnClick();
 };
@@ -299,7 +316,7 @@ const watchGeoLocationSuccess = async ({ coords }) => {
   // If there is a report id in the query params and the focus param is set, don't pan to the user's location
   // but to the report's location
   if (flyToTrigger && !(!!idReport && (!!focusMarker || !!openDetail))) {
-    geoMap.map.flyTo([lat, lng], FLY_TO_ZOOM);
+    flyTo(lat, lng);
     flyToTrigger = false;
   }
 };
@@ -326,21 +343,51 @@ const onSearchInput = debounce(async ({ target }) => {
     searchSuggestions = await geocode({ searchTerm }, 'autocomplete');
   else searchSuggestions = [];
 
-  if (searchSuggestions.length > 0) {
-    // inject search suggestions
-    injectHTML(
-      searchSuggestions?.map((item) => {
-        return {
-          func: SearchBarSuggestionCard,
-          args: item,
-          target: '.sb-suggestion-wrapper',
-        };
-      }) ?? []
-    );
-
-    suggestionOnClick();
-
-    boxSuggestion.style.display = 'block';
-    boxCategories.style.display = 'none';
+  if (!searchSuggestions.length) {
+    boxSuggestion.style.display = 'none';
+    return;
   }
+
+  // inject search suggestions
+  injectHTML(
+    searchSuggestions?.map((item) => {
+      return {
+        func: SearchBarSuggestionCard,
+        args: item,
+        target: '.sb-suggestion-wrapper',
+      };
+    }) ?? []
+  );
+
+  suggestionOnClick();
+  boxSuggestion.style.display = 'block';
+  boxCategories.style.display = 'none';
 });
+
+// Load Hazard Detail Card
+let hazardReportID = '16cde280-ac58-467b-888e-dd0549274b6e';
+let currentReport = {};
+const body = document.getElementById('home-body');
+
+// Calculate distance from user to hazard with Haversine foruma
+function calcHazardDistance(lat1, lon1, lat2, lon2) {
+  const earthRadius = 6371;
+
+  const lat1Rad = (lat1 * Math.PI) / 180;
+  const lon1Rad = (lon1 * Math.PI) / 180;
+  const lat2Rad = (lat2 * Math.PI) / 180;
+  const lon2Rad = (lon2 * Math.PI) / 180;
+
+  const dLat = lat2Rad - lat1Rad;
+  const dLon = lon2Rad - lon1Rad;
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(lat1Rad) *
+      Math.cos(lat2Rad) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  const distance = earthRadius * c;
+
+  return distance.toFixed(1);
+}
