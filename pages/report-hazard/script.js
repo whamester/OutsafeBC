@@ -36,6 +36,8 @@ const ANIMATION_DURATION = 4;
 /**
  * Page Init
  */
+
+//Loading animation (White overlay)
 const loader = new LoaderAnimation();
 
 //to display the correct section
