@@ -305,7 +305,8 @@ const getCategories = async () => {
       // categoryDescription.innerHTML = category.description || '';
       //siguiente linea es temporal
       // categoryDescription.innerHTML = category.description || 'null';
-      categoryDescription.innerHTML = `<p>Report any ${arrayIcons[i]} you see while camping.</p>`;
+      // categoryDescription.innerHTML = `<p>Report any ${arrayIcons[i]} you see while camping.</p>`;
+      categoryDescription.innerHTML = `<p> ${category.description} </p>`;
 
       const categoryName = document.createElement('span');
       categoryName.innerHTML = category.name;
