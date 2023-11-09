@@ -135,15 +135,25 @@ window.onload = async function () {
     }
 
     if (openDetail) {
-      //TODO: Open pull-up card
-      //Remove temporary modal
+      const data = new HazardDetailCard(
+        hazardDetail.id,
+        hazardDetail.category.name,
+        hazardDetail.option.name,
+        hazardDetail.location.address,
+        hazardDetail.created_at,
+        hazardDetail.images,
+        hazardDetail.comment,
+        hazardDetail.category.settings,
+        geolocationDistance(
+          hazardDetail.location.lat,
+          hazardDetail.location.lng,
+          position.lat,
+          position.lng
+        ),
+        hazardDetail.user
+      );
 
-      const modal = new Modal();
-      modal.show({
-        title: 'Hazard Detail',
-        description: `${hazardDetail.location.address}`,
-        enableOverlayClickClose: true,
-      });
+      showHazardDetails(data);
 
       return;
     }
@@ -165,7 +175,7 @@ const markerParams = {
     }
     await getReportApiCall(position.lat, position.lng, categoryFilters);
 
-    await showHazardDetails(idx);
+    showHazardCardFromExistingReports(idx);
   },
 };
 
@@ -265,7 +275,9 @@ const injectCards = () => {
 
   document.querySelectorAll('.view-details')?.forEach((detailBtn) => {
     const idx = detailBtn.dataset.idx;
-    detailBtn.addEventListener('click', () => showHazardDetails(idx));
+    detailBtn.addEventListener('click', () =>
+      showHazardCardFromExistingReports(idx)
+    );
   });
 
   loadIcons();
@@ -335,9 +347,31 @@ const onSearchInput = debounce(async ({ target }) => {
   boxCategories.style.display = 'none';
 });
 
-const body = document.getElementById('home-body');
+const showHazardDetails = (hazardReport) => {
+  try {
+    // Create a new hazardReportPopulated
+    hazardReportPopulated = hazardReport.hazardCardContent();
+    const root = document.getElementById('root');
 
-const showHazardDetails = async (idx) => {
+    root.insertBefore(
+      hazardReportPopulated,
+      document.getElementById('hazard-comp')
+    );
+    loadIcons();
+
+    // Close report card
+    const reportCloseBtn = document.getElementById('reportCloseBtn');
+    reportCloseBtn.addEventListener('click', () => {
+      if (hazardReportPopulated.parentNode) {
+        hazardReportPopulated.parentNode.removeChild(hazardReportPopulated);
+      }
+    });
+  } catch (error) {
+    console.error('Error:', error);
+  }
+};
+
+const showHazardCardFromExistingReports = (idx) => {
   try {
     let hazardReport = new HazardDetailCard(
       hazardCardParams['reports'][idx].id,
@@ -356,23 +390,8 @@ const showHazardDetails = async (idx) => {
       ),
       hazardCardParams['reports'][idx].user
     );
-    // Create a new hazardReportPopulated
-    hazardReportPopulated = hazardReport.hazardCardContent();
-    const root = document.getElementById('root');
 
-    root.insertBefore(
-      hazardReportPopulated,
-      document.getElementById('hazard-comp')
-    );
-    loadIcons();
-
-    // Close report card
-    const reportCloseBtn = document.getElementById('reportCloseBtn');
-    reportCloseBtn.addEventListener('click', () => {
-      if (hazardReportPopulated.parentNode) {
-        hazardReportPopulated.parentNode.removeChild(hazardReportPopulated);
-      }
-    });
+    showHazardDetails(hazardReport);
   } catch (error) {
     console.error('Error:', error);
   }

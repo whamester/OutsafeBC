@@ -147,6 +147,7 @@
   bottom: 25px;
   left: 0;
   width: 100%;
+  z-index: 1;
 }
 
 .report-hazard-box-wrapper {
@@ -162,7 +163,7 @@
   .sb {
     top: 90px;
   }
-  
+
   .sb-wrapper-outer {
     margin: auto;
     max-width: 80rem;
@@ -183,7 +184,7 @@
     left: 0;
     width: 100%;
   }
-  
+
   .report-hazard-box-wrapper {
     max-width: 80rem;
   }
