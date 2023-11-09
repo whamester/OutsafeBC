@@ -115,6 +115,14 @@ h1 {
   outline: none;
 }
 
+@media (max-width: 767px) {
+.category-button:active,
+.category-button:focus {
+  border: 1px solid var(--neutral-neutral-100, #f0f2f5);
+  background: var(--secondary-secondary-500-base, #d8e7e2);
+  outline: none;
+}
+}
 /* #map{
   width: 343px !important;
   margin-left: 16px;
