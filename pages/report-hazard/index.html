@@ -108,20 +108,38 @@
       <button id="backButton" class="back-button-mobile">&lt; Back</button>
 
       <form id="reportHazardForm">
-        <section id="select-location" class="page">
-          <h1>1. Select the location.</h1>
-
-          <div>
-            <div>
-              <label>Your current location is:</label>
-              <input type="text" id="locationAddressInput" required disabled />
+        <section id="select-location" class="page section-container">
+          <div class="select-location-header">
+            <h1>Select location on map</h1>
+            <p class="text-neutral-500">
+              You can also move the pin on the map to set the desired location.
+            </p>
+          </div>
+          <div class="select-location-content">
+            <div class="select-location-content__header">
+              <label class="text-body-3 text-neutral-400"
+                >Your current location is:</label
+              >
+              <div class="select-location-content__header__location">
+                <i
+                  class="icon-location-pin-outline"
+                  style="
+                    width: 1.5rem;
+                    height: 1.5rem;
+                    background: var(--neutral-900);
+                  "
+                ></i>
+                <p
+                  id="locationAddressLabel"
+                  class="text-body-3 text-neutral-600 semibold"
+                ></p>
+              </div>
             </div>
 
-            <p>You can move the pin on the map to set your location.</p>
             <div id="map"></div>
           </div>
 
-          <button type="button" id="hazardCategory" class="btn btn-primary">
+          <button type="button" id="hazardCategory" class="btn btn-primary continue-btn">
             Continue
             <span class="btn__icon">
               <i class="icon-arrow-right"></i>
@@ -129,11 +147,11 @@
           </button>
         </section>
 
-        <section id="hazard-category" class="page">
+        <section id="hazard-category" class="page section-container">
           <h1>2. What type of hazard would you like to report?</h1>
           <div id="hazard-category-content"></div>
 
-          <button type="button" id="hazardType" class="btn btn-primary">
+          <button type="button" id="hazardType" class="btn btn-primary continue-btn">
             Continue
             <span class="btn__icon">
               <i class="icon-arrow-right"></i>
@@ -141,14 +159,14 @@
           </button>
         </section>
 
-        <section id="hazard-type" class="page">
+        <section id="hazard-type" class="page section-container">
           <h1 id="hazardTypeQuestion"></h1>
           <div id="hazard-option-content"></div>
 
           <button
             type="button"
             id="selectHazardOptionLink"
-            class="btn btn-primary"
+            class="btn btn-primary continue-btn"
           >
             Continue
             <span class="btn__icon">
@@ -157,14 +175,14 @@
           </button>
         </section>
 
-        <section id="additional-details" class="page">
+        <section id="additional-details" class="page section-container">
           <h1>4. Would you like to mention any further details?</h1>
 
           <div>
             <textarea id="commentInput"></textarea>
           </div>
 
-          <button type="button" id="uploadPicture" class="btn btn-primary">
+          <button type="button" id="uploadPicture" class="btn btn-primary continue-btn">
             Continue
             <span class="btn__icon">
               <i class="icon-arrow-right"></i>
@@ -172,7 +190,7 @@
           </button>
         </section>
 
-        <section id="upload-photos" class="page">
+        <section id="upload-photos" class="page section-container">
           <h1>
             5. Please upload photos to help others see the reported hazard
             visually. <span>(Optional)</span>
@@ -260,7 +278,7 @@
           <button
             type="button"
             id="showConfirmationBtn"
-            class="btn btn-primary"
+            class="btn btn-primary continue-btn"
           >
             Continue
             <span class="btn__icon">
@@ -269,7 +287,7 @@
           </button>
         </section>
 
-        <section id="review-report" class="page">
+        <section id="review-report" class="page section-container">
           <h1>6. Review the report before submitting.</h1>
 
           <div>
@@ -319,12 +337,18 @@
             </div>
           </div>
 
-          <button id="saveReportBtn" type="submit" class="submit">
+          <button id="saveReportBtn" type="submit" class="submit btn btn-primary continue-btn">
             Submit Report
+            <span class="btn__icon">
+              <i class="icon-arrow-right"></i>
+            </span>
           </button>
 
-          <button id="updateReportBtn" type="submit" class="submit">
+          <button id="updateReportBtn" type="submit" class="submit btn btn-primary continue-btn">
             Update Report
+            <span class="btn__icon">
+              <i class="icon-arrow-right"></i>
+            </span>
           </button>
         </section>
       </form>
