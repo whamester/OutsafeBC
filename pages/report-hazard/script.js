@@ -239,7 +239,7 @@ const populateReport = async () => {
     getCollection();
   } else {
     document.getElementById('updateReportBtn').style.display = 'none';
-    document.getElementById('saveReportBtn').style.display = 'initial';
+    document.getElementById('saveReportBtn').style.display = 'flex';
   }
 };
 
