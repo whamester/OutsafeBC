@@ -251,6 +251,14 @@ const getAddressFromCoordinates = async (params) => {
   }
 };
 
+//Insert chevron-left arrow on back button
+const button = document.getElementById('backButton');
+const icon = document.createElement('img');
+icon.src = '../../assets/icons/chevron-left.svg';
+icon.alt = 'Your Alt Text';
+button.insertBefore(icon, button.firstChild);
+icon.setAttribute('class', 'back-arrow');
+
 /**
  * Step 1: Location
  */
@@ -295,17 +303,9 @@ const getCategories = async () => {
 
       const icon = document.createElement('i');
       icon.classList.add('category-icon');
-      // icon.innerHTML = '<img src="../../assets/icons/insects-outline.svg">';
-      // icon.innerHTML = '<img src="../../assets/icons/${arrayIcons[i]}-outline.svg">';
       icon.innerHTML = `<img src="../../assets/icons/${arrayIcons[i]}-outline.svg" alt="${arrayIcons[i]}">`;
 
-
       const categoryDescription = document.createElement('p');
-      //descomentar la siguiente linea cuando endpoitn este respondiendo con descripcion
-      // categoryDescription.innerHTML = category.description || '';
-      //siguiente linea es temporal
-      // categoryDescription.innerHTML = category.description || 'null';
-      // categoryDescription.innerHTML = `<p>Report any ${arrayIcons[i]} you see while camping.</p>`;
       categoryDescription.innerHTML = `${category.description}`;
 
       const categoryName = document.createElement('p');

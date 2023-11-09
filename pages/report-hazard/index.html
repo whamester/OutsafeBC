@@ -105,7 +105,8 @@
           </li>
         </ul>
       </nav>
-      <button id="backButton" class="back-button-mobile">&lt; Back</button>
+      <button id="backButton" class="back-button-mobile">Back</button>
+      <div class="underline"></div>
 
       <form id="reportHazardForm">
         <section id="select-location" class="page">
@@ -130,7 +131,7 @@
         </section>
 
         <section id="hazard-category" class="page">
-          <h1>2. What type of hazard would you like to report?</h1>
+          <h1>What type of hazard would you like to report?</h1>
           <div id="hazard-category-content"></div>
 
           <button type="button" id="hazardType" class="btn btn-primary">
@@ -191,7 +192,6 @@
                 >at the hazard site? Take a picture to add in the report.</span
               >
             </label>
-            <!-- <br /><br /> -->
 
             <div id="dragAndDropArea">
               <!-- TODO// Add icon here -->
@@ -210,16 +210,15 @@
             </div>
 
             <div id="displayCameraArea" style="display: none">
-              <!-- <br /> -->
               <video id="video" width="320" height="240" autoplay></video>
-              <!-- <br /> -->
+
               <button type="button" id="takeDesktopPictureBtn" disabled>
                 Take a photo
               </button>
               <button type="button" id="stopCameraBtn" disabled>
                 Stop Camera
               </button>
-              <!-- <br /> -->
+
               <canvas hidden id="canvasArea" width="320" height="240"></canvas>
             </div>
           </div>
@@ -234,12 +233,12 @@
               />
               <!-- TODO// Add icon here -->
               Take a picture
-              <!-- <br /> -->
+
               <span
                 >at the hazard site? Take a picture to add in the report.</span
-              > </label
-            >
-            <!-- <br /><br /> -->
+              >
+            </label>
+
             <label for="uploadPictureMobileInput" class="custom-file-upload2">
               <input
                 type="file"
@@ -249,7 +248,7 @@
               />
               <!-- TODO// Add icon here -->
               Upload Files
-              <!-- <br /> -->
+
               <span>File size limit: 10 MB</span>
             </label>
           </div>

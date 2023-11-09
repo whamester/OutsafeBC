@@ -18,11 +18,54 @@
 }
 /* end loading animation */
 
-h1{
+/* Header */
+#header-content{
+  display: none;
+}
+
+/* Back button */
+#backButton {
+  border: none;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  text-decoration: none;
+  color: var(--neutral-neutral-500, #667185);
+  margin-top: 12px;
+  margin-bottom: 12px;
+  margin-left: 16px;
+  margin-right: 16px;
+  display: flex;
+  align-items: center;
+}
+
+.underline {
+  width: 100%;
+  border-bottom: 1px solid var(--neutral-neutral-300, #d0d5dd);
+}
+
+.back-arrow {
+  height: 20px;
+  width: 20px;
+  padding: 0;
+}
+
+/* Continue button */
+.btn-primary {
+  height: 56px;
+  width: 343px;
+  margin-left: 16px;
+  margin-right: 16px;
+  margin-bottom: 21px;
+}
+
+/* Question */
+h1 {
   margin-left: 16px;
   margin-right: 16px;
 }
 
+/* Category Hazard */
 .category-icon {
   float: left;
   margin-right: 10px;
@@ -50,7 +93,7 @@ h1{
 }
 
 .button-title {
-margin-bottom: 4px;
+  margin-bottom: 4px;
 }
 
 .category-button .button-title {
@@ -63,44 +106,22 @@ margin-bottom: 4px;
   font-size: 12px;
   text-align: left;
   width: 218px;
-
 }
 
-.category-button:active, .category-button:focus {
-border: 1px solid var(--neutral-neutral-100, #F0F2F5);
-background: var(--secondary-secondary-500-base, #D8E7E2);
-outline: none;
+.category-button:active,
+.category-button:focus {
+  border: 1px solid var(--neutral-neutral-100, #f0f2f5);
+  background: var(--secondary-secondary-500-base, #d8e7e2);
+  outline: none;
 }
 
-.btn-primary{
-  height: 56px;
-  width: 343px;
+/* #map{
+  width: 343px !important;
   margin-left: 16px;
   margin-right: 16px;
-  margin-bottom: 21px;
-}
-
-#backButton {
-  border: none; /* Quita el borde del botón */
-  background: none; /* Quita el color de fondo del botón */
-  color: inherit; /* Mantiene el color del texto heredado */
-  cursor: pointer; /* Cambia el cursor a una mano para indicar que es interactivo */
-  text-decoration: none; /* Subraya el texto para que parezca un enlace */
-  color: var(--neutral-neutral-500, #667185);
-  margin-top: 12px;
-  margin-bottom: 12px;
-  margin-left: 16px;
-  margin-right: 16px;
-/* Large/Body-3/Regular (400) */
-/* font-family: Instrument Sans;
-font-size: 14px;
-font-style: normal;
-font-weight: 400;
-line-height: 150%; 21px */
-  
-}
-
-
+  border-radius: 8px;
+  border: 1px solid var(--neutral-neutral-300, #d0d5dd);
+} */
 
 #map {
   height: 400px;
