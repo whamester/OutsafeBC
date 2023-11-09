@@ -111,7 +111,11 @@ const updateCurrentReportLocation = async (params) => {
     address: address,
   };
 
-  locationAddressInput.value = `${currentReport.location.address} (${currentReport.location.lat}, ${currentReport.location.lng})`;
+  locationAddressLabel.innerHTML = `${
+    currentReport.location.address
+      ? currentReport.location.address
+      : `(${currentReport.location.lat}, ${currentReport.location.lng})`
+  }`;
   var enlace = document.getElementById('hazardCategory');
   enlace.setAttribute('onclick', 'location.href="#hazard-category"');
 };
@@ -131,7 +135,7 @@ const displayCurrentSection = () => {
     const pageId = location.hash ? location.hash : '#select-location';
     for (let page of allPages) {
       if (pageId === '#' + page.id) {
-        page.style.display = 'block';
+        page.style.display = 'flex';
       } else {
         page.style.display = 'none';
       }
