@@ -18,6 +18,90 @@
 }
 /* end loading animation */
 
+h1{
+  margin-left: 16px;
+  margin-right: 16px;
+}
+
+.category-icon {
+  float: left;
+  margin-right: 10px;
+}
+
+.category-button p {
+  margin-left: 60px;
+}
+
+.category-icon img {
+  width: 50px;
+  height: 50px;
+  margin-right: 16px;
+}
+.category-button {
+  width: 343px;
+  border-radius: 8px;
+  border: 1px solid var(--neutral-neutral-300, #d0d5dd);
+  background: var(--neutral-neutral-50, #f7f9fc);
+  height: 104px;
+  margin-bottom: 16px;
+  padding: 20px;
+  margin-left: 16px;
+  margin-right: 16px;
+}
+
+.button-title {
+margin-bottom: 4px;
+}
+
+.category-button .button-title {
+  font-weight: bold;
+  font-size: 16px;
+  text-align: left;
+  margin-left: 0;
+}
+.category-button p {
+  font-size: 12px;
+  text-align: left;
+  width: 218px;
+
+}
+
+.category-button:active, .category-button:focus {
+border: 1px solid var(--neutral-neutral-100, #F0F2F5);
+background: var(--secondary-secondary-500-base, #D8E7E2);
+outline: none;
+}
+
+.btn-primary{
+  height: 56px;
+  width: 343px;
+  margin-left: 16px;
+  margin-right: 16px;
+  margin-bottom: 21px;
+}
+
+#backButton {
+  border: none; /* Quita el borde del botón */
+  background: none; /* Quita el color de fondo del botón */
+  color: inherit; /* Mantiene el color del texto heredado */
+  cursor: pointer; /* Cambia el cursor a una mano para indicar que es interactivo */
+  text-decoration: none; /* Subraya el texto para que parezca un enlace */
+  color: var(--neutral-neutral-500, #667185);
+  margin-top: 12px;
+  margin-bottom: 12px;
+  margin-left: 16px;
+  margin-right: 16px;
+/* Large/Body-3/Regular (400) */
+/* font-family: Instrument Sans;
+font-size: 14px;
+font-style: normal;
+font-weight: 400;
+line-height: 150%; 21px */
+  
+}
+
+
+
 #map {
   height: 400px;
   width: 100%;

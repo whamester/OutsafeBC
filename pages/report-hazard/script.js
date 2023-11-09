@@ -306,9 +306,10 @@ const getCategories = async () => {
       //siguiente linea es temporal
       // categoryDescription.innerHTML = category.description || 'null';
       // categoryDescription.innerHTML = `<p>Report any ${arrayIcons[i]} you see while camping.</p>`;
-      categoryDescription.innerHTML = `<p> ${category.description} </p>`;
+      categoryDescription.innerHTML = `${category.description}`;
 
-      const categoryName = document.createElement('span');
+      const categoryName = document.createElement('p');
+      categoryName.setAttribute('class', 'button-title');
       categoryName.innerHTML = category.name;
 
       button.addEventListener('click', (event) => {
