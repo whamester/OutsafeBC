@@ -7,28 +7,6 @@ class MyReportCard extends ReportCard {
   }
 
   reportContent() {
-    const dateObj = new Date(this.date);
-    const date = dateObj.toLocaleString('default', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric',
-    });
-    const time = dateObj.toLocaleTimeString('default', {
-      hour: '2-digit',
-      minute: '2-digit',
-      timeZoneName: 'short',
-    });
-
-    let photos = this.photos;
-    let gallery = document.createElement('div');
-    gallery.setAttribute('id', 'report-card__picture-container');
-
-    for (const pic of photos) {
-      let image = document.createElement('img');
-      image.src = pic;
-      gallery.appendChild(image);
-    }
-
     let divOuter = document.createElement('div');
     divOuter.setAttribute('id', `reportCard${this.id}`);
     divOuter.setAttribute('class', `report-card__outer`);
@@ -47,20 +25,20 @@ class MyReportCard extends ReportCard {
 		</div>
 
 		<div class="report-card__top-info">
-			<div class="report-card__location">
+			<div class="report-card__details">
 				<i class="icon-location-pin-outline" style="background-color: var(--neutral-400)"></i>
 				<p class="text-body-2 regular report-card__location-text">${this.location}</p>
 			</div>
 
 			<div class="report-card__date_time">
-				<div class="report-card__date">
+				<div class="report-card__details">
 					<i class="icon-date" style="background-color: var(--neutral-400)"></i>
-					<p class="text-body-2 regular">${date}</p>
+					<p class="text-body-2 regular">${super.getDateFormatted()}</p>
 				</div>
 
-				<div class="report-card__time">
+				<div class="report-card__details">
 					<i class="icon-time" style="background-color: var(--neutral-400)"></i>
-					<p class="text-body-2 regular">${time}</p>
+					<p class="text-body-2 regular">${super.getTimeFormatted()}</p>
 				</div>
 			</div>
 		</div>
@@ -78,13 +56,17 @@ class MyReportCard extends ReportCard {
 
 		<div class="report-card__my-reports-buttons">
 			${ToggleSwitch(this.id)}
-			<button class="btn btn-tertiary text-body-3 medium" onclick="window.location.href='/pages/report-hazard/index.html?id=${this.id}#review-report'">
+			<button class="btn btn-tertiary text-body-3 medium" onclick="window.location.href='/pages/report-hazard/index.html?id=${
+        this.id
+      }#review-report'">
 				<i class="icon-edit"></i>
 				Edit Report
 			</button>
 		</div>
         `;
-    divInner.querySelector('#report-card__image-gallery').appendChild(gallery);
+    divInner
+      .querySelector('#report-card__image-gallery')
+      .appendChild(super.getGallery());
     divOuter.appendChild(divInner);
     return divOuter;
   }
