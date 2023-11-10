@@ -7,7 +7,6 @@
 }
 
 #notifications-popup .notifications-popup__container {
-  max-width: 26.5rem;
   border-radius: 1rem;
   position: absolute;
   float: right;
@@ -18,11 +17,17 @@
   background: var(--white, #fff);
   box-shadow: 0px 5px 15px 0px rgba(0, 0, 0, 0.05);
   overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
 }
 
 #notifications-popup .notifications-popup__container ul {
   overflow-y: auto;
   max-width: 26.5rem;
+
+  overflow: auto;
+  max-height: calc(100vh - 190px);
 }
 
 #notifications-popup .notifications-popup ul li:not(:last-child) {
@@ -137,6 +142,7 @@
     right: 0.3rem;
     margin-top: 0.3rem;
     width: -webkit-fill-available;
+    max-width: 26.5rem;
   }
 
   #notifications-popup .notifications-popup__container ul {

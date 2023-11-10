@@ -28,11 +28,70 @@ img {
   display: none;
 }
 
+#reportHazardForm h1 {
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.section-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+#reportHazardForm {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  padding: 1rem;
+}
+
+.select-location-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.select-location-content {
+  border-radius: 1rem;
+  border: 1px solid var(--neutral-300);
+}
+
+.select-location-content__header {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.select-location-content__header__location {
+  display: flex;
+  gap: 0.5rem;
+}
+
+#map,
+.leaflet-control-attribution {
+  border-radius: 0 0 1rem 1rem;
+}
+
 @media screen and (min-width: 800px) {
   .breadbrumb-desktop {
     display: block;
   }
+  
   .back-button-mobile {
     display: none;
+  }
+
+  .continue-btn{
+    width: 15.5rem;
+  }
+
+  #reportHazardForm h1 {
+    font-size: 2.8125rem;
+    margin: 0;
+  }
+
+  #reportHazardForm {
+    margin-top: 3.5rem;
   }
 }

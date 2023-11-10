@@ -66,5 +66,12 @@
 
 .sb-cards-info--box {
   margin-top: 16px;
-  padding-inline: 8px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  width: calc(100% - 24px);
+}
+
+#viewDetailsBtn {
+  margin-top: 20px;
 }

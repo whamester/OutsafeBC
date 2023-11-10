@@ -44,7 +44,7 @@ class HazardDetailCard extends ReportCard {
     }">
       <i class="${
         this.settings.icon
-      }" style="width:24px; height:24px; background-color: white"></i>
+      }-outline" style="width:24px; height:24px; background-color: white"></i>
     </span>
         <p class="text-body-1 semibold">${this.hazard}</p>
   </div>
@@ -52,7 +52,7 @@ class HazardDetailCard extends ReportCard {
   <div class="report-card__top-info">
     <div class="report-card__details">
       <i class="icon-location-pin-outline" style="background-color: var(--neutral-400)"></i>
-      <p class="text-body-2 regular">${this.location}</p>
+      <p class="text-body-2 regular report-card__location-text">${this.location}</p>
     </div>
 
     <div class="report-card__date_time">

@@ -34,7 +34,7 @@
 
 .report-card__details {
 	display: flex;
-	align-items: center;
+		align-items: center;
 	gap: 0.5rem;
 }
 
@@ -72,4 +72,14 @@
 .btn-tertiary {
 	background: none;
 	border: none;
+}
+
+.report-card__location-text {
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+i {
+	flex-shrink: 0;
 }
