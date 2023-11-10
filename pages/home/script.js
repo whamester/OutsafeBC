@@ -46,7 +46,7 @@ let searchSuggestions = [];
 let reports = [];
 let categoryFilters = [];
 let flyToTrigger = true;
-let currentReport;
+
 const alert = new AlertPopup();
 
 let mapOptions = {
@@ -209,13 +209,33 @@ function showLoginModal() {
 
 const markerParams = {
   event: 'click',
-  func: async (hazardID, lat, lng) => {
+  func: async (hazardID) => {
     if (hazardReportPopulated && hazardReportPopulated.parentNode) {
       hazardReportPopulated.parentNode.removeChild(hazardReportPopulated);
     }
     // await getReportApiCall(position.lat, position.lng, categoryFilters);
 
-    showHazardDetails(hazardID);
+   const currentReport =  await getHazardReportData(hazardID);
+   
+    let hazardReport = new HazardDetailCard(
+      currentReport.id,
+      currentReport.hazardCategory.name,
+      currentReport.hazard.name,
+      currentReport.location.address,
+      currentReport.created_at,
+      currentReport.images,
+      currentReport.comment,
+      currentReport.hazardCategory.settings,
+      geolocationDistance(
+        currentReport.location.lat,
+        currentReport.location.lng,
+        position.lat,
+        position.lng
+      ),
+      currentReport.user
+    );
+
+    showHazardDetails(hazardReport);
   },
 };
 
@@ -398,38 +418,19 @@ async function getHazardReportData(id) {
     }
     const response = await fetch(API_URL + endpointURL);
     const result = await response.json();
-    currentReport = result.data;
+    return result.data
   } catch (error) {
     alert.show(
       'Reports unavailable at the moment, please try again later or contact support',
       AlertPopup.error
     );
+    return null
   }
 }
 
 // Show hazard report
-async function showHazardDetails(id) {
+function showHazardDetails(hazardReport) {
   try {
-    await getHazardReportData(id);
-    let hazardReport = new HazardDetailCard(
-      currentReport.id,
-      currentReport.hazardCategory.name,
-      currentReport.hazard.name,
-      currentReport.location.address,
-      currentReport.created_at,
-      currentReport.images,
-      currentReport.comment,
-      currentReport.hazardCategory.settings,
-      geolocationDistance(
-        currentReport.location.lat,
-        currentReport.location.lng,
-        position.lat,
-        position.lng
-      ),
-      currentReport.user,
-      currentReport.flagged_as_fake,
-      currentReport.enable_reaction
-    );
     hazardReportPopulated = hazardReport.hazardCardContent();
 
     root.insertBefore(
