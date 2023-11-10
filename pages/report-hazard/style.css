@@ -76,28 +76,27 @@ img {
 }
 
 /* Hide botones from radios */
-input[type="radio"] {
+input[type='radio'] {
   display: none;
 }
 
-
-#hazard-category label, #hazard-option-content label {
-  background-color: #f0f0f0;
+#hazard-category label,
+#hazard-option-content label {
   padding: 5px 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
   cursor: pointer;
   display: inline-block;
   margin: 5px;
+  border-radius: 8px;
+  border: 1px solid var(--neutral-neutral-300, #d0d5dd);
+  background: var(--neutral-neutral-50, #f7f9fc);
 }
 
-
-#hazard-category input[type="radio"]:checked + label, #hazard-option-content input[type="radio"]:checked + label {
-  background-color: #3498db;
-  color: white;
-  border-color: #3498db;
+#hazard-category input[type='radio']:checked + label,
+#hazard-option-content input[type='radio']:checked + label {
+  border-radius: 8px;
+  border: 1px solid var(--neutral-neutral-100, #f0f2f5);
+  background: var(--secondary-secondary-500-base, #d8e7e2);
 }
-
 
 @media screen and (min-width: 800px) {
   .breadbrumb-desktop {
