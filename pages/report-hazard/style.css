@@ -75,6 +75,30 @@ img {
   border-radius: 0 0 1rem 1rem;
 }
 
+/* Hide botones from radios */
+input[type="radio"] {
+  display: none;
+}
+
+
+#hazard-category label, #hazard-option-content label {
+  background-color: #f0f0f0;
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-block;
+  margin: 5px;
+}
+
+
+#hazard-category input[type="radio"]:checked + label, #hazard-option-content input[type="radio"]:checked + label {
+  background-color: #3498db;
+  color: white;
+  border-color: #3498db;
+}
+
+
 @media screen and (min-width: 800px) {
   .breadbrumb-desktop {
     display: block;
