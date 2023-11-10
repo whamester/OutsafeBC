@@ -14,8 +14,6 @@
   border: solid;
 }
 
-/* /For easy testing on a mobile browser, this property is temporary */
-
 #imagesFirstOutput2 > img {
   display: grid;
   grid-template-columns: 1fr;
@@ -75,7 +73,13 @@ img {
   border-radius: 0 0 1rem 1rem;
 }
 
-/* Hide botones from radios */
+header {
+  display: none;
+}
+
+
+
+/* Question 2 */
 input[type='radio'] {
   display: none;
 }
@@ -109,15 +113,51 @@ img {
   height: 40px;
 }
 
+.category-icon{
+  margin-left: 20px;
+}
+
 .text-container {
   display: flex;
   flex-direction: column;
+  margin: 20px;
+  margin-left: 16px;
 }
 
 #hazard-category-content label {
   display: flex;
   align-items: center;
 }
+
+.label-container {
+  padding: 20px;
+  width: 342px;
+  height: 104px;
+}
+
+.title-hazard{
+  color: var(--primary-primary-500-base, #243832);
+/* Small/Body-1/Bold (700) */
+/* font-family: Instrument Sans; */
+font-size: 16px;
+font-style: normal;
+font-weight: 700;
+line-height: 150%; /* 24px */
+margin-bottom: 4px;
+}
+
+.description-hazard {
+  color: var(--primary-primary-400, #50605B);
+
+/* Small/Body-3/Medium (500) */
+/* font-family: Instrument Sans; */
+font-size: 12px;
+font-style: normal;
+font-weight: 500;
+line-height: 150%; /* 18px */
+}
+
+/* Question 3 */
 
 @media screen and (min-width: 800px) {
   .breadbrumb-desktop {

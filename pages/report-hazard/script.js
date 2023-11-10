@@ -327,6 +327,7 @@ const getCategories = async () => {
 
       label.setAttribute('id', `category-${category.id}-label`);
       label.setAttribute('for', `category-${category.id}-radio`);
+      label.classList.add('label-container');
       label.innerHTML = `<i class="category-icon"><img src="../../assets/icons/${arrayIcons[i]}-outline.svg" alt="${arrayIcons[i]}"></i>`;
 
       const textContainer = document.createElement('div');
@@ -334,9 +335,11 @@ const getCategories = async () => {
 
       const categoryName = document.createElement('p');
       categoryName.innerHTML = category.name;
+      categoryName.classList.add('title-hazard');
 
       const categoryDescription = document.createElement('p');
       categoryDescription.innerHTML = category.description;
+      categoryDescription.classList.add('description-hazard');
 
       textContainer.appendChild(categoryName);
       textContainer.appendChild(categoryDescription);
@@ -355,6 +358,7 @@ const getCategories = async () => {
     );
   }
 };
+
 
 getCategories();
 
