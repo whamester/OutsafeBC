@@ -4,7 +4,6 @@ import GeoMap from '../../assets/components/GeoMap.js';
 import SearchBar, {
   SearchBarSuggestionCard,
 } from '../../assets/components/SearchBar.js';
-import Modal from '../../assets/components/Modal.js';
 import HazardCard from '../../assets/components/HazardCard.js';
 import ModalFilter from '../../assets/components/ModalFilter.js';
 import AlertPopup from '../../assets/components/AlertPopup.js';
