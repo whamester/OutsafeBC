@@ -1,4 +1,10 @@
 import ReportCard from '../helpers/card-container.js';
+import { API_URL } from '../../constants.js';
+import Modal from './Modal.js';
+import { getUserSession } from '../helpers/storage.js';
+import AlertPopup from './AlertPopup.js';
+
+const user = getUserSession();
 
 class HazardDetailCard extends ReportCard {
   constructor(
@@ -11,14 +17,136 @@ class HazardDetailCard extends ReportCard {
     comment,
     icon,
     distance,
-    user
+    user,
+    flagged_as_fake, 
+    enable_reaction
+
   ) {
     super(id, category, hazard, location, date, photos, comment, icon);
-    (this.distance = distance), (this.user = user);
+    this.distance = distance;
+    this.user = user;
+    this.flagged_as_fake = flagged_as_fake
+    this.enable_reaction = enable_reaction
+    this.divContainer = null;
   }
 
-  stillThere(){
-    
+  showLoginModal() {
+    const modal = new Modal();
+
+    const loginBtn = document.createElement('button');
+    loginBtn.setAttribute('id', 'open-modal-btn');
+    loginBtn.setAttribute('class', 'btn btn-primary');
+    loginBtn.addEventListener('click', () =>
+      window.location.assign(`/pages/login/index.html`)
+    );
+    loginBtn.innerHTML = 'Log in';
+
+    modal.show({
+      title: 'Please log in to continue',
+      description:
+        'Thank you for helping others have a safe outdoors experience.',
+      icon: {
+        name: 'icon-exclamation-mark',
+        color: '#000000',
+        size: '3.5rem',
+      },
+      actions: loginBtn,
+      enableOverlayClickClose: true,
+    });
+  }
+
+  async reportStillThere(option) {
+    try {
+      const alert = new AlertPopup();
+
+      const response = await fetch(
+        `${API_URL}/hazard-report-reaction?id=${this.id}`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            user_id: this.id,
+            still_there: option,
+          }),
+        }
+      );
+      const { error, data, message } = await response.json();
+
+      if (!!error) {
+        alert.show(
+          'Unable to complete the action at the moment',
+          AlertPopup.error
+        );
+        console.error(error);
+        return;
+      }
+      // Success alert
+      alert.show('Feedback Submitted!', AlertPopup.success);
+      console.log('Success', data, message);
+    } catch (error) {
+      // Error alert
+      alert.show(
+        'Unable to complete the action at the moment',
+        AlertPopup.error
+      );
+      console.error(error);
+    }
+  }
+
+  async flagAsFake() {
+    const alert = new AlertPopup();
+    try {
+      const response = await fetch(
+        `${API_URL}/hazard-report-flag?id=${this.id}`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            user_id: this.id,
+          }),
+        }
+      );
+      const { error, data, message } = await response.json();
+
+      if (!!error) {
+        alert.show(
+          'Unable to complete the action at the moment',
+          AlertPopup.error
+        );
+        console.error(error);
+        return;
+      }
+      // Success alert
+      alert.show('Feedback Submitted!', AlertPopup.success);
+      console.log('Success', data, message);
+    } catch (error) {
+      // Error alert
+      alert.show(
+        'Unable to complete the action at the moment',
+        AlertPopup.error
+      );
+      console.error(error);
+    }
+  }
+
+  changeButtonState() {
+    if (this.flagged_as_fake) {
+      this.divContainer.querySelector('#flagReportBtn').disabled = true;
+    } else {
+      this.divContainer.querySelector('#flagReportBtn').disabled = false;
+    }
+
+    if (this.enable_reaction) {
+      this.divContainer.querySelector('#stillThereBtn').disabled = false;
+      this.divContainer.querySelector('#notThereBtn').disabled = false;
+    } else {
+      this.divContainer.querySelector('#stillThereBtn').disabled = true;
+      this.divContainer.querySelector('#notThereBtn').disabled = true;
+    }
   }
 
   hazardCardContent() {
@@ -52,7 +180,9 @@ class HazardDetailCard extends ReportCard {
   <div class="report-card__top-info">
     <div class="report-card__details">
       <i class="icon-location-pin-outline" style="background-color: var(--neutral-400)"></i>
-      <p class="text-body-2 regular report-card__location-text">${this.location}</p>
+      <p class="text-body-2 regular report-card__location-text">${
+        this.location
+      }</p>
     </div>
 
     <div class="report-card__date_time">
@@ -86,7 +216,9 @@ class HazardDetailCard extends ReportCard {
   <div class="report-card__spacer-line"></div>
   <p class="text-body-3 regular">Reported by</p>
   <div class="report-card__user-details">
-  <img id="user-image" src="${this.user.photo || '../../assets/img/default-nav-image.png'}" alt="User photo">
+  <img id="user-image" src="${
+    this.user.photo || '../../assets/img/default-nav-image.png'
+  }" alt="User photo">
   <p class="text-body-2 regular">${this.user.name}</p>
   </div>
   
@@ -94,25 +226,55 @@ class HazardDetailCard extends ReportCard {
 
   <div class="report-card__hazard-detail-buttons">
     
-    <button class="btn btn-success">
+    <button class="btn btn-success" id="stillThereBtn">
       <i class="icon-check"></i>
       Still there
     </button>
-    <button class="btn btn-warning">
+    <button class="btn btn-warning" id="notThereBtn">
       <i class="icon-close"></i>
       Not there
     </button>
-    <button class="btn btn-error">
+    <button class="btn btn-error" id="flagReportBtn">
       <i class="icon-flag"></i>
       Flag report
     </button>
   </div>
       `;
+
     divInner
       .querySelector('#report-card__image-gallery')
       .appendChild(super.getGallery());
     divOuter.appendChild(divInner);
     divContainer.appendChild(divOuter);
+    divContainer
+      .querySelector('#stillThereBtn')
+      .addEventListener('click', () => {
+        if (!user) {
+          this.showLoginModal();
+        } else {
+          this.reportStillThere(true);
+        }
+      });
+    divContainer.querySelector('#notThereBtn').addEventListener('click', () => {
+      if (!user) {
+        this.showLoginModal();
+      } else {
+        this.reportStillThere(false);
+      }
+    });
+    divContainer
+      .querySelector('#flagReportBtn')
+      .addEventListener('click', () => {
+        if (!user) {
+          this.showLoginModal();
+        } else {
+          this.flagAsFake();
+        }
+      });
+
+    this.divContainer = divContainer;
+
+    this.changeButtonState();
     return divContainer;
   }
 }
