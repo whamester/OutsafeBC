@@ -61,7 +61,7 @@ class Map {
       marker.sub_category = subCategory;
 
       if (markerParams.event)
-        marker.on(markerParams.event, () => markerParams.func(idx, hazard?.location?.lat, hazard?.location?.lng));
+        marker.on(markerParams.event, () => markerParams.func(hazard?.id, hazard?.location?.lat, hazard?.location?.lng));
 
       this.mapLayers.addLayer(marker);
     });

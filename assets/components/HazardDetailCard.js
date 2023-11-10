@@ -1,4 +1,11 @@
 import ReportCard from '../helpers/card-container.js';
+import { API_URL } from '../../constants.js';
+import Modal from './Modal.js';
+import { getUserSession } from '../helpers/storage.js';
+import AlertPopup from './AlertPopup.js';
+
+const alert = new AlertPopup();
+const user = getUserSession();
 
 class HazardDetailCard extends ReportCard {
   constructor(
@@ -17,7 +24,97 @@ class HazardDetailCard extends ReportCard {
     (this.distance = distance), (this.user = user);
   }
 
-  stillThere() {}
+  showLoginModal() {
+    const modal = new Modal();
+
+    const loginBtn = document.createElement('button');
+    loginBtn.setAttribute('id', 'open-modal-btn');
+    loginBtn.setAttribute('class', 'btn btn-primary');
+    loginBtn.addEventListener('click', () =>
+      window.location.assign(`/pages/login/index.html`)
+    );
+    loginBtn.innerHTML = 'Log in';
+
+    modal.show({
+      title: 'Please log in to continue',
+      description:
+        'Thank you for helping others have a safe outdoors experience.',
+      icon: {
+        name: 'icon-exclamation-mark',
+        color: '#000000',
+        size: '3.5rem',
+      },
+      actions: loginBtn,
+      enableOverlayClickClose: true,
+    });
+  }
+
+  async reportStillThere(option) {
+    try {
+      let bodyData;
+
+      if (!user) {
+        bodyData = {
+          still_there: option,
+        };
+      } else {
+        bodyData = {
+          user_id: this.id,
+          still_there: option,
+        };
+      }
+
+      const response = await fetch(
+        `${API_URL}/hazard-report-reaction?id=${this.id}`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(bodyData),
+        }
+      );
+      const { error, data, message } = await response.json();
+
+      if (!!error) {
+        console.error(error);
+        return;
+      }
+      // Success alert
+      console.log('Success', data, message);
+    } catch (error) {
+      console.error(error);
+      // Error alert
+    }
+  }
+
+  async flagAsFake() {
+    try {
+      const response = await fetch(
+        `${API_URL}/hazard-report-flag?id=${this.id}`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            user_id: this.id,
+          }),
+        }
+      );
+      const { error, data, message } = await response.json();
+
+      if (!!error) {
+        console.error(error);
+        return;
+      }
+      // Success alert
+      console.log('Success', data, message);
+    } catch (error) {
+      console.error(error);
+      // Error alert
+    }
+  }
 
   hazardCardContent() {
     let divContainer = document.createElement('div');
@@ -113,6 +210,31 @@ class HazardDetailCard extends ReportCard {
       .appendChild(super.getGallery());
     divOuter.appendChild(divInner);
     divContainer.appendChild(divOuter);
+    divContainer
+      .querySelector('#stillThereBtn')
+      .addEventListener('click', () => {
+        if (!user) {
+          this.showLoginModal();
+        } else {
+          this.reportStillThere(true);
+        }
+      });
+    divContainer.querySelector('#notThereBtn').addEventListener('click', () => {
+      if (!user) {
+        this.showLoginModal();
+      } else {
+        this.reportStillThere(false);
+      }
+    });
+    divContainer
+      .querySelector('#flagReportBtn')
+      .addEventListener('click', () => {
+        if (!user) {
+          this.showLoginModal();
+        } else {
+          this.flagAsFake();
+        }
+      });
     return divContainer;
   }
 }

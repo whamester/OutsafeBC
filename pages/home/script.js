@@ -209,13 +209,13 @@ function showLoginModal() {
 
 const markerParams = {
   event: 'click',
-  func: async (idx, lat, lng) => {
+  func: async (hazardID, lat, lng) => {
     if (hazardReportPopulated && hazardReportPopulated.parentNode) {
       hazardReportPopulated.parentNode.removeChild(hazardReportPopulated);
     }
-    await getReportApiCall(position.lat, position.lng, categoryFilters);
+    // await getReportApiCall(position.lat, position.lng, categoryFilters);
 
-    showHazardDetails('45a95a6c-654a-4d09-bfe8-f6b36f4a1e49');
+    showHazardDetails(hazardID);
   },
 };
 
@@ -442,28 +442,3 @@ async function showHazardDetails(id) {
     console.error('Error:', error);
   }
 }
-
-// Detail hazard report card buttons
-root.addEventListener('click', (event) => {
-  const buttonId = event.target.id;
-
-  if (
-    ['stillThereBtn', 'notThereBtn', 'flagReportBtn'].includes(buttonId) &&
-    !user
-  ) {
-    showLoginModal();
-    return;
-  }
-
-  switch (buttonId) {
-    case 'stillThereBtn':
-      // TODO: Still there endpoint
-      break;
-    case 'notThereBtn':
-      // TODO: Not there endpoint
-      break;
-    case 'flagReportBtn':
-      // TODO: Flag report endpoint
-      break;
-  }
-});
