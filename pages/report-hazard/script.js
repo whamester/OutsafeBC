@@ -294,8 +294,6 @@ const getCategories = async () => {
       }
     });
 
-    console.log(arrayIcons);
-
     for (let i = 0; i < data.length; i++) {
       const category = data[i];
 
