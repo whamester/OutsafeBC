@@ -9,6 +9,7 @@ import { API_URL } from '../../constants.js';
 import Header from '../../assets/components/Header.js';
 import AlertPopup from '../../assets/components/AlertPopup.js';
 import Modal from '../../assets/components/Modal.js';
+import LoaderAnimation from '../../assets/components/WhiteTransition.js';
 
 //Helpers
 import { getUserSession } from '../../assets/helpers/storage.js';
@@ -36,10 +37,8 @@ const ANIMATION_DURATION = 4;
  * Page Init
  */
 
-//loading animation
-window.addEventListener('load', function () {
-  document.getElementById('loader').classList.toggle('loader2');
-});
+//Loading animation (White overlay)
+const loader = new LoaderAnimation();
 
 //to display the correct section
 window.onload = async function () {
@@ -111,7 +110,11 @@ const updateCurrentReportLocation = async (params) => {
     address: address,
   };
 
-  locationAddressInput.value = `${currentReport.location.address} (${currentReport.location.lat}, ${currentReport.location.lng})`;
+  locationAddressLabel.innerHTML = `${
+    currentReport.location.address
+      ? currentReport.location.address
+      : `(${currentReport.location.lat}, ${currentReport.location.lng})`
+  }`;
   var enlace = document.getElementById('hazardCategory');
   enlace.setAttribute('onclick', 'location.href="#hazard-category"');
 };
@@ -131,7 +134,7 @@ const displayCurrentSection = () => {
     const pageId = location.hash ? location.hash : '#select-location';
     for (let page of allPages) {
       if (pageId === '#' + page.id) {
-        page.style.display = 'block';
+        page.style.display = 'flex';
       } else {
         page.style.display = 'none';
       }
@@ -152,10 +155,6 @@ const loadGeolocation = async () => {
     mapInstance.setMarkerOnMap(position.lat, position.lng, {
       draggable: true,
     });
-    // mapInstance.map.flyTo([position.lat, position.lng], Map.CURRENT_ZOOM, {
-    //   animate: true,
-    //   duration: 2,
-    // });
     mapInstance.map.flyTo([position.lat, position.lng], FLY_TO_ZOOM, {
       animate: true,
       duration: ANIMATION_DURATION,
@@ -235,7 +234,7 @@ const populateReport = async () => {
     getCollection();
   } else {
     document.getElementById('updateReportBtn').style.display = 'none';
-    document.getElementById('saveReportBtn').style.display = 'initial';
+    document.getElementById('saveReportBtn').style.display = 'flex';
   }
 };
 
