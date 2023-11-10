@@ -274,7 +274,7 @@ const getCategories = async () => {
     let response = await fetch(`${API_URL}/hazard-category`);
     let { data } = await response.json();
     const content = document.getElementById('hazard-category-content');
-    
+
     let arrayIcons = [];
 
     data.forEach((category) => {
@@ -326,6 +326,11 @@ const getCategories = async () => {
       label.setAttribute('for', `category-${category.id}-radio`);
       label.innerHTML = `<i class="category-icon"><img src="../../assets/icons/${arrayIcons[i]}-outline.svg" alt="${arrayIcons[i]}"></i> ${category.name}`;
 
+      const categoryDescription = document.createElement('p');
+      categoryDescription.innerHTML = category.description;
+
+      label.appendChild(categoryDescription);
+
       div.appendChild(radio);
       div.appendChild(label);
 
@@ -339,6 +344,7 @@ const getCategories = async () => {
     );
   }
 };
+
 
 
 getCategories();
