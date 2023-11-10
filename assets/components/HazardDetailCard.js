@@ -17,9 +17,7 @@ class HazardDetailCard extends ReportCard {
     (this.distance = distance), (this.user = user);
   }
 
-  stillThere(){
-    
-  }
+  stillThere() {}
 
   hazardCardContent() {
     let divContainer = document.createElement('div');
@@ -86,7 +84,9 @@ class HazardDetailCard extends ReportCard {
   <div class="report-card__spacer-line"></div>
   <p class="text-body-3 regular">Reported by</p>
   <div class="report-card__user-details">
-  <img id="user-image" src="${this.user.photo || '../../assets/img/default-nav-image.png'}" alt="User photo">
+  <img id="user-image" src="${
+    this.user.photo || '../../assets/img/default-nav-image.png'
+  }" alt="User photo">
   <p class="text-body-2 regular">${this.user.name}</p>
   </div>
   
@@ -94,15 +94,15 @@ class HazardDetailCard extends ReportCard {
 
   <div class="report-card__hazard-detail-buttons">
     
-    <button class="btn btn-success">
+    <button class="btn btn-success" id="stillThereBtn">
       <i class="icon-check"></i>
       Still there
     </button>
-    <button class="btn btn-warning">
+    <button class="btn btn-warning" id="notThereBtn">
       <i class="icon-close"></i>
       Not there
     </button>
-    <button class="btn btn-error">
+    <button class="btn btn-error" id="flagReportBtn">
       <i class="icon-flag"></i>
       Flag report
     </button>

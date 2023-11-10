@@ -63,6 +63,7 @@ const searchBarParams = {
 };
 
 const user = getUserSession();
+const root = document.getElementById('root');
 
 /**
  * Page Init
@@ -422,7 +423,6 @@ async function showHazardDetails(id) {
       currentReport.user
     );
     hazardReportPopulated = hazardReport.hazardCardContent();
-    const root = document.getElementById('root');
 
     root.insertBefore(
       hazardReportPopulated,
@@ -442,3 +442,28 @@ async function showHazardDetails(id) {
     console.error('Error:', error);
   }
 }
+
+// Detail hazard report card buttons
+root.addEventListener('click', (event) => {
+  const buttonId = event.target.id;
+
+  if (
+    ['stillThereBtn', 'notThereBtn', 'flagReportBtn'].includes(buttonId) &&
+    !user
+  ) {
+    showLoginModal();
+    return;
+  }
+
+  switch (buttonId) {
+    case 'stillThereBtn':
+      // TODO: Still there endpoint
+      break;
+    case 'notThereBtn':
+      // TODO: Not there endpoint
+      break;
+    case 'flagReportBtn':
+      // TODO: Flag report endpoint
+      break;
+  }
+});
