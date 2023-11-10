@@ -16,6 +16,7 @@ import { getUserSession } from '../../assets/helpers/storage.js';
 import readImage from '../../assets/helpers/read-image.js';
 import geocode from '../../assets/helpers/geocode.js';
 import injectHeader from '../../assets/helpers/inject-header.js';
+import loadIcons from '../../assets/helpers/load-icons.js';
 
 //Variable Declaration
 const currentReport = new ReportForm();
@@ -335,6 +336,7 @@ const getCategories = async () => {
       label.setAttribute('for', `category-${category.id}-radio`);
       label.classList.add('label-container');
       // label.innerHTML = `<i class="category-icon"><img src="../../assets/icons/${arrayIcons[i]}-outline.svg" alt="${arrayIcons[i]}"></i>`;
+      // label.innerHTML = `<i class="${category.icon}-outline category-icon"> </i>`;//by Wonnyo
       label.innerHTML = `<img class="category-icon" src="../../assets/icons/${arrayIcons[i]}-outline.svg" alt="${arrayIcons[i]}">`;
       // label.innerHTML = `<i class="category-icon" src="../../assets/icons/${arrayIcons[i]}-outline.svg" alt="${arrayIcons[i]}"></i>`;
 
@@ -344,10 +346,14 @@ const getCategories = async () => {
       const categoryName = document.createElement('p');
       categoryName.innerHTML = category.name;
       categoryName.classList.add('title-hazard');
+      categoryName.classList.add('text-body-1');
+      categoryName.classList.add('bold');
 
       const categoryDescription = document.createElement('p');
       categoryDescription.innerHTML = category.description;
       categoryDescription.classList.add('description-hazard');
+      categoryDescription.classList.add('text-body-3');
+      categoryDescription.classList.add('medium');
 
       textContainer.appendChild(categoryName);
       textContainer.appendChild(categoryDescription);
@@ -366,7 +372,6 @@ const getCategories = async () => {
     );
   }
 };
-
 
 getCategories();
 
