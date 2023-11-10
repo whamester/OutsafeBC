@@ -254,6 +254,14 @@ const getAddressFromCoordinates = async (params) => {
   }
 };
 
+//Insert chevron-left arrow on back button
+const button = document.getElementById('backButton');
+const icon = document.createElement('img');
+icon.src = '../../assets/icons/chevron-left.svg';
+icon.alt = 'Your Alt Text';
+button.insertBefore(icon, button.firstChild);
+icon.setAttribute('class', 'back-arrow');
+
 /**
  * Step 1: Location
  */
