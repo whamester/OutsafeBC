@@ -334,7 +334,9 @@ const getCategories = async () => {
       label.setAttribute('id', `category-${category.id}-label`);
       label.setAttribute('for', `category-${category.id}-radio`);
       label.classList.add('label-container');
-      label.innerHTML = `<i class="category-icon"><img src="../../assets/icons/${arrayIcons[i]}-outline.svg" alt="${arrayIcons[i]}"></i>`;
+      // label.innerHTML = `<i class="category-icon"><img src="../../assets/icons/${arrayIcons[i]}-outline.svg" alt="${arrayIcons[i]}"></i>`;
+      label.innerHTML = `<img class="category-icon" src="../../assets/icons/${arrayIcons[i]}-outline.svg" alt="${arrayIcons[i]}">`;
+      // label.innerHTML = `<i class="category-icon" src="../../assets/icons/${arrayIcons[i]}-outline.svg" alt="${arrayIcons[i]}"></i>`;
 
       const textContainer = document.createElement('div');
       textContainer.classList.add('text-container');

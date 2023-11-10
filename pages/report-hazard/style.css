@@ -1,4 +1,5 @@
 @import url('../../assets/css/white-transition.css');
+@import url('../../assets/css/_variables.css');
 
 #map {
   height: 400px;
@@ -89,7 +90,7 @@ header {
   color: inherit;
   cursor: pointer;
   text-decoration: none;
-  color: var(--neutral-neutral-500, #667185);
+  color: var(--neutral-500);
   margin-top: 12px;
   margin-bottom: 12px;
   margin-left: 16px;
@@ -100,7 +101,7 @@ header {
 
 .divider {
   width: 100%;
-  border-bottom: 1px solid var(--neutral-neutral-300, #d0d5dd);
+  border-bottom: 1px solid var(--neutral-300);
 }
 
 .back-arrow {
@@ -122,15 +123,15 @@ input[type='radio'] {
   display: inline-block;
   margin: 5px;
   border-radius: 8px;
-  border: 1px solid var(--neutral-neutral-300, #d0d5dd);
-  background: var(--neutral-neutral-50, #f7f9fc);
+  border: 1px solid var(--neutral-300);
+  background: var(--neutral-50);
 }
 
 #hazard-category input[type='radio']:checked + label,
 #hazard-option-content input[type='radio']:checked + label {
   border-radius: 8px;
-  border: 1px solid var(--neutral-neutral-100, #f0f2f5);
-  background: var(--secondary-secondary-500-base, #d8e7e2);
+  border: 1px solid var(--neutral-100);
+  background: var(--secondary-500);
 }
 
 .category-container {
@@ -167,7 +168,7 @@ img {
 }
 
 .title-hazard {
-  color: var(--primary-primary-500-base, #243832);
+  color: var(--primary-500);
   /* Small/Body-1/Bold (700) */
   /* font-family: Instrument Sans; */
   font-size: 16px;
@@ -178,7 +179,7 @@ img {
 }
 
 .description-hazard {
-  color: var(--primary-primary-400, #50605b);
+  color: var(--primary-400);
 
   /* Small/Body-3/Medium (500) */
   /* font-family: Instrument Sans; */
