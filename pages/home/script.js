@@ -84,28 +84,7 @@ window.onload = async function () {
 
     document.getElementById('reportHazardBtn').addEventListener('click', () => {
       if (!user) {
-        const modal = new Modal();
-
-        const loginBtn = document.createElement('button');
-        loginBtn.setAttribute('id', 'open-modal-btn');
-        loginBtn.setAttribute('class', 'btn btn-primary');
-        loginBtn.addEventListener('click', () =>
-          window.location.assign(`/pages/login/index.html`)
-        );
-        loginBtn.innerHTML = 'Log in';
-
-        modal.show({
-          title: 'Please log in to continue',
-          description:
-            'Thank you for helping others have a safe outdoors experience.',
-          icon: {
-            name: 'icon-exclamation-mark',
-            color: '#000000',
-            size: '3.5rem',
-          },
-          actions: loginBtn,
-          enableOverlayClickClose: true,
-        });
+        showLoginModal()
       } else {
         window.location = '/pages/report-hazard';
       }
@@ -198,6 +177,32 @@ window.onload = async function () {
     );
   }
 };
+
+// show modal that instructs user to log in to continue
+function showLoginModal(){
+  const modal = new Modal();
+
+  const loginBtn = document.createElement('button');
+  loginBtn.setAttribute('id', 'open-modal-btn');
+  loginBtn.setAttribute('class', 'btn btn-primary');
+  loginBtn.addEventListener('click', () =>
+    window.location.assign(`/pages/login/index.html`)
+  );
+  loginBtn.innerHTML = 'Log in';
+
+  modal.show({
+    title: 'Please log in to continue',
+    description:
+      'Thank you for helping others have a safe outdoors experience.',
+    icon: {
+      name: 'icon-exclamation-mark',
+      color: '#000000',
+      size: '3.5rem',
+    },
+    actions: loginBtn,
+    enableOverlayClickClose: true,
+  });
+}
 
 const markerParams = {
   event: 'click',
