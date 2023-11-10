@@ -51,18 +51,6 @@ class HazardDetailCard extends ReportCard {
   async reportStillThere(option) {
     try {
       const alert = new AlertPopup();
-      let bodyData;
-
-      if (!user) {
-        bodyData = {
-          still_there: option,
-        };
-      } else {
-        bodyData = {
-          user_id: this.id,
-          still_there: option,
-        };
-      }
 
       const response = await fetch(
         `${API_URL}/hazard-report-reaction?id=${this.id}`,
@@ -71,7 +59,10 @@ class HazardDetailCard extends ReportCard {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(bodyData),
+          body: JSON.stringify({
+            user_id: this.id,
+            still_there: option,
+          }),
         }
       );
       const { error, data, message } = await response.json();

@@ -390,7 +390,13 @@ const onSearchInput = debounce(async ({ target }) => {
 // Get hazard report from endpoint
 async function getHazardReportData(id) {
   try {
-    const response = await fetch(`${API_URL}/hazard-report?id=${id}`);
+    let endpointURL
+    if (!user){
+      endpointURL = `/hazard-report?id=${id}`
+    } else {
+      endpointURL = `/hazard-report?id=${id}&user_id=${user.id}`
+    }
+    const response = await fetch(API_URL+endpointURL);
     const result = await response.json();
     currentReport = result.data;
   } catch (error) {
