@@ -4,7 +4,6 @@ import Modal from './Modal.js';
 import { getUserSession } from '../helpers/storage.js';
 import AlertPopup from './AlertPopup.js';
 
-const alert = new AlertPopup();
 const user = getUserSession();
 
 class HazardDetailCard extends ReportCard {
@@ -51,6 +50,7 @@ class HazardDetailCard extends ReportCard {
 
   async reportStillThere(option) {
     try {
+      const alert = new AlertPopup();
       let bodyData;
 
       if (!user) {
@@ -77,18 +77,28 @@ class HazardDetailCard extends ReportCard {
       const { error, data, message } = await response.json();
 
       if (!!error) {
+        alert.show(
+          'Unable to complete the action at the moment',
+          AlertPopup.error
+        );
         console.error(error);
         return;
       }
       // Success alert
+      alert.show('Feedback Submitted!', AlertPopup.success);
       console.log('Success', data, message);
     } catch (error) {
-      console.error(error);
       // Error alert
+      alert.show(
+        'Unable to complete the action at the moment',
+        AlertPopup.error
+      );
+      console.error(error);
     }
   }
 
   async flagAsFake() {
+    const alert = new AlertPopup();
     try {
       const response = await fetch(
         `${API_URL}/hazard-report-flag?id=${this.id}`,
@@ -105,14 +115,23 @@ class HazardDetailCard extends ReportCard {
       const { error, data, message } = await response.json();
 
       if (!!error) {
+        alert.show(
+          'Unable to complete the action at the moment',
+          AlertPopup.error
+        );
         console.error(error);
         return;
       }
       // Success alert
+      alert.show('Feedback Submitted!', AlertPopup.success);
       console.log('Success', data, message);
     } catch (error) {
-      console.error(error);
       // Error alert
+      alert.show(
+        'Unable to complete the action at the moment',
+        AlertPopup.error
+      );
+      console.error(error);
     }
   }
 
