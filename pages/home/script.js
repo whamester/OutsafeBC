@@ -1,3 +1,4 @@
+import { API_URL } from '../../constants.js';
 //Components
 import Header from '../../assets/components/Header.js';
 import GeoMap from '../../assets/components/GeoMap.js';
@@ -8,6 +9,7 @@ import Modal from '../../assets/components/Modal.js';
 import HazardCard from '../../assets/components/HazardCard.js';
 import ModalFilter from '../../assets/components/ModalFilter.js';
 import AlertPopup from '../../assets/components/AlertPopup.js';
+import HazardDetailCard from '../../assets/components/HazardDetailCard.js';
 //Helpers
 import injectHTML from '../../assets/helpers/inject-html.js';
 import injectHeader from '../../assets/helpers/inject-header.js';
@@ -15,7 +17,6 @@ import apiRequest from '../../assets/helpers/api-request.js';
 import debounce from '../../assets/helpers/debounce.js';
 import geocode from '../../assets/helpers/geocode.js';
 import loadIcons from '../../assets/helpers/load-icons.js';
-import HazardDetailCard from '../../assets/components/HazardDetailCard.js';
 import geolocationDistance from '../../assets/helpers/geolocation-distance.js';
 import { getUserSession } from '../../assets/helpers/storage.js';
 //Models
@@ -45,6 +46,7 @@ let searchSuggestions = [];
 let reports = [];
 let categoryFilters = [];
 let flyToTrigger = true;
+let currentReport;
 const alert = new AlertPopup();
 
 let mapOptions = {
@@ -84,7 +86,7 @@ window.onload = async function () {
 
     document.getElementById('reportHazardBtn').addEventListener('click', () => {
       if (!user) {
-        showLoginModal()
+        showLoginModal();
       } else {
         window.location = '/pages/report-hazard';
       }
@@ -179,7 +181,7 @@ window.onload = async function () {
 };
 
 // show modal that instructs user to log in to continue
-function showLoginModal(){
+function showLoginModal() {
   const modal = new Modal();
 
   const loginBtn = document.createElement('button');
@@ -212,7 +214,7 @@ const markerParams = {
     }
     await getReportApiCall(position.lat, position.lng, categoryFilters);
 
-    showHazardCardFromExistingReports(idx);
+    showHazardDetails('45a95a6c-654a-4d09-bfe8-f6b36f4a1e49');
   },
 };
 
@@ -384,9 +386,41 @@ const onSearchInput = debounce(async ({ target }) => {
   boxCategories.style.display = 'none';
 });
 
-const showHazardDetails = (hazardReport) => {
+// Get hazard report from endpoint
+async function getHazardReportData(id) {
   try {
-    // Create a new hazardReportPopulated
+    const response = await fetch(`${API_URL}/hazard-report?id=${id}`);
+    const result = await response.json();
+    currentReport = result.data;
+  } catch (error) {
+    alert.show(
+      'Reports unavailable at the moment, please try again later or contact support',
+      AlertPopup.error
+    );
+  }
+}
+
+// Show hazard report
+async function showHazardDetails(id) {
+  try {
+    await getHazardReportData(id);
+    let hazardReport = new HazardDetailCard(
+      currentReport.id,
+      currentReport.hazardCategory.name,
+      currentReport.hazard.name,
+      currentReport.location.address,
+      currentReport.created_at,
+      currentReport.images,
+      currentReport.comment,
+      currentReport.hazardCategory.settings,
+      geolocationDistance(
+        currentReport.location.lat,
+        currentReport.location.lng,
+        position.lat,
+        position.lng
+      ),
+      currentReport.user
+    );
     hazardReportPopulated = hazardReport.hazardCardContent();
     const root = document.getElementById('root');
 
@@ -394,6 +428,7 @@ const showHazardDetails = (hazardReport) => {
       hazardReportPopulated,
       document.getElementById('hazard-comp')
     );
+
     loadIcons();
 
     // Close report card
@@ -406,30 +441,4 @@ const showHazardDetails = (hazardReport) => {
   } catch (error) {
     console.error('Error:', error);
   }
-};
-
-const showHazardCardFromExistingReports = (idx) => {
-  try {
-    let hazardReport = new HazardDetailCard(
-      hazardCardParams['reports'][idx].id,
-      hazardCardParams['reports'][idx].hazardCategory.name,
-      hazardCardParams['reports'][idx].hazard.name,
-      hazardCardParams['reports'][idx].location.address,
-      hazardCardParams['reports'][idx].created_at,
-      hazardCardParams['reports'][idx].images,
-      hazardCardParams['reports'][idx].comment,
-      hazardCardParams['reports'][idx].hazardCategory.settings,
-      geolocationDistance(
-        hazardCardParams['reports'][idx].location.lat,
-        hazardCardParams['reports'][idx].location.lng,
-        position.lat,
-        position.lng
-      ),
-      hazardCardParams['reports'][idx].user
-    );
-
-    showHazardDetails(hazardReport);
-  } catch (error) {
-    console.error('Error:', error);
-  }
-};
+}
