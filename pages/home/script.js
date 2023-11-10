@@ -17,6 +17,7 @@ import geocode from '../../assets/helpers/geocode.js';
 import loadIcons from '../../assets/helpers/load-icons.js';
 import HazardDetailCard from '../../assets/components/HazardDetailCard.js';
 import geolocationDistance from '../../assets/helpers/geolocation-distance.js';
+import { getUserSession } from '../../assets/helpers/storage.js';
 //Models
 import Map from '../../assets/models/Map.js';
 import HazardReport from '../../assets/models/HazardReport.js';
@@ -59,6 +60,8 @@ const searchBarParams = {
   categories: [],
 };
 
+const user = getUserSession();
+
 /**
  * Page Init
  */
@@ -78,6 +81,33 @@ window.onload = async function () {
       { func: SearchBar, args: searchBarParams },
       { func: ModalFilter, args: searchBarParams.categories },
     ]);
+
+    document.getElementById("reportHazardBtn").addEventListener("click", ()=>{
+      if (!user){
+        const modal = new Modal();
+
+        const button = document.createElement('button');
+        button.setAttribute('id', 'open-modal-btn');
+        button.setAttribute('class', 'btn btn-primary');
+        button.addEventListener('click', () =>
+          window.location.assign(
+            `/pages/login/index.html`
+          )
+        );
+        button.innerHTML = 'Log in';
+
+        modal.show({
+          title: 'Please log in to continue',
+          description:
+            'Thank you for helping others have a safe camping experience.',
+          icon: { name: 'icon-check', color: '#000000', size: '3.5rem' },
+          actions: button,
+          enableOverlayClickClose: true,
+        });
+      } else {
+        window.location='/pages/report-hazard'
+      }
+    })
 
     const toggleFilterModal = () => {
       const filterModalStyle = document.querySelector('.modal-filter').style;
@@ -165,6 +195,7 @@ window.onload = async function () {
       500
     );
   }
+  
 };
 
 const markerParams = {
@@ -266,7 +297,7 @@ const quickFiltersOnClick = async ({ target }) => {
 };
 
 const injectCards = () => {
-  document.querySelector('.btn-report-hazard').style.display = 'none';
+  document.querySelector('#reportHazardBtn').style.display = 'none';
   document.querySelector('.sb-cards')?.remove();
 
   injectHTML([

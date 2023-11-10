@@ -66,7 +66,7 @@ const SearchBar = ({ categories }) => {
     <div class="report-hazard-box">
       <div class="report-hazard-box-wrapper">
         <button
-          onclick="window.location='/pages/report-hazard'"
+          id="reportHazardBtn"
           class="btn btn-primary btn-report-hazard">
           Report Hazard
           <span class="btn__icon">
