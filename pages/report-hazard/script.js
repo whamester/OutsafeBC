@@ -290,7 +290,11 @@ const getCategories = async () => {
 
     for (let i = 0; i < data.length; i++) {
       const category = data[i];
-      const div = document.createElement('div');
+
+      // Crear el contenedor <div class="category-container">
+      const categoryContainer = document.createElement('div');
+      categoryContainer.classList.add('category-container');
+
       const radio = document.createElement('input');
 
       radio.setAttribute('type', 'radio');
@@ -324,17 +328,29 @@ const getCategories = async () => {
 
       label.setAttribute('id', `category-${category.id}-label`);
       label.setAttribute('for', `category-${category.id}-radio`);
-      label.innerHTML = `<i class="category-icon"><img src="../../assets/icons/${arrayIcons[i]}-outline.svg" alt="${arrayIcons[i]}"></i> ${category.name}`;
+      label.innerHTML = `<i class="category-icon"><img src="../../assets/icons/${arrayIcons[i]}-outline.svg" alt="${arrayIcons[i]}"></i>`;
+
+      // Crear el contenedor <div class="text-container">
+      const textContainer = document.createElement('div');
+      textContainer.classList.add('text-container');
+
+      const categoryName = document.createElement('p');
+      categoryName.innerHTML = category.name;
 
       const categoryDescription = document.createElement('p');
       categoryDescription.innerHTML = category.description;
 
-      label.appendChild(categoryDescription);
+      // Agregar los elementos <p> al contenedor <div class="text-container">
+      textContainer.appendChild(categoryName);
+      textContainer.appendChild(categoryDescription);
 
-      div.appendChild(radio);
-      div.appendChild(label);
+      // Agregar el contenedor <div class="text-container"> al interior del <label>
+      label.appendChild(textContainer);
 
-      content.appendChild(div);
+      // Agregar el <div class="category-container"> al contenido antes de cada radio
+      categoryContainer.appendChild(radio);
+      categoryContainer.appendChild(label);
+      content.appendChild(categoryContainer);
     }
   } catch (error) {
     const alert = new AlertPopup();
@@ -344,6 +360,7 @@ const getCategories = async () => {
     );
   }
 };
+
 
 
 

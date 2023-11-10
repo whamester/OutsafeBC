@@ -98,6 +98,27 @@ input[type='radio'] {
   background: var(--secondary-secondary-500-base, #d8e7e2);
 }
 
+.category-container {
+  display: flex;
+  align-items: center;
+}
+
+.category-icon, img{
+  width: 40px;
+  height: 40px;
+}
+
+.text-container {
+  display: flex;
+  flex-direction: column;
+}
+
+#hazard-category-content label {
+  display: flex;
+  align-items: center;
+}
+
+
 @media screen and (min-width: 800px) {
   .breadbrumb-desktop {
     display: block;
