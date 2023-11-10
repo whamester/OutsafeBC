@@ -1,4 +1,4 @@
-.loader {
+.loader-start {
   background: #fff;
   width: 100%;
   height: 100vh;
@@ -8,10 +8,10 @@
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 10000;
+  z-index: 2;
   clip-path: circle(150% at 100% 0);
   transition: clip-path 1.9s ease-in-out;
 }
-.loader2 {
+.loader-end {
   clip-path: circle(0% at 100% 100%);
 }

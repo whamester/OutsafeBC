@@ -6,7 +6,7 @@ class LoaderAnimation {
 
   initialize() {
     window.addEventListener('load', () => {
-      this.loader.classList.toggle('loader2');
+      this.loader.classList.toggle('loader-end');
     });
   }
 }
