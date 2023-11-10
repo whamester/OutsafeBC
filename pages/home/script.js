@@ -434,7 +434,7 @@ async function showHazardDetails(id) {
       hazardReportPopulated,
       document.getElementById('hazard-comp')
     );
-
+    hazardReport.changeButtonState()
     loadIcons();
 
     // Close report card

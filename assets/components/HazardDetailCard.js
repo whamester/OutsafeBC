@@ -20,7 +20,9 @@ class HazardDetailCard extends ReportCard {
     user
   ) {
     super(id, category, hazard, location, date, photos, comment, icon);
-    (this.distance = distance), (this.user = user);
+    this.distance = distance;
+    this.user = user;
+    this.divContainer = null;
   }
 
   showLoginModal() {
@@ -126,6 +128,22 @@ class HazardDetailCard extends ReportCard {
     }
   }
 
+  changeButtonState() {
+    if (this.flagged_as_fake) {
+      this.divContainer.querySelector('#flagReportBtn').disabled = true;
+    } else {
+      this.divContainer.querySelector('#flagReportBtn').disabled = false;
+    }
+
+    if (this.enable_reaction) {
+      this.divContainer.querySelector('#stillThereBtn').disabled = false;
+      this.divContainer.querySelector('#notThereBtn').disabled = false;
+    } else {
+      this.divContainer.querySelector('#stillThereBtn').disabled = true;
+      this.divContainer.querySelector('#notThereBtn').disabled = true;
+    }
+  }
+
   hazardCardContent() {
     let divContainer = document.createElement('div');
     divContainer.setAttribute('id', `hazard-card__container`);
@@ -157,7 +175,9 @@ class HazardDetailCard extends ReportCard {
   <div class="report-card__top-info">
     <div class="report-card__details">
       <i class="icon-location-pin-outline" style="background-color: var(--neutral-400)"></i>
-      <p class="text-body-2 regular report-card__location-text">${this.location}</p>
+      <p class="text-body-2 regular report-card__location-text">${
+        this.location
+      }</p>
     </div>
 
     <div class="report-card__date_time">
@@ -215,6 +235,7 @@ class HazardDetailCard extends ReportCard {
     </button>
   </div>
       `;
+
     divInner
       .querySelector('#report-card__image-gallery')
       .appendChild(super.getGallery());
@@ -245,6 +266,10 @@ class HazardDetailCard extends ReportCard {
           this.flagAsFake();
         }
       });
+
+    this.divContainer = divContainer;
+
+    this.changeButtonState();
     return divContainer;
   }
 }
