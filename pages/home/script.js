@@ -390,13 +390,13 @@ const onSearchInput = debounce(async ({ target }) => {
 // Get hazard report from endpoint
 async function getHazardReportData(id) {
   try {
-    let endpointURL
-    if (!user){
-      endpointURL = `/hazard-report?id=${id}`
+    let endpointURL;
+    if (!user) {
+      endpointURL = `/hazard-report?id=${id}`;
     } else {
-      endpointURL = `/hazard-report?id=${id}&user_id=${user.id}`
+      endpointURL = `/hazard-report?id=${id}&user_id=${user.id}`;
     }
-    const response = await fetch(API_URL+endpointURL);
+    const response = await fetch(API_URL + endpointURL);
     const result = await response.json();
     currentReport = result.data;
   } catch (error) {
@@ -426,7 +426,9 @@ async function showHazardDetails(id) {
         position.lat,
         position.lng
       ),
-      currentReport.user
+      currentReport.user,
+      currentReport.flagged_as_fake,
+      currentReport.enable_reaction
     );
     hazardReportPopulated = hazardReport.hazardCardContent();
 
@@ -434,7 +436,7 @@ async function showHazardDetails(id) {
       hazardReportPopulated,
       document.getElementById('hazard-comp')
     );
-    hazardReport.changeButtonState()
+    hazardReport.changeButtonState();
     loadIcons();
 
     // Close report card

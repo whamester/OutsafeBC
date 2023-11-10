@@ -17,11 +17,16 @@ class HazardDetailCard extends ReportCard {
     comment,
     icon,
     distance,
-    user
+    user,
+    flagged_as_fake, 
+    enable_reaction
+
   ) {
     super(id, category, hazard, location, date, photos, comment, icon);
     this.distance = distance;
     this.user = user;
+    this.flagged_as_fake = flagged_as_fake
+    this.enable_reaction = enable_reaction
     this.divContainer = null;
   }
 
