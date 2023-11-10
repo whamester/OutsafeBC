@@ -14,8 +14,6 @@
   border: solid;
 }
 
-/* /For easy testing on a mobile browser, this property is temporary */
-
 #imagesFirstOutput2 > img {
   display: grid;
   grid-template-columns: 1fr;
@@ -75,13 +73,117 @@ img {
   border-radius: 0 0 1rem 1rem;
 }
 
+/* Header */
+#report-hazard-body main {
+  height: 100%;
+}
+
+header {
+  display: none;
+}
+
+/* Back button */
+#backButton {
+  border: none;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  text-decoration: none;
+  color: var(--neutral-500);
+  margin-top: 12px;
+  margin-bottom: 12px;
+  margin-left: 16px;
+  margin-right: 16px;
+  display: flex;
+  align-items: center;
+}
+
+.divider {
+  width: 100%;
+  border-bottom: 1px solid var(--neutral-300);
+}
+
+.back-arrow {
+  height: 20px;
+  width: 20px;
+  padding: 0;
+  margin-right: 8px;
+}
+
+/* Question 2 */
+input[type='radio'] {
+  display: none;
+}
+
+#hazard-category label,
+#hazard-option-content label {
+  padding: 5px 10px;
+  cursor: pointer;
+  display: inline-block;
+  margin: 5px;
+  border-radius: 8px;
+  border: 1px solid var(--neutral-300);
+  background: var(--neutral-50);
+}
+
+#hazard-category input[type='radio']:checked + label,
+#hazard-option-content input[type='radio']:checked + label {
+  border-radius: 8px;
+  border: 1px solid var(--neutral-100);
+  background: var(--secondary-500);
+}
+
+.category-container {
+  display: flex;
+  align-items: center;
+}
+
+.category-icon,
+img {
+  width: 40px;
+  height: 40px;
+}
+
+.category-icon {
+  margin-left: 20px;
+}
+
+.text-container {
+  display: flex;
+  flex-direction: column;
+  margin: 20px;
+  margin-left: 16px;
+}
+
+#hazard-category-content label {
+  display: flex;
+  align-items: center;
+}
+
+.label-container {
+  padding: 20px;
+  width: 342px;
+  height: 104px;
+}
+
+.title-hazard {
+  color: var(--primary-500);
+}
+
+.description-hazard {
+  color: var(--primary-400);
+}
+
+#hazard-category-content {
+  max-height: calc(100vh - 280px);
+  overflow: auto;
+  }
+
+/* Question 3 */
+
 @media screen and (min-width: 800px) {
   .breadbrumb-desktop {
     display: block;
-  }
-
-  .back-button-mobile {
-    display: none;
   }
 
   .continue-btn {
@@ -95,5 +197,13 @@ img {
 
   #reportHazardForm {
     margin-top: 3.5rem;
+  }
+
+  .divider {
+    display: none;
+  }
+
+  #backButton {
+    display: none;
   }
 }

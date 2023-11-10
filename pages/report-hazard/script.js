@@ -254,6 +254,14 @@ const getAddressFromCoordinates = async (params) => {
   }
 };
 
+//Insert chevron-left arrow on back button
+const button = document.getElementById('backButton');
+const icon = document.createElement('img');
+icon.src = '../../assets/icons/chevron-left.svg';
+icon.alt = 'Your Alt Text';
+button.insertBefore(icon, button.firstChild);
+icon.setAttribute('class', 'back-arrow');
+
 /**
  * Step 1: Location
  */
@@ -275,9 +283,23 @@ const getCategories = async () => {
     let { data } = await response.json();
     const content = document.getElementById('hazard-category-content');
 
+    let arrayIcons = [];
+
+    data.forEach((category) => {
+      if (category.name && category.ui_settings.icon) {
+        const iconParts = category.ui_settings.icon.toLowerCase().split('-');
+        if (iconParts.length >= 2) {
+          arrayIcons.push(iconParts[1]);
+        }
+      }
+    });
+
     for (let i = 0; i < data.length; i++) {
       const category = data[i];
-      const div = document.createElement('div');
+
+      const categoryContainer = document.createElement('div');
+      categoryContainer.classList.add('category-container');
+
       const radio = document.createElement('input');
 
       radio.setAttribute('type', 'radio');
@@ -311,12 +333,35 @@ const getCategories = async () => {
 
       label.setAttribute('id', `category-${category.id}-label`);
       label.setAttribute('for', `category-${category.id}-radio`);
-      label.innerHTML = category.name;
+      label.classList.add('label-container');
+      // label.innerHTML = `<i class="category-icon"><img src="../../assets/icons/${arrayIcons[i]}-outline.svg" alt="${arrayIcons[i]}"></i>`;
+      // label.innerHTML = `<i class="${category.icon}-outline category-icon"> </i>`;//by Wonnyo
+      label.innerHTML = `<img class="category-icon" src="../../assets/icons/${arrayIcons[i]}-outline.svg" alt="${arrayIcons[i]}">`;
+      // label.innerHTML = `<i class="category-icon" src="../../assets/icons/${arrayIcons[i]}-outline.svg" alt="${arrayIcons[i]}"></i>`;
 
-      div.appendChild(radio);
-      div.appendChild(label);
+      const textContainer = document.createElement('div');
+      textContainer.classList.add('text-container');
 
-      content.appendChild(div);
+      const categoryName = document.createElement('p');
+      categoryName.innerHTML = category.name;
+      categoryName.classList.add('title-hazard');
+      categoryName.classList.add('text-body-1');
+      categoryName.classList.add('bold');
+
+      const categoryDescription = document.createElement('p');
+      categoryDescription.innerHTML = category.description;
+      categoryDescription.classList.add('description-hazard');
+      categoryDescription.classList.add('text-body-3');
+      categoryDescription.classList.add('medium');
+
+      textContainer.appendChild(categoryName);
+      textContainer.appendChild(categoryDescription);
+
+      label.appendChild(textContainer);
+
+      categoryContainer.appendChild(radio);
+      categoryContainer.appendChild(label);
+      content.appendChild(categoryContainer);
     }
   } catch (error) {
     const alert = new AlertPopup();
