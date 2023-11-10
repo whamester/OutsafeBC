@@ -274,6 +274,19 @@ const getCategories = async () => {
     let response = await fetch(`${API_URL}/hazard-category`);
     let { data } = await response.json();
     const content = document.getElementById('hazard-category-content');
+    
+    let arrayIcons = [];
+
+    data.forEach((category) => {
+      if (category.name && category.ui_settings.icon) {
+        const iconParts = category.ui_settings.icon.toLowerCase().split('-');
+        if (iconParts.length >= 2) {
+          arrayIcons.push(iconParts[1]);
+        }
+      }
+    });
+
+    console.log(arrayIcons);
 
     for (let i = 0; i < data.length; i++) {
       const category = data[i];
@@ -311,7 +324,7 @@ const getCategories = async () => {
 
       label.setAttribute('id', `category-${category.id}-label`);
       label.setAttribute('for', `category-${category.id}-radio`);
-      label.innerHTML = category.name;
+      label.innerHTML = `<i class="category-icon"><img src="../../assets/icons/${arrayIcons[i]}-outline.svg" alt="${arrayIcons[i]}"></i> ${category.name}`;
 
       div.appendChild(radio);
       div.appendChild(label);
@@ -326,6 +339,7 @@ const getCategories = async () => {
     );
   }
 };
+
 
 getCategories();
 
