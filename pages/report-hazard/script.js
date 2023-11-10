@@ -291,7 +291,6 @@ const getCategories = async () => {
     for (let i = 0; i < data.length; i++) {
       const category = data[i];
 
-      // Crear el contenedor <div class="category-container">
       const categoryContainer = document.createElement('div');
       categoryContainer.classList.add('category-container');
 
@@ -330,7 +329,6 @@ const getCategories = async () => {
       label.setAttribute('for', `category-${category.id}-radio`);
       label.innerHTML = `<i class="category-icon"><img src="../../assets/icons/${arrayIcons[i]}-outline.svg" alt="${arrayIcons[i]}"></i>`;
 
-      // Crear el contenedor <div class="text-container">
       const textContainer = document.createElement('div');
       textContainer.classList.add('text-container');
 
@@ -340,14 +338,11 @@ const getCategories = async () => {
       const categoryDescription = document.createElement('p');
       categoryDescription.innerHTML = category.description;
 
-      // Agregar los elementos <p> al contenedor <div class="text-container">
       textContainer.appendChild(categoryName);
       textContainer.appendChild(categoryDescription);
 
-      // Agregar el contenedor <div class="text-container"> al interior del <label>
       label.appendChild(textContainer);
 
-      // Agregar el <div class="category-container"> al contenido antes de cada radio
       categoryContainer.appendChild(radio);
       categoryContainer.appendChild(label);
       content.appendChild(categoryContainer);
@@ -360,9 +355,6 @@ const getCategories = async () => {
     );
   }
 };
-
-
-
 
 getCategories();
 

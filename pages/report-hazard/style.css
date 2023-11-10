@@ -103,7 +103,8 @@ input[type='radio'] {
   align-items: center;
 }
 
-.category-icon, img{
+.category-icon,
+img {
   width: 40px;
   height: 40px;
 }
@@ -117,7 +118,6 @@ input[type='radio'] {
   display: flex;
   align-items: center;
 }
-
 
 @media screen and (min-width: 800px) {
   .breadbrumb-desktop {
