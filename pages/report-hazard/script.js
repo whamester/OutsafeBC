@@ -16,7 +16,6 @@ import { getUserSession } from '../../assets/helpers/storage.js';
 import readImage from '../../assets/helpers/read-image.js';
 import geocode from '../../assets/helpers/geocode.js';
 import injectHeader from '../../assets/helpers/inject-header.js';
-import loadIcons from '../../assets/helpers/load-icons.js';
 
 //Variable Declaration
 const currentReport = new ReportForm();
