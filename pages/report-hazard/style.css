@@ -188,6 +188,11 @@ img {
   line-height: 150%; /* 18px */
 }
 
+#hazard-category-content {
+  max-height: calc(100vh - 280px);
+  overflow: auto;
+  }
+
 /* Question 3 */
 
 @media screen and (min-width: 800px) {
