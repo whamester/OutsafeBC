@@ -86,22 +86,22 @@ window.onload = async function () {
       if (!user){
         const modal = new Modal();
 
-        const button = document.createElement('button');
-        button.setAttribute('id', 'open-modal-btn');
-        button.setAttribute('class', 'btn btn-primary');
-        button.addEventListener('click', () =>
+        const loginBtn = document.createElement('button');
+        loginBtn.setAttribute('id', 'open-modal-btn');
+        loginBtn.setAttribute('class', 'btn btn-primary');
+        loginBtn.addEventListener('click', () =>
           window.location.assign(
             `/pages/login/index.html`
           )
         );
-        button.innerHTML = 'Log in';
+        loginBtn.innerHTML = 'Log in';
 
         modal.show({
           title: 'Please log in to continue',
           description:
             'Thank you for helping others have a safe camping experience.',
-          icon: { name: 'icon-check', color: '#000000', size: '3.5rem' },
-          actions: button,
+          icon: { name: 'icon-exclamation-mark', color: '#000000', size: '3.5rem' },
+          actions: loginBtn,
           enableOverlayClickClose: true,
         });
       } else {

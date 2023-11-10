@@ -647,7 +647,7 @@ reportHazardForm.addEventListener('submit', async function (event) {
           title: 'Your report has been submitted!',
           description:
             'Thank you for helping others have a safe camping experience.',
-          icon: { name: 'icon-check', color: '#000000', size: '3.5rem' },
+          icon: { name: 'icon-report-submitted', color: '#000000', size: '3.5rem' },
           actions: button,
           enableOverlayClickClose: false,
         });
