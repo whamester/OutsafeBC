@@ -98,7 +98,7 @@ header {
   align-items: center;
 }
 
-.underline {
+.divider {
   width: 100%;
   border-bottom: 1px solid var(--neutral-neutral-300, #d0d5dd);
 }
@@ -208,7 +208,7 @@ img {
     margin-top: 3.5rem;
   }
 
-  .underline {
+  .divider {
     display: none;
   }
 
