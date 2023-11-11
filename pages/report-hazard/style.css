@@ -129,6 +129,7 @@ input[type='radio'] {
   border-radius: 8px;
   border: 1px solid var(--neutral-100);
   background: var(--secondary-500);
+  position: relative;
 }
 
 .category-container {
@@ -187,6 +188,7 @@ img {
   position: absolute;
   top: 0;
   right: 0;
+  transform: translate(34%, -34%);
 }
 
 /* Question 3 */
