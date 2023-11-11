@@ -177,6 +177,19 @@ img {
   overflow: auto;
 }
 
+.category-container {
+  position: relative;
+}
+
+.new-icon {
+  width: 24px;
+  height: 24px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  /* Puedes ajustar la posición y estilos según tus necesidades */
+}
+
 /* Question 3 */
 
 #hazard-option-content label {

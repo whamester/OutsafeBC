@@ -327,6 +327,17 @@ const getCategories = async () => {
 
         var enlace = document.getElementById('hazardType');
         enlace.setAttribute('onclick', 'location.href="#hazard-type"');
+
+        const allNewIcons = document.querySelectorAll('.new-icon');
+        allNewIcons.forEach((newIcon) => {
+          newIcon.style.display = 'none';
+        });
+
+        const selectedLabel = document.querySelector(`label[for=${radio.id}]`);
+        const newIcon = selectedLabel.querySelector('.new-icon');
+        if (newIcon) {
+          newIcon.style.display = 'block';
+        }
       });
 
       const label = document.createElement('label');
@@ -334,10 +345,7 @@ const getCategories = async () => {
       label.setAttribute('id', `category-${category.id}-label`);
       label.setAttribute('for', `category-${category.id}-radio`);
       label.classList.add('label-container');
-      // label.innerHTML = `<i class="category-icon"><img src="../../assets/icons/${arrayIcons[i]}-outline.svg" alt="${arrayIcons[i]}"></i>`;
-      // label.innerHTML = `<i class="${category.icon}-outline category-icon"> </i>`;//by Wonnyo
       label.innerHTML = `<img class="category-icon" src="../../assets/icons/${arrayIcons[i]}-outline.svg" alt="${arrayIcons[i]}">`;
-      // label.innerHTML = `<i class="category-icon" src="../../assets/icons/${arrayIcons[i]}-outline.svg" alt="${arrayIcons[i]}"></i>`;
 
       const textContainer = document.createElement('div');
       textContainer.classList.add('text-container');
@@ -358,6 +366,13 @@ const getCategories = async () => {
       textContainer.appendChild(categoryDescription);
 
       label.appendChild(textContainer);
+
+      const newIcon = document.createElement('img');
+      newIcon.setAttribute('src', '../../assets/icons/circle-check-filled.svg');
+      newIcon.setAttribute('alt', 'circle-check-filled');
+      newIcon.classList.add('new-icon');
+      newIcon.style.display = 'none';
+      label.appendChild(newIcon);
 
       categoryContainer.appendChild(radio);
       categoryContainer.appendChild(label);
