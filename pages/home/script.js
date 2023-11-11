@@ -164,7 +164,9 @@ window.onload = async function () {
           position.lat,
           position.lng
         ),
-        hazardDetail.user
+        hazardDetail.user,
+        hazardDetail.flagged_as_fake,
+        hazardDetail.enable_reaction
       );
 
       showHazardDetails(data);
@@ -215,8 +217,8 @@ const markerParams = {
     }
     // await getReportApiCall(position.lat, position.lng, categoryFilters);
 
-   const currentReport =  await getHazardReportData(hazardID);
-   
+    const currentReport = await getHazardReportData(hazardID);
+
     let hazardReport = new HazardDetailCard(
       currentReport.id,
       currentReport.hazardCategory.name,
@@ -232,7 +234,9 @@ const markerParams = {
         position.lat,
         position.lng
       ),
-      currentReport.user
+      currentReport.user,
+      currentReport.flagged_as_fake,
+      currentReport.enable_reaction
     );
 
     showHazardDetails(hazardReport);
@@ -418,13 +422,13 @@ async function getHazardReportData(id) {
     }
     const response = await fetch(API_URL + endpointURL);
     const result = await response.json();
-    return result.data
+    return result.data;
   } catch (error) {
     alert.show(
       'Reports unavailable at the moment, please try again later or contact support',
       AlertPopup.error
     );
-    return null
+    return null;
   }
 }
 
@@ -437,7 +441,7 @@ function showHazardDetails(hazardReport) {
       hazardReportPopulated,
       document.getElementById('hazard-comp')
     );
-    hazardReport.changeButtonState();
+
     loadIcons();
 
     // Close report card
