@@ -395,6 +395,7 @@ const populateHazardOptions = (options, selectedOptionQuestion) => {
       const option = options[i];
 
       const div = document.createElement('div');
+      div.classList.add('div-input');
       const radio = document.createElement('input');
 
       radio.setAttribute('type', 'radio');
@@ -413,16 +414,24 @@ const populateHazardOptions = (options, selectedOptionQuestion) => {
       const label = document.createElement('label');
       label.setAttribute('id', `option-${option.id}-label`);
       label.setAttribute('for', `option-${option.id}-radio`);
-      // label.innerHTML = option.name;
 
-      const div1 = document.createElement('div');
-      div1.innerHTML = '<img class="category-icon" src="../../assets/icons/${arrayIcons[i]}-outline.svg" alt="${arrayIcons[i]}">';
-      
-      const div2 = document.createElement('div');
-      div2.innerHTML = option.name;
+      const divContainer = document.createElement('div');
+      divContainer.classList.add('container-type');
 
-      label.appendChild(div1);
-      label.appendChild(div2);
+      const div1Icon = document.createElement('div');
+      div1Icon.innerHTML = '<img class="category-icon" src="../../assets/icons/checkmark.svg" >';
+      div1Icon.classList.add('checkmark');
+
+      const div2Text = document.createElement('div');
+      div2Text.innerHTML = option.name;
+      div2Text.classList.add('text-type');
+      div2Text.classList.add('text-body-1');
+      div2Text.classList.add('medium');
+
+      divContainer.appendChild(div1Icon);
+      divContainer.appendChild(div2Text);
+
+      label.appendChild(divContainer);
 
       div.appendChild(radio);
       div.appendChild(label);
@@ -437,6 +446,7 @@ const populateHazardOptions = (options, selectedOptionQuestion) => {
     );
   }
 };
+
 
 /**
  * Step 4: Comments
