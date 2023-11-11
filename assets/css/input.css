@@ -12,7 +12,7 @@
 	color: var(--neutral-700);
 }
 
-.form-field input {
+.form-field input, .form-field textarea {
 	border-radius: 0.5rem;
 	border: 1px solid var(--neutral-300);
 	background: var(--white);
@@ -30,18 +30,18 @@
 	width: 100%;
 }
 
-.form-field input:focus {
+.form-field input:focus ,.form-field textarea:focus {
 	border: 1px solid var(--neutral-200);
 	background: var(--white);
 	box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.05), 0px 0px 0px 2px #9aa3a1;
 	outline: none;
 }
 
-.form-field input::placeholder {
-	color: var(--neutral-500);
+.form-field input::placeholder, .form-field textarea::placeholder {
+	color: var(--neutral-400);
 }
 
-.form-field input:disabled {
+.form-field input:disabled, .form-field textarea:disabled {
 	border: 1px solid var(--neutral-300);
 	background: var(--neutral-100);
 }
@@ -59,11 +59,11 @@
 	position: relative;
 }
 
-.form-field.error input:not(:disabled) {
+.form-field.error input:not(:disabled), .form-field.error textarea:not(:disabled) {
 	border: 1px solid var(--error-500);
 }
 
-.form-field.error input:focus:not(:disabled) {
+.form-field.error input:focus:not(:disabled), .form-field.error textarea:focus:not(:disabled) {
 	border: 1px solid var(--error-500);
 	box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.05), 0px 0px 0px 2px #f2bcba;
 }
