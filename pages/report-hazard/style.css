@@ -193,6 +193,15 @@ img {
 
 /* Question 3 */
 
+#hazard-option-content{
+  display: flex;
+  flex-wrap: wrap;
+}
+
+#hazard-option-content .div-input{
+  flex-shrink: 0;
+}
+
 #hazard-option-content label {
   padding: 5px 10px;
   cursor: pointer;
@@ -210,17 +219,15 @@ img {
 }
 
 .container-type {
-  display: grid;
-  grid-template-columns: auto auto;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  margin-left: 10px;
-  margin-right: 10px;
-  padding: 0;
+  display: flex;
+  gap: 0.2rem;
+  padding: 0.625rem;
 }
 
 .checkmark {
   padding-right: 2px;
+  display: flex;
+  align-items: center;
 }
 
 .text-type {
@@ -233,9 +240,6 @@ img {
   padding: 0;
   width: 20px;
   height: 20px;
-}
-.div-input {
-  display: inline-block;
 }
 
 @media screen and (min-width: 800px) {
