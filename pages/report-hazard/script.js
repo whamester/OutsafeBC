@@ -380,15 +380,16 @@ getCategories();
 
 const populateHazardOptions = (options, selectedOptionQuestion) => {
   try {
-    document.getElementById('hazard-option-content').innerHTML = '';
+    const hazardOptionContent = document.getElementById('hazard-option-content');
+    hazardOptionContent.innerHTML = '';
+
     if (options.length === 1) {
       currentReport.option.id = options[0].id;
       currentReport.option.name = options[0].name;
       skipHazardOption = true;
     }
 
-    document.getElementById('hazardTypeQuestion').innerHTML =
-      selectedOptionQuestion;
+    document.getElementById('hazardTypeQuestion').innerHTML = selectedOptionQuestion;
 
     for (let i = 0; i < options.length; i++) {
       const option = options[i];
@@ -412,12 +413,21 @@ const populateHazardOptions = (options, selectedOptionQuestion) => {
       const label = document.createElement('label');
       label.setAttribute('id', `option-${option.id}-label`);
       label.setAttribute('for', `option-${option.id}-radio`);
-      label.innerHTML = option.name;
+      // label.innerHTML = option.name;
+
+      const div1 = document.createElement('div');
+      div1.innerHTML = '<img class="category-icon" src="../../assets/icons/${arrayIcons[i]}-outline.svg" alt="${arrayIcons[i]}">';
+      
+      const div2 = document.createElement('div');
+      div2.innerHTML = option.name;
+
+      label.appendChild(div1);
+      label.appendChild(div2);
 
       div.appendChild(radio);
       div.appendChild(label);
 
-      document.getElementById('hazard-option-content').appendChild(div);
+      hazardOptionContent.appendChild(div);
     }
   } catch (error) {
     const alert = new AlertPopup();
