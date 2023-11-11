@@ -178,9 +178,11 @@
 	--error: var(--error-500);
 
 	--shadow-xs: 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
+
+	--padding-x: 5rem
 }
 
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 768px) {
 	:root {
 		/* Headings */
 		--heading-1-size: var(--heading-1-small-size);
@@ -212,5 +214,7 @@
 		--body-4-size: var(--body-3-small-size);
 		--body-4-letter-spacing: var(--body-3-small-letter-spacing);
 		--body-4-line-height: var(--body-3-small-line-height);
+
+		--padding-x: 1rem
 	}
 }

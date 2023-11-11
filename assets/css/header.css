@@ -12,13 +12,6 @@ header {
   align-items: center;
 }
 
-#header-content,
-#header-menu {
-  max-width: 80rem;
-  margin: auto;
-  /* MAX WIDTH */
-}
-
 #header-nav {
   display: flex;
   gap: 1rem;
@@ -102,5 +95,17 @@ i[class^='icon-notification'] {
     left: unset;
     width: 12.25rem;
     margin-top: 0.3rem;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  #header-content,
+  #header-menu {
+    padding-left: var(--padding-x);
+    padding-right: var(--padding-x);
+  }
+
+  .header-menu__container {
+    margin-right: var(--padding-x);
   }
 }

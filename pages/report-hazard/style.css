@@ -115,8 +115,7 @@ input[type='radio'] {
   display: none;
 }
 
-#hazard-category label,
-#hazard-option-content label {
+#hazard-category label {
   padding: 5px 10px;
   cursor: pointer;
   display: inline-block;
@@ -126,11 +125,11 @@ input[type='radio'] {
   background: var(--neutral-50);
 }
 
-#hazard-category input[type='radio']:checked + label,
-#hazard-option-content input[type='radio']:checked + label {
+#hazard-category input[type='radio']:checked + label {
   border-radius: 8px;
   border: 1px solid var(--neutral-100);
   background: var(--secondary-500);
+  position: relative;
 }
 
 .category-container {
@@ -177,9 +176,77 @@ img {
 #hazard-category-content {
   max-height: calc(100vh - 280px);
   overflow: auto;
-  }
+}
+
+.category-container {
+  position: relative;
+}
+
+.orange-check-icon {
+  width: 24px;
+  height: 24px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: translate(34%, -34%);
+}
 
 /* Question 3 */
+
+#hazard-option-content{
+  display: flex;
+  flex-wrap: wrap;
+}
+
+#hazard-option-content .div-input{
+  flex-shrink: 0;
+}
+
+#hazard-option-content label {
+  padding: 5px 10px;
+  cursor: pointer;
+  display: inline-block;
+  margin: 5px;
+  border-radius: 100px;
+  border: 1px solid var(--neutral-300);
+  background: var(--neutral-50);
+}
+
+#hazard-option-content input[type='radio']:checked + label {
+  border-radius: 100px;
+  border: 1px solid var(--neutral-100);
+  background: var(--secondary-500);
+}
+
+.container-type {
+  display: flex;
+  gap: 0.2rem;
+  padding: 0.625rem;
+}
+
+.checkmark {
+  padding-right: 2px;
+  display: flex;
+  align-items: center;
+}
+
+.text-type {
+  display: flex;
+  align-items: center;
+}
+
+.category-icon-type {
+  margin: 0;
+  padding: 0;
+  width: 20px;
+  height: 20px;
+}
+
+/* Question 4 */
+
+.additional-details__header h1{
+  display: inline;
+}
 
 @media screen and (min-width: 800px) {
   .breadbrumb-desktop {

@@ -327,6 +327,17 @@ const getCategories = async () => {
 
         var enlace = document.getElementById('hazardType');
         enlace.setAttribute('onclick', 'location.href="#hazard-type"');
+
+        const allNewIcons = document.querySelectorAll('.orange-check-icon');
+        allNewIcons.forEach((newIcon) => {
+          newIcon.style.display = 'none';
+        });
+
+        const selectedLabel = document.querySelector(`label[for=${radio.id}]`);
+        const newIcon = selectedLabel.querySelector('.orange-check-icon');
+        if (newIcon) {
+          newIcon.style.display = 'block';
+        }
       });
 
       const label = document.createElement('label');
@@ -334,10 +345,7 @@ const getCategories = async () => {
       label.setAttribute('id', `category-${category.id}-label`);
       label.setAttribute('for', `category-${category.id}-radio`);
       label.classList.add('label-container');
-      // label.innerHTML = `<i class="category-icon"><img src="../../assets/icons/${arrayIcons[i]}-outline.svg" alt="${arrayIcons[i]}"></i>`;
-      // label.innerHTML = `<i class="${category.icon}-outline category-icon"> </i>`;//by Wonnyo
       label.innerHTML = `<img class="category-icon" src="../../assets/icons/${arrayIcons[i]}-outline.svg" alt="${arrayIcons[i]}">`;
-      // label.innerHTML = `<i class="category-icon" src="../../assets/icons/${arrayIcons[i]}-outline.svg" alt="${arrayIcons[i]}"></i>`;
 
       const textContainer = document.createElement('div');
       textContainer.classList.add('text-container');
@@ -358,6 +366,13 @@ const getCategories = async () => {
       textContainer.appendChild(categoryDescription);
 
       label.appendChild(textContainer);
+
+      const newIcon = document.createElement('img');
+      newIcon.setAttribute('src', '../../assets/icons/circle-check-filled.svg');
+      newIcon.setAttribute('alt', 'circle-check-filled');
+      newIcon.classList.add('orange-check-icon');
+      newIcon.style.display = 'none';
+      label.appendChild(newIcon);
 
       categoryContainer.appendChild(radio);
       categoryContainer.appendChild(label);
@@ -380,7 +395,11 @@ getCategories();
 
 const populateHazardOptions = (options, selectedOptionQuestion) => {
   try {
-    document.getElementById('hazard-option-content').innerHTML = '';
+    const hazardOptionContent = document.getElementById(
+      'hazard-option-content'
+    );
+    hazardOptionContent.innerHTML = '';
+
     if (options.length === 1) {
       currentReport.option.id = options[0].id;
       currentReport.option.name = options[0].name;
@@ -394,6 +413,7 @@ const populateHazardOptions = (options, selectedOptionQuestion) => {
       const option = options[i];
 
       const div = document.createElement('div');
+      div.classList.add('div-input');
       const radio = document.createElement('input');
 
       radio.setAttribute('type', 'radio');
@@ -407,17 +427,46 @@ const populateHazardOptions = (options, selectedOptionQuestion) => {
 
         var enlace = document.getElementById('selectHazardOptionLink');
         enlace.setAttribute('onclick', 'location.href="#additional-details"');
+
+        const allIconTypes = document.querySelectorAll('.category-icon-type');
+        allIconTypes.forEach((iconType) => {
+          iconType.style.display = 'none';
+        });
+
+        const selectedLabel = document.querySelector(`label[for=${radio.id}]`);
+        const iconType = selectedLabel.querySelector('.category-icon-type');
+        if (iconType) {
+          iconType.style.display = 'block';
+        }
       });
 
       const label = document.createElement('label');
       label.setAttribute('id', `option-${option.id}-label`);
       label.setAttribute('for', `option-${option.id}-radio`);
-      label.innerHTML = option.name;
+
+      const divContainer = document.createElement('div');
+      divContainer.classList.add('container-type');
+
+      const div1Icon = document.createElement('div');
+      div1Icon.innerHTML =
+        '<img class="category-icon-type" src="../../assets/icons/checkmark.svg" style="display: none">';
+      div1Icon.classList.add('checkmark');
+
+      const div2Text = document.createElement('div');
+      div2Text.innerHTML = option.name;
+      div2Text.classList.add('text-type');
+      div2Text.classList.add('text-body-1');
+      div2Text.classList.add('medium');
+
+      divContainer.appendChild(div1Icon);
+      divContainer.appendChild(div2Text);
+
+      label.appendChild(divContainer);
 
       div.appendChild(radio);
       div.appendChild(label);
 
-      document.getElementById('hazard-option-content').appendChild(div);
+      hazardOptionContent.appendChild(div);
     }
   } catch (error) {
     const alert = new AlertPopup();
