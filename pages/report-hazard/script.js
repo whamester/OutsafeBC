@@ -328,13 +328,13 @@ const getCategories = async () => {
         var enlace = document.getElementById('hazardType');
         enlace.setAttribute('onclick', 'location.href="#hazard-type"');
 
-        const allNewIcons = document.querySelectorAll('.new-icon');
+        const allNewIcons = document.querySelectorAll('.orange-check-icon');
         allNewIcons.forEach((newIcon) => {
           newIcon.style.display = 'none';
         });
 
         const selectedLabel = document.querySelector(`label[for=${radio.id}]`);
-        const newIcon = selectedLabel.querySelector('.new-icon');
+        const newIcon = selectedLabel.querySelector('.orange-check-icon');
         if (newIcon) {
           newIcon.style.display = 'block';
         }
@@ -370,7 +370,7 @@ const getCategories = async () => {
       const newIcon = document.createElement('img');
       newIcon.setAttribute('src', '../../assets/icons/circle-check-filled.svg');
       newIcon.setAttribute('alt', 'circle-check-filled');
-      newIcon.classList.add('new-icon');
+      newIcon.classList.add('orange-check-icon');
       newIcon.style.display = 'none';
       label.appendChild(newIcon);
 
