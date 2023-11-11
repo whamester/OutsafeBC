@@ -149,3 +149,5 @@ async function displayOlderReports() {
   }
   olderReportClicked = true;
 }
+
+// Update status
