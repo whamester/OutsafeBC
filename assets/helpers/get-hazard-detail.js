@@ -46,6 +46,9 @@ const getHazardDetail = async (idReport) => {
         lng: data.location.lng,
         address: data.location.address,
       };
+
+      hazardDetail.flagged_as_fake = data.flagged_as_fake
+      hazardDetail.enable_reaction = data.enable_reaction
     }
   } catch (error) {
     console.error(error);

@@ -164,7 +164,9 @@ window.onload = async function () {
           position.lat,
           position.lng
         ),
-        hazardDetail.user
+        hazardDetail.user,
+        hazardDetail.flagged_as_fake,
+        hazardDetail.enable_reaction
       );
 
       showHazardDetails(data);
@@ -232,7 +234,9 @@ const markerParams = {
         position.lat,
         position.lng
       ),
-      currentReport.user
+      currentReport.user,
+      currentReport.flagged_as_fake,
+      currentReport.enable_reaction
     );
 
     showHazardDetails(hazardReport);

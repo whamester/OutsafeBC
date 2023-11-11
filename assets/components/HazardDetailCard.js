@@ -27,7 +27,7 @@ class HazardDetailCard extends ReportCard {
     this.flagged_as_fake = flagged_as_fake;
     this.enable_reaction = enable_reaction;
     this.divContainer = null;
-    this.createdByUserLoggedIn = userSession.email === this.user.email;
+    this.createdByUserLoggedIn = userSession?.email === this.user.email;
   }
 
   showLoginModal() {
@@ -67,7 +67,7 @@ class HazardDetailCard extends ReportCard {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            user_id: this.id,
+            user_id: userSession?.id,
             still_there: option,
           }),
         }
@@ -75,16 +75,14 @@ class HazardDetailCard extends ReportCard {
       const { error, data, message } = await response.json();
 
       if (!!error) {
-        alert.show(
-          'Unable to complete the action at the moment',
-          AlertPopup.error
-        );
+        alert.show(error, AlertPopup.error);
         console.error(error);
         return;
       }
       // Success alert
       alert.show('Feedback Submitted!', AlertPopup.success);
-      console.log('Success', data, message);
+      this.enable_reaction = false;
+      this.changeButtonState()
     } catch (error) {
       // Error alert
       alert.show(
@@ -106,23 +104,22 @@ class HazardDetailCard extends ReportCard {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            user_id: this.id,
+            user_id: userSession?.id,
           }),
         }
       );
       const { error, data, message } = await response.json();
 
       if (!!error) {
-        alert.show(
-          'Unable to complete the action at the moment',
-          AlertPopup.error
-        );
+        alert.show(error, AlertPopup.error);
         console.error(error);
         return;
       }
       // Success alert
       alert.show('Feedback Submitted!', AlertPopup.success);
       console.log('Success', data, message);
+      this.flagged_as_fake = true
+      this.changeButtonState()
     } catch (error) {
       // Error alert
       alert.show(
@@ -135,17 +132,17 @@ class HazardDetailCard extends ReportCard {
 
   changeButtonState() {
     if (this.flagged_as_fake) {
-      this.divContainer.querySelector('#flagReportBtn').disabled = true;
+      this.divContainer.querySelector('#flagReportBtn').classList.add('hidden');
     } else {
-      this.divContainer.querySelector('#flagReportBtn').disabled = false;
+      this.divContainer.querySelector('#flagReportBtn').classList.remove('hidden');
     }
 
-    if (this.enable_reaction) {
-      this.divContainer.querySelector('#stillThereBtn').disabled = false;
-      this.divContainer.querySelector('#notThereBtn').disabled = false;
-    } else {
-      this.divContainer.querySelector('#stillThereBtn').disabled = true;
-      this.divContainer.querySelector('#notThereBtn').disabled = true;
+    if (!this.enable_reaction) {
+      this.divContainer.querySelector('#stillThereBtn').classList.add('hidden');
+      this.divContainer.querySelector('#notThereBtn').classList.add('hidden');
+    }else{
+      this.divContainer.querySelector('#stillThereBtn').classList.remove('hidden');
+      this.divContainer.querySelector('#notThereBtn').classList.remove('hidden');
     }
   }
 
