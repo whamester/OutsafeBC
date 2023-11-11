@@ -242,6 +242,12 @@ img {
   height: 20px;
 }
 
+/* Question 4 */
+
+.additional-details__header h1{
+  display: inline;
+}
+
 @media screen and (min-width: 800px) {
   .breadbrumb-desktop {
     display: block;
