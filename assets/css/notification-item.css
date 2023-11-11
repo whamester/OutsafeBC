@@ -1,7 +1,5 @@
 #notifications-popup {
   background-color: var(--white);
-  max-width: 80rem;
-  /* MAX WIDTH */
   margin: auto;
   position: relative;
 }
@@ -135,7 +133,7 @@
   visibility: hidden;
 }
 
-@media screen and (min-width: 500px) {
+@media screen and (min-width: 768px) {
   #notifications-popup .notifications-popup__container {
     right: 26.5rem;
     left: unset;
@@ -143,6 +141,8 @@
     margin-top: 0.3rem;
     width: -webkit-fill-available;
     max-width: 26.5rem;
+
+    margin-right: var(--padding-x);
   }
 
   #notifications-popup .notifications-popup__container ul {
