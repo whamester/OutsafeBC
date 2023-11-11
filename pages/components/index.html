@@ -1,387 +1,384 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <link
-      rel="icon"
-      type="image/x-icon"
-      href="../../assets/img/icons/logo-square.png"
-    />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <link rel="stylesheet" href="../../assets/css/_global.css" />
+  <link rel="icon" type="image/x-icon" href="../../assets/img/icons/logo-square.png" />
 
-    <script src="../../global.js" defer type="module"></script>
+  <link rel="stylesheet" href="../../assets/css/_global.css" />
 
-    <title>Components</title>
+  <script src="../../global.js" defer type="module"></script>
 
-    <style>
-      body {
-        display: flex;
-        overflow-y: hidden;
-      }
+  <title>Components</title>
 
-      nav {
-        width: 200px;
-        overflow-y: auto;
-        height: 100vh;
-      }
+  <style>
+    body {
+      display: flex;
+      overflow-y: hidden;
+    }
 
-      h1 {
-        color: var(--success-700);
-      }
+    nav {
+      width: 200px;
+      overflow-y: auto;
+      height: 100vh;
+    }
 
-      h3 {
-        margin-bottom: 0;
-      }
+    h1 {
+      color: var(--success-700);
+    }
 
-      main {
-        overflow-y: auto;
-        padding-bottom: 50px;
-        width: 100%;
-      }
+    h3 {
+      margin-bottom: 0;
+    }
 
-      section > section {
-        padding-left: 3rem;
-      }
+    main {
+      overflow-y: auto;
+      padding-bottom: 50px;
+      width: 100%;
+    }
 
-      [id='input-section'] > section,
-      [id='textarea-section'] > section {
-        display: flex;
-        flex-direction: column;
-        gap: 2rem;
-        max-width: 300px;
-      }
+    section>section {
+      padding-left: 3rem;
+    }
 
-      [id='input-section'] > section > h3,
-      [id='textarea-section'] > section > h3 {
-        padding-top: 1rem;
-      }
-    </style>
+    [id='input-section']>section,
+    [id='textarea-section']>section {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      max-width: 300px;
+    }
 
-    <script>
-      if (window.location.href.includes('https')) {
-        // redirect user to view hazard screen
-        // window.location.replace("/pages/home");
-      }
-    </script>
-  </head>
+    [id='input-section']>section>h3,
+    [id='textarea-section']>section>h3 {
+      padding-top: 1rem;
+    }
+  </style>
 
-  <body>
-    <nav>
-      <ul>
-        <li><a href="#button-section">Button</a></li>
-        <li><a href="#input-section">Input</a></li>
-        <li><a href="#textarea-section">Textarea</a></li>
-        <li><a href="#modal-section">Modal</a></li>
-        <li><a href="#alert-section">Alert</a></li>
-      </ul>
-    </nav>
-    <main id="main">
-      <h1>Components</h1>
+  <script>
+    if (window.location.href.includes('https')) {
+      // redirect user to view hazard screen
+      // window.location.replace("/pages/home");
+    }
+  </script>
+</head>
 
-      <section id="button-section">
-        <h2>Button</h2>
+<body>
+  <nav>
+    <ul>
+      <li><a href="#button-section">Button</a></li>
+      <li><a href="#input-section">Input</a></li>
+      <li><a href="#textarea-section">Textarea</a></li>
+      <li><a href="#message-section">Message</a></li>
+      <li><a href="#modal-section">Modal</a></li>
+      <li><a href="#alert-section">Alert</a></li>
+    </ul>
+  </nav>
+  <main id="main">
+    <h1>Components</h1>
 
-        <section>
-          <h3>Default</h3>
+    <section id="button-section">
+      <h2>Button</h2>
 
-          <button class="btn btn-primary">Primary</button>
-          <button class="btn btn-secondary">Secondary</button>
-          <button class="btn btn-success">Button</button>
-          <button class="btn btn-warning">Warning</button>
-          <button class="btn btn-error">Error</button>
+      <section>
+        <h3>Default</h3>
 
-          <h3>With Icon</h3>
-          <button class="btn btn-primary">
-            Primary
-            <span class="btn__icon">
-              <i class="icon-arrow-right"></i>
-            </span>
-          </button>
-          <button class="btn btn-secondary">
-            <i class="icon-check"></i>
-            Secondary
-          </button>
-          <button class="btn btn-success">
-            Button <i class="icon-check"></i>
-          </button>
-          <button class="btn btn-warning">
-            Warning <i class="icon-check"></i>
-          </button>
-          <button class="btn btn-error">
-            Error <i class="icon-check"></i>
-          </button>
+        <button class="btn btn-primary">Primary</button>
+        <button class="btn btn-secondary">Secondary</button>
+        <button class="btn btn-success">Button</button>
+        <button class="btn btn-warning">Warning</button>
+        <button class="btn btn-error">Error</button>
 
-          <h3>Disabled</h3>
+        <h3>With Icon</h3>
+        <button class="btn btn-primary">
+          Primary
+          <span class="btn__icon">
+            <i class="icon-arrow-right"></i>
+          </span>
+        </button>
+        <button class="btn btn-secondary">
+          <i class="icon-check"></i>
+          Secondary
+        </button>
+        <button class="btn btn-success">
+          Button <i class="icon-check"></i>
+        </button>
+        <button class="btn btn-warning">
+          Warning <i class="icon-check"></i>
+        </button>
+        <button class="btn btn-error">
+          Error <i class="icon-check"></i>
+        </button>
 
-          <button class="btn btn-primary" disabled>Primary</button>
-          <button class="btn btn-secondary" disabled>Secondary</button>
-          <button class="btn btn-success" disabled>Button</button>
-          <button class="btn btn-warning" disabled>Warning</button>
-          <button class="btn btn-error" disabled>Error</button>
-        </section>
+        <h3>Disabled</h3>
+
+        <button class="btn btn-primary" disabled>Primary</button>
+        <button class="btn btn-secondary" disabled>Secondary</button>
+        <button class="btn btn-success" disabled>Button</button>
+        <button class="btn btn-warning" disabled>Warning</button>
+        <button class="btn btn-error" disabled>Error</button>
       </section>
+    </section>
 
-      <section id="input-section">
-        <h2>Input</h2>
+    <section id="input-section">
+      <h2>Input</h2>
 
-        <section>
-          <h3>Default</h3>
-          <div class="form-field">
-            <label> Label </label>
-            <div class="form-field__input-container">
-              <input type="text" placeholder="name@email.com" />
-            </div>
-
-            <span class="form-field__helper">This is a helper message.</span>
+      <section>
+        <h3>Default</h3>
+        <div class="form-field">
+          <label> Label </label>
+          <div class="form-field__input-container">
+            <input type="text" placeholder="name@email.com" />
           </div>
 
-          <div class="form-field">
-            <label> Label </label>
-            <div class="form-field__input-container">
-              <input type="text" value="mikewillson@gmail.com" />
-            </div>
-            <span class="form-field__helper">This is a helper message.</span>
+          <span class="form-field__helper">This is a helper message.</span>
+        </div>
+
+        <div class="form-field">
+          <label> Label </label>
+          <div class="form-field__input-container">
+            <input type="text" value="mikewillson@gmail.com" />
+          </div>
+          <span class="form-field__helper">This is a helper message.</span>
+        </div>
+
+        <div class="form-field">
+          <label> Label </label>
+          <div class="form-field__input-container">
+            <textarea type="text" placeholder="name@email.com"></textarea>
           </div>
 
-          <div class="form-field">
-            <label> Label </label>
-            <div class="form-field__input-container">
-              <textarea type="text" placeholder="name@email.com"></textarea>
-            </div>
+          <span class="form-field__helper">This is a helper message.</span>
+        </div>
 
-            <span class="form-field__helper">This is a helper message.</span>
+        <h3>Disabled</h3>
+
+        <div class="form-field">
+          <label> Label </label>
+          <div class="form-field__input-container">
+            <input type="text" placeholder="name@email.com" disabled />
           </div>
 
-          <h3>Disabled</h3>
+          <span class="form-field__helper">This is a helper message.</span>
+        </div>
 
-          <div class="form-field">
-            <label> Label </label>
-            <div class="form-field__input-container">
-              <input type="text" placeholder="name@email.com" disabled />
-            </div>
-
-            <span class="form-field__helper">This is a helper message.</span>
+        <div class="form-field">
+          <label> Label </label>
+          <div class="form-field__input-container">
+            <input type="text" value="mikewillson@gmail.com" disabled />
           </div>
+          <span class="form-field__helper">This is a helper message.</span>
+        </div>
 
-          <div class="form-field">
-            <label> Label </label>
-            <div class="form-field__input-container">
-              <input type="text" value="mikewillson@gmail.com" disabled />
-            </div>
-            <span class="form-field__helper">This is a helper message.</span>
+        <h3>Error</h3>
+
+        <div class="form-field error">
+          <label> Label </label>
+          <div class="form-field__input-container">
+            <input type="text" placeholder="name@email.com" />
           </div>
+          <span class="form-field__helper">This is an error message.</span>
+        </div>
 
-          <h3>Error</h3>
-
-          <div class="form-field error">
-            <label> Label </label>
-            <div class="form-field__input-container">
-              <input type="text" placeholder="name@email.com" />
-            </div>
-            <span class="form-field__helper">This is an error message.</span>
+        <div class="form-field error">
+          <label> Label </label>
+          <div class="form-field__input-container">
+            <input type="text" value="mikewillson@gmail.com" />
           </div>
+          <span class="form-field__helper">This is an error message.</span>
+        </div>
 
-          <div class="form-field error">
-            <label> Label </label>
-            <div class="form-field__input-container">
-              <input type="text" value="mikewillson@gmail.com" />
-            </div>
-            <span class="form-field__helper">This is an error message.</span>
+        <h3>With Icon</h3>
+
+        <div class="form-field with-icon">
+          <label> Label </label>
+          <div class="form-field__input-container">
+            <i class="icon-search left"></i>
+            <input type="text" placeholder="name@email.com" />
           </div>
+        </div>
 
-          <h3>With Icon</h3>
-
-          <div class="form-field with-icon">
-            <label> Label </label>
-            <div class="form-field__input-container">
-              <i class="icon-search left"></i>
-              <input type="text" placeholder="name@email.com" />
-            </div>
+        <div class="form-field with-icon">
+          <label> Label </label>
+          <div class="form-field__input-container">
+            <i class="icon-search right"></i>
+            <input type="text" value="mikewillson@gmail.com" />
           </div>
-
-          <div class="form-field with-icon">
-            <label> Label </label>
-            <div class="form-field__input-container">
-              <i class="icon-search right"></i>
-              <input type="text" value="mikewillson@gmail.com" />
-            </div>
-          </div>
-        </section>
+        </div>
       </section>
+    </section>
 
-      <section id="textarea-section">
-        <h2>Textarea</h2>
+    <section id="textarea-section">
+      <h2>Textarea</h2>
 
-        <section>
-          <h3>Default</h3>
+      <section>
+        <h3>Default</h3>
 
-          <div class="form-field">
-            <label> Label </label>
-            <div class="form-field__input-container">
-              <textarea type="text" placeholder="Type something here..."></textarea>
-            </div>
-
-            <span class="form-field__helper">This is a helper message.</span>
+        <div class="form-field">
+          <label> Label </label>
+          <div class="form-field__input-container">
+            <textarea type="text" placeholder="Type something here..."></textarea>
           </div>
 
-          <div class="form-field">
-            <label> Label </label>
-            <div class="form-field__input-container">
-              <textarea type="text">
+          <span class="form-field__helper">This is a helper message.</span>
+        </div>
+
+        <div class="form-field">
+          <label> Label </label>
+          <div class="form-field__input-container">
+            <textarea type="text">
 Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quae inventore, saepe cum corrupti ullam numquam officia sapiente soluta mollitia animi?
-                        </textarea
-              >
-            </div>
-
-            <span class="form-field__helper">This is a helper message.</span>
+                        </textarea>
           </div>
 
-          <h3>Disabled</h3>
+          <span class="form-field__helper">This is a helper message.</span>
+        </div>
 
-          <div class="form-field">
-            <label> Label </label>
-            <div class="form-field__input-container">
-              <textarea
-                type="text"
-                placeholder="Type something here..."
-                disabled
-              ></textarea>
-            </div>
+        <h3>Disabled</h3>
 
-            <span class="form-field__helper">This is a helper message.</span>
+        <div class="form-field">
+          <label> Label </label>
+          <div class="form-field__input-container">
+            <textarea type="text" placeholder="Type something here..." disabled></textarea>
           </div>
 
-          <div class="form-field">
-            <label> Label </label>
-            <div class="form-field__input-container">
-              <textarea type="text" disabled>
+          <span class="form-field__helper">This is a helper message.</span>
+        </div>
+
+        <div class="form-field">
+          <label> Label </label>
+          <div class="form-field__input-container">
+            <textarea type="text" disabled>
 Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quae inventore, saepe cum corrupti ullam numquam officia sapiente soluta mollitia animi?
-                        </textarea
-              >
-            </div>
-
-            <span class="form-field__helper">This is a helper message.</span>
+                        </textarea>
           </div>
 
-          <h3>Error</h3>
+          <span class="form-field__helper">This is a helper message.</span>
+        </div>
 
-          <div class="form-field error">
-            <label> Label </label>
-            <div class="form-field__input-container">
-              <textarea
-                type="text"
-                placeholder="Type something here..."
-              ></textarea>
-            </div>
-            <span class="form-field__helper">This is an error message.</span>
+        <h3>Error</h3>
+
+        <div class="form-field error">
+          <label> Label </label>
+          <div class="form-field__input-container">
+            <textarea type="text" placeholder="Type something here..."></textarea>
           </div>
+          <span class="form-field__helper">This is an error message.</span>
+        </div>
 
-          <div class="form-field error">
-            <label> Label </label>
-            <div class="form-field__input-container">
-              <textarea type="text">
-Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa, soluta!</textarea
-              >
-            </div>
-            <span class="form-field__helper">This is an error message.</span>
+        <div class="form-field error">
+          <label> Label </label>
+          <div class="form-field__input-container">
+            <textarea type="text">
+Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa, soluta!</textarea>
           </div>
+          <span class="form-field__helper">This is an error message.</span>
+        </div>
 
-        </section>
       </section>
+    </section>
 
-      <section id="modal-section">
-        <h2>Modal</h2>
+    <section id="message-section">
 
-        <section>
-          <h3>Default</h3>
+      <div class="message error">
+        <i class="icon-flag message__icon"></i>
+        <p class="message__content text-body-3 medium">This report has been reported as fake.</p>
+      </div>
+    </section>
 
-          <button id="open-modal-btn" class="btn btn-primary">
-            Open Modal
-          </button>
-          <script type="module">
-            import Modal from '../../assets/components/Modal.js';
-            const openModalBtn = document.getElementById('open-modal-btn');
+    <section id="modal-section">
+      <h2>Modal</h2>
 
-            openModalBtn.addEventListener('click', () => {
-              const modal = new Modal();
+      <section>
+        <h3>Default</h3>
 
-              const closeModal = () => {
-                console.log('closing modal');
-                modal.close();
-              };
-              const button = document.createElement('button');
-              button.setAttribute('id', 'open-modal-btn');
-              button.setAttribute('class', 'btn btn-primary');
-              button.addEventListener('click', closeModal);
-              button.innerHTML = 'Continue Exploring';
+        <button id="open-modal-btn" class="btn btn-primary">
+          Open Modal
+        </button>
+        <script type="module">
+          import Modal from '../../assets/components/Modal.js';
+          const openModalBtn = document.getElementById('open-modal-btn');
 
-              modal.show({
-                title: 'Your report has been submitted!',
-                description:
-                  'Thank you for helping others have a safe camping experience.',
-                icon: { name: 'icon-check', color: '#000000', size: '3.5rem' },
-                actions: button, // '<button id="open-modal-btn" class="btn btn-primary">Continue Exploring</button>',
-                enableOverlayClickClose: true,
-              });
+          openModalBtn.addEventListener('click', () => {
+            const modal = new Modal();
+
+            const closeModal = () => {
+              console.log('closing modal');
+              modal.close();
+            };
+            const button = document.createElement('button');
+            button.setAttribute('id', 'open-modal-btn');
+            button.setAttribute('class', 'btn btn-primary');
+            button.addEventListener('click', closeModal);
+            button.innerHTML = 'Continue Exploring';
+
+            modal.show({
+              title: 'Your report has been submitted!',
+              description:
+                'Thank you for helping others have a safe camping experience.',
+              icon: { name: 'icon-check', color: '#000000', size: '3.5rem' },
+              actions: button, // '<button id="open-modal-btn" class="btn btn-primary">Continue Exploring</button>',
+              enableOverlayClickClose: true,
             });
-          </script>
-        </section>
+          });
+        </script>
       </section>
+    </section>
 
-      <section id="alert-section">
-        <h2>Alert</h2>
+    <section id="alert-section">
+      <h2>Alert</h2>
 
-        <section>
-          <h3>Default</h3>
+      <section>
+        <h3>Default</h3>
 
-          <button id="open-success-alert-btn" class="btn btn-success">
-            Open Success Alert
-          </button>
-          <button id="open-warning-alert-btn" class="btn btn-warning">
-            Open Warning Alert
-          </button>
-          <button id="open-error-alert-btn" class="btn btn-error">
-            Open Error Alert
-          </button>
+        <button id="open-success-alert-btn" class="btn btn-success">
+          Open Success Alert
+        </button>
+        <button id="open-warning-alert-btn" class="btn btn-warning">
+          Open Warning Alert
+        </button>
+        <button id="open-error-alert-btn" class="btn btn-error">
+          Open Error Alert
+        </button>
 
-          <script type="module">
-            import AlertPopup from '../../assets/components/AlertPopup.js';
+        <script type="module">
+          import AlertPopup from '../../assets/components/AlertPopup.js';
 
-            const successBtn = document.getElementById(
-              'open-success-alert-btn'
+          const successBtn = document.getElementById(
+            'open-success-alert-btn'
+          );
+          const warningBtn = document.getElementById(
+            'open-warning-alert-btn'
+          );
+          const errorBtn = document.getElementById('open-error-alert-btn');
+
+          successBtn.addEventListener('click', () => {
+            const alert = new AlertPopup();
+            alert.show('Hello there!');
+          });
+
+          warningBtn.addEventListener('click', () => {
+            const alert = new AlertPopup();
+            alert.show(
+              'Warning with 5 seconds delay!',
+              AlertPopup.warning,
+              5000
             );
-            const warningBtn = document.getElementById(
-              'open-warning-alert-btn'
+          });
+
+          errorBtn.addEventListener('click', () => {
+            const alert = new AlertPopup();
+            alert.show(
+              AlertPopup.SOMETHING_WENT_WRONG_MESSAGE,
+              AlertPopup.error
             );
-            const errorBtn = document.getElementById('open-error-alert-btn');
-
-            successBtn.addEventListener('click', () => {
-              const alert = new AlertPopup();
-              alert.show('Hello there!');
-            });
-
-            warningBtn.addEventListener('click', () => {
-              const alert = new AlertPopup();
-              alert.show(
-                'Warning with 5 seconds delay!',
-                AlertPopup.warning,
-                5000
-              );
-            });
-
-            errorBtn.addEventListener('click', () => {
-              const alert = new AlertPopup();
-              alert.show(
-                AlertPopup.SOMETHING_WENT_WRONG_MESSAGE,
-                AlertPopup.error
-              );
-            });
-          </script>
-        </section>
+          });
+        </script>
       </section>
-    </main>
-  </body>
+    </section>
+  </main>
+</body>
+
 </html>

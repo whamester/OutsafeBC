@@ -55,6 +55,49 @@ class HazardDetailCard extends ReportCard {
     });
   }
 
+  showFakeReportConfirmationModal() {
+    const modal = new Modal();
+
+    const confirmButton = document.createElement('button');
+    confirmButton.setAttribute('id', 'flag-confirmation-btn');
+    confirmButton.setAttribute('class', 'btn btn-error');
+    confirmButton.addEventListener('click', async () => {
+      await this.flagAsFake();
+      modal.close();
+    });
+    confirmButton.innerHTML = 'Flag Report';
+    confirmButton.style.width = '7.875rem';
+    confirmButton.style.justifyContent = 'center';
+
+    const cancelButton = document.createElement('button');
+    cancelButton.setAttribute('id', 'flag-cancel-btn');
+    cancelButton.setAttribute('class', 'btn btn-secondary');
+    cancelButton.addEventListener('click', async () => modal.close());
+    cancelButton.innerHTML = 'Cancel';
+    cancelButton.style.width = '7.875rem';
+    cancelButton.style.justifyContent = 'center';
+
+    const actions = document.createElement('div');
+    actions.style.display = 'flex';
+    actions.style.gap = '1rem';
+
+    actions.appendChild(cancelButton);
+    actions.appendChild(confirmButton);
+
+    modal.show({
+      title: 'Are you sure you want to flag this report as fake?',
+      description:
+        'Your decision helps us ensure the accuracy and reliability of our hazard reporting system.',
+      icon: {
+        name: 'icon-flag',
+        color: 'var(--error-500)',
+        size: '3.5rem',
+      },
+      actions,
+      enableOverlayClickClose: true,
+    });
+  }
+
   async reportStillThere(option) {
     try {
       const alert = new AlertPopup();
@@ -72,7 +115,7 @@ class HazardDetailCard extends ReportCard {
           }),
         }
       );
-      const { error, data, message } = await response.json();
+      const { error, message } = await response.json();
 
       if (!!error) {
         alert.show(error, AlertPopup.error);
@@ -80,9 +123,9 @@ class HazardDetailCard extends ReportCard {
         return;
       }
       // Success alert
-      alert.show('Feedback Submitted!', AlertPopup.success);
+      alert.show(message, AlertPopup.success);
       this.enable_reaction = false;
-      this.changeButtonState()
+      this.changeButtonState();
     } catch (error) {
       // Error alert
       alert.show(
@@ -108,18 +151,17 @@ class HazardDetailCard extends ReportCard {
           }),
         }
       );
-      const { error, data, message } = await response.json();
+      const { error, message } = await response.json();
 
       if (!!error) {
         alert.show(error, AlertPopup.error);
         console.error(error);
         return;
       }
-      // Success alert
-      alert.show('Feedback Submitted!', AlertPopup.success);
-      console.log('Success', data, message);
-      this.flagged_as_fake = true
-      this.changeButtonState()
+
+      alert.show(message, AlertPopup.success);
+      this.flagged_as_fake = true;
+      this.changeButtonState();
     } catch (error) {
       // Error alert
       alert.show(
@@ -133,16 +175,28 @@ class HazardDetailCard extends ReportCard {
   changeButtonState() {
     if (this.flagged_as_fake) {
       this.divContainer.querySelector('#flagReportBtn').classList.add('hidden');
+      this.divContainer
+        .querySelector('#flagReportMessage')
+        .classList.remove('hidden');
     } else {
-      this.divContainer.querySelector('#flagReportBtn').classList.remove('hidden');
+      this.divContainer
+        .querySelector('#flagReportBtn')
+        .classList.remove('hidden');
+      this.divContainer
+        .querySelector('#flagReportMessage')
+        .classList.add('hidden');
     }
 
     if (!this.enable_reaction) {
       this.divContainer.querySelector('#stillThereBtn').classList.add('hidden');
       this.divContainer.querySelector('#notThereBtn').classList.add('hidden');
-    }else{
-      this.divContainer.querySelector('#stillThereBtn').classList.remove('hidden');
-      this.divContainer.querySelector('#notThereBtn').classList.remove('hidden');
+    } else {
+      this.divContainer
+        .querySelector('#stillThereBtn')
+        .classList.remove('hidden');
+      this.divContainer
+        .querySelector('#notThereBtn')
+        .classList.remove('hidden');
     }
   }
 
@@ -155,99 +209,126 @@ class HazardDetailCard extends ReportCard {
     let divInner = document.createElement('div');
     divInner.setAttribute('class', `report-card__inner`);
     divInner.innerHTML = `
-  <div class="report-card__top-controls">
-  <div class="circle-border" id="reportCloseBtn">
-  <i class="icon-close-square" style="background-color: var(--neutral-500)"></i>
-  </div>
-  <div class="circle-border">
-  <i class="icon-share" style="background-color: var(--neutral-500)"></i>
-  </div>
-  </div>
-  <div class="report-card__heading">
-    <span class="btn__icon report-card__heading__icon" style="background-color: ${
-      this.settings.iconBackround
-    }">
-      <i class="${
-        this.settings.icon
-      }-outline" style="width:24px; height:24px; background-color: white"></i>
-    </span>
-        <p class="text-body-1 semibold">${this.hazard}</p>
-  </div>
+          <div class="report-card__top-controls">
+            <div class="circle-border" id="reportCloseBtn">
+              <i
+                class="icon-close-square"
+                style="background-color: var(--neutral-500)"
+              ></i>
+            </div>
+            <div class="circle-border">
+              <i class="icon-share" style="background-color: var(--neutral-500)"></i>
+            </div>
+          </div>
+          <div class="report-card__heading">
+            <span
+              class="btn__icon report-card__heading__icon"
+              style="background-color: ${this.settings.iconBackround}"
+            >
+              <i
+                class="${this.settings.icon}-outline"
+                style="width: 24px; height: 24px; background-color: white"
+              ></i>
+            </span>
+            <p class="text-body-1 semibold">${this.hazard}</p>
+          </div>
+          
+          <div class="report-card__top-info">
+            <div class="report-card__details">
+              <i
+                class="icon-location-pin-outline"
+                style="background-color: var(--neutral-400)"
+              ></i>
+              <p class="text-body-2 regular report-card__location-text">
+                ${this.location}
+              </p>
+            </div>
+          
+            <div class="report-card__date_time">
+              <div class="report-card__details">
+                <i class="icon-date" style="background-color: var(--neutral-400)"></i>
+                <p class="text-body-2 regular">${super.getDateFormatted()}</p>
+              </div>
+          
+              <div class="report-card__details">
+                <i class="icon-time" style="background-color: var(--neutral-400)"></i>
+                <p class="text-body-2 regular">${super.getTimeFormatted()}</p>
+              </div>
+            </div>
+          
+            <div class="report-card__details">
+              <i class="icon-distance" style="background-color: var(--neutral-400)"></i>
+              <p class="text-body-2 regular">${this.distance} km away</p>
+            </div>
+          </div>
+          
+          <div class="report-card__spacer-line"></div>
+          
+          <div id="report-card__image-gallery"></div>
+          
+          <div class="report-card__spacer-line"></div>
+          
+          <p class="text-body-3 regular">Description</p>
+          <p class="text-body-2 regular">${this.comment}</p>
+          
+          <div class="report-card__spacer-line"></div>
+          <p class="text-body-3 regular">
+            Reported by ${this.createdByUserLoggedIn ? 'You' : ''}
+          </p>
+          
+          ${
+            !this.createdByUserLoggedIn
+              ? `
+          <div class="report-card__user-details">
+            <img
+              id="user-image"
+              src="${
+                this.user.photo || '../../assets/img/default-nav-image.png'
+              }"
+              alt="User photo"
+            />
+            <p class="text-body-2 regular">${this.user.name}</p>
+          </div>
+          `
+              : ''
+          }
+          
+          <div
+            class="report-card__spacer-line ${
+              this.createdByUserLoggedIn ? 'hidden' : ''
+            }"
+          ></div>
+          
+          <div
+            class="report-card__hazard-detail-buttons ${
+              this.createdByUserLoggedIn ? 'hidden' : ''
+            }"
+          >
+  
+            <button class="btn btn-success" id="stillThereBtn">
+              <i class="icon-check"></i>
+              Still there
+            </button>
 
-  <div class="report-card__top-info">
-    <div class="report-card__details">
-      <i class="icon-location-pin-outline" style="background-color: var(--neutral-400)"></i>
-      <p class="text-body-2 regular report-card__location-text">${
-        this.location
-      }</p>
-    </div>
+            <button class="btn btn-warning" id="notThereBtn">
+              <i class="icon-close"></i>
+              Not there
+            </button>
 
-    <div class="report-card__date_time">
-      <div class="report-card__details">
-        <i class="icon-date" style="background-color: var(--neutral-400)"></i>
-        <p class="text-body-2 regular">${super.getDateFormatted()}</p>
-      </div>
+            <button class="btn btn-error" id="flagReportBtn">
+              <i class="icon-flag"></i>
+              Flag report
+            </button>
+          
+            <div id="flagReportMessage" class="message error">
+              <i class="icon-flag message__icon"></i>
+              <p class="message__content text-body-3 medium">
+                This report has been reported as fake.
+              </p>
+            </div>
 
-      <div class="report-card__details">
-        <i class="icon-time" style="background-color: var(--neutral-400)"></i>
-        <p class="text-body-2 regular">${super.getTimeFormatted()}</p>
-      </div>
-    </div>
-    
-    <div class="report-card__details">
-    <i class="icon-distance" style="background-color: var(--neutral-400)"></i>
-    <p class="text-body-2 regular">${this.distance} km away</p>
-  </div>
-    
-  </div>
 
-  <div class="report-card__spacer-line"></div>
-      
-  <div id="report-card__image-gallery"></div>
-
-  <div class="report-card__spacer-line"></div>
-
-  <p class="text-body-3 regular">Description</p>
-  <p class="text-body-2 regular">${this.comment}</p>
-
-  <div class="report-card__spacer-line"></div>
-  <p class="text-body-3 regular">Reported by ${
-    this.createdByUserLoggedIn ? 'You' : ''
-  }</p>
-
-  ${
-    !this.createdByUserLoggedIn
-      ? `
-  <div class="report-card__user-details">
-  <img id="user-image" src="${
-    this.user.photo || '../../assets/img/default-nav-image.png'
-  }" alt="User photo">
-  <p class="text-body-2 regular">${this.user.name}</p>
-  </div>
-  `
-      : ''
-  }
-
-  <div class="report-card__spacer-line ${
-    this.createdByUserLoggedIn ? 'hidden' : ''
-  }"></div>
-
-  <div class="report-card__hazard-detail-buttons ${
-    this.createdByUserLoggedIn ? 'hidden' : ''
-  }">
-    <button class="btn btn-success" id="stillThereBtn">
-      <i class="icon-check"></i>
-      Still there
-    </button>
-    <button class="btn btn-warning" id="notThereBtn">
-      <i class="icon-close"></i>
-      Not there
-    </button>
-    <button class="btn btn-error" id="flagReportBtn">
-      <i class="icon-flag"></i>
-      Flag report
-    </button>
-  </div>
+          </div>
       `;
     // TODO: We can add the edit button for the user if it's the author of the report
 
@@ -281,7 +362,8 @@ class HazardDetailCard extends ReportCard {
         if (!userSession) {
           this.showLoginModal();
         } else {
-          this.flagAsFake();
+          // this.flagAsFake();
+          this.showFakeReportConfirmationModal();
         }
       });
 
