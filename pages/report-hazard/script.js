@@ -380,7 +380,9 @@ getCategories();
 
 const populateHazardOptions = (options, selectedOptionQuestion) => {
   try {
-    const hazardOptionContent = document.getElementById('hazard-option-content');
+    const hazardOptionContent = document.getElementById(
+      'hazard-option-content'
+    );
     hazardOptionContent.innerHTML = '';
 
     if (options.length === 1) {
@@ -389,7 +391,8 @@ const populateHazardOptions = (options, selectedOptionQuestion) => {
       skipHazardOption = true;
     }
 
-    document.getElementById('hazardTypeQuestion').innerHTML = selectedOptionQuestion;
+    document.getElementById('hazardTypeQuestion').innerHTML =
+      selectedOptionQuestion;
 
     for (let i = 0; i < options.length; i++) {
       const option = options[i];
@@ -409,6 +412,17 @@ const populateHazardOptions = (options, selectedOptionQuestion) => {
 
         var enlace = document.getElementById('selectHazardOptionLink');
         enlace.setAttribute('onclick', 'location.href="#additional-details"');
+
+        const allIconTypes = document.querySelectorAll('.category-icon-type');
+        allIconTypes.forEach((iconType) => {
+          iconType.style.display = 'none';
+        });
+
+        const selectedLabel = document.querySelector(`label[for=${radio.id}]`);
+        const iconType = selectedLabel.querySelector('.category-icon-type');
+        if (iconType) {
+          iconType.style.display = 'block';
+        }
       });
 
       const label = document.createElement('label');
@@ -419,7 +433,8 @@ const populateHazardOptions = (options, selectedOptionQuestion) => {
       divContainer.classList.add('container-type');
 
       const div1Icon = document.createElement('div');
-      div1Icon.innerHTML = '<img class="category-icon" src="../../assets/icons/checkmark.svg" >';
+      div1Icon.innerHTML =
+        '<img class="category-icon-type" src="../../assets/icons/checkmark.svg" style="display: none">';
       div1Icon.classList.add('checkmark');
 
       const div2Text = document.createElement('div');
@@ -446,7 +461,6 @@ const populateHazardOptions = (options, selectedOptionQuestion) => {
     );
   }
 };
-
 
 /**
  * Step 4: Comments
