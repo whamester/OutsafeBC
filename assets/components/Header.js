@@ -59,7 +59,7 @@ const Header = () => {
                 menu.classList.add('hidden');
                 " />`}
           `
-            : `<a href="/pages/login"><button class="btn btn-secondary">Sign in</button></a>`
+            : `<a href="/pages/login"><button class="btn btn-secondary">Log in</button></a>`
         } 
       </nav>`
           : ``
