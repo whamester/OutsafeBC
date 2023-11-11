@@ -185,13 +185,17 @@
         </section>
 
         <section id="additional-details" class="page section-container">
-          <h1>Would you like to mention any further details?
-            <span class="text-body-2 medium">(Optional)</span>
-          </h1>
-
-          <div>
-            <textarea id="commentInput" class="comment-input"></textarea>
+          <div class="additional-details__header">
+            <h1>Would you like to mention any further details?</h1>
+            <span class="text-body-1 medium text-neutral-500">(optional)</span>
           </div>
+
+            <div class="form-field">
+              <div class="form-field__input-container">
+                <textarea id="commentInput" rows="7"></textarea
+                >
+              </div>
+            </div>
 
           <button
             type="button"
@@ -242,7 +246,6 @@
             </div>
 
             <div id="displayCameraArea" style="display: none">
-
               <video id="video" width="320" height="240" autoplay></video>
 
               <button type="button" id="takeDesktopPictureBtn" disabled>
@@ -268,8 +271,8 @@
               Take a picture
               <span
                 >at the hazard site? Take a picture to add in the report.</span
-              > </label
-            >
+              >
+            </label>
             <label for="uploadPictureMobileInput" class="custom-file-upload2">
               <input
                 type="file"
