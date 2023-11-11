@@ -174,8 +174,8 @@ self.addEventListener('fetch', (event) => {
             cache.put(event.request, response.clone())
           }
           return response
-        })
-      });
+        }).catch(console.log)
+      }).catch(console.log);
     })
   );
 });
