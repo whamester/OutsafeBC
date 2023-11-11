@@ -4,7 +4,7 @@ import Modal from './Modal.js';
 import { getUserSession } from '../helpers/storage.js';
 import AlertPopup from './AlertPopup.js';
 
-const user = getUserSession();
+const userSession = getUserSession();
 
 class HazardDetailCard extends ReportCard {
   constructor(
@@ -18,16 +18,16 @@ class HazardDetailCard extends ReportCard {
     icon,
     distance,
     user,
-    flagged_as_fake, 
+    flagged_as_fake,
     enable_reaction
-
   ) {
     super(id, category, hazard, location, date, photos, comment, icon);
     this.distance = distance;
     this.user = user;
-    this.flagged_as_fake = flagged_as_fake
-    this.enable_reaction = enable_reaction
+    this.flagged_as_fake = flagged_as_fake;
+    this.enable_reaction = enable_reaction;
     this.divContainer = null;
+    this.createdByUserLoggedIn = userSession.email === this.user.email;
   }
 
   showLoginModal() {
@@ -214,18 +214,30 @@ class HazardDetailCard extends ReportCard {
   <p class="text-body-2 regular">${this.comment}</p>
 
   <div class="report-card__spacer-line"></div>
-  <p class="text-body-3 regular">Reported by</p>
+  <p class="text-body-3 regular">Reported by ${
+    this.createdByUserLoggedIn ? 'You' : ''
+  }</p>
+
+  ${
+    !this.createdByUserLoggedIn
+      ? `
   <div class="report-card__user-details">
   <img id="user-image" src="${
     this.user.photo || '../../assets/img/default-nav-image.png'
   }" alt="User photo">
   <p class="text-body-2 regular">${this.user.name}</p>
   </div>
-  
-  <div class="report-card__spacer-line"></div>
+  `
+      : ''
+  }
 
-  <div class="report-card__hazard-detail-buttons">
-    
+  <div class="report-card__spacer-line ${
+    this.createdByUserLoggedIn ? 'hidden' : ''
+  }"></div>
+
+  <div class="report-card__hazard-detail-buttons ${
+    this.createdByUserLoggedIn ? 'hidden' : ''
+  }">
     <button class="btn btn-success" id="stillThereBtn">
       <i class="icon-check"></i>
       Still there
@@ -240,32 +252,36 @@ class HazardDetailCard extends ReportCard {
     </button>
   </div>
       `;
+    // TODO: We can add the edit button for the user if it's the author of the report
 
     divInner
       .querySelector('#report-card__image-gallery')
       .appendChild(super.getGallery());
     divOuter.appendChild(divInner);
     divContainer.appendChild(divOuter);
+
     divContainer
       .querySelector('#stillThereBtn')
       .addEventListener('click', () => {
-        if (!user) {
+        if (!userSession) {
           this.showLoginModal();
         } else {
           this.reportStillThere(true);
         }
       });
+
     divContainer.querySelector('#notThereBtn').addEventListener('click', () => {
-      if (!user) {
+      if (!userSession) {
         this.showLoginModal();
       } else {
         this.reportStillThere(false);
       }
     });
+
     divContainer
       .querySelector('#flagReportBtn')
       .addEventListener('click', () => {
-        if (!user) {
+        if (!userSession) {
           this.showLoginModal();
         } else {
           this.flagAsFake();
