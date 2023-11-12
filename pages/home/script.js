@@ -373,7 +373,7 @@ const watchGeoLocationSuccess = async ({ coords }) => {
   // If there is a report id in the query params and the focus param is set, don't pan to the user's location
   // but to the report's location
   if (flyToTrigger && !(!!idReport && (!!focusMarker || !!openDetail))) {
-    // flyTo(lat, lng);
+    flyTo(lat, lng);
     flyToTrigger = false;
   }
 };
