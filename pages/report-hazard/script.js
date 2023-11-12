@@ -654,7 +654,6 @@ const saveFile = (files) => {
 
 const displayImages = (base64File) => {
   const imagesArea = document.getElementById('displayImagesArea');
-
   let divNumber = -1;
 
   for (let i = 1; i <= 3; i++) {
@@ -673,11 +672,11 @@ const displayImages = (base64File) => {
   deleteButton.type = 'button';
   deleteButton.innerText = 'X';
   deleteButton.addEventListener('click', function () {
-
     imagesArea.querySelector(`.picture-${divNumber}`).removeChild(img);
     imagesArea.querySelector(`.picture-${divNumber}`).removeChild(deleteButton);
 
-    imagesArea.querySelector(`.hide-picture-${divNumber}`).style.display = 'block';
+    imagesArea.querySelector(`.hide-picture-${divNumber}`).style.display =
+      'block';
 
     const index = currentReport.images.indexOf(`picture-${divNumber}`);
     if (index !== -1) {
@@ -687,7 +686,9 @@ const displayImages = (base64File) => {
     if (currentReport.images.length < 3) {
       document.getElementById('starCameraBtn').removeAttribute('disabled');
       document.getElementById('dragAndDropArea').removeAttribute('disabled');
-      document.getElementById('uploadPictureDesktopInput').removeAttribute('disabled');
+      document
+        .getElementById('uploadPictureDesktopInput')
+        .removeAttribute('disabled');
     }
 
     if (currentReport.images.length === 2) {
@@ -704,7 +705,9 @@ const displayImages = (base64File) => {
   if (currentReport.images.length === 3) {
     document.getElementById('starCameraBtn').setAttribute('disabled', true);
     document.getElementById('dragAndDropArea').setAttribute('disabled', true);
-    document.getElementById('uploadPictureDesktopInput').setAttribute('disabled', true);
+    document
+      .getElementById('uploadPictureDesktopInput')
+      .setAttribute('disabled', true);
 
     stopCamera();
   }
