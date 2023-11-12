@@ -657,8 +657,21 @@ const displayImages = (base64File) => {
 
   const img = document.createElement('img');
   img.setAttribute('src', base64File);
-  img.style.width = 'auto';
-  img.style.height = '84px';
+
+  img.addEventListener('load', function() {
+    console.log('Original Width:', img.naturalWidth);
+    console.log('Original Height:', img.naturalHeight);
+    if(img.naturalWidth < img.naturalHeight){
+      img.style.width = 'auto';
+      img.style.height = '84px';
+    }else if(img.naturalWidth > img.naturalHeight){
+      img.style.width = '101px';
+      img.style.height = 'auto';
+    }else{
+      img.style.width = 'auto';
+      img.style.height = '84px';
+    }
+  });
 
   const deleteButton = document.createElement('button');
   deleteButton.type = 'button';
@@ -691,8 +704,6 @@ const displayImages = (base64File) => {
 
   deleteButton.style.background = `url('../../assets/icons/remove.svg') no-repeat center`;
   deleteButton.style.border = 'none';
-  // deleteButton.style.width = '24px';
-  // deleteButton.style.height = '24px';
 
   imagesArea.querySelector(`.hide-picture-${divNumber}`).style.display = 'none';
   imagesArea.querySelector(`.picture-${divNumber}`).appendChild(img);
@@ -711,6 +722,7 @@ const displayImages = (base64File) => {
     stopCamera();
   }
 };
+
 
 
 var enlace = document.getElementById('showConfirmationBtn');

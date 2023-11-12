@@ -351,9 +351,15 @@ img {
   height: 24px;
 }
 
-/* .delete-button img{
-  width: 34px;
-  height: 34px;
+/* to display the button at the bottom in the center */
+/* .delete-button {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  border: none;
+  width: 24px;
+  height: 24px;
 } */
 
 @media screen and (min-width: 800px) {
