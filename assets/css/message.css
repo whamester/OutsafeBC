@@ -1,0 +1,22 @@
+.message {
+  border-radius: 0.5rem;
+  background: var(--error-50);
+  display: flex;
+  padding: 0.5rem 0.75rem;
+  align-items: center;
+  gap: 0.5rem;
+  align-self: stretch;
+  width: 100%;
+}
+
+.message.error .message__icon {
+  width: 1rem;
+  height: 1rem;
+  background: var(--error-700);
+}
+
+.message.error .message__content {
+  color: var(--error-700);
+}
+
+/* Add more variants as needed */

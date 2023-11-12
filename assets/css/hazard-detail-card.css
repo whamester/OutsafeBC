@@ -8,7 +8,7 @@
   max-width: 30.625rem;
   position: absolute;
   bottom: 0;
-  z-index: 2;
+  z-index: 3;
 }
 
 .report-card__top-controls {
@@ -51,4 +51,5 @@
   width: 1.75rem;
   height: 1.75rem;
   border-radius: 6.25rem;
+  object-fit: cover;
 }

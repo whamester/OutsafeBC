@@ -1,34 +1,26 @@
+import DateFormat from '../models/DateFormat.js';
+
 class ReportCard {
   constructor(id, category, hazard, location, date, photos, comment, settings) {
     this.id = id;
     this.category = category;
     this.hazard = hazard;
     this.location = location;
-    this.date = new Date(date); 
+    this.date = new Date(date);
     this.photos = photos;
     this.comment = comment;
     this.settings = settings;
   }
 
-  getDateFormatted(){
-    const date = this.date.toLocaleString('default', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric',
-    });
-    return date;
+  getDateFormatted() {
+    return DateFormat.getDate(this.date);
   }
 
-  getTimeFormatted(){
-    const time = this.date.toLocaleTimeString('default', {
-      hour: '2-digit',
-      minute: '2-digit',
-      timeZoneName: 'short',
-    });
-    return time;
+  getTimeFormatted() {
+    return DateFormat.getTime(this.date);
   }
 
-  getGallery(){
+  getGallery() {
     let photos = this.photos;
     let gallery = document.createElement('div');
     gallery.setAttribute('id', 'report-card__picture-container');
@@ -41,6 +33,5 @@ class ReportCard {
     return gallery;
   }
 }
-
 
 export default ReportCard;
