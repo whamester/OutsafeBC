@@ -199,6 +199,7 @@ const toggleFilterModal = async (flag) => {
   });
 
   if(!flag) {
+    hazardShowCount = geoMap.filterMarkerCount(hazardFilters);
     filterModal.querySelector(".modal-filter--wrapper-outer").scrollTop = 0;
     showReportsBtnStatus(hazardShowCount);
   }
@@ -270,17 +271,21 @@ const closeSearchSuggestion = (e) => {
   document.querySelector('.sb-categories-wrapper').style.display = 'flex';
 };
 
-const getReportApiCall = async (lat, lng, size=1000, cursor = 0) => {
+const getReportApiCall = async (lat, lng, categoryFilters = [], hazardFilters = [],size=1000, cursor = 0) => {
   // clear previous markers
   geoMap.mapLayers.clearLayers();
   // clear previous reports
   reports = [];
 
   const positionChange = searchInput.dataset.positionChange === 'true';
-  const url = `hazard-report?cursor=${cursor}&size={size}&lat=${
+  const url = `hazard-report?cursor=${cursor}&size=${size}&lat=${
     positionChange ? positionSecondary.lat : lat
   }&lng=${
     positionChange ? positionSecondary.lng : lng
+  }${
+    categoryFilters.length ? `&category_ids=${categoryFilters.join(',')}` : ''
+  }${
+    hazardFilters.length ? `&hazard_option_ids=${hazardFilters.join(',')}` : ''
   }`;
 
   const res = await apiRequest(url, { method: 'GET' });
@@ -311,7 +316,7 @@ const suggestionOnClick = () => {
       positionSecondary = latLng;
       flyTo(latLng.lat, latLng.lng);
       closeSearchSuggestion();
-      await getReportApiCall(latLng.lat, latLng.lng);
+      await getReportApiCall(latLng.lat, latLng.lng, categoryFilters, hazardFilters);
       injectCards();
     });
   });
