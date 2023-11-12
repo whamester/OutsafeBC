@@ -654,20 +654,57 @@ const saveFile = (files) => {
 
 const displayImages = (base64File) => {
   const imagesArea = document.getElementById('displayImagesArea');
+
+  let divNumber = -1;
+
+  for (let i = 1; i <= 3; i++) {
+    if (currentReport.images.indexOf(`picture-${i}`) === -1) {
+      divNumber = i;
+      break;
+    }
+  }
+
   const img = document.createElement('img');
   img.setAttribute('src', base64File);
   img.style.width = '200px';
   img.style.height = '200px';
-  imagesArea.append(img);
 
-  currentReport.images.push(base64File);
+  const deleteButton = document.createElement('button');
+  deleteButton.type = 'button';
+  deleteButton.innerText = 'X';
+  deleteButton.addEventListener('click', function () {
+
+    imagesArea.querySelector(`.picture-${divNumber}`).removeChild(img);
+    imagesArea.querySelector(`.picture-${divNumber}`).removeChild(deleteButton);
+
+    imagesArea.querySelector(`.hide-picture-${divNumber}`).style.display = 'block';
+
+    const index = currentReport.images.indexOf(`picture-${divNumber}`);
+    if (index !== -1) {
+      currentReport.images.splice(index, 1);
+    }
+
+    if (currentReport.images.length < 3) {
+      document.getElementById('starCameraBtn').removeAttribute('disabled');
+      document.getElementById('dragAndDropArea').removeAttribute('disabled');
+      document.getElementById('uploadPictureDesktopInput').removeAttribute('disabled');
+    }
+
+    if (currentReport.images.length === 2) {
+      startCamera();
+    }
+  });
+
+  imagesArea.querySelector(`.hide-picture-${divNumber}`).style.display = 'none';
+  imagesArea.querySelector(`.picture-${divNumber}`).appendChild(img);
+  imagesArea.querySelector(`.picture-${divNumber}`).appendChild(deleteButton);
+
+  currentReport.images.push(`picture-${divNumber}`);
 
   if (currentReport.images.length === 3) {
     document.getElementById('starCameraBtn').setAttribute('disabled', true);
     document.getElementById('dragAndDropArea').setAttribute('disabled', true);
-    document
-      .getElementById('uploadPictureDesktopInput')
-      .setAttribute('disabled', true);
+    document.getElementById('uploadPictureDesktopInput').setAttribute('disabled', true);
 
     stopCamera();
   }
