@@ -228,7 +228,7 @@ img {
   height: 20px;
 }
 
-/* Question 4 */
+/* Question 5 */
 
 .additional-details__header h1{
   display: inline;
@@ -276,7 +276,6 @@ background: var(--primary-50);
 #displayImagesArea {
   display: flex;
   gap: 20px;
-  /* justify-content: space-around; */
 }
 
 .picture-1,
@@ -287,7 +286,6 @@ background: var(--primary-50);
   justify-content: center;
   width: 101px;
   height: 84px;
-  /* border: 1px solid #ccc; */
 }
 
 .hide-picture-1,
@@ -318,14 +316,7 @@ background: var(--primary-50);
   margin-bottom: 24px;
 }
 
-/* .custom-file-upload {
-  border: solid;
-} */
 
-/* #imagesFirstOutput2 > img {
-  display: grid;
-  grid-template-columns: 1fr;
-} */
 
 @media screen and (min-width: 800px) {
   .breadbrumb-desktop {
