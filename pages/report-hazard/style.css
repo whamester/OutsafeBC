@@ -261,6 +261,19 @@ img {
   margin-bottom: 8px;
 }
 
+.hide-picture-1 img, .hide-picture-2 img, .hide-picture-3 img{
+  color: --neutral-500;
+  width: 25px;
+  height: 24px;
+}
+
+.hide-picture-1, .hide-picture-2, .hide-picture-3{
+  border-radius: 8px;
+border: 1px solid var(--neutral-300);
+background: var(--primary-50);
+}
+
+
 
 #dragAndDropArea,
 .custom-file-upload2 {
