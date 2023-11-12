@@ -649,7 +649,7 @@ const displayImages = (base64File) => {
   let divNumber = -1;
 
   for (let i = 1; i <= 3; i++) {
-    if (currentReport.images.indexOf(`picture-${i}`) === -1) {
+    if (currentReport.images2.indexOf(`picture-${i}`) === -1) {
       divNumber = i;
       break;
     }
@@ -670,12 +670,13 @@ const displayImages = (base64File) => {
     imagesArea.querySelector(`.hide-picture-${divNumber}`).style.display =
       'block';
 
-    const index = currentReport.images.indexOf(`picture-${divNumber}`);
+    const index = currentReport.images2.indexOf(`picture-${divNumber}`);
     if (index !== -1) {
       currentReport.images.splice(index, 1);
+      currentReport.images2.splice(index, 1);
     }
 
-    if (currentReport.images.length < 3) {
+    if (currentReport.images2.length < 3) {
       document.getElementById('starCameraBtn').removeAttribute('disabled');
       document.getElementById('dragAndDropArea').removeAttribute('disabled');
       document
@@ -683,7 +684,7 @@ const displayImages = (base64File) => {
         .removeAttribute('disabled');
     }
 
-    if (currentReport.images.length === 2) {
+    if (currentReport.images2.length === 2) {
       startCamera();
     }
   });
@@ -692,9 +693,10 @@ const displayImages = (base64File) => {
   imagesArea.querySelector(`.picture-${divNumber}`).appendChild(img);
   imagesArea.querySelector(`.picture-${divNumber}`).appendChild(deleteButton);
 
-  currentReport.images.push(`picture-${divNumber}`);
+  currentReport.images2.push(`picture-${divNumber}`);
+  currentReport.images.push(base64File);
 
-  if (currentReport.images.length === 3) {
+  if (currentReport.images2.length === 3) {
     document.getElementById('starCameraBtn').setAttribute('disabled', true);
     document.getElementById('dragAndDropArea').setAttribute('disabled', true);
     document
@@ -712,7 +714,7 @@ enlace.setAttribute('onclick', 'location.href="#review-report"');
 /**
  * Step 6: Show Confirmation
  */
-showConfirmationBtn.addEventListener('click', () => {
+showConfirmationBtn.addEventListener('click', () => {console.log(currentReport);
   locationOutput.innerHTML = `${currentReport.location.address} (${currentReport.location.lat},${currentReport.location.lng})`;
   categoryOutput.innerHTML = currentReport.category.name;
   hazardOptionOutput.innerHTML = currentReport.option.name;
