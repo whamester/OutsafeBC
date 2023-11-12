@@ -190,12 +190,15 @@
             <span class="text-body-1 medium text-neutral-500">(optional)</span>
           </div>
 
-            <div class="form-field">
-              <div class="form-field__input-container">
-                <textarea id="commentInput" rows="7" placeholder="Type here..."></textarea
-                >
-              </div>
+          <div class="form-field">
+            <div class="form-field__input-container">
+              <textarea
+                id="commentInput"
+                rows="7"
+                placeholder="Type here..."
+              ></textarea>
             </div>
+          </div>
 
           <button
             type="button"
@@ -212,7 +215,8 @@
         <section id="upload-photos" class="page section-container">
           <h1>
             Please upload photos to help others see the reported hazard
-            visually. <span class="text-body-1 medium text-neutral-500">(optional)</span>
+            visually.
+            <span class="text-body-1 medium text-neutral-500">(optional)</span>
           </h1>
 
           <div id="upload-photos-desktop-content">
@@ -258,7 +262,7 @@
               <canvas hidden id="canvasArea" width="320" height="240"></canvas>
             </div>
           </div>
-          
+
           <div id="upload-photos-mobile-content">
             <label for="takeMobilePictureBtn" class="custom-file-upload">
               <input
@@ -268,12 +272,21 @@
                 accept="image/*"
                 style="display: none"
               />
-              <!-- TODO// Add icon here -->
-              M Take a picture
-              <span
-                >at the hazard site? Take a picture to add in the report.</span
-              >
+              <div class="main-div-TakePic">
+                <div class="camera-icon">
+                  <img src="../../assets/icons/camera.svg" alt="Camera Icon" />
+                </div>
+                <div class="text-body-1 semibold main-title">
+                  <p>Take a picture</p>
+                </div>
+                <div class="text-body-3 regular">
+                  <span>
+                    At the hazard site? Take a picture to add in the report.
+                  </span>
+                </div>
+              </div>
             </label>
+            <br />
             <label for="uploadPictureMobileInput" class="custom-file-upload2">
               <input
                 type="file"
@@ -281,9 +294,19 @@
                 accept="image/jpeg, image/jpg, image/png"
                 style="display: none"
               />
-              <!-- TODO// Add icon here -->
-              M Upload Files
-              <span>File size limit: 10 MB</span>
+              <div class="main-div-drag-drop-Pic">
+                <div class="plus-icon">
+                  <img src="../../assets/icons/plus.svg" alt="Plus Icon" />
+                </div>
+                <div class="text-body-1 semibold main-title">
+                  <p>Upload Files</p>
+                </div>
+                <div class="text-body-3 regular">
+                  <span>
+                    File size limit: 10 MB
+                  </span>
+                </div>
+              </div>
             </label>
           </div>
 
