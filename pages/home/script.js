@@ -326,6 +326,12 @@ const suggestionOnClick = () => {
 
 const quickFiltersOnClick = async ({ target }) => {
   hazardFilters = [];
+  filterBtn.classList.remove('selected');
+  const hazardFilterCountTag = document.getElementById('hazardFilterCountTag');
+
+  if (hazardFilterCountTag)
+    hazardFilterCountTag.remove();
+
   const quickFilter = target.closest('.quick-filter');
   const categoryId = quickFilter.dataset.categoryId;
 
