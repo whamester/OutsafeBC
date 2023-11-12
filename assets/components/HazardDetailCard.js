@@ -208,26 +208,27 @@ class HazardDetailCard extends ReportCard {
     divOuter.setAttribute('class', `report-card__outer`);
     let divInner = document.createElement('div');
     divInner.setAttribute('class', `report-card__inner`);
+    const icon = this.settings?.detail;
     divInner.innerHTML = `
           <div class="report-card__top-controls">
-            <div class="circle-border" id="reportCloseBtn">
+            <div class="circle-border pointer" id="reportCloseBtn">
               <i
                 class="icon-close-square"
                 style="background-color: var(--neutral-500)"
               ></i>
             </div>
-            <div class="circle-border">
+            <div class="circle-border pointer">
               <i class="icon-share" style="background-color: var(--neutral-500)"></i>
             </div>
           </div>
           <div class="report-card__heading">
             <span
               class="btn__icon report-card__heading__icon"
-              style="background-color: ${this.settings.iconBackround}"
+              style="background-color: ${icon.iconBackround}; padding: 0.2rem;"
             >
               <i
-                class="${this.settings.icon}-outline"
-                style="width: 24px; height: 24px; background-color: white"
+                class="${icon.icon}"
+                style="width: 1.5rem; height: 1.5rem; background-color: var(--white)"
               ></i>
             </span>
             <p class="text-body-1 semibold">${this.hazard}</p>
