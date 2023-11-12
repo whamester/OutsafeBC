@@ -287,10 +287,10 @@ const getReportApiCall = async (lat, lng, size=1000, cursor = 0) => {
   const res = await apiRequest(url, { method: 'GET' });
   reports = res.data?.results
   hazardCardParams.position = position;
-  geoMap.createLayerGroups(reports, markerParams);
 
+  geoMap.createLayerGroups(reports, markerParams);
   if (hazardFilters.length > 0) {
-    geoMap.filterMarker(hazardFilters);
+    geoMap.filterMarker(categoryFilters, hazardFilters);
   } else if (categoryFilters.length > 0) {
     geoMap.filterMarker(categoryFilters);
   }
