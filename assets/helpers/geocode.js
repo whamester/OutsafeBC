@@ -8,7 +8,11 @@ const geocode = async (params, type) => {
 
   if (type === "autocomplete") {
     const encodedSearchTerm = encodeURIComponent(params?.searchTerm);
-    url += `autocomplete?text=${ encodedSearchTerm }&apiKey=${ API_GEOAPIFY_KEY }`;
+    // filter location within BC, Canada
+    // https://apidocs.geoapify.com/docs/geocoding/forward-geocoding/#about
+    // https://gis.stackexchange.com/questions/154740/lat-and-long-extents-of-canadian-provinces
+    const filter = encodeURIComponent(`rect:-139.06,48.30,-114.03,60.00`);
+    url += `autocomplete?text=${ encodedSearchTerm }&apiKey=${ API_GEOAPIFY_KEY }&filter=${ filter }`;
   } else if (type === "geocode") {
     const text = encodeURIComponent(params?.text);
     url += `search?text=${ text }&apiKey=${ API_GEOAPIFY_KEY }`;
