@@ -271,7 +271,7 @@ const closeSearchSuggestion = (e) => {
   document.querySelector('.sb-categories-wrapper').style.display = 'flex';
 };
 
-const getReportApiCall = async (lat, lng, categoryFilters = [], hazardFilters = [],size=1000, cursor = 0) => {
+const getReportApiCall = async (lat, lng, size=1000, cursor = 0) => {
   // clear previous markers
   geoMap.mapLayers.clearLayers();
   // clear previous reports
@@ -282,16 +282,18 @@ const getReportApiCall = async (lat, lng, categoryFilters = [], hazardFilters = 
     positionChange ? positionSecondary.lat : lat
   }&lng=${
     positionChange ? positionSecondary.lng : lng
-  }${
-    categoryFilters.length ? `&category_ids=${categoryFilters.join(',')}` : ''
-  }${
-    hazardFilters.length ? `&hazard_option_ids=${hazardFilters.join(',')}` : ''
   }`;
 
   const res = await apiRequest(url, { method: 'GET' });
   reports = res.data?.results
-  hazardCardParams['position'] = position;
+  hazardCardParams.position = position;
   geoMap.createLayerGroups(reports, markerParams);
+
+  if (hazardFilters.length > 0) {
+    geoMap.filterMarker(hazardFilters);
+  } else if (categoryFilters.length > 0) {
+    geoMap.filterMarker(categoryFilters);
+  }
 };
 
 const cardsOnClick = () => {
@@ -562,6 +564,6 @@ const clearHazardFilter = async () => {
   });
 
   showReportsBtnStatus(0);
-  geoMap.filterMarker();
+  geoMap.filterMarker([], hazardFilters);
   if (document.querySelector('.sb-cards')) injectCards();
 }
