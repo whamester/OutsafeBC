@@ -273,4 +273,8 @@ img {
   #backButton {
     display: none;
   }
+
+  header {
+    display: block;
+  }
 }
