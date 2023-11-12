@@ -141,10 +141,7 @@ window.onload = async function () {
     if (!idReport) {
       return;
     }
-
-    console.log(idReport)
     hazardDetail = await getHazardDetail(idReport);
-    console.log(hazardDetail)
 
     if (focusMarker || openDetail) {
       const makerExists = geoMap.checkMarkerOnMap(hazardDetail);
@@ -191,7 +188,6 @@ window.onload = async function () {
   }
 };
 
-
 const toggleFilterModal = async (flag) => {
   const filterModal = document.querySelector('.modal-filter');
   filterModal.classList.toggle("hidden", flag);
@@ -204,7 +200,7 @@ const toggleFilterModal = async (flag) => {
 
   if(!flag) {
     filterModal.querySelector(".modal-filter--wrapper-outer").scrollTop = 0;
-    showReportsBtnStatus(hazardFilters.length);
+    showReportsBtnStatus(hazardShowCount);
   }
 
   showReportsBtn?.addEventListener('click', hazardFilterApply, false);
@@ -350,9 +346,7 @@ const injectCards = () => {
   ]);
 
   document.querySelectorAll('.view-details')?.forEach((detailBtn) => {
-    const idx = detailBtn.dataset.idx;
     detailBtn.addEventListener('click', async ({target}) => {
-      console.log(target);
       const hazardID = target.dataset.id;
       const currentReport = await getHazardReportData(hazardID);
 
@@ -466,7 +460,7 @@ async function getHazardReportData(id) {
 }
 
 // Show hazard report
-function showHazardDetails(hazardReport) {
+const showHazardDetails = (hazardReport) => {
   try {
     hazardReportPopulated = hazardReport.hazardCardContent();
 
