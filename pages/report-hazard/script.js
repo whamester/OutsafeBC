@@ -995,50 +995,50 @@ hazardUploadPhotosNavEl.addEventListener('click', () => {
 });
 
 //Delete pictures
-var displayImagesArea = document.getElementById('displayImagesArea');
-var images = displayImagesArea.getElementsByTagName('img');
-const delete1Element = document.getElementById('delete1');
+// var displayImagesArea = document.getElementById('displayImagesArea');
+// var images = displayImagesArea.getElementsByTagName('img');
+// const delete1Element = document.getElementById('delete1');
 
-delete1Element.addEventListener('click', () => {
-  var firstImage = images[0];
-  var noImageText = document.createElement('img');
-  displayImagesArea.replaceChild(noImageText, firstImage);
+// delete1Element.addEventListener('click', () => {
+//   var firstImage = images[0];
+//   var noImageText = document.createElement('img');
+//   displayImagesArea.replaceChild(noImageText, firstImage);
 
-  var index = 0;
-  if (index !== -1) {
-    currentReport.images[0] = null;
-  }
-  document.getElementById('delete1').style.display = 'none';
-});
+//   var index = 0;
+//   if (index !== -1) {
+//     currentReport.images[0] = null;
+//   }
+//   document.getElementById('delete1').style.display = 'none';
+// });
 
-const delete2Element = document.getElementById('delete2');
+// const delete2Element = document.getElementById('delete2');
 
-delete2Element.addEventListener('click', () => {
-  var secondImage = images[1];
-  var noImageText = document.createElement('img');
-  displayImagesArea.replaceChild(noImageText, secondImage);
+// delete2Element.addEventListener('click', () => {
+//   var secondImage = images[1];
+//   var noImageText = document.createElement('img');
+//   displayImagesArea.replaceChild(noImageText, secondImage);
 
-  var index = 1;
-  if (index !== -1) {
-    currentReport.images[1] = null;
-  }
-  document.getElementById('delete2').style.display = 'none';
-});
+//   var index = 1;
+//   if (index !== -1) {
+//     currentReport.images[1] = null;
+//   }
+//   document.getElementById('delete2').style.display = 'none';
+// });
 
-const delete3Element = document.getElementById('delete3');
+// const delete3Element = document.getElementById('delete3');
 
-delete3Element.addEventListener('click', () => {
-  var thirdImage = images[2];
+// delete3Element.addEventListener('click', () => {
+//   var thirdImage = images[2];
 
-  var noImageText = document.createElement('img');
-  displayImagesArea.replaceChild(noImageText, thirdImage);
+//   var noImageText = document.createElement('img');
+//   displayImagesArea.replaceChild(noImageText, thirdImage);
 
-  var index = 2;
-  if (index !== -1) {
-    currentReport.images[2] = null;
-  }
-  document.getElementById('delete3').style.display = 'none';
-});
+//   var index = 2;
+//   if (index !== -1) {
+//     currentReport.images[2] = null;
+//   }
+//   document.getElementById('delete3').style.display = 'none';
+// });
 
 /**
  *  Back Button
