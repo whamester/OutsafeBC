@@ -665,8 +665,8 @@ const displayImages = (base64File) => {
 
   const img = document.createElement('img');
   img.setAttribute('src', base64File);
-  img.style.width = '200px';
-  img.style.height = '200px';
+  img.style.width = 'auto';
+  img.style.height = '84px';
 
   const deleteButton = document.createElement('button');
   deleteButton.type = 'button';
