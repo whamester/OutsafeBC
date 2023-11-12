@@ -144,7 +144,17 @@ window.onload = async function () {
     hazardDetail = await getHazardDetail(idReport);
 
     if (focusMarker || openDetail) {
-      geoMap.createLayerGroups([hazardDetail], markerParams);
+      //TODO: Check if the marker is alreaady on the map, if it is, don't add the layer
+      geoMap.createLayerGroups(
+        [
+          {
+            ...hazardDetail,
+            hazardCategory: hazardDetail.category,
+            hazard: hazardDetail.option,
+          },
+        ],
+        markerParams
+      );
       flyTo(hazardDetail.location?.lat, hazardDetail.location?.lng);
     }
 
@@ -363,7 +373,7 @@ const watchGeoLocationSuccess = async ({ coords }) => {
   // If there is a report id in the query params and the focus param is set, don't pan to the user's location
   // but to the report's location
   if (flyToTrigger && !(!!idReport && (!!focusMarker || !!openDetail))) {
-    flyTo(lat, lng);
+    // flyTo(lat, lng);
     flyToTrigger = false;
   }
 };
