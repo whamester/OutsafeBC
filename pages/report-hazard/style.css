@@ -351,6 +351,9 @@ img {
   height: 24px;
 }
 
+.hide-picture-1, img{
+  border-radius: 8px;
+}
 /* to display the button at the bottom in the center */
 /* .delete-button {
   position: absolute;
