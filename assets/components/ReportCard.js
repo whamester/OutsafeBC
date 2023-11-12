@@ -12,14 +12,16 @@ class MyReportCard extends ReportCard {
     divOuter.setAttribute('class', `report-card__outer`);
     let divInner = document.createElement('div');
     divInner.setAttribute('class', `report-card__inner`);
+
+    const icon = this.settings?.detail;
     divInner.innerHTML = `
 		<div class="report-card__heading">
 			<span class="btn__icon report-card__heading__icon" style="background-color: ${
-        this.settings.iconBackround
+        icon.iconBackround
       }">
 				<i class="${
-          this.settings.icon
-        }" style="width:24px; height:24px; background-color: white"></i>
+          icon.icon
+        }" style="width:1.5rem; height:1.5rem; background-color: white"></i>
 			</span>
         	<p class="text-body-1 semibold">${this.hazard}</p>
 		</div>

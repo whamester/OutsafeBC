@@ -144,7 +144,17 @@ window.onload = async function () {
     hazardDetail = await getHazardDetail(idReport);
 
     if (focusMarker || openDetail) {
-      geoMap.createLayerGroups([hazardDetail], markerParams);
+      //TODO: Check if the marker is alreaady on the map, if it is, don't add the layer
+      geoMap.createLayerGroups(
+        [
+          {
+            ...hazardDetail,
+            hazardCategory: hazardDetail.category,
+            hazard: hazardDetail.option,
+          },
+        ],
+        markerParams
+      );
       flyTo(hazardDetail.location?.lat, hazardDetail.location?.lng);
     }
 

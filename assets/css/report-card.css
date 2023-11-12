@@ -1,85 +1,91 @@
 .report-card__outer {
-	border-radius: 0.75rem;
-	border: 1px solid var(--neutral-300, #d0d5dd);
-	background: var(--white, #fff);
-	box-shadow: 0px 2px 1px 0px rgba(0, 0, 0, 0.05);
+  border-radius: 0.75rem;
+  border: 1px solid var(--neutral-300, #d0d5dd);
+  background: var(--white, #fff);
+  box-shadow: 0px 2px 1px 0px rgba(0, 0, 0, 0.05);
 }
 
 .report-card__inner {
-	margin: 1rem;
+  margin: 1rem;
 }
 
 .report-card__heading {
-	display: flex;
-	align-items: center;
-	gap: 0.75rem;
-	flex: 1 0 0;
-	padding: 0.5rem;
-	border-radius: 0.5rem;
-	background: var(--neutral-100, #f0f2f5);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 1 0 0;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  background: var(--neutral-100, #f0f2f5);
 }
 
 .report-card__heading__icon {
-	background: var(--error-500);
-	width: 24px;
-	height: 24px;
+  background: var(--error-500);
+  width: 24px;
+  height: 24px;
 }
 
 .report-card__top-info {
-	display: flex;
-	flex-direction: column;
-	gap: 1.5rem;
-	margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
 }
 
 .report-card__details {
-	display: flex;
-		align-items: center;
-	gap: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .report-card__date_time {
-	display: flex;
-	justify-content: space-between;
-	width: 95%;
+  display: flex;
+  justify-content: space-between;
+  width: 95%;
 }
 
 .report-card__spacer-line {
-	margin: 1rem 0 1rem;
-	border-bottom: 1px solid var(--neutral-300, #d0d5dd);
+  margin: 1rem 0 1rem;
+  border-bottom: 1px solid var(--neutral-300, #d0d5dd);
 }
 
 .report-card__my-reports-buttons {
-	display: flex;
-	justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
 }
 
 #report-card__image-gallery {
-	max-width: 100%;
+  max-width: 100%;
 }
 
 #report-card__picture-container {
-	display: flex;
-	gap: 0.75rem;
-	overflow: scroll;
+  display: flex;
+  gap: 0.75rem;
+  overflow: scroll;
 }
 
 #report-card__picture-container img {
-	height: 5.125rem;
-	border-radius: 0.25rem;
+  height: 5.125rem;
+  border-radius: 0.25rem;
 }
 
 .btn-tertiary {
-	background: none;
-	border: none;
+  background: none;
+  border: none;
 }
 
 .report-card__location-text {
-	overflow: hidden;
-	white-space: nowrap;
-	text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 i {
-	flex-shrink: 0;
+  flex-shrink: 0;
+}
+
+i.icon-edit {
+  width: 1.2rem;
+  height: 1.2rem;
+  background-color: var(--neutral-600);
 }
