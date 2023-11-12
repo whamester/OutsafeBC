@@ -662,7 +662,7 @@ const displayImages = (base64File) => {
 
   const deleteButton = document.createElement('button');
   deleteButton.type = 'button';
-  deleteButton.innerText = 'X';
+  deleteButton.classList.add('delete-button');
   deleteButton.addEventListener('click', function () {
     imagesArea.querySelector(`.picture-${divNumber}`).removeChild(img);
     imagesArea.querySelector(`.picture-${divNumber}`).removeChild(deleteButton);
@@ -689,6 +689,11 @@ const displayImages = (base64File) => {
     }
   });
 
+  deleteButton.style.background = `url('../../assets/icons/close.svg')`;
+  deleteButton.style.border = 'none';
+  deleteButton.style.width = '24px';
+  deleteButton.style.height = '24px';
+
   imagesArea.querySelector(`.hide-picture-${divNumber}`).style.display = 'none';
   imagesArea.querySelector(`.picture-${divNumber}`).appendChild(img);
   imagesArea.querySelector(`.picture-${divNumber}`).appendChild(deleteButton);
@@ -706,6 +711,7 @@ const displayImages = (base64File) => {
     stopCamera();
   }
 };
+
 
 var enlace = document.getElementById('showConfirmationBtn');
 enlace.setAttribute('onclick', 'location.href="#review-report"');
