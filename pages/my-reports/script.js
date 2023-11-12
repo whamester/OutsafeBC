@@ -10,7 +10,6 @@ import AlertPopup from '../../assets/components/AlertPopup.js';
 import { onToggle } from '../../assets/components/ToggleSwitch.js';
 import ReportsEmpty from '../../assets/components/ReportsEmpty.js';
 
-
 // Variables
 const user = getUserSession();
 let userID = user?.id;
@@ -94,12 +93,7 @@ async function displayRecentReports() {
       );
       recentReports.appendChild(hazardReport.reportContent());
 
-      document.querySelectorAll('[id^=ts]').forEach((toggleSwitch) => {
-        toggleSwitch.addEventListener('change', (e) => {
-          onToggle(e);
-          // TODO: API call
-        });
-      });
+      toggleSwitchEventlistener();
 
       loadIcons();
     }
@@ -144,10 +138,49 @@ async function displayOlderReports() {
         report.hazardCategory.settings
       );
       olderReports.appendChild(hazardReport.reportContent());
+
       loadIcons();
     }
+    toggleSwitchEventlistener();
   }
   olderReportClicked = true;
 }
 
-// Update status
+// Toggle switch eventlistener
+function toggleSwitchEventlistener() {
+  document.querySelectorAll('[id^=ts]').forEach((toggleSwitch) => {
+    toggleSwitch.addEventListener('change', (e) => {
+      onToggle(e);
+      console.log(e.target.id);
+      // TODO: API call
+    });
+  });
+}
+
+// Update status of hazard report
+async function updateReportStatus(reportID, activeState) {
+  try {
+    const response = await fetch(
+      `${API_URL}/hazard-report-status?id=${reportID}&is_active=${activeState}`
+    );
+    const { error, message } = await response.json();
+
+    if (!!error) {
+      alert.show(`${error}`, AlertPopup.error);
+      if (!activeState) {
+        activeState = true;
+      } else {
+        activeState = false;
+      }
+    } else {
+      alert.show(`${message}`, AlertPopup.success);
+    }
+  } catch (error) {
+    alert.show('Unable to update status at the moment', AlertPopup.error);
+    if (!activeState) {
+      activeState = true;
+    } else {
+      activeState = false;
+    }
+  }
+}
