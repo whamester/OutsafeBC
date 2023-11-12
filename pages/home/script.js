@@ -326,6 +326,7 @@ const suggestionOnClick = () => {
 
 const quickFiltersOnClick = async ({ target }) => {
   hazardFilters = [];
+  hazardTempFilters = [];
   filterBtn.classList.remove('selected');
   const hazardFilterCountTag = document.getElementById('hazardFilterCountTag');
 
