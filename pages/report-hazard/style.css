@@ -349,9 +349,12 @@ img {
   border: none;
   width: 24px;
   height: 24px;
-  background-color: aqua;
 }
 
+/* .delete-button img{
+  width: 34px;
+  height: 34px;
+} */
 
 @media screen and (min-width: 800px) {
   .breadbrumb-desktop {

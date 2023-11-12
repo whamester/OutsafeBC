@@ -689,10 +689,10 @@ const displayImages = (base64File) => {
     }
   });
 
-  deleteButton.style.background = `url('../../assets/icons/close.svg')`;
+  deleteButton.style.background = `url('../../assets/icons/remove.svg') no-repeat center`;
   deleteButton.style.border = 'none';
-  deleteButton.style.width = '24px';
-  deleteButton.style.height = '24px';
+  // deleteButton.style.width = '24px';
+  // deleteButton.style.height = '24px';
 
   imagesArea.querySelector(`.hide-picture-${divNumber}`).style.display = 'none';
   imagesArea.querySelector(`.picture-${divNumber}`).appendChild(img);
