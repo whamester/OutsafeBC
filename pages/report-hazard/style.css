@@ -338,6 +338,21 @@ img {
   margin-bottom: 24px;
 }
 
+.picture-1, .picture-2, .picture-3 {
+  position: relative;
+}
+
+.delete-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  border: none;
+  width: 24px;
+  height: 24px;
+  background-color: aqua;
+}
+
+
 @media screen and (min-width: 800px) {
   .breadbrumb-desktop {
     display: block;
