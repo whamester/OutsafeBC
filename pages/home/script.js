@@ -205,6 +205,22 @@ const toggleFilterModal = async (flag) => {
 
   showReportsBtn?.addEventListener('click', hazardFilterApply, false);
   clearReportsBtn?.addEventListener('click', clearHazardFilter, false);
+
+  let countTag = filterBtn.querySelector("#hazardFilterCountTag");
+  filterBtn.classList.remove('selected');
+
+  if (!countTag) {
+    countTag = document.createElement('p');
+  }
+  
+  if (hazardFilters.length > 0){
+    countTag.innerText = hazardFilters.length;
+    filterBtn.classList.add('selected');
+    countTag.setAttribute('id', 'hazardFilterCountTag');
+    filterBtn.appendChild(countTag)
+  } else {
+    countTag.remove();
+  }
 };
 
 const markerParams =  {

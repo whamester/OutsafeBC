@@ -34,7 +34,8 @@ const SearchBar = ({ categories }) => {
                   class="sb-search-box--input"
                   placeholder="Search location"/>
               </div>
-              <button 
+              <button
+                id="filterBtn"
                 class="sb-search-box--filter-btn">
                 <i class="icon-filters sb-search-box--filter-btn--icon"></i>
               </button>
