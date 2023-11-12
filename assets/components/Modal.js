@@ -59,6 +59,7 @@ class Modal {
 		descriptionElement.innerHTML = description
 
 		const actionsElement = document.getElementById('modal-actions')
+
 		if (typeof actions === 'string') {
 			actionsElement.innerHTML = actions
 		}

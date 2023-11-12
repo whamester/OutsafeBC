@@ -28,6 +28,9 @@ class HazardReport extends ReportForm {
       email: null,
       name: null,
     };
+
+    this.flagged_as_fake = false;
+    this.enable_reaction = false;
   }
 }
 

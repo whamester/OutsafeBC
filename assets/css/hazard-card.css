@@ -18,8 +18,7 @@
 
 .sb-cards {
   margin: auto;
-  padding-left: 16px;
-  max-width: 80rem;
+  padding-left: var(--padding-x);
   overflow: hidden;
 }
 

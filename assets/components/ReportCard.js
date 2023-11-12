@@ -12,14 +12,16 @@ class MyReportCard extends ReportCard {
     divOuter.setAttribute('class', `report-card__outer`);
     let divInner = document.createElement('div');
     divInner.setAttribute('class', `report-card__inner`);
+
+    const icon = this.settings?.detail;
     divInner.innerHTML = `
 		<div class="report-card__heading">
 			<span class="btn__icon report-card__heading__icon" style="background-color: ${
-        this.settings.iconBackround
+        icon.iconBackround
       }">
 				<i class="${
-          this.settings.icon
-        }" style="width:24px; height:24px; background-color: white"></i>
+          icon.icon
+        }" style="width:1.5rem; height:1.5rem; background-color: white"></i>
 			</span>
         	<p class="text-body-1 semibold">${this.hazard}</p>
 		</div>
@@ -27,7 +29,7 @@ class MyReportCard extends ReportCard {
 		<div class="report-card__top-info">
 			<div class="report-card__details">
 				<i class="icon-location-pin-outline" style="background-color: var(--neutral-400)"></i>
-				<p class="text-body-2 regular">${this.location}</p>
+				<p class="text-body-2 regular report-card__location-text">${this.location}</p>
 			</div>
 
 			<div class="report-card__date_time">

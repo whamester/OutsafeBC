@@ -1,3 +1,4 @@
+import { API_URL } from '../../constants.js';
 //Components
 import Header from '../../assets/components/Header.js';
 import GeoMap from '../../assets/components/GeoMap.js';
@@ -8,6 +9,7 @@ import Modal from '../../assets/components/Modal.js';
 import HazardCard from '../../assets/components/HazardCard.js';
 import ModalFilter from '../../assets/components/ModalFilter.js';
 import AlertPopup from '../../assets/components/AlertPopup.js';
+import HazardDetailCard from '../../assets/components/HazardDetailCard.js';
 //Helpers
 import injectHTML from '../../assets/helpers/inject-html.js';
 import injectHeader from '../../assets/helpers/inject-header.js';
@@ -15,8 +17,8 @@ import apiRequest from '../../assets/helpers/api-request.js';
 import debounce from '../../assets/helpers/debounce.js';
 import geocode from '../../assets/helpers/geocode.js';
 import loadIcons from '../../assets/helpers/load-icons.js';
-import HazardDetailCard from '../../assets/components/HazardDetailCard.js';
 import geolocationDistance from '../../assets/helpers/geolocation-distance.js';
+import { getUserSession } from '../../assets/helpers/storage.js';
 //Models
 import Map from '../../assets/models/Map.js';
 import HazardReport from '../../assets/models/HazardReport.js';
@@ -47,6 +49,7 @@ let hazardTempFilters = [];
 let hazardFilters = [];
 let hazardShowCount = 0;
 let flyToTrigger = true;
+
 const alert = new AlertPopup();
 
 let mapOptions = {
@@ -61,6 +64,9 @@ let hazardReportPopulated;
 const searchBarParams = {
   categories: [],
 };
+
+const user = getUserSession();
+const root = document.getElementById('root');
 
 /**
  * Page Init
@@ -81,6 +87,14 @@ window.onload = async function () {
       { func: SearchBar, args: searchBarParams },
       { func: ModalFilter, args: searchBarParams.categories },
     ]);
+
+    document.getElementById('reportHazardBtn').addEventListener('click', () => {
+      if (!user) {
+        showLoginModal();
+      } else {
+        window.location = '/pages/report-hazard';
+      }
+    });
 
     document
       .querySelector('.sb-search-box--filter-btn')
@@ -127,41 +141,43 @@ window.onload = async function () {
     if (!idReport) {
       return;
     }
-    const res = await apiRequest(`hazard-report?id=${idReport}`);
-    hazardDetail = res.data;
+
+    console.log(idReport)
+    hazardDetail = await getHazardDetail(idReport);
+    console.log(hazardDetail)
 
     if (focusMarker || openDetail) {
       const makerExists = geoMap.checkMarkerOnMap(hazardDetail);
 
       // marker currently doesnot exists on the map
-      if (!makerExists) {
-        reports.push(hazardDetail);
-        const markerParams =  {
-          event: 'click',
-          func: async (_, lat, lng) => {
-            if (hazardReportPopulated && hazardReportPopulated.parentNode) {
-              hazardReportPopulated.parentNode.removeChild(hazardReportPopulated);
-            }
-            flyTo(lat, lng);
-            await showHazardDetails(reports.length - 1);
-          }
-        };
+      if (!makerExists)
         geoMap.createLayerGroups([hazardDetail], markerParams);
-      }
       
       flyTo(hazardDetail.location?.lat, hazardDetail.location?.lng);
     }
 
     if (openDetail) {
-      //TODO: Open pull-up card
-      //Remove temporary modal
+      const data = new HazardDetailCard(
+        hazardDetail.id,
+        hazardDetail.category.name,
+        hazardDetail.option.name,
+        hazardDetail.location.address,
+        hazardDetail.created_at,
+        hazardDetail.images,
+        hazardDetail.comment,
+        hazardDetail.category.settings,
+        geolocationDistance(
+          hazardDetail.location.lat,
+          hazardDetail.location.lng,
+          position.lat,
+          position.lng
+        ),
+        hazardDetail.user,
+        hazardDetail.flagged_as_fake,
+        hazardDetail.enable_reaction
+      );
 
-      const modal = new Modal();
-      modal.show({
-        title: 'Hazard Detail',
-        description: `${hazardDetail.location.address}`,
-        enableOverlayClickClose: true,
-      });
+      showHazardDetails(data);
 
       return;
     }
@@ -197,13 +213,35 @@ const toggleFilterModal = async (flag) => {
 
 const markerParams =  {
   event: 'click',
-  func: async (idx, lat, lng) => {
+  func: async (hazardID) => {
     if (hazardReportPopulated && hazardReportPopulated.parentNode) {
       hazardReportPopulated.parentNode.removeChild(hazardReportPopulated);
     }
-    flyTo(lat, lng);
-    await showHazardDetails(idx);
-  }
+    
+    const currentReport = await getHazardReportData(hazardID);
+
+    let hazardReport = new HazardDetailCard(
+      currentReport.id,
+      currentReport.hazardCategory.name,
+      currentReport.hazard.name,
+      currentReport.location.address,
+      currentReport.created_at,
+      currentReport.images,
+      currentReport.comment,
+      currentReport.hazardCategory.settings,
+      geolocationDistance(
+        currentReport.location.lat,
+        currentReport.location.lng,
+        position.lat,
+        position.lng
+      ),
+      currentReport.user,
+      currentReport.flagged_as_fake,
+      currentReport.enable_reaction
+    );
+
+    showHazardDetails(hazardReport);
+  },
 };
 
 const flyTo = (lat, lng) => {
@@ -296,7 +334,7 @@ const quickFiltersOnClick = async ({ target }) => {
 };
 
 const injectCards = () => {
-  document.querySelector('.btn-report-hazard').style.display = 'none';
+  document.querySelector('#reportHazardBtn').style.display = 'none';
   document.querySelector('.sb-cards')?.remove();
 
   if (categoryFilters.length > 0) {
@@ -311,10 +349,36 @@ const injectCards = () => {
     { func: HazardCard, args: hazardCardParams, target: '#hazard-comp' },
   ]);
 
-  document.querySelectorAll(".view-details")?.forEach(detailBtn => {
-    const idx = detailBtn.dataset.idx
-    detailBtn.addEventListener('click', () => showHazardDetails(idx));
-  })
+  document.querySelectorAll('.view-details')?.forEach((detailBtn) => {
+    const idx = detailBtn.dataset.idx;
+    detailBtn.addEventListener('click', async ({target}) => {
+      console.log(target);
+      const hazardID = target.dataset.id;
+      const currentReport = await getHazardReportData(hazardID);
+
+      let hazardReport = new HazardDetailCard(
+        currentReport.id,
+        currentReport.hazardCategory.name,
+        currentReport.hazard.name,
+        currentReport.location.address,
+        currentReport.created_at,
+        currentReport.images,
+        currentReport.comment,
+        currentReport.hazardCategory.settings,
+        geolocationDistance(
+          currentReport.location.lat,
+          currentReport.location.lng,
+          position.lat,
+          position.lng
+        ),
+        currentReport.user,
+        currentReport.flagged_as_fake,
+        currentReport.enable_reaction
+      );
+
+      showHazardDetails(hazardReport);
+    });
+  });
 
   loadIcons();
   cardsOnClick();
@@ -380,32 +444,39 @@ const onSearchInput = debounce(async ({ target }) => {
   boxCategories.style.display = 'none';
 });
 
-const body = document.getElementById('home-body');
-
-const showHazardDetails = async(idx) => {
+// Get hazard report from endpoint
+async function getHazardReportData(id) {
   try {
-    let hazardReport = new HazardDetailCard(
-      reports[idx].id,
-      reports[idx].hazardCategory.name,
-      reports[idx].hazard.name,
-      reports[idx].location.address,
-      reports[idx].created_at,
-      reports[idx].images,
-      reports[idx].comment,
-      reports[idx].hazardCategory.settings,
-      geolocationDistance(
-        reports[idx].location.lat,
-        reports[idx].location.lng,
-        position.lat,
-        position.lng
-      ),
-      reports[idx].user
+    let endpointURL;
+    if (!user) {
+      endpointURL = `/hazard-report?id=${id}`;
+    } else {
+      endpointURL = `/hazard-report?id=${id}&user_id=${user.id}`;
+    }
+    const response = await fetch(API_URL + endpointURL);
+    const result = await response.json();
+    return result.data;
+  } catch (error) {
+    alert.show(
+      'Reports unavailable at the moment, please try again later or contact support',
+      AlertPopup.error
     );
-    // Create a new hazardReportPopulated
+    return null;
+  }
+}
+
+// Show hazard report
+function showHazardDetails(hazardReport) {
+  try {
     hazardReportPopulated = hazardReport.hazardCardContent();
-    body.insertBefore(hazardReportPopulated, body.childNodes[1]);
+
+    root.insertBefore(
+      hazardReportPopulated,
+      document.getElementById('hazard-comp')
+    );
+
     loadIcons();
-    
+
     // Close report card
     const reportCloseBtn = document.getElementById('reportCloseBtn');
     reportCloseBtn.addEventListener('click', () => {

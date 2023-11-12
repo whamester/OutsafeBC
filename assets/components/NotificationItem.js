@@ -1,10 +1,12 @@
+import DateFormat from '../models/DateFormat.js';
+
 class NotificationItem {
   constructor(report) {
     this.report = report;
   }
 
   createItem = () => {
-    const settings = this.report.hazardCategory.settings;
+    const settings = this.report.hazardCategory.settings.detail;
     return `
             <div class="notification-modal">
               <span class="notification__icon" style="background:${
@@ -22,9 +24,11 @@ class NotificationItem {
                     <span> has been reported at </span> 
                     <strong> ${this.report.location.address} </strong>
                   </span>
-                  <span> ${new Date(
-                    this.report.created_at
-                  ).toLocaleString()} <span>
+                  <span> ${`${DateFormat.getDate(
+                    new Date(this.report.created_at)
+                  )} • ${DateFormat.getTime(
+                    new Date(this.report.created_at)
+                  )}`} <span>
                 </div>
                 <button class="btn btn-secondary notification__body__button">View details</button>
               </div>

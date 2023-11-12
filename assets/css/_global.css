@@ -8,6 +8,7 @@
 @import url(./input.css);
 @import url(./badge.css);
 @import url(./checkbox.css);
+@import url(./message.css);
 
 @import url(./header.css);
 
@@ -38,10 +39,8 @@ body {
 main {
   overflow-y: auto;
   height: calc(100vh - 60px);
-  /* 100vh minus the header height */
-  max-width: 80rem;
-  margin: auto;
-  /* MAX WIDTH */
+  padding-left: var(--padding-x);
+  padding-right: var(--padding-x);
 }
 
 #root {
