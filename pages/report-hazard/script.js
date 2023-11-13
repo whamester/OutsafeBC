@@ -658,16 +658,16 @@ const displayImages = (base64File) => {
   const img = document.createElement('img');
   img.setAttribute('src', base64File);
 
-  img.addEventListener('load', function() {
+  img.addEventListener('load', function () {
     console.log('Original Width:', img.naturalWidth);
     console.log('Original Height:', img.naturalHeight);
-    if(img.naturalWidth < img.naturalHeight){
+    if (img.naturalWidth < img.naturalHeight) {
       img.style.width = 'auto';
       img.style.height = '84px';
-    }else if(img.naturalWidth > img.naturalHeight){
+    } else if (img.naturalWidth > img.naturalHeight) {
       img.style.width = '101px';
       img.style.height = 'auto';
-    }else{
+    } else {
       img.style.width = 'auto';
       img.style.height = '84px';
     }
@@ -682,6 +682,14 @@ const displayImages = (base64File) => {
 
     imagesArea.querySelector(`.hide-picture-${divNumber}`).style.display =
       'block';
+
+    const hidePicture = imagesArea.querySelector(`.hide-picture-${divNumber}`);
+    hidePicture.style.display = 'block';
+    hidePicture.style.display = 'flex';
+    hidePicture.style.alignItems = 'center';
+    hidePicture.style.justifyContent = 'center';
+    hidePicture.style.width = '100%';
+    hidePicture.style.height = '100%';
 
     const index = currentReport.images2.indexOf(`picture-${divNumber}`);
     if (index !== -1) {
@@ -723,8 +731,6 @@ const displayImages = (base64File) => {
   }
 };
 
-
-
 var enlace = document.getElementById('showConfirmationBtn');
 enlace.setAttribute('onclick', 'location.href="#review-report"');
 //#endregion
@@ -732,7 +738,8 @@ enlace.setAttribute('onclick', 'location.href="#review-report"');
 /**
  * Step 6: Show Confirmation
  */
-showConfirmationBtn.addEventListener('click', () => {console.log(currentReport);
+showConfirmationBtn.addEventListener('click', () => {
+  console.log(currentReport);
   locationOutput.innerHTML = `${currentReport.location.address} (${currentReport.location.lat},${currentReport.location.lng})`;
   categoryOutput.innerHTML = currentReport.category.name;
   hazardOptionOutput.innerHTML = currentReport.option.name;
