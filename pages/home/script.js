@@ -5,8 +5,7 @@ import GeoMap from '../../assets/components/GeoMap.js';
 import SearchBar, {
   SearchBarSuggestionCard,
 } from '../../assets/components/SearchBar.js';
-import Modal from '../../assets/components/Modal.js';
-import HazardCard from '../../assets/components/HazardCard.js';
+import HazardCardLayout from '../../assets/components/HazardCardLayout.js';
 import ModalFilter from '../../assets/components/ModalFilter.js';
 import AlertPopup from '../../assets/components/AlertPopup.js';
 import HazardDetailCard from '../../assets/components/HazardDetailCard.js';
@@ -384,7 +383,7 @@ const injectCards = () => {
   }
 
   injectHTML([
-    { func: HazardCard, args: hazardCardParams, target: '#hazard-comp' },
+    { func: HazardCardLayout, args: hazardCardParams, target: '#hazard-comp' },
   ]);
 
   document.querySelectorAll('.view-details')?.forEach((detailBtn) => {

@@ -1,4 +1,4 @@
-import ReportCard from '../helpers/card-container.js';
+import ReportCardContainer from './ReportCardContainer.js';
 import { API_URL } from '../../constants.js';
 import Modal from './Modal.js';
 import { getUserSession } from '../helpers/storage.js';
@@ -12,19 +12,7 @@ const FLAGGED_BY_OTHERS_AND_I_MESSAGE =
   'This report has been flagged as fake by you and other users';
 const FLAGGED_BY_ME_MESSAGE = 'This report has been flagged as fake by you';
 
-class HazardDetailCard extends ReportCard {
-  // id,
-  // category,
-  // hazard,
-  // location,
-  // date,
-  // photos,
-  // comment,
-  // icon,
-  // distance,
-  // user,
-  // flagged_as_fake,
-  // enable_reaction
+class HazardDetailCard extends ReportCardContainer {
   constructor(data) {
     super(data);
     this.distance = data.distance;
@@ -386,7 +374,6 @@ class HazardDetailCard extends ReportCard {
         if (!userSession) {
           this.showLoginModal();
         } else {
-          // this.flagAsFake();
           this.showFakeReportConfirmationModal();
         }
       });

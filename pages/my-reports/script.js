@@ -81,23 +81,23 @@ async function displayRecentReports() {
     recentReports.innerHTML = empty.getHTML();
   } else {
     for (const report of recentReportArr) {
-      // id, category, hazard, location, date, photos, comment, settings,flagged_count, not_there_count,still_there_count
       let hazardReport = new MyReportCard({
         id: report.id,
         category: report.hazardCategory.name,
         hazard: report.hazard.name,
         location: report.location.address,
-        date: report.created_at,
         photos: report.images,
         comment: report.comment,
         settings: report.hazardCategory.settings,
         flagged_count: report.flagged_count,
         not_there_count: report.not_there_count,
         still_there_count: report.still_there_count,
+        created_at: report.created_at,
+        deleted_at: report.deleted_at,
+        updated_at: report.updated_at,
       });
       recentReports.appendChild(hazardReport.reportContent());
 
-      
       loadIcons();
     }
   }
@@ -137,13 +137,17 @@ async function displayOlderReports() {
         category: report.hazardCategory.name,
         hazard: report.hazard.name,
         location: report.location.address,
-        date: report.created_at,
+
         photos: report.images,
         comment: report.comment,
         settings: report.hazardCategory.settings,
         flagged_count: report.flagged_count,
         not_there_count: report.not_there_count,
         still_there_count: report.still_there_count,
+
+        created_at: report.created_at,
+        deleted_at: report.deleted_at,
+        updated_at: report.updated_at,
       });
       olderReports.appendChild(hazardReport.reportContent());
 
@@ -159,9 +163,9 @@ function toggleSwitchEventlistener() {
   document.querySelectorAll('[id^=ts]').forEach((toggleSwitch) => {
     toggleSwitch.onchange = (e) => {
       onToggle(e);
-      let reportID = e.target.id.slice(3)
-      let toggleState = e.target.checked
-      updateReportStatus(reportID, toggleState)
+      let reportID = e.target.id.slice(3);
+      let toggleState = e.target.checked;
+      updateReportStatus(reportID, toggleState);
     };
   });
 }
@@ -170,12 +174,13 @@ function toggleSwitchEventlistener() {
 async function updateReportStatus(reportID, activeState) {
   try {
     const response = await fetch(
-      `${API_URL}/hazard-report-status?id=${reportID}&is_active=${activeState}`, {
+      `${API_URL}/hazard-report-status?id=${reportID}&is_active=${activeState}`,
+      {
         method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-      } 
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
     );
     const { error, message } = await response.json();
 

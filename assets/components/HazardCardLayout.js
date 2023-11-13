@@ -1,7 +1,7 @@
 import geolocationDistance from '../helpers/geolocation-distance.js';
 import DateFormat from '../models/DateFormat.js';
 
-const HazardCard = ({ reports, position }) => {
+const HazardCardLayout = ({ reports, position }) => {
   return reports
     ? `<div class="sb-cards">
     <button class="sb-cards-btn--back"
@@ -77,4 +77,4 @@ const HazardCard = ({ reports, position }) => {
     : '';
 };
 
-export default HazardCard;
+export default HazardCardLayout;

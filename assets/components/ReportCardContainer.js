@@ -1,13 +1,11 @@
 import DateFormat from '../models/DateFormat.js';
 
-class ReportCard {
-  // id, category, hazard, location, date, photos, comment, settings,flagged_count, not_there_count,still_there_count
+class ReportCardContainer {
   constructor(data) {
     this.id = data.id;
     this.category = data.category;
     this.hazard = data.hazard;
     this.location = data.location;
-    this.date = new Date(data.date);
     this.photos = data.photos;
     this.comment = data.comment;
 
@@ -18,16 +16,21 @@ class ReportCard {
     this.flagged_count = Number(data.flagged_count) || 0;
     this.not_there_count = Number(data.not_there_count) || 0;
     this.still_there_count = Number(data.still_there_count) || 0;
+
     this.flagged_as_fake = data.flagged_as_fake || false;
     this.enable_reaction = data.enable_reaction || true;
+
+    this.created_at = data.created_at;
+    this.deleted_at = data.deleted_at;
+    this.updated_at = data.updated_at;
   }
 
   getDateFormatted() {
-    return DateFormat.getDate(this.date);
+    return DateFormat.getDate(new Date(this.created_at));
   }
 
   getTimeFormatted() {
-    return DateFormat.getTime(this.date);
+    return DateFormat.getTime(new Date(this.created_at));
   }
 
   getGallery() {
@@ -44,4 +47,4 @@ class ReportCard {
   }
 }
 
-export default ReportCard;
+export default ReportCardContainer;
