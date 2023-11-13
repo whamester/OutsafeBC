@@ -1,4 +1,5 @@
 import DateFormat from '../models/DateFormat.js';
+import ToggleSwitch from '../components/ToggleSwitch.js';
 
 class ReportCard {
   constructor(id, category, hazard, location, date, photos, comment, settings) {
@@ -75,6 +76,30 @@ class ReportCard {
     }
     galleryContainer.appendChild(gallery);
     return galleryContainer;
+  }
+
+  getDescription(){
+    const contentHTML = `	
+    <p class="text-body-3 regular">Description</p>
+		<p class="text-body-2 regular">${this.comment}</p>`
+    const div = document.createElement('div');
+    div.setAttribute('class', 'report-card__description');
+    div.innerHTML = contentHTML;
+    return div;
+  }
+  getMyReportButtons(){
+    const contentHTML = `	
+    ${ToggleSwitch(this.id)}
+    <button class="btn btn-tertiary text-body-3 medium" onclick="window.location.href='/pages/report-hazard/index.html?id=${
+      this.id
+    }#review-report'">
+      <i class="icon-edit"></i>
+      Edit Report
+    </button>`
+    const div = document.createElement('div');
+    div.setAttribute('class', 'report-card__my-reports-buttons');
+    div.innerHTML = contentHTML;
+    return div;
   }
 }
 
