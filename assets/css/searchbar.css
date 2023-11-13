@@ -50,6 +50,25 @@
   background-color: var(--white);
   width: 44px;
   height: 44px;
+  position: relative;
+}
+
+.sb-search-box--filter-btn.selected {
+  border: 1px solid var(--neutral-900);
+}
+
+#hazardFilterCountTag {
+  position: absolute;
+  right: -5px;
+  top: -5px;
+  display: flex;
+  padding: 0px 5px 0px 6px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 100px;
+  border: 2px solid var(--white);
+  color: var(--white);
+  background: var(--neutral-900);
 }
 
 .sb-search-box--filter-btn .sb-search-box--filter-btn--icon {

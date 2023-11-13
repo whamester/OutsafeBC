@@ -3,7 +3,7 @@ import CheckBox from "./CheckBox.js";
 const ModalFilter = (categories) => {
   return `
     <div
-      class="modal-filter" style="display:none;">
+      class="modal-filter hidden">
       <div class="modal-filter--top">
         <button 
           class="modal-filter--close-btn">
@@ -22,7 +22,7 @@ const ModalFilter = (categories) => {
                 <div class="modal-filter--categories-wrapper-inner">
                   ${ 
                     item?.options?.map(option => {
-                      return  CheckBox(option?.name?.toLowerCase(), option?.name);
+                      return  CheckBox(option?.id, option?.name);
                     }).join("") 
                   }
                 </div>
@@ -34,8 +34,13 @@ const ModalFilter = (categories) => {
       </div>
       <div class="modal-filter--bottom">
         <div class="modal-filter--bottom-wrapper">
-          <button class="modal-filter--clear-btn">Clear All</button>
-          <button class="btn btn-primary modal-filter--show-btn">Show reports</button>
+          <button
+            id="clearReportsBtn"
+            class="modal-filter--clear-btn">Clear All</button>
+          <button
+            disabled="true"
+            id="showReportsBtn"
+            class="btn btn-primary modal-filter--show-btn">Show reports</button>
         </div>
       </div>
     </div>

@@ -13,6 +13,7 @@ const HazardCard = ({ reports, position }) => {
         const dateObj = new Date(item.created_at);
         const date = dateObj.toLocaleString("default", { day: "numeric", month: "long", year: "numeric" });
         const time = dateObj.toLocaleTimeString("default", { hour: "2-digit", minute: "2-digit", timeZoneName: "short" });
+        const id = item.id;
 
         return `
           <div
@@ -52,7 +53,7 @@ const HazardCard = ({ reports, position }) => {
               <p class="text-body-2 regular">${geolocationDistance(item.location.lat, item.location.lng, position.lat, position.lng)} km away</p>
             </div>
 
-            <button data-idx="${idx}" class="btn btn-secondary view-details" id="viewDetailsBtn">
+            <button data-id="${id}" class="btn btn-secondary view-details" id="viewDetailsBtn">
                 <i class="icon-plus"></i>
                 View Deatils
             </button>
