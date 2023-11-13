@@ -162,7 +162,12 @@ function toggleSwitchEventlistener() {
 async function updateReportStatus(reportID, activeState) {
   try {
     const response = await fetch(
-      `${API_URL}/hazard-report-status?id=${reportID}&is_active=${activeState}`
+      `${API_URL}/hazard-report-status?id=${reportID}&is_active=${activeState}`, {
+        method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+      } 
     );
     const { error, message } = await response.json();
 
