@@ -351,8 +351,9 @@ img {
   height: 24px;
 }
 
-.hide-picture-1, img{
+.picture-1 img, .picture-2 img, .picture-3 img{
   border-radius: 8px;
+  
 }
 /* to display the button at the bottom in the center */
 /* .delete-button {
