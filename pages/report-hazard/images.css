@@ -9,10 +9,10 @@
 
 .main-div-TakePic,
 .main-div-drag-drop-Pic {
-  padding-bottom: 24px;
-  padding-top: 24px;
-  padding-left: 48px;
-  padding-right: 48px;
+  padding-bottom: 1.5rem;
+  padding-top: 1.5rem;
+  padding-left: 3rem;
+  padding-right: 3rem;
 }
 
 .custom-file-upload,
@@ -21,35 +21,35 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  border-radius: 16px;
-  border: 1px solid var(--neutral-300);
+  border-radius: 1rem;
+  border: 0.0625rem solid var(--neutral-300);
 }
 
 .camera-icon img,
 .plus-icon img {
   color: --neutral-900;
-  width: 25px;
-  height: 24px;
-  margin-bottom: 20px;
+  width: 1.5625rem;
+  height: 1.5rem;
+  margin-bottom: 1.25rem;
 }
 
 .custom-file-upload .main-title {
-  margin-bottom: 8px;
+  margin-bottom: 0.5rem;
 }
 
 .hide-picture-1 img,
 .hide-picture-2 img,
 .hide-picture-3 img {
   color: --neutral-500;
-  width: 25px;
-  height: 24px;
+  width: 1.5625rem;
+  height: 1.5rem;
 }
 
 .hide-picture-1,
 .hide-picture-2,
 .hide-picture-3 {
-  border-radius: 8px;
-  border: 1px solid var(--neutral-300);
+  border-radius: 0.5rem ;
+  border: 0.0625rem solid var(--neutral-300);
   background: var(--primary-50);
 }
 
@@ -65,8 +65,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 101px;
-  height: 84px;
+  width: 6.3125rem;
+  height: 5.25rem;
 }
 
 .hide-picture-1,
@@ -88,7 +88,7 @@
 
 #dragAndDropArea,
 .custom-file-upload2 {
-  border-radius: 16px;
+  border-radius: 1rem;
   border: 1px dashed var(--neutral-300);
 }
 
@@ -109,12 +109,13 @@
   top: 0;
   right: 0;
   border: none;
-  width: 24px;
-  height: 24px;
+  width: 1.5rem;
+  height: 1.5rem;
 }
 
 .picture-1 img,
 .picture-2 img,
 .picture-3 img {
-  border-radius: 8px;
+  border-radius: 0.5rem;
+  border: 1px solid var(--neutral-300);
 }

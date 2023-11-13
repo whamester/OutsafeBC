@@ -64,10 +64,10 @@
   cursor: pointer;
   text-decoration: none;
   color: var(--neutral-500);
-  margin-top: 12px;
-  margin-bottom: 12px;
-  margin-left: 16px;
-  margin-right: 16px;
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
   display: flex;
   align-items: center;
 }
@@ -78,10 +78,10 @@
 }
 
 .back-arrow {
-  height: 20px;
-  width: 20px;
+  height: 1.25rem;
+  width: 1.25rem;
   padding: 0;
-  margin-right: 8px;
+  margin-right: 0.5rem;
 }
 
 input[type='radio'] {

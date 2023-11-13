@@ -1,8 +1,8 @@
 #hazard-category label {
-  padding: 5px 10px;
+  padding: 0.3125rem 0.625rem;
   cursor: pointer;
   display: inline-block;
-  border: 1px solid var(--neutral-300);
+  border: 0.0625rem solid var(--neutral-300);
   background: var(--neutral-50);
   border-radius: 0.5rem;
   display: flex;
@@ -12,7 +12,7 @@
 }
 
 #hazard-category input[type='radio']:checked + label {
-  border: 1px solid var(--neutral-100);
+  border: 0.0625rem solid var(--neutral-100);
   background: var(--secondary-500);
 }
 
@@ -47,8 +47,8 @@ img {
 }
 
 .category-container .orange-check-icon {
-  width: 24px;
-  height: 24px;
+  width: 1.5rem;
+  height: 1.5rem;
   position: absolute;
   top: -0.5rem;
   right: -0.5rem;
