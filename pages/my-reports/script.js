@@ -174,9 +174,9 @@ async function updateReportStatus(reportID, activeState) {
     if (!!error) {
       alert.show(`${error}`, AlertPopup.error);
       if (!activeState) {
-        activeState = true;
+        // TODO: checked true
       } else {
-        activeState = false;
+        // TODO: checked false
       }
     } else {
       alert.show(`${message}`, AlertPopup.success);
@@ -184,9 +184,9 @@ async function updateReportStatus(reportID, activeState) {
   } catch (error) {
     alert.show('Unable to update status at the moment', AlertPopup.error);
     if (!activeState) {
-      activeState = true;
+      // TODO: checked true
     } else {
-      activeState = false;
+      // TODO: checked false
     }
   }
 }
