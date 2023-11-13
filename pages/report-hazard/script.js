@@ -123,30 +123,34 @@ const updateCurrentReportLocation = async (params) => {
 
 const displayCurrentSection = () => {
   try {
+    let pageId = location.hash ? location.hash : '#select-location';
     if (skipHazardOption && location.hash === '#hazard-type') {
-      window.location.hash = '#additional-details';
+      pageId = '#additional-details';
     }
 
     if (skipHazardOption && location.hash === '#review-report') {
       document.getElementById('review-report-category').classList.add('hidden');
     }
 
-    const allPages = document.querySelectorAll('section.page');
-
-    const pageId = location.hash ? location.hash : '#select-location';
-    for (let page of allPages) {
-      if (pageId === '#' + page.id) {
-        page.style.display = 'flex';
-      } else {
-        page.style.display = 'none';
-      }
-    }
+    pagesHandler(pageId);
   } catch (error) {
     const alert = new AlertPopup();
     alert.show(
       error.message || AlertPopup.SOMETHING_WENT_WRONG_MESSAGE,
       AlertPopup.error
     );
+  }
+};
+
+const pagesHandler = (pageId = '#select-location') => {
+  const allPages = document.querySelectorAll('section.page');
+
+  for (let page of allPages) {
+    if (pageId === '#' + page.id) {
+      page.style.display = 'flex';
+    } else {
+      page.style.display = 'none';
+    }
   }
 };
 
