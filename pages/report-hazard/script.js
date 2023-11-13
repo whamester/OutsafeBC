@@ -76,6 +76,8 @@ window.onload = async function () {
     loadGeolocation();
 
     populateReport();
+
+    reportHazardForm.style.height = '100%';
   } catch (error) {
     const alert = new AlertPopup();
     alert.show(
@@ -121,30 +123,34 @@ const updateCurrentReportLocation = async (params) => {
 
 const displayCurrentSection = () => {
   try {
+    let pageId = location.hash ? location.hash : '#select-location';
     if (skipHazardOption && location.hash === '#hazard-type') {
-      window.location.hash = '#additional-details';
+      pageId = '#additional-details';
     }
 
     if (skipHazardOption && location.hash === '#review-report') {
       document.getElementById('review-report-category').classList.add('hidden');
     }
 
-    const allPages = document.querySelectorAll('section.page');
-
-    const pageId = location.hash ? location.hash : '#select-location';
-    for (let page of allPages) {
-      if (pageId === '#' + page.id) {
-        page.style.display = 'flex';
-      } else {
-        page.style.display = 'none';
-      }
-    }
+    pagesHandler(pageId);
   } catch (error) {
     const alert = new AlertPopup();
     alert.show(
       error.message || AlertPopup.SOMETHING_WENT_WRONG_MESSAGE,
       AlertPopup.error
     );
+  }
+};
+
+const pagesHandler = (pageId = '#select-location') => {
+  const allPages = document.querySelectorAll('section.page');
+
+  for (let page of allPages) {
+    if (pageId === '#' + page.id) {
+      page.style.display = 'flex';
+    } else {
+      page.style.display = 'none';
+    }
   }
 };
 
@@ -253,14 +259,6 @@ const getAddressFromCoordinates = async (params) => {
     return null;
   }
 };
-
-//Insert chevron-left arrow on back button
-const button = document.getElementById('backButton');
-const icon = document.createElement('img');
-icon.src = '../../assets/icons/chevron-left.svg';
-icon.alt = 'Your Alt Text';
-button.insertBefore(icon, button.firstChild);
-icon.setAttribute('class', 'back-arrow');
 
 /**
  * Step 1: Location
@@ -654,15 +652,79 @@ const saveFile = (files) => {
 
 const displayImages = (base64File) => {
   const imagesArea = document.getElementById('displayImagesArea');
+  let divNumber = -1;
+
+  for (let i = 1; i <= 3; i++) {
+    if (currentReport.images2.indexOf(`picture-${i}`) === -1) {
+      divNumber = i;
+      break;
+    }
+  }
+
   const img = document.createElement('img');
   img.setAttribute('src', base64File);
-  img.style.width = '200px';
-  img.style.height = '200px';
-  imagesArea.append(img);
 
+  img.addEventListener('load', function () {
+    if (img.naturalWidth < img.naturalHeight) {
+      img.style.width = 'auto';
+      img.style.height = '84px';
+    } else if (img.naturalWidth > img.naturalHeight) {
+      img.style.width = '101px';
+      img.style.height = 'auto';
+    } else {
+      img.style.width = 'auto';
+      img.style.height = '84px';
+    }
+  });
+
+  const deleteButton = document.createElement('button');
+  deleteButton.type = 'button';
+  deleteButton.classList.add('delete-button');
+  deleteButton.addEventListener('click', function () {
+    imagesArea.querySelector(`.picture-${divNumber}`).removeChild(img);
+    imagesArea.querySelector(`.picture-${divNumber}`).removeChild(deleteButton);
+
+    imagesArea.querySelector(`.hide-picture-${divNumber}`).style.display =
+      'flex';
+
+    const hidePicture = imagesArea.querySelector(`.hide-picture-${divNumber}`);
+    hidePicture.style.display = 'block';
+    hidePicture.style.display = 'flex';
+    hidePicture.style.alignItems = 'center';
+    hidePicture.style.justifyContent = 'center';
+    hidePicture.style.width = '100%';
+    hidePicture.style.height = '100%';
+
+    const index = currentReport.images2.indexOf(`picture-${divNumber}`);
+    if (index !== -1) {
+      currentReport.images.splice(index, 1);
+      currentReport.images2.splice(index, 1);
+    }
+
+    if (currentReport.images2.length < 3) {
+      document.getElementById('starCameraBtn').removeAttribute('disabled');
+      document.getElementById('dragAndDropArea').removeAttribute('disabled');
+      document
+        .getElementById('uploadPictureDesktopInput')
+        .removeAttribute('disabled');
+    }
+
+    if (currentReport.images2.length === 2) {
+      startCamera();
+    }
+  });
+
+  deleteButton.style.background = `url('../../assets/icons/remove.svg') no-repeat center`;
+  deleteButton.style.border = 'none';
+
+  imagesArea.querySelector(`.hide-picture-${divNumber}`).style.display = 'none';
+  imagesArea.querySelector(`.picture-${divNumber}`).appendChild(img);
+  imagesArea.querySelector(`.picture-${divNumber}`).appendChild(deleteButton);
+
+  currentReport.images2.push(`picture-${divNumber}`);
   currentReport.images.push(base64File);
 
-  if (currentReport.images.length === 3) {
+  if (currentReport.images2.length === 3) {
     document.getElementById('starCameraBtn').setAttribute('disabled', true);
     document.getElementById('dragAndDropArea').setAttribute('disabled', true);
     document
@@ -681,6 +743,7 @@ enlace.setAttribute('onclick', 'location.href="#review-report"');
  * Step 6: Show Confirmation
  */
 showConfirmationBtn.addEventListener('click', () => {
+  console.log(currentReport);
   locationOutput.innerHTML = `${currentReport.location.address} (${currentReport.location.lat},${currentReport.location.lng})`;
   categoryOutput.innerHTML = currentReport.category.name;
   hazardOptionOutput.innerHTML = currentReport.option.name;
@@ -960,52 +1023,6 @@ const hazardUploadPhotosNavEl = document.getElementById(
 
 hazardUploadPhotosNavEl.addEventListener('click', () => {
   document.getElementById('hazardReviewReportNav').style.display = 'none';
-});
-
-//Delete pictures
-var displayImagesArea = document.getElementById('displayImagesArea');
-var images = displayImagesArea.getElementsByTagName('img');
-const delete1Element = document.getElementById('delete1');
-
-delete1Element.addEventListener('click', () => {
-  var firstImage = images[0];
-  var noImageText = document.createElement('img');
-  displayImagesArea.replaceChild(noImageText, firstImage);
-
-  var index = 0;
-  if (index !== -1) {
-    currentReport.images[0] = null;
-  }
-  document.getElementById('delete1').style.display = 'none';
-});
-
-const delete2Element = document.getElementById('delete2');
-
-delete2Element.addEventListener('click', () => {
-  var secondImage = images[1];
-  var noImageText = document.createElement('img');
-  displayImagesArea.replaceChild(noImageText, secondImage);
-
-  var index = 1;
-  if (index !== -1) {
-    currentReport.images[1] = null;
-  }
-  document.getElementById('delete2').style.display = 'none';
-});
-
-const delete3Element = document.getElementById('delete3');
-
-delete3Element.addEventListener('click', () => {
-  var thirdImage = images[2];
-
-  var noImageText = document.createElement('img');
-  displayImagesArea.replaceChild(noImageText, thirdImage);
-
-  var index = 2;
-  if (index !== -1) {
-    currentReport.images[2] = null;
-  }
-  document.getElementById('delete3').style.display = 'none';
 });
 
 /**
