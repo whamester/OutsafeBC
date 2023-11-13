@@ -665,8 +665,6 @@ const displayImages = (base64File) => {
   img.setAttribute('src', base64File);
 
   img.addEventListener('load', function () {
-    console.log('Original Width:', img.naturalWidth);
-    console.log('Original Height:', img.naturalHeight);
     if (img.naturalWidth < img.naturalHeight) {
       img.style.width = 'auto';
       img.style.height = '84px';
