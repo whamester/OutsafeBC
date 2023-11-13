@@ -1,15 +1,25 @@
 import DateFormat from '../models/DateFormat.js';
 
 class ReportCard {
-  constructor(id, category, hazard, location, date, photos, comment, settings) {
-    this.id = id;
-    this.category = category;
-    this.hazard = hazard;
-    this.location = location;
-    this.date = new Date(date);
-    this.photos = photos;
-    this.comment = comment;
-    this.settings = settings;
+  // id, category, hazard, location, date, photos, comment, settings,flagged_count, not_there_count,still_there_count
+  constructor(data) {
+    this.id = data.id;
+    this.category = data.category;
+    this.hazard = data.hazard;
+    this.location = data.location;
+    this.date = new Date(data.date);
+    this.photos = data.photos;
+    this.comment = data.comment;
+
+    this.user = data.user;
+
+    this.settings = data.settings;
+
+    this.flagged_count = Number(data.flagged_count) || 0;
+    this.not_there_count = Number(data.not_there_count) || 0;
+    this.still_there_count = Number(data.still_there_count) || 0;
+    this.flagged_as_fake = data.flagged_as_fake || false;
+    this.enable_reaction = data.enable_reaction || true;
   }
 
   getDateFormatted() {

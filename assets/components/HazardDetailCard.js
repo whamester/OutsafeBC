@@ -6,26 +6,28 @@ import AlertPopup from './AlertPopup.js';
 
 const userSession = getUserSession();
 
+const FLAGGED_BY_OTHERS_MESSAGE =
+  'This report has been flagged as fake by other users';
+const FLAGGED_BY_OTHERS_AND_I_MESSAGE =
+  'This report has been flagged as fake by you and other users';
+const FLAGGED_BY_ME_MESSAGE = 'This report has been flagged as fake by you';
+
 class HazardDetailCard extends ReportCard {
-  constructor(
-    id,
-    category,
-    hazard,
-    location,
-    date,
-    photos,
-    comment,
-    icon,
-    distance,
-    user,
-    flagged_as_fake,
-    enable_reaction
-  ) {
-    super(id, category, hazard, location, date, photos, comment, icon);
-    this.distance = distance;
-    this.user = user;
-    this.flagged_as_fake = flagged_as_fake;
-    this.enable_reaction = enable_reaction;
+  // id,
+  // category,
+  // hazard,
+  // location,
+  // date,
+  // photos,
+  // comment,
+  // icon,
+  // distance,
+  // user,
+  // flagged_as_fake,
+  // enable_reaction
+  constructor(data) {
+    super(data);
+    this.distance = data.distance;
     this.divContainer = null;
     this.createdByUserLoggedIn = userSession?.email === this.user.email;
   }
@@ -173,11 +175,30 @@ class HazardDetailCard extends ReportCard {
   }
 
   changeButtonState() {
-    if (this.flagged_as_fake) {
+    if (this.flagged_as_fake && this.flagged_count > 0) {
+      this.divContainer
+        .querySelector('#flagReportMessage')
+        .classList.remove('hidden');
+
+      this.divContainer.querySelector('#flagReportMessage p').innerHTML =
+        FLAGGED_BY_OTHERS_AND_I_MESSAGE;
+    } else if (this.flagged_as_fake) {
       this.divContainer.querySelector('#flagReportBtn').classList.add('hidden');
       this.divContainer
         .querySelector('#flagReportMessage')
         .classList.remove('hidden');
+
+      this.divContainer.querySelector('#flagReportMessage p').innerHTML =
+        FLAGGED_BY_ME_MESSAGE;
+    } else if (this.flagged_count > 0) {
+      this.divContainer.querySelector('#flagReportBtn').classList.add('hidden');
+
+      this.divContainer
+        .querySelector('#flagReportMessage')
+        .classList.remove('hidden');
+
+      this.divContainer.querySelector('#flagReportMessage p').innerHTML =
+        FLAGGED_BY_OTHERS_MESSAGE;
     } else {
       this.divContainer
         .querySelector('#flagReportBtn')
@@ -288,7 +309,9 @@ class HazardDetailCard extends ReportCard {
               }"
               alt="User photo"
             />
-            <p class="text-body-2 regular">${this.user.name}</p>
+            <p class="text-body-2 regular">${
+              this.user.name || 'Anonymous user'
+            }</p>
           </div>
           `
               : ''
@@ -324,7 +347,7 @@ class HazardDetailCard extends ReportCard {
             <div id="flagReportMessage" class="message error">
               <i class="icon-flag message__icon"></i>
               <p class="message__content text-body-3 medium">
-                This report has been reported as fake.
+                You have flagged this report as fake.
               </p>
             </div>
 

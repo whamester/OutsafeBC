@@ -159,25 +159,30 @@ window.onload = async function () {
     }
 
     if (openDetail) {
-      const data = new HazardDetailCard(
-        hazardDetail.id,
-        hazardDetail.category.name,
-        hazardDetail.option.name,
-        hazardDetail.location.address,
-        hazardDetail.created_at,
-        hazardDetail.images,
-        hazardDetail.comment,
-        hazardDetail.category.settings,
-        geolocationDistance(
+      // id, category, hazard, location, date, photos, comment, settings,flagged_count, not_there_count,still_there_count
+      // distance, user, flagged_as_fake, enable_reaction
+      const data = new HazardDetailCard({
+        id: hazardDetail.id,
+        category: hazardDetail.category.name,
+        hazard: hazardDetail.option.name,
+        location: hazardDetail.location.address,
+        date: hazardDetail.created_at,
+        photos: hazardDetail.images,
+        comment: hazardDetail.comment,
+        settings: hazardDetail.category.settings,
+        flagged_count: hazardDetail.flagged_count,
+        not_there_count: hazardDetail.not_there_count,
+        still_there_count: hazardDetail.still_there_count,
+        flagged_as_fake: hazardDetail.flagged_as_fake,
+        enable_reaction: hazardDetail.enable_reaction,
+        distance: geolocationDistance(
           hazardDetail.location.lat,
           hazardDetail.location.lng,
           position.lat,
           position.lng
         ),
-        hazardDetail.user,
-        hazardDetail.flagged_as_fake,
-        hazardDetail.enable_reaction
-      );
+        user: hazardDetail.user,
+      });
 
       showHazardDetails(data);
 
@@ -229,25 +234,28 @@ const markerParams = {
 
     const currentReport = await getHazardReportData(hazardID);
 
-    let hazardReport = new HazardDetailCard(
-      currentReport.id,
-      currentReport.hazardCategory.name,
-      currentReport.hazard.name,
-      currentReport.location.address,
-      currentReport.created_at,
-      currentReport.images,
-      currentReport.comment,
-      currentReport.hazardCategory.settings,
-      geolocationDistance(
+    let hazardReport = new HazardDetailCard({
+      id: currentReport.id,
+      category: currentReport.hazardCategory.name,
+      hazard: currentReport.hazard.name,
+      location: currentReport.location.address,
+      date: currentReport.created_at,
+      photos: currentReport.images,
+      comment: currentReport.comment,
+      settings: currentReport.hazardCategory.settings,
+      flagged_count: currentReport.flagged_count,
+      not_there_count: currentReport.not_there_count,
+      still_there_count: currentReport.still_there_count,
+      flagged_as_fake: currentReport.flagged_as_fake,
+      enable_reaction: currentReport.enable_reaction,
+      distance: geolocationDistance(
         currentReport.location.lat,
         currentReport.location.lng,
         position.lat,
         position.lng
       ),
-      currentReport.user,
-      currentReport.flagged_as_fake,
-      currentReport.enable_reaction
-    );
+      user: currentReport.user,
+    });
 
     showHazardDetails(hazardReport);
   },
@@ -348,10 +356,35 @@ const injectCards = () => {
   ]);
 
   document.querySelectorAll('.view-details')?.forEach((detailBtn) => {
-    const idx = detailBtn.dataset.idx;
-    detailBtn.addEventListener('click', () =>
-      showHazardCardFromExistingReports(idx)
-    );
+    const id = detailBtn.dataset.id;
+    detailBtn.addEventListener('click', async () => {
+      hazardDetail = await getHazardDetail(id);
+
+      const data = new HazardDetailCard({
+        id: hazardDetail.id,
+        category: hazardDetail.category.name,
+        hazard: hazardDetail.option.name,
+        location: hazardDetail.location.address,
+        date: hazardDetail.created_at,
+        photos: hazardDetail.images,
+        comment: hazardDetail.comment,
+        settings: hazardDetail.category.settings,
+        flagged_count: hazardDetail.flagged_count,
+        not_there_count: hazardDetail.not_there_count,
+        still_there_count: hazardDetail.still_there_count,
+        flagged_as_fake: hazardDetail.flagged_as_fake,
+        enable_reaction: hazardDetail.enable_reaction,
+        distance: geolocationDistance(
+          hazardDetail.location.lat,
+          hazardDetail.location.lng,
+          position.lat,
+          position.lng
+        ),
+        user: hazardDetail.user,
+      });
+
+      showHazardDetails(data);
+    });
   });
 
   loadIcons();

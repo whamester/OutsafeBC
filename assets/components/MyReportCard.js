@@ -1,9 +1,9 @@
 import ReportCard from '../helpers/card-container.js';
-import ToggleSwitch from '../components/ToggleSwitch.js';
+import ToggleSwitch from './ToggleSwitch.js';
 
 class MyReportCard extends ReportCard {
-  constructor(id, category, hazard, location, date, photos, comment, icon) {
-    super(id, category, hazard, location, date, photos, comment, icon);
+  constructor(data) {
+    super(data);
   }
 
   reportContent() {

@@ -1,4 +1,5 @@
-import geolocationDistance from "../helpers/geolocation-distance.js";
+import geolocationDistance from '../helpers/geolocation-distance.js';
+import DateFormat from '../models/DateFormat.js';
 
 const HazardCard = ({ reports, position }) => {
   return reports
@@ -8,13 +9,16 @@ const HazardCard = ({ reports, position }) => {
       <img src="/assets/icons/chevron-left.svg" />Back
     </button>
     <div class="sb-cards-wrapper d-grid">
-      ${ reports?.map((item, idx) => {
-        const location = item?.location?.address ?? `${ item?.location?.lat }, ${ item?.location?.lng }`;
-        const dateObj = new Date(item.created_at);
-        const date = dateObj.toLocaleString("default", { day: "numeric", month: "long", year: "numeric" });
-        const time = dateObj.toLocaleTimeString("default", { hour: "2-digit", minute: "2-digit", timeZoneName: "short" });
+      ${reports
+        ?.map((item, idx) => {
+          const location =
+            item?.location?.address ??
+            `${item?.location?.lat}, ${item?.location?.lng}`;
+          const dateObj = new Date(item.created_at);
+          const date = DateFormat.getDate(dateObj);
+          const time = DateFormat.getTime(dateObj);
 
-        return `
+          return `
           <div
             class="sb-cards--item"
             id="sb-card-${idx + 1}"  
@@ -28,7 +32,9 @@ const HazardCard = ({ reports, position }) => {
                   item.hazardCategory.settings.icon
                 }-outline" style="width:24px; height:24px; background-color: white"></i>
               </span>
-                  <p class="text-body-1 semibold">${item.hazardCategory.name}</p>
+                  <p class="text-body-1 semibold">${
+                    item.hazardCategory.name
+                  }</p>
             </div>
             <div class="report-card__details sb-cards-info--box">
               <i class="icon-location-pin-outline" style="background-color: var(--neutral-400)"></i>
@@ -49,10 +55,17 @@ const HazardCard = ({ reports, position }) => {
 
             <div class="report-card__details sb-cards-info--box">
               <i class="icon-distance" style="background-color: var(--neutral-400)"></i>
-              <p class="text-body-2 regular">${geolocationDistance(item.location.lat, item.location.lng, position.lat, position.lng)} km away</p>
+              <p class="text-body-2 regular">${geolocationDistance(
+                item.location.lat,
+                item.location.lng,
+                position.lat,
+                position.lng
+              )} km away</p>
             </div>
 
-            <button data-idx="${idx}" class="btn btn-secondary view-details" id="viewDetailsBtn">
+            <button data-idx="${idx}" data-id="${
+            item.id
+          }" class="btn btn-secondary view-details" id="viewDetailsBtn">
                 <i class="icon-plus"></i>
                 View Deatils
             </button>
