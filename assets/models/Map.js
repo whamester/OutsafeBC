@@ -48,8 +48,8 @@ class Map {
 
   createLayerGroups(hazards, markerParams = {}) {
     hazards?.forEach((hazard, idx) => {
-      const category = hazard?.hazard?.name?.toLowerCase();
-      const subCategory = hazard?.hazardCategory?.name?.toLowerCase();
+      const categoryId = hazard?.hazardCategory?.id;
+      const subCategoryId = hazard?.hazard?.id;
       const iconName = `marker/${hazard?.hazardCategory?.settings?.icon}.svg`
       const pinIcon = Map.createIcon({iconName});
       
@@ -57,8 +57,9 @@ class Map {
         icon: pinIcon,
       });
 
-      marker.category = category;
-      marker.sub_category = subCategory;
+      marker.id = hazard.id
+      marker.category_id = categoryId;
+      marker.sub_category_id = subCategoryId;
 
       if (markerParams.event)
         marker.on(markerParams.event, () => markerParams.func(hazard?.id, hazard?.location?.lat, hazard?.location?.lng));
@@ -67,6 +68,14 @@ class Map {
     });
 
     this.mapLayers.addTo(this.map);
+  }
+
+  checkMarkerOnMap(hazard) {
+    let markerExists = false;
+    this.mapLayers.eachLayer(maker => {
+      if (maker.id === hazard.id) markerExists = true;
+    });
+    return markerExists;
   }
 
   setMarkerOnMap(lat, lng, markerParams = {}) {
@@ -79,10 +88,31 @@ class Map {
     }).addTo(this.map);
   }
 
+  filterMarker(categoryIdArr = [], subCategoryIdArr = []) {
+    this.mapLayers.eachLayer(marker => {
+      this.map.removeLayer(marker);
+      if (subCategoryIdArr.length === 0 && (categoryIdArr.length === 0 || categoryIdArr.includes(marker.category_id))) {
+        this.map.addLayer(marker);
+      } else if (categoryIdArr.length === 0 && (subCategoryIdArr.length === 0 || (subCategoryIdArr.includes(marker.sub_category_id)))) {
+        this.map.addLayer(marker);
+      }
+    });
+  }
+
+  filterMarkerCount(subCategoryIdArr = []) {
+    let count = 0;
+    this.mapLayers.eachLayer(marker => {
+      if (subCategoryIdArr.includes(marker.sub_category_id)) {
+        count++;
+      }
+    });
+    return count;
+  }
+
   static watchGeoLocation(success, error, customOptions = {}) {
     // check if browser supports geolocation
     if (!('geolocation' in navigator)) {
-      console.log('Geolocation not supported on your browser.');
+      console.error('Geolocation not supported on your browser.');
       return;
     }
 
@@ -108,7 +138,7 @@ class Map {
   static async getCurrentLocation() {
     // check if browser supports geolocation
     if (!('geolocation' in navigator)) {
-      console.log('Geolocation not supported on your browser.');
+      console.error('Geolocation not supported on your browser.');
       return;
     }
 
@@ -134,7 +164,7 @@ class Map {
         lng: longitude,
       };
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
       //TODO: default lat, long values on error
       return Map.DEFAULT_LOCATION;
     }

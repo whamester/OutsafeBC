@@ -17,6 +17,7 @@ const HazardCard = ({ reports, position }) => {
           const dateObj = new Date(item.created_at);
           const date = DateFormat.getDate(dateObj);
           const time = DateFormat.getTime(dateObj);
+          const id = item.id;
 
           return `
           <div
@@ -63,9 +64,7 @@ const HazardCard = ({ reports, position }) => {
               )} km away</p>
             </div>
 
-            <button data-idx="${idx}" data-id="${
-            item.id
-          }" class="btn btn-secondary view-details" id="viewDetailsBtn">
+            <button data-id="${id}" class="btn btn-secondary view-details" id="viewDetailsBtn">
                 <i class="icon-plus"></i>
                 View Deatils
             </button>

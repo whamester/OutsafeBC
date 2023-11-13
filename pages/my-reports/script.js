@@ -97,16 +97,11 @@ async function displayRecentReports() {
       });
       recentReports.appendChild(hazardReport.reportContent());
 
-      document.querySelectorAll('[id^=ts]').forEach((toggleSwitch) => {
-        toggleSwitch.addEventListener('change', (e) => {
-          onToggle(e);
-          // TODO: API call
-        });
-      });
-
+      
       loadIcons();
     }
   }
+  toggleSwitchEventlistener();
 }
 
 // Get all the older reports for the logged in user and display them
@@ -151,8 +146,55 @@ async function displayOlderReports() {
         still_there_count: report.still_there_count,
       });
       olderReports.appendChild(hazardReport.reportContent());
+
       loadIcons();
     }
+    toggleSwitchEventlistener();
   }
   olderReportClicked = true;
+}
+
+// Toggle switch eventlistener
+function toggleSwitchEventlistener() {
+  document.querySelectorAll('[id^=ts]').forEach((toggleSwitch) => {
+    toggleSwitch.onchange = (e) => {
+      onToggle(e);
+      let reportID = e.target.id.slice(3)
+      let toggleState = e.target.checked
+      updateReportStatus(reportID, toggleState)
+    };
+  });
+}
+
+// Update status of hazard report
+async function updateReportStatus(reportID, activeState) {
+  try {
+    const response = await fetch(
+      `${API_URL}/hazard-report-status?id=${reportID}&is_active=${activeState}`, {
+        method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+      } 
+    );
+    const { error, message } = await response.json();
+
+    if (!!error) {
+      alert.show(`${error}`, AlertPopup.error);
+      if (!activeState) {
+        // TODO: checked true
+      } else {
+        // TODO: checked false
+      }
+    } else {
+      alert.show(`${message}`, AlertPopup.success);
+    }
+  } catch (error) {
+    alert.show('Unable to update status at the moment', AlertPopup.error);
+    if (!activeState) {
+      // TODO: checked true
+    } else {
+      // TODO: checked false
+    }
+  }
 }
