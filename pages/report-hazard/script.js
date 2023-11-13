@@ -76,6 +76,8 @@ window.onload = async function () {
     loadGeolocation();
 
     populateReport();
+
+    reportHazardForm.style.height = '100%';
   } catch (error) {
     const alert = new AlertPopup();
     alert.show(
@@ -681,7 +683,7 @@ const displayImages = (base64File) => {
     imagesArea.querySelector(`.picture-${divNumber}`).removeChild(deleteButton);
 
     imagesArea.querySelector(`.hide-picture-${divNumber}`).style.display =
-      'block';
+      'flex';
 
     const hidePicture = imagesArea.querySelector(`.hide-picture-${divNumber}`);
     hidePicture.style.display = 'block';
