@@ -93,11 +93,11 @@ async function displayRecentReports() {
       );
       recentReports.appendChild(hazardReport.reportContent());
 
-      toggleSwitchEventlistener();
-
+      
       loadIcons();
     }
   }
+  toggleSwitchEventlistener();
 }
 
 // Get all the older reports for the logged in user and display them
@@ -149,11 +149,12 @@ async function displayOlderReports() {
 // Toggle switch eventlistener
 function toggleSwitchEventlistener() {
   document.querySelectorAll('[id^=ts]').forEach((toggleSwitch) => {
-    toggleSwitch.addEventListener('change', (e) => {
+    toggleSwitch.onchange = (e) => {
       onToggle(e);
-      console.log(e.target.id);
-      // TODO: API call
-    });
+      let reportID = e.target.id.slice(3)
+      let toggleState = e.target.checked
+      updateReportStatus(reportID, toggleState)
+    };
   });
 }
 
