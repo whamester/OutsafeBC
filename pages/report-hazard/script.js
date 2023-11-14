@@ -76,6 +76,8 @@ window.onload = async function () {
     loadGeolocation();
 
     populateReport();
+
+    reportHazardForm.style.height = '100%';
   } catch (error) {
     const alert = new AlertPopup();
     alert.show(
@@ -121,30 +123,34 @@ const updateCurrentReportLocation = async (params) => {
 
 const displayCurrentSection = () => {
   try {
+    let pageId = location.hash ? location.hash : '#select-location';
     if (skipHazardOption && location.hash === '#hazard-type') {
-      window.location.hash = '#additional-details';
+      pageId = '#additional-details';
     }
 
     if (skipHazardOption && location.hash === '#review-report') {
       document.getElementById('review-report-category').classList.add('hidden');
     }
 
-    const allPages = document.querySelectorAll('section.page');
-
-    const pageId = location.hash ? location.hash : '#select-location';
-    for (let page of allPages) {
-      if (pageId === '#' + page.id) {
-        page.style.display = 'flex';
-      } else {
-        page.style.display = 'none';
-      }
-    }
+    pagesHandler(pageId);
   } catch (error) {
     const alert = new AlertPopup();
     alert.show(
       error.message || AlertPopup.SOMETHING_WENT_WRONG_MESSAGE,
       AlertPopup.error
     );
+  }
+};
+
+const pagesHandler = (pageId = '#select-location') => {
+  const allPages = document.querySelectorAll('section.page');
+
+  for (let page of allPages) {
+    if (pageId === '#' + page.id) {
+      page.style.display = 'flex';
+    } else {
+      page.style.display = 'none';
+    }
   }
 };
 
@@ -254,14 +260,6 @@ const getAddressFromCoordinates = async (params) => {
   }
 };
 
-//Insert chevron-left arrow on back button
-const button = document.getElementById('backButton');
-const icon = document.createElement('img');
-icon.src = '../../assets/icons/chevron-left.svg';
-icon.alt = 'Your Alt Text';
-button.insertBefore(icon, button.firstChild);
-icon.setAttribute('class', 'back-arrow');
-
 /**
  * Step 1: Location
  */
@@ -327,6 +325,17 @@ const getCategories = async () => {
 
         var enlace = document.getElementById('hazardType');
         enlace.setAttribute('onclick', 'location.href="#hazard-type"');
+
+        const allNewIcons = document.querySelectorAll('.orange-check-icon');
+        allNewIcons.forEach((newIcon) => {
+          newIcon.style.display = 'none';
+        });
+
+        const selectedLabel = document.querySelector(`label[for=${radio.id}]`);
+        const newIcon = selectedLabel.querySelector('.orange-check-icon');
+        if (newIcon) {
+          newIcon.style.display = 'block';
+        }
       });
 
       const label = document.createElement('label');
@@ -334,10 +343,7 @@ const getCategories = async () => {
       label.setAttribute('id', `category-${category.id}-label`);
       label.setAttribute('for', `category-${category.id}-radio`);
       label.classList.add('label-container');
-      // label.innerHTML = `<i class="category-icon"><img src="../../assets/icons/${arrayIcons[i]}-outline.svg" alt="${arrayIcons[i]}"></i>`;
-      // label.innerHTML = `<i class="${category.icon}-outline category-icon"> </i>`;//by Wonnyo
       label.innerHTML = `<img class="category-icon" src="../../assets/icons/${arrayIcons[i]}-outline.svg" alt="${arrayIcons[i]}">`;
-      // label.innerHTML = `<i class="category-icon" src="../../assets/icons/${arrayIcons[i]}-outline.svg" alt="${arrayIcons[i]}"></i>`;
 
       const textContainer = document.createElement('div');
       textContainer.classList.add('text-container');
@@ -358,6 +364,13 @@ const getCategories = async () => {
       textContainer.appendChild(categoryDescription);
 
       label.appendChild(textContainer);
+
+      const newIcon = document.createElement('img');
+      newIcon.setAttribute('src', '../../assets/icons/circle-check-filled.svg');
+      newIcon.setAttribute('alt', 'circle-check-filled');
+      newIcon.classList.add('orange-check-icon');
+      newIcon.style.display = 'none';
+      label.appendChild(newIcon);
 
       categoryContainer.appendChild(radio);
       categoryContainer.appendChild(label);
@@ -380,7 +393,11 @@ getCategories();
 
 const populateHazardOptions = (options, selectedOptionQuestion) => {
   try {
-    document.getElementById('hazard-option-content').innerHTML = '';
+    const hazardOptionContent = document.getElementById(
+      'hazard-option-content'
+    );
+    hazardOptionContent.innerHTML = '';
+
     if (options.length === 1) {
       currentReport.option.id = options[0].id;
       currentReport.option.name = options[0].name;
@@ -394,6 +411,7 @@ const populateHazardOptions = (options, selectedOptionQuestion) => {
       const option = options[i];
 
       const div = document.createElement('div');
+      div.classList.add('div-input');
       const radio = document.createElement('input');
 
       radio.setAttribute('type', 'radio');
@@ -407,17 +425,46 @@ const populateHazardOptions = (options, selectedOptionQuestion) => {
 
         var enlace = document.getElementById('selectHazardOptionLink');
         enlace.setAttribute('onclick', 'location.href="#additional-details"');
+
+        const allIconTypes = document.querySelectorAll('.category-icon-type');
+        allIconTypes.forEach((iconType) => {
+          iconType.style.display = 'none';
+        });
+
+        const selectedLabel = document.querySelector(`label[for=${radio.id}]`);
+        const iconType = selectedLabel.querySelector('.category-icon-type');
+        if (iconType) {
+          iconType.style.display = 'block';
+        }
       });
 
       const label = document.createElement('label');
       label.setAttribute('id', `option-${option.id}-label`);
       label.setAttribute('for', `option-${option.id}-radio`);
-      label.innerHTML = option.name;
+
+      const divContainer = document.createElement('div');
+      divContainer.classList.add('container-type');
+
+      const div1Icon = document.createElement('div');
+      div1Icon.innerHTML =
+        '<img class="category-icon-type" src="../../assets/icons/checkmark.svg" style="display: none">';
+      div1Icon.classList.add('checkmark');
+
+      const div2Text = document.createElement('div');
+      div2Text.innerHTML = option.name;
+      div2Text.classList.add('text-type');
+      div2Text.classList.add('text-body-1');
+      div2Text.classList.add('medium');
+
+      divContainer.appendChild(div1Icon);
+      divContainer.appendChild(div2Text);
+
+      label.appendChild(divContainer);
 
       div.appendChild(radio);
       div.appendChild(label);
 
-      document.getElementById('hazard-option-content').appendChild(div);
+      hazardOptionContent.appendChild(div);
     }
   } catch (error) {
     const alert = new AlertPopup();
@@ -605,15 +652,79 @@ const saveFile = (files) => {
 
 const displayImages = (base64File) => {
   const imagesArea = document.getElementById('displayImagesArea');
+  let divNumber = -1;
+
+  for (let i = 1; i <= 3; i++) {
+    if (currentReport.images2.indexOf(`picture-${i}`) === -1) {
+      divNumber = i;
+      break;
+    }
+  }
+
   const img = document.createElement('img');
   img.setAttribute('src', base64File);
-  img.style.width = '200px';
-  img.style.height = '200px';
-  imagesArea.append(img);
 
+  img.addEventListener('load', function () {
+    if (img.naturalWidth < img.naturalHeight) {
+      img.style.width = 'auto';
+      img.style.height = '84px';
+    } else if (img.naturalWidth > img.naturalHeight) {
+      img.style.width = '101px';
+      img.style.height = 'auto';
+    } else {
+      img.style.width = 'auto';
+      img.style.height = '84px';
+    }
+  });
+
+  const deleteButton = document.createElement('button');
+  deleteButton.type = 'button';
+  deleteButton.classList.add('delete-button');
+  deleteButton.addEventListener('click', function () {
+    imagesArea.querySelector(`.picture-${divNumber}`).removeChild(img);
+    imagesArea.querySelector(`.picture-${divNumber}`).removeChild(deleteButton);
+
+    imagesArea.querySelector(`.hide-picture-${divNumber}`).style.display =
+      'flex';
+
+    const hidePicture = imagesArea.querySelector(`.hide-picture-${divNumber}`);
+    hidePicture.style.display = 'block';
+    hidePicture.style.display = 'flex';
+    hidePicture.style.alignItems = 'center';
+    hidePicture.style.justifyContent = 'center';
+    hidePicture.style.width = '100%';
+    hidePicture.style.height = '100%';
+
+    const index = currentReport.images2.indexOf(`picture-${divNumber}`);
+    if (index !== -1) {
+      currentReport.images.splice(index, 1);
+      currentReport.images2.splice(index, 1);
+    }
+
+    if (currentReport.images2.length < 3) {
+      document.getElementById('starCameraBtn').removeAttribute('disabled');
+      document.getElementById('dragAndDropArea').removeAttribute('disabled');
+      document
+        .getElementById('uploadPictureDesktopInput')
+        .removeAttribute('disabled');
+    }
+
+    if (currentReport.images2.length === 2) {
+      startCamera();
+    }
+  });
+
+  deleteButton.style.background = `url('../../assets/icons/remove.svg') no-repeat center`;
+  deleteButton.style.border = 'none';
+
+  imagesArea.querySelector(`.hide-picture-${divNumber}`).style.display = 'none';
+  imagesArea.querySelector(`.picture-${divNumber}`).appendChild(img);
+  imagesArea.querySelector(`.picture-${divNumber}`).appendChild(deleteButton);
+
+  currentReport.images2.push(`picture-${divNumber}`);
   currentReport.images.push(base64File);
 
-  if (currentReport.images.length === 3) {
+  if (currentReport.images2.length === 3) {
     document.getElementById('starCameraBtn').setAttribute('disabled', true);
     document.getElementById('dragAndDropArea').setAttribute('disabled', true);
     document
@@ -632,6 +743,7 @@ enlace.setAttribute('onclick', 'location.href="#review-report"');
  * Step 6: Show Confirmation
  */
 showConfirmationBtn.addEventListener('click', () => {
+  console.log(currentReport);
   locationOutput.innerHTML = `${currentReport.location.address} (${currentReport.location.lat},${currentReport.location.lng})`;
   categoryOutput.innerHTML = currentReport.category.name;
   hazardOptionOutput.innerHTML = currentReport.option.name;
@@ -911,52 +1023,6 @@ const hazardUploadPhotosNavEl = document.getElementById(
 
 hazardUploadPhotosNavEl.addEventListener('click', () => {
   document.getElementById('hazardReviewReportNav').style.display = 'none';
-});
-
-//Delete pictures
-var displayImagesArea = document.getElementById('displayImagesArea');
-var images = displayImagesArea.getElementsByTagName('img');
-const delete1Element = document.getElementById('delete1');
-
-delete1Element.addEventListener('click', () => {
-  var firstImage = images[0];
-  var noImageText = document.createElement('img');
-  displayImagesArea.replaceChild(noImageText, firstImage);
-
-  var index = 0;
-  if (index !== -1) {
-    currentReport.images[0] = null;
-  }
-  document.getElementById('delete1').style.display = 'none';
-});
-
-const delete2Element = document.getElementById('delete2');
-
-delete2Element.addEventListener('click', () => {
-  var secondImage = images[1];
-  var noImageText = document.createElement('img');
-  displayImagesArea.replaceChild(noImageText, secondImage);
-
-  var index = 1;
-  if (index !== -1) {
-    currentReport.images[1] = null;
-  }
-  document.getElementById('delete2').style.display = 'none';
-});
-
-const delete3Element = document.getElementById('delete3');
-
-delete3Element.addEventListener('click', () => {
-  var thirdImage = images[2];
-
-  var noImageText = document.createElement('img');
-  displayImagesArea.replaceChild(noImageText, thirdImage);
-
-  var index = 2;
-  if (index !== -1) {
-    currentReport.images[2] = null;
-  }
-  document.getElementById('delete3').style.display = 'none';
 });
 
 /**

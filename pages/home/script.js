@@ -39,11 +39,14 @@ let position =
     ? { lat: latitude, lng: longitude }
     : Map.DEFAULT_LOCATION;
 
+let reports = [];
 let positionSecondary = {};
 let hazardCardParams = {};
 let searchSuggestions = [];
-let reports = [];
 let categoryFilters = [];
+let hazardTempFilters = [];
+let hazardFilters = [];
+let hazardShowCount = 0;
 let flyToTrigger = true;
 
 const alert = new AlertPopup();
@@ -92,19 +95,13 @@ window.onload = async function () {
       }
     });
 
-    const toggleFilterModal = () => {
-      const filterModalStyle = document.querySelector('.modal-filter').style;
-      filterModalStyle.display =
-        filterModalStyle.display === 'block' ? 'none' : 'block';
-    };
-
     document
       .querySelector('.sb-search-box--filter-btn')
-      .addEventListener('click', toggleFilterModal);
+      .addEventListener('click', () => toggleFilterModal(false));
 
     document
       .querySelector('.modal-filter--close-btn')
-      .addEventListener('click', toggleFilterModal);
+      .addEventListener('click', () => toggleFilterModal(true));
 
     document
       .querySelector('.sb-search-box--input')
@@ -129,9 +126,12 @@ window.onload = async function () {
 
     loadIcons();
 
-    await loadGeolocation();
+    geoMap = new Map(position.lat, position.lng, mapOptions);
+    await getReportApiCall(position.lat, position.lng);
+
+    Map.watchGeoLocation(watchGeoLocationSuccess, watchGeoLocationError);
   } catch (error) {
-    console.error(error);
+    console.error(error, error.message);
 
     alert.show('Error loading categories', AlertPopup.error, 500);
   }
@@ -143,7 +143,12 @@ window.onload = async function () {
     hazardDetail = await getHazardDetail(idReport);
 
     if (focusMarker || openDetail) {
-      geoMap.createLayerGroups([hazardDetail], markerParams);
+      const makerExists = geoMap.checkMarkerOnMap(hazardDetail);
+
+      // marker currently doesnot exists on the map
+      if (!makerExists)
+        geoMap.createLayerGroups([hazardDetail], markerParams);
+      
       flyTo(hazardDetail.location?.lat, hazardDetail.location?.lng);
     }
 
@@ -163,7 +168,9 @@ window.onload = async function () {
           position.lat,
           position.lng
         ),
-        hazardDetail.user
+        hazardDetail.user,
+        hazardDetail.flagged_as_fake,
+        hazardDetail.enable_reaction
       );
 
       showHazardDetails(data);
@@ -180,42 +187,51 @@ window.onload = async function () {
   }
 };
 
-// show modal that instructs user to log in to continue
-function showLoginModal() {
-  const modal = new Modal();
+const toggleFilterModal = async (flag) => {
+  const filterModal = document.querySelector('.modal-filter');
+  filterModal.classList.toggle("hidden", flag);
 
-  const loginBtn = document.createElement('button');
-  loginBtn.setAttribute('id', 'open-modal-btn');
-  loginBtn.setAttribute('class', 'btn btn-primary');
-  loginBtn.addEventListener('click', () =>
-    window.location.assign(`/pages/login/index.html`)
-  );
-  loginBtn.innerHTML = 'Log in';
-
-  modal.show({
-    title: 'Please log in to continue',
-    description:
-      'Thank you for helping others have a safe outdoors experience.',
-    icon: {
-      name: 'icon-exclamation-mark',
-      color: '#000000',
-      size: '3.5rem',
-    },
-    actions: loginBtn,
-    enableOverlayClickClose: true,
+  document.querySelectorAll(".cb").forEach(checkbox => {
+    checkbox.addEventListener('change', hazardFilterTempApply, false);
+    checkbox.checked = hazardFilters.includes(checkbox.dataset?.id);
+    checkbox.classList.toggle("selected", checkbox.checked);
   });
-}
 
-const markerParams = {
+  if(!flag) {
+    hazardShowCount = geoMap.filterMarkerCount(hazardFilters);
+    filterModal.querySelector(".modal-filter--wrapper-outer").scrollTop = 0;
+    showReportsBtnStatus(hazardShowCount);
+  }
+
+  showReportsBtn?.addEventListener('click', hazardFilterApply, false);
+  clearReportsBtn?.addEventListener('click', clearHazardFilter, false);
+
+  let countTag = filterBtn.querySelector("#hazardFilterCountTag");
+  filterBtn.classList.remove('selected');
+
+  if (!countTag) {
+    countTag = document.createElement('p');
+  }
+  
+  if (hazardFilters.length > 0){
+    countTag.innerText = hazardFilters.length;
+    filterBtn.classList.add('selected');
+    countTag.setAttribute('id', 'hazardFilterCountTag');
+    filterBtn.appendChild(countTag)
+  } else {
+    countTag.remove();
+  }
+};
+
+const markerParams =  {
   event: 'click',
   func: async (hazardID) => {
     if (hazardReportPopulated && hazardReportPopulated.parentNode) {
       hazardReportPopulated.parentNode.removeChild(hazardReportPopulated);
     }
-    // await getReportApiCall(position.lat, position.lng, categoryFilters);
+    
+    const currentReport = await getHazardReportData(hazardID);
 
-   const currentReport =  await getHazardReportData(hazardID);
-   
     let hazardReport = new HazardDetailCard(
       currentReport.id,
       currentReport.hazardCategory.name,
@@ -231,7 +247,9 @@ const markerParams = {
         position.lat,
         position.lng
       ),
-      currentReport.user
+      currentReport.user,
+      currentReport.flagged_as_fake,
+      currentReport.enable_reaction
     );
 
     showHazardDetails(hazardReport);
@@ -242,6 +260,7 @@ const flyTo = (lat, lng) => {
   geoMap.map.flyTo([lat, lng], 12, { animate: true });
 };
 
+
 const closeSearchSuggestion = (e) => {
   const boxSuggestion = document.querySelector('.sb-suggestion-wrapper');
   boxSuggestion.style.display = e?.target?.closest('.sb-search-box')
@@ -251,21 +270,29 @@ const closeSearchSuggestion = (e) => {
   document.querySelector('.sb-categories-wrapper').style.display = 'flex';
 };
 
-const getReportApiCall = async (lat, lng, categoryFilters = [], cursor = 0) => {
+const getReportApiCall = async (lat, lng, size=1000, cursor = 0) => {
+  // clear previous markers
+  geoMap.mapLayers.clearLayers();
   // clear previous reports
-  hazardCardParams['reports'] = [];
+  reports = [];
 
   const positionChange = searchInput.dataset.positionChange === 'true';
-  const url = `hazard-report?cursor=${cursor}&size=10&lat=${
+  const url = `hazard-report?cursor=${cursor}&size=${size}&lat=${
     positionChange ? positionSecondary.lat : lat
   }&lng=${
     positionChange ? positionSecondary.lng : lng
-  }&category_ids=${categoryFilters.join(',')}`;
-  reports = await apiRequest(url, { method: 'GET' });
-  hazardCardParams['reports'] = reports.data?.results;
-  hazardCardParams['position'] = position;
+  }`;
 
-  geoMap.createLayerGroups(hazardCardParams.reports, markerParams);
+  const res = await apiRequest(url, { method: 'GET' });
+  reports = res.data?.results
+  hazardCardParams.position = position;
+
+  geoMap.createLayerGroups(reports, markerParams);
+  if (hazardFilters.length > 0) {
+    geoMap.filterMarker(categoryFilters, hazardFilters);
+  } else if (categoryFilters.length > 0) {
+    geoMap.filterMarker(categoryFilters);
+  }
 };
 
 const cardsOnClick = () => {
@@ -290,14 +317,21 @@ const suggestionOnClick = () => {
       positionSecondary = latLng;
       flyTo(latLng.lat, latLng.lng);
       closeSearchSuggestion();
-      await getReportApiCall(latLng.lat, latLng.lng, categoryFilters);
+      await getReportApiCall(latLng.lat, latLng.lng, categoryFilters, hazardFilters);
       injectCards();
     });
   });
 };
 
 const quickFiltersOnClick = async ({ target }) => {
-  geoMap.mapLayers.clearLayers();
+  hazardFilters = [];
+  hazardTempFilters = [];
+  filterBtn.classList.remove('selected');
+  const hazardFilterCountTag = document.getElementById('hazardFilterCountTag');
+
+  if (hazardFilterCountTag)
+    hazardFilterCountTag.remove();
+
   const quickFilter = target.closest('.quick-filter');
   const categoryId = quickFilter.dataset.categoryId;
 
@@ -307,12 +341,12 @@ const quickFiltersOnClick = async ({ target }) => {
     quickFilter.classList.remove('selected');
     // all filters are de-selected
     if (categoryFilters.length === 0) {
-      await getReportApiCall(position.lat, position.lng, categoryFilters);
+      geoMap.filterMarker(categoryFilters);
       if (document.querySelector('.sb-cards')) injectCards();
       return;
     }
 
-    await getReportApiCall(position.lat, position.lng, categoryFilters);
+    geoMap.filterMarker(categoryFilters);
     if (document.querySelector('.sb-cards')) injectCards();
     return;
   }
@@ -320,7 +354,7 @@ const quickFiltersOnClick = async ({ target }) => {
   quickFilter.classList.add('selected');
   categoryFilters.push(categoryId);
 
-  await getReportApiCall(position.lat, position.lng, categoryFilters);
+  geoMap.filterMarker(categoryFilters);
   if (document.querySelector('.sb-cards')) injectCards();
 };
 
@@ -328,26 +362,56 @@ const injectCards = () => {
   document.querySelector('#reportHazardBtn').style.display = 'none';
   document.querySelector('.sb-cards')?.remove();
 
+  if (categoryFilters.length > 0) {
+    hazardCardParams.reports = reports.filter(report => categoryFilters.includes(report.hazardCategory.id));
+  } else if (hazardFilters.length > 0) {
+    hazardCardParams.reports = reports.filter(report => hazardFilters.includes(report.hazard.id));
+  }else {
+    hazardCardParams.reports = reports;
+  }
+
   injectHTML([
     { func: HazardCard, args: hazardCardParams, target: '#hazard-comp' },
   ]);
 
   document.querySelectorAll('.view-details')?.forEach((detailBtn) => {
-    const idx = detailBtn.dataset.idx;
-    detailBtn.addEventListener('click', () =>
-      showHazardCardFromExistingReports(idx)
-    );
+    detailBtn.addEventListener('click', async ({target}) => {
+      const hazardID = target.dataset.id;
+      const currentReport = await getHazardReportData(hazardID);
+
+      let hazardReport = new HazardDetailCard(
+        currentReport.id,
+        currentReport.hazardCategory.name,
+        currentReport.hazard.name,
+        currentReport.location.address,
+        currentReport.created_at,
+        currentReport.images,
+        currentReport.comment,
+        currentReport.hazardCategory.settings,
+        geolocationDistance(
+          currentReport.location.lat,
+          currentReport.location.lng,
+          position.lat,
+          position.lng
+        ),
+        currentReport.user,
+        currentReport.flagged_as_fake,
+        currentReport.enable_reaction
+      );
+
+      showHazardDetails(hazardReport);
+    });
   });
 
   loadIcons();
   cardsOnClick();
 };
 
+
 const watchGeoLocationSuccess = async ({ coords }) => {
   const lat = coords?.latitude;
   const lng = coords?.longitude;
   geoMap.setMarkerOnMap(lat, lng);
-  await getReportApiCall(lat, lng, categoryFilters);
 
   // update current user position
   position = {
@@ -358,20 +422,17 @@ const watchGeoLocationSuccess = async ({ coords }) => {
   // If there is a report id in the query params and the focus param is set, don't pan to the user's location
   // but to the report's location
   if (flyToTrigger && !(!!idReport && (!!focusMarker || !!openDetail))) {
+    await getReportApiCall(lat, lng);
     flyTo(lat, lng);
     flyToTrigger = false;
   }
 };
 
 const watchGeoLocationError = async (err) => {
-  alert.show(`ERROR(${err.code}): ${err.message}`, AlertPopup.error);
-  await getReportApiCall(position.lat, position.lng, categoryFilters);
+  alert.show(`Unable to access geolocation`, AlertPopup.warning);
+  await getReportApiCall(position.lat, position.lng);
 };
 
-const loadGeolocation = async () => {
-  geoMap = new Map(position.lat, position.lng, mapOptions);
-  Map.watchGeoLocation(watchGeoLocationSuccess, watchGeoLocationError);
-};
 
 const onSearchInput = debounce(async ({ target }) => {
   const boxSuggestion = document.querySelector('.sb-suggestion-wrapper');
@@ -417,18 +478,18 @@ async function getHazardReportData(id) {
     }
     const response = await fetch(API_URL + endpointURL);
     const result = await response.json();
-    return result.data
+    return result.data;
   } catch (error) {
     alert.show(
       'Reports unavailable at the moment, please try again later or contact support',
       AlertPopup.error
     );
-    return null
+    return null;
   }
 }
 
 // Show hazard report
-function showHazardDetails(hazardReport) {
+const showHazardDetails = (hazardReport) => {
   try {
     hazardReportPopulated = hazardReport.hazardCardContent();
 
@@ -436,7 +497,7 @@ function showHazardDetails(hazardReport) {
       hazardReportPopulated,
       document.getElementById('hazard-comp')
     );
-    hazardReport.changeButtonState();
+
     loadIcons();
 
     // Close report card
@@ -449,4 +510,66 @@ function showHazardDetails(hazardReport) {
   } catch (error) {
     console.error('Error:', error);
   }
+}
+
+const showReportsBtnStatus = (count) => {
+  const countNum = Number(count);
+  showReportsBtn.disabled = countNum ? false : true;
+  showReportsBtn.innerText = `Show ${countNum || ''} reports`;
+}
+
+const hazardFilterTempApply = async ({target}) => {
+  const hazardId = target?.dataset?.id;
+  hazardTempFilters = [...hazardTempFilters.filter((f) => f !== hazardId)];
+
+  if (target?.classList?.contains('selected')) {
+    target.classList.remove('selected');
+    // all filters are de-selected
+
+    if (hazardTempFilters.length === 0) {
+      hazardShowCount = 0
+      showReportsBtnStatus(hazardShowCount);
+      return;
+    }
+    hazardShowCount = geoMap.filterMarkerCount(hazardTempFilters);
+    showReportsBtnStatus(hazardShowCount);
+    return;
+  }
+
+  if (!!target) {
+    target.classList.add('selected');
+    hazardTempFilters.push(hazardId);
+  }
+
+  hazardShowCount = geoMap.filterMarkerCount(hazardTempFilters);
+  showReportsBtnStatus(hazardShowCount);
+}
+
+const hazardFilterApply = async () => {
+  // clear all quick filters
+  categoryFilters = [];
+  document.querySelectorAll('.quick-filter')
+    ?.forEach(c => c.classList.remove("selected"));
+
+  hazardFilters = hazardTempFilters;
+  geoMap.filterMarker(categoryFilters, hazardFilters);
+  if (document.querySelector('.sb-cards')) injectCards();
+  toggleFilterModal(true);
+}
+
+const clearHazardFilter = async () => {
+  categoryFilters = [];
+  hazardTempFilters = [];
+  hazardFilters = [];
+  hazardShowCount = 0;
+
+  // clear checkboxes
+  document.querySelectorAll('.cb').forEach(c => {
+    c.classList.remove('selected');
+    c.checked = false;
+  });
+
+  showReportsBtnStatus(0);
+  geoMap.filterMarker([], hazardFilters);
+  if (document.querySelector('.sb-cards')) injectCards();
 }

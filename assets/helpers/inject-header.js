@@ -2,6 +2,7 @@ import AlertPopup from '../components/AlertPopup.js';
 import NotificationItem from '../components/NotificationItem.js';
 import NotificationsEmpty from '../components/NotificationsEmpty.js';
 import loadIcons from '../helpers/load-icons.js';
+import Map from '../models/Map.js';
 import injectHTML from './inject-html.js';
 import {
   getNotifications,
@@ -88,7 +89,7 @@ export const displayNotificationItem = (report) => {
         insertedElement.classList.add('notification__item--read');
         updateNotificationAsRead(user.id, report.id);
         window.location.replace(
-          `/pages/home/index.html?id=${report.id}&open=true`
+          `/pages/home/index.html?id=${report.id}&open=true&zoom=${Map.DEFAULT_MAP_ZOOM}&lat=${report.location.lat}&lng=${report.location.lng}`
         );
 
         checkIfAllNotificationsAreRead();
