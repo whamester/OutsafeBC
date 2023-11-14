@@ -1,10 +1,83 @@
 const STATIC_RESOURCES_KEY = 'static-resources';
 const APP_RESOURCES_KEY = 'app-resources';
 
+const API_REQUESTS_KEY = 'api-requests';
+
+const ICONS = [
+  'assets/icons/search.svg',
+  'assets/icons/checkmark.svg',
+  'assets/icons/wildlife-filled.svg',
+  'assets/icons/circle-check-filled.svg',
+  'assets/icons/password-visible.svg',
+  'assets/icons/location-pin-fill-red.svg',
+  'assets/icons/distance.svg',
+  'assets/icons/logout.svg',
+  'assets/icons/location-pin-fill.svg',
+  'assets/icons/photo-placeholder.svg',
+  'assets/icons/mark-as-read.svg',
+  'assets/icons/map.svg',
+  'assets/icons/report-submitted.svg',
+  'assets/icons/checkbox-checked.svg',
+  'assets/icons/reports.svg',
+  'assets/icons/location-pin-outline.svg',
+  'assets/icons/arrow-right.svg',
+  'assets/icons/subscribe.svg',
+  'assets/icons/settings.svg',
+  'assets/icons/insects-outline.svg',
+  'assets/icons/time.svg',
+  'assets/icons/add-pin.svg',
+  'assets/icons/filters.svg',
+  'assets/icons/circle-check.svg',
+  'assets/icons/weather-outline.svg',
+  'assets/icons/flag.svg',
+  'assets/icons/plus.svg',
+  'assets/icons/check.svg',
+  'assets/icons/warning.svg',
+  'assets/icons/email.svg',
+  'assets/icons/checkbox-unchecked.svg',
+  'assets/icons/close.svg',
+  'assets/icons/infrastructure-outline.svg',
+  'assets/icons/wildfire-outline.svg',
+  'assets/icons/exclamation-mark.svg',
+  'assets/icons/camera.svg',
+  'assets/icons/wildfire-filled.svg',
+  'assets/icons/edit.svg',
+  'assets/icons/wildlife-outline.svg',
+  'assets/icons/delete.svg',
+  'assets/icons/update-status.svg',
+  'assets/icons/plants-outline.svg',
+  'assets/icons/profile.svg',
+  'assets/icons/share.svg',
+  'assets/icons/remove.svg',
+  'assets/icons/marker/icon-insects.svg',
+  'assets/icons/marker/icon-wildfire.svg',
+  'assets/icons/marker/icon-wildfire-focused.svg',
+  'assets/icons/marker/icon-weather.svg',
+  'assets/icons/marker/icon-wildlife.svg',
+  'assets/icons/marker/icon-plants-focused.svg',
+  'assets/icons/marker/icon-wildlife-focused.svg',
+  'assets/icons/marker/icon-infrastructure.svg',
+  'assets/icons/marker/icon-plants.svg',
+  'assets/icons/marker/icon-weather-focused.svg',
+  'assets/icons/marker/icon-infrastructure-focused.svg',
+  'assets/icons/marker/icon-insects-focused.svg',
+  'assets/icons/current-location.svg',
+  'assets/icons/close-square.svg',
+  'assets/icons/date.svg',
+  'assets/icons/password-close.svg',
+  'assets/icons/notification-yes.svg',
+  'assets/icons/notification-no.svg',
+  'assets/icons/plants-filled.svg',
+  'assets/icons/dangerous-insects-filled.svg',
+  'assets/icons/minus.svg',
+  'assets/icons/chevron-left.svg',
+];
+
 const ASSETS = [
   '/index.html',
   '/global.js',
   '/constants.js',
+  '/pages/home/index.html',
 
   '/assets/css/_global.css',
   '/assets/css/_typography.css',
@@ -36,70 +109,7 @@ const ASSETS = [
   '/assets/img/icons/appicon-96.png',
   '/assets/img/header-logo-dark.svg',
 
-  '/assets/icons/search.svg',
-  '/assets/icons/password-visible.svg',
-  '/assets/icons/location-pin-fill-red.svg',
-  '/assets/icons/distance.svg',
-  '/assets/icons/logout.svg',
-  '/assets/icons/location-pin-fill.svg',
-  '/assets/icons/photo-placeholder.svg',
-  '/assets/icons/mark-as-read.svg',
-  '/assets/icons/map.svg',
-  '/assets/icons/report-submitted.svg',
-  '/assets/icons/checkbox-checked.svg',
-  '/assets/icons/reports.svg',
-  '/assets/icons/location-pin-outline.svg',
-  '/assets/icons/arrow-right.svg',
-  '/assets/icons/subscribe.svg',
-  '/assets/icons/poisonous-plants-filled.svg',
-  '/assets/icons/settings.svg',
-  '/assets/icons/insects-outline.svg',
-  '/assets/icons/time.svg',
-  '/assets/icons/add-pin.svg',
-  '/assets/icons/filters.svg',
-  '/assets/icons/circle-check.svg',
-  '/assets/icons/weather-outline.svg',
-  '/assets/icons/flag.svg',
-  '/assets/icons/plus.svg',
-  '/assets/icons/check.svg',
-  '/assets/icons/warning.svg',
-  '/assets/icons/email.svg',
-  '/assets/icons/checkbox-unchecked.svg',
-  '/assets/icons/close.svg',
-  '/assets/icons/infrastructure-outline.svg',
-  '/assets/icons/wildfire-outline.svg',
-  '/assets/icons/exclamation-mark.svg',
-  '/assets/icons/camera.svg',
-  '/assets/icons/wildfire-filled.svg',
-  '/assets/icons/edit.svg',
-  '/assets/icons/wildlife-outline.svg',
-  '/assets/icons/delete.svg',
-  '/assets/icons/update-status.svg',
-  '/assets/icons/plants-outline.svg',
-  '/assets/icons/profile.svg',
-  '/assets/icons/share.svg',
-  '/assets/icons/marker/icon-insects.svg',
-  '/assets/icons/marker/icon-wildfire.svg',
-  '/assets/icons/marker/icon-wildfire-focused.svg',
-  '/assets/icons/marker/icon-weather.svg',
-  '/assets/icons/marker/icon-wildlife.svg',
-  '/assets/icons/marker/icon-plants-focused.svg',
-  '/assets/icons/marker/icon-wildlife-focused.svg',
-  '/assets/icons/marker/icon-infrastructure.svg',
-  '/assets/icons/marker/icon-plants.svg',
-  '/assets/icons/marker/icon-weather-focused.svg',
-  '/assets/icons/marker/icon-infrastructure-focused.svg',
-  '/assets/icons/marker/icon-insects-focused.svg',
-  '/assets/icons/current-location.svg',
-  '/assets/icons/close-square.svg',
-  '/assets/icons/date.svg',
-  '/assets/icons/password-close.svg',
-  '/assets/icons/notification-yes.svg',
-  '/assets/icons/wild-animal-filled.svg',
-  '/assets/icons/notification-no.svg',
-  '/assets/icons/dangerous-insects-filled.svg',
-  '/assets/icons/minus.svg',
-  '/assets/icons/chevron-left.svg',
+  ...ICONS,
 
   '/assets/fonts/Instrument_Sans/static/InstrumentSans-Italic.ttf',
   '/assets/fonts/Instrument_Sans/static/InstrumentSans_SemiCondensed-BoldItalic.ttf',
@@ -142,6 +152,7 @@ const ASSETS = [
   'https://www.gstatic.com/firebasejs/ui/6.0.1/firebase-ui-auth.js',
   'https://www.gstatic.com/firebasejs/ui/6.0.1/firebase-ui-auth.css',
 ];
+
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(STATIC_RESOURCES_KEY).then((cache) => {
@@ -163,19 +174,48 @@ self.addEventListener('activate', async (event) => {
   );
 });
 
+const API_REQUESTS_URLS = ['https://enchanting-llama-6664aa.netlify.app'];
+const APP_BLACKLIST = [
+  'https://enchanting-llama-6664aa.netlify.app',
+  '/jawg-terrain',
+  'chrome-extension://',
+];
+
 self.addEventListener('fetch', (event) => {
-  //Statiic assets
   event.respondWith(
     caches.match(event.request).then((cache) => {
-      return cache || fetch(event.request).then(response =>{
-        return caches.open(APP_RESOURCES_KEY).then(cache =>{
-          if(!event.request.url.includes('/jawg-terrain')){
+      if (
+        API_REQUESTS_URLS.find((url) => event.request.url.includes(url)) &&
+        event.request.method === 'GET'
+      ) {
+        caches
+          .open(API_REQUESTS_KEY)
+          .then((cache) => cache.add(event.request).catch(console.error));
+      }
 
-            cache.put(event.request, response.clone())
-          }
-          return response
-        }).catch(console.log)
-      }).catch(console.log);
+      return (
+        cache ||
+        fetch(event.request)
+          .then(async (response) => {
+            return caches
+              .open(APP_RESOURCES_KEY)
+              .then((cache) => {
+                if (
+                  !APP_BLACKLIST.find((url) =>
+                    event.request.url.includes(url)
+                  ) &&
+                  event.request.method === 'GET'
+                ) {
+                  cache
+                    .put(event.request, response.clone())
+                    .catch(console.error);
+                }
+                return response;
+              })
+              .catch(console.log);
+          })
+          .catch(console.log)
+      );
     })
   );
 });
