@@ -6,13 +6,19 @@ class AlertPopup {
   static error = 'error';
   static warning = 'warning';
 
-  constructor() {
+  constructor() {}
+
+  show(message, type = AlertPopup.success, delay = 3000) {
+    if (!message) {
+      throw new Error('message is required');
+    }
+
     const alert = `
-			<div id="alert" class="hidden">
-				<div id="alert-icon"></div>
-				<p id="alert-message" class="text-body-2"></p>
-			</div>
-		`;
+    <div id="alert" class="hidden">
+      <div id="alert-icon"></div>
+      <p id="alert-message" class="text-body-2"></p>
+    </div>
+  `;
 
     const body = document.getElementsByTagName('body')?.[0];
 
@@ -24,12 +30,7 @@ class AlertPopup {
     alertContainer.innerHTML = alert;
 
     body.appendChild(alertContainer);
-  }
 
-  show(message, type = AlertPopup.success, delay = 3000) {
-    if (!message) {
-      throw new Error('message is required');
-    }
     this.message = message;
     this.type = type;
     this.delay = delay;

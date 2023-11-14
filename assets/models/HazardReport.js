@@ -10,6 +10,7 @@ class HazardReport extends ReportForm {
       id: null,
       name: null,
       settings: {
+        detail: null,
         icon: null,
         iconBackround: null,
         report_hazard_question: null,
