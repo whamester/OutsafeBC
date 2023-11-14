@@ -751,7 +751,7 @@ showConfirmationBtn.addEventListener('click', () => {
   imagesOutput.innerHTML = '';
 
   currentReport.images.forEach((image) => {
-    imagesOutput.innerHTML += `<img src="${image}" width="150" />`;
+    imagesOutput.innerHTML += `<img src="${image}" height = "100" width = "auto"/>`;
   });
 });
 

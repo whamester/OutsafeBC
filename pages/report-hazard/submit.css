@@ -3,7 +3,7 @@
   border: 1px solid var(--neutral-300);
   background: var(--white);
   padding-top: 1.69rem;
-  padding-bottom: 1.69rem;
+  /* padding-bottom: 1.69rem; */
   padding-left: 1rem;
   padding-right: 1rem;
 }
@@ -32,7 +32,6 @@
   padding-left: 1.25rem;
   padding-right: 1.25rem;
   color: var(--neutral-neutral-900);
-  
 }
 
 .edit-link {
@@ -53,6 +52,18 @@
   margin-left: 0.5rem;
 }
 
-.main-submit-section{
-    margin-bottom: 2.5rem;
+.main-submit-section {
+  margin-bottom: 2.5rem;
+}
+
+#imagesOutput {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  gap: 16px;
+}
+
+#imagesOutput img {
+  border-radius: 0.38606rem;
+  border: 0.386px solid var(--neutral-300);
 }
