@@ -1,6 +1,6 @@
 import { API_URL } from '../../constants.js';
 // Helpers
-import MyReportCard from '../../assets/components/ReportCard.js';
+import MyReportCard from '../../assets/components/MyReportCard.js';
 import { getUserSession } from '../../assets/helpers/storage.js';
 import loadIcons from '../../assets/helpers/load-icons.js';
 import injectHeader from '../../assets/helpers/inject-header.js';
@@ -81,19 +81,23 @@ async function displayRecentReports() {
     recentReports.innerHTML = empty.getHTML();
   } else {
     for (const report of recentReportArr) {
-      let hazardReport = new MyReportCard(
-        report.id,
-        report.hazardCategory.name,
-        report.hazard.name,
-        report.location.address,
-        report.created_at,
-        report.images,
-        report.comment,
-        report.hazardCategory.settings
-      );
+      let hazardReport = new MyReportCard({
+        id: report.id,
+        category: report.hazardCategory.name,
+        hazard: report.hazard.name,
+        location: report.location.address,
+        photos: report.images,
+        comment: report.comment,
+        settings: report.hazardCategory.settings,
+        flagged_count: report.flagged_count,
+        not_there_count: report.not_there_count,
+        still_there_count: report.still_there_count,
+        created_at: report.created_at,
+        deleted_at: report.deleted_at,
+        updated_at: report.updated_at,
+      });
       recentReports.appendChild(hazardReport.reportContent());
 
-      
       loadIcons();
     }
   }
@@ -127,16 +131,24 @@ async function displayOlderReports() {
     olderReports.innerHTML = empty.getHTML();
   } else {
     for (const report of olderReportArr) {
-      let hazardReport = new MyReportCard(
-        report.id,
-        report.hazardCategory.name,
-        report.hazard.name,
-        report.location.address,
-        report.created_at,
-        report.images,
-        report.comment,
-        report.hazardCategory.settings
-      );
+      // id, category, hazard, location, date, photos, comment, settings,flagged_count, not_there_count,still_there_count
+      let hazardReport = new MyReportCard({
+        id: report.id,
+        category: report.hazardCategory.name,
+        hazard: report.hazard.name,
+        location: report.location.address,
+
+        photos: report.images,
+        comment: report.comment,
+        settings: report.hazardCategory.settings,
+        flagged_count: report.flagged_count,
+        not_there_count: report.not_there_count,
+        still_there_count: report.still_there_count,
+
+        created_at: report.created_at,
+        deleted_at: report.deleted_at,
+        updated_at: report.updated_at,
+      });
       olderReports.appendChild(hazardReport.reportContent());
 
       loadIcons();
@@ -151,9 +163,9 @@ function toggleSwitchEventlistener() {
   document.querySelectorAll('[id^=ts]').forEach((toggleSwitch) => {
     toggleSwitch.onchange = (e) => {
       onToggle(e);
-      let reportID = e.target.id.slice(3)
-      let toggleState = e.target.checked
-      updateReportStatus(reportID, toggleState)
+      let reportID = e.target.id.slice(3);
+      let toggleState = e.target.checked;
+      updateReportStatus(reportID, toggleState);
     };
   });
 }
@@ -162,12 +174,13 @@ function toggleSwitchEventlistener() {
 async function updateReportStatus(reportID, activeState) {
   try {
     const response = await fetch(
-      `${API_URL}/hazard-report-status?id=${reportID}&is_active=${activeState}`, {
+      `${API_URL}/hazard-report-status?id=${reportID}&is_active=${activeState}`,
+      {
         method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-      } 
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
     );
     const { error, message } = await response.json();
 

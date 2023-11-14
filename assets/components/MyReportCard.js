@@ -1,9 +1,9 @@
-import ReportCard from '../helpers/card-container.js';
-import ToggleSwitch from '../components/ToggleSwitch.js';
+import ReportCardContainer from '../components/ReportCardContainer.js';
+import ToggleSwitch from './ToggleSwitch.js';
 
-class MyReportCard extends ReportCard {
-  constructor(id, category, hazard, location, date, photos, comment, icon) {
-    super(id, category, hazard, location, date, photos, comment, icon);
+class MyReportCard extends ReportCardContainer {
+  constructor(data) {
+    super(data);
   }
 
   reportContent() {
@@ -57,7 +57,7 @@ class MyReportCard extends ReportCard {
 		<div class="report-card__spacer-line"></div>
 
 		<div class="report-card__my-reports-buttons">
-			${ToggleSwitch(this.id)}
+			${ToggleSwitch(this.id, !this.deleted_at)}
 			<button class="btn btn-tertiary text-body-3 medium" onclick="window.location.href='/pages/report-hazard/index.html?id=${
         this.id
       }#review-report'">
