@@ -745,8 +745,8 @@ enlace.setAttribute('onclick', 'location.href="#review-report"');
 showConfirmationBtn.addEventListener('click', () => {
   console.log(currentReport);
   locationOutput.innerHTML = `${currentReport.location.address} (${currentReport.location.lat},${currentReport.location.lng})`;
-  categoryOutput.innerHTML = currentReport.category.name;
-  hazardOptionOutput.innerHTML = currentReport.option.name;
+  categoryOutput.innerHTML = currentReport.category.name; console.log(currentReport.category.name);
+  hazardOptionOutput.innerHTML = currentReport.option.name; console.log(currentReport.option.name);
   commentOutput.innerHTML = currentReport.comment;
   imagesOutput.innerHTML = '';
 

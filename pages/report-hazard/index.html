@@ -267,37 +267,61 @@
 
         <div id="submitContainer" class="scroll-container">
 
-          <div>
+          <div class="main-submit-section">
             <div class="submit-section">
-              <p>Location:</p>
-              <a id="editLocation" href="#select-location">Edit</a>
+              <p class="text-body-2 medium title-label">
+                Location:
+              </p>
+              <a id="editLocation" href="#select-location" class="text-body-2 regular edit-link">
+                <p>
+                  Edit<img src="../../assets/icons/edit.svg" alt="Back" class="edit-icon"/>
+                </p> 
+              </a>
             </div>
             <div>
-              <p id="locationOutput"></p>
+              <p id="locationOutput" class="submit-value"></p>
             </div>
           </div>
 
-          <div id="review-report-category">
-            <p>Type of hazard:</p>
-
+          <div class="main-submit-section">
+            <div class="submit-section">
+              <p class="text-body-2 medium title-label">
+                Type of hazard:
+              </p>
+              <a id="editCategory" href="#hazard-category" class="text-body-2 regular edit-link">
+                <p>
+                  Edit<img src="../../assets/icons/edit.svg" alt="Back" class="edit-icon"/>
+                </p> 
+              </a>
+            </div>
             <div>
-              <p id="categoryOutput"></p>
+              <p id="categoryOutput" class="submit-value"></p>
+            </div>
+          </div>
+
+
+          <!-- <div id="review-report-category">
+            <p>Type of hazard:</p>
+            <div>
+              <p id="categoryOutput-"></p>
               <a id="editCategory" href="#hazard-category">Edit</a>
             </div>
-          </div>
+          </div> -->
+
+
+
 
           <div>
             <p>Hazard:</p>
-
             <div>
-              <p id="hazardOptionOutput"></p>
+              <p id="hazardOptionOutput-"></p>
               <a id="editType" href="#hazard-type">Edit</a>
             </div>
           </div>
 
+
           <div>
             <p>Additional details:</p>
-
             <div>
               <p id="commentOutput"></p>
               <a id="editDetails" href="#additional-details">Edit</a>
