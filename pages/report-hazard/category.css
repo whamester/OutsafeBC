@@ -24,12 +24,6 @@
   padding-top: 0.5rem;
 }
 
-.category-container .category-icon,
-img {
-  /* width: 2.5rem;
-  height: 2.5rem; */
-}
-
 .category-container .text-container {
   display: flex;
   flex-direction: column;
