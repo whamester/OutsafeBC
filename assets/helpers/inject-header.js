@@ -96,8 +96,7 @@ export const displayNotificationItem = (report) => {
       });
     }
   } catch (error) {
-    const alert = new AlertPopup();
-    alert.show('Error displaying notifications', AlertPopup.error);
+    AlertPopup.show('Error displaying notifications', AlertPopup.error);
   }
 };
 

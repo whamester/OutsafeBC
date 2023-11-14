@@ -8,7 +8,7 @@ class AlertPopup {
 
   constructor() {}
 
-  show(message, type = AlertPopup.success, delay = 3000) {
+  static show(message, type = AlertPopup.success, delay = 3000) {
     if (!message) {
       throw new Error('message is required');
     }
