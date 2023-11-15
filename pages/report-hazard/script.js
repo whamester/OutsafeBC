@@ -79,8 +79,7 @@ window.onload = async function () {
 
     reportHazardForm.style.height = '100%';
   } catch (error) {
-    const alert = new AlertPopup();
-    alert.show(
+    AlertPopup.show(
       error.message || AlertPopup.SOMETHING_WENT_WRONG_MESSAGE,
       AlertPopup.error,
       500
@@ -134,8 +133,7 @@ const displayCurrentSection = () => {
 
     pagesHandler(pageId);
   } catch (error) {
-    const alert = new AlertPopup();
-    alert.show(
+    AlertPopup.show(
       error.message || AlertPopup.SOMETHING_WENT_WRONG_MESSAGE,
       AlertPopup.error
     );
@@ -168,8 +166,7 @@ const loadGeolocation = async () => {
   } catch (error) {
     console.log(error);
 
-    const alert = new AlertPopup();
-    alert.show(
+    AlertPopup.show(
       error.message || AlertPopup.SOMETHING_WENT_WRONG_MESSAGE,
       AlertPopup.error
     );
@@ -228,8 +225,8 @@ const populateReport = async () => {
         });
       } catch (error) {
         console.log({ error });
-        const alert = new AlertPopup();
-        alert.show(
+
+        AlertPopup.show(
           error.message || AlertPopup.SOMETHING_WENT_WRONG_MESSAGE,
           AlertPopup.error,
           6000
@@ -377,8 +374,7 @@ const getCategories = async () => {
       content.appendChild(categoryContainer);
     }
   } catch (error) {
-    const alert = new AlertPopup();
-    alert.show(
+    AlertPopup.show(
       error.message || AlertPopup.SOMETHING_WENT_WRONG_MESSAGE,
       AlertPopup.error
     );
@@ -467,8 +463,7 @@ const populateHazardOptions = (options, selectedOptionQuestion) => {
       hazardOptionContent.appendChild(div);
     }
   } catch (error) {
-    const alert = new AlertPopup();
-    alert.show(
+    AlertPopup.show(
       error.message || AlertPopup.SOMETHING_WENT_WRONG_MESSAGE,
       AlertPopup.error
     );
@@ -535,13 +530,12 @@ document.getElementById('starCameraBtn').addEventListener('click', () => {
       console.error(error);
       canvasContext.font = '20px Tahoma';
       canvasContext.fillText(error, 20, 100);
-      const alert = new AlertPopup();
-      alert.show('Error taking the picture', AlertPopup.warning);
+
+      AlertPopup.show('Error taking the picture', AlertPopup.warning);
     });
     document.getElementById('takeDesktopPictureBtn').disabled = false;
   } else {
-    const alert = new AlertPopup();
-    alert.show(
+    AlertPopup.show(
       "This browser doesn't support media devices",
       AlertPopup.warning
     );
@@ -567,8 +561,7 @@ document
 
       displayImages(canvasDataURL);
     } else {
-      const alert = new AlertPopup();
-      alert.show(
+      AlertPopup.show(
         'You have reached the limit of pictures allowed',
         AlertPopup.warning
       );
@@ -625,8 +618,7 @@ function handleFileSelection(event) {
 //#region Mobile and Desktop Image Functions
 const saveFile = (files) => {
   if (currentReport.images.length >= 3) {
-    const alert = new AlertPopup();
-    alert.show(
+    AlertPopup.show(
       'You have reached the limit of pictures allowed',
       AlertPopup.warning
     );
@@ -635,8 +627,7 @@ const saveFile = (files) => {
   const selectedFiles = Array.isArray(files) ? files : [files];
 
   if (selectedFiles.length > 3) {
-    const alert = new AlertPopup();
-    alert.show('You can only upload 3 images', AlertPopup.warning);
+    AlertPopup.show('You can only upload 3 images', AlertPopup.warning);
   }
   selectedFiles?.splice(0, 3)?.forEach((file) => {
     try {
@@ -644,8 +635,7 @@ const saveFile = (files) => {
         displayImages(target.result);
       });
     } catch (error) {
-      const alert = new AlertPopup();
-      alert.show('Error uploading the image', AlertPopup.warning);
+      AlertPopup.show('Error uploading the image', AlertPopup.warning);
     }
   });
 };
@@ -861,8 +851,7 @@ reportHazardForm.addEventListener('submit', async function (event) {
       throw new Error('Failed to create report');
     }
   } catch (error) {
-    const alert = new AlertPopup();
-    alert.show(error.message, AlertPopup.error);
+    AlertPopup.show(error.message, AlertPopup.error);
   }
 });
 

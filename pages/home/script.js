@@ -49,8 +49,6 @@ let hazardFilters = [];
 let hazardShowCount = 0;
 let flyToTrigger = true;
 
-const alert = new AlertPopup();
-
 let mapOptions = {
   zoomControl: false,
   doubleClickZoom: false,
@@ -133,7 +131,7 @@ window.onload = async function () {
   } catch (error) {
     console.error(error, error.message);
 
-    alert.show('Error loading categories', AlertPopup.error, 500);
+    AlertPopup.show('Error loading categories', AlertPopup.error, 500);
   }
 
   try {
@@ -183,7 +181,7 @@ window.onload = async function () {
     }
   } catch (error) {
     console.error(error);
-    alert.show(
+    AlertPopup.show(
       error.message || AlertPopup.SOMETHING_WENT_WRONG_MESSAGE,
       AlertPopup.error,
       500
@@ -283,9 +281,11 @@ const getReportApiCall = async (lat, lng, size = 1000, cursor = 0) => {
   reports = [];
 
   const positionChange = searchInput.dataset.positionChange === 'true';
-  const url = `hazard-report?cursor=${cursor}&size=${size}&lat=${
-    positionChange ? positionSecondary.lat : lat
-  }&lng=${positionChange ? positionSecondary.lng : lng}`;
+  //TEMP
+  // const url = `hazard-report?cursor=${cursor}&size=${size}&lat=${
+  //   positionChange ? positionSecondary.lat : lat
+  // }&lng=${positionChange ? positionSecondary.lng : lng}`;
+  const url = `hazard-report`;
 
   const res = await apiRequest(url, { method: 'GET' });
   reports = res.data?.results;
@@ -443,7 +443,7 @@ const watchGeoLocationSuccess = async ({ coords }) => {
 };
 
 const watchGeoLocationError = async (err) => {
-  alert.show(`Unable to access geolocation`, AlertPopup.warning);
+  AlertPopup.show(`Unable to access geolocation`, AlertPopup.warning);
   await getReportApiCall(position.lat, position.lng);
 };
 
@@ -493,7 +493,7 @@ async function getHazardReportData(id) {
     const result = await response.json();
     return result.data;
   } catch (error) {
-    alert.show(
+    AlertPopup.show(
       'Reports unavailable at the moment, please try again later or contact support',
       AlertPopup.error
     );

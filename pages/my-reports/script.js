@@ -20,7 +20,7 @@ const recentReports = document.getElementById('recentReports');
 const olderReports = document.getElementById('olderReports');
 const recentBtn = document.getElementById('recentReportsBtn');
 const olderBtn = document.getElementById('olderReportsBtn');
-const alert = new AlertPopup();
+
 const empty = new ReportsEmpty();
 
 /**
@@ -68,7 +68,7 @@ async function getRecentReports() {
 
     recentReportArr.push(...result.data.results);
   } catch (error) {
-    alert.show(
+    AlertPopup.show(
       'Reports unavailable at the moment, please try again later or contact support',
       AlertPopup.error
     );
@@ -117,7 +117,7 @@ async function getOlderReports() {
 
     olderReportArr.push(...result.data.results);
   } catch (error) {
-    alert.show(
+    AlertPopup.show(
       'Reports unavailable at the moment, please try again later or contact support',
       AlertPopup.error
     );
@@ -185,17 +185,17 @@ async function updateReportStatus(reportID, activeState) {
     const { error, message } = await response.json();
 
     if (!!error) {
-      alert.show(`${error}`, AlertPopup.error);
+      AlertPopup.show(`${error}`, AlertPopup.error);
       if (!activeState) {
         // TODO: checked true
       } else {
         // TODO: checked false
       }
     } else {
-      alert.show(`${message}`, AlertPopup.success);
+      AlertPopup.show(`${message}`, AlertPopup.success);
     }
   } catch (error) {
-    alert.show('Unable to update status at the moment', AlertPopup.error);
+    AlertPopup.show('Unable to update status at the moment', AlertPopup.error);
     if (!activeState) {
       // TODO: checked true
     } else {

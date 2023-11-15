@@ -9,8 +9,7 @@ const getHazardDetail = async (idReport) => {
       const { data, error } = await apiRequest(`hazard-report?id=${idReport}`);
 
       if (error) {
-        const alert = new AlertPopup();
-        alert.show(error, AlertPopup.error, 500);
+        AlertPopup.show(error, AlertPopup.error, 500);
         return;
       }
 

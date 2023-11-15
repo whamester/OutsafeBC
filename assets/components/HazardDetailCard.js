@@ -90,8 +90,6 @@ class HazardDetailCard extends ReportCardContainer {
 
   async reportStillThere(option) {
     try {
-      const alert = new AlertPopup();
-
       const response = await fetch(
         `${API_URL}/hazard-report-reaction?id=${this.id}`,
         {
@@ -108,17 +106,17 @@ class HazardDetailCard extends ReportCardContainer {
       const { error, message } = await response.json();
 
       if (!!error) {
-        alert.show(error, AlertPopup.error);
+        AlertPopup.show(error, AlertPopup.error);
         console.error(error);
         return;
       }
       // Success alert
-      alert.show(message, AlertPopup.success);
+      AlertPopup.show(message, AlertPopup.success);
       this.enable_reaction = false;
       this.changeButtonState();
     } catch (error) {
       // Error alert
-      alert.show(
+      AlertPopup.show(
         'Unable to complete the action at the moment',
         AlertPopup.error
       );
@@ -127,7 +125,6 @@ class HazardDetailCard extends ReportCardContainer {
   }
 
   async flagAsFake() {
-    const alert = new AlertPopup();
     try {
       const response = await fetch(
         `${API_URL}/hazard-report-flag?id=${this.id}`,
@@ -144,17 +141,17 @@ class HazardDetailCard extends ReportCardContainer {
       const { error, message } = await response.json();
 
       if (!!error) {
-        alert.show(error, AlertPopup.error);
+        AlertPopup.show(error, AlertPopup.error);
         console.error(error);
         return;
       }
 
-      alert.show(message, AlertPopup.success);
+      AlertPopup.show(message, AlertPopup.success);
       this.flagged_as_fake = true;
       this.changeButtonState();
     } catch (error) {
       // Error alert
-      alert.show(
+      AlertPopup.show(
         'Unable to complete the action at the moment',
         AlertPopup.error
       );

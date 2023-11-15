@@ -45,6 +45,14 @@
   width: 3rem;
   height: 3rem;
   border-radius: 6.25rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#alert #alert-icon i {
+  width: 1.75rem;
+  height: 1.75rem;
   flex-shrink: 0;
 }
 
@@ -63,8 +71,20 @@
   background: var(--white);
 }
 
+#alert.success #alert-icon i {
+  background: var(--success-500);
+}
+
+#alert.warning #alert-icon i {
+  background: var(--warning-500);
+}
+
+#alert.error #alert-icon i {
+  background: var(--error-500);
+}
+
 #alert.dismiss {
-  transform: translateY(-200px);
+  transform: translateY(-400px);
   transition: all ease 0.5s;
 }
 

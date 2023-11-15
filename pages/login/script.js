@@ -9,7 +9,6 @@ import Header from '../../assets/components/Header.js';
 import AlertPopup from '../../assets/components/AlertPopup.js';
 import injectHeader from '../../assets/helpers/inject-header.js';
 //Variables
-const alert = new AlertPopup();
 const password = document.getElementById('password-input');
 const showPw = document.getElementById('show-pw');
 const hidePw = document.getElementById('hide-pw');
@@ -41,15 +40,21 @@ window.onload = function () {
         const { data } = await response.json();
 
         if (data?.id) {
-          alert.show('Welcome back!');
+          AlertPopup.show('Welcome back!');
           setUserSession(data);
           window.location.replace('/');
           return;
         }
 
-        alert.show(AlertPopup.SOMETHING_WENT_WRONG_MESSAGE, AlertPopup.error);
+        AlertPopup.show(
+          AlertPopup.SOMETHING_WENT_WRONG_MESSAGE,
+          AlertPopup.error
+        );
       } catch (error) {
-        alert.show(AlertPopup.SOMETHING_WENT_WRONG_MESSAGE, AlertPopup.error);
+        AlertPopup.show(
+          AlertPopup.SOMETHING_WENT_WRONG_MESSAGE,
+          AlertPopup.error
+        );
         console.debug(error);
       }
     },
@@ -85,17 +90,20 @@ document
       const { data, error } = await response.json();
 
       if (data?.id) {
-        alert.show('Welcome back!');
+        AlertPopup.show('Welcome back!');
 
         setUserSession(data);
         window.location.replace('/');
       }
 
       if (!!error) {
-        alert.show(error, AlertPopup.error);
+        AlertPopup.show(error, AlertPopup.error);
       }
     } catch (error) {
-      alert.show(AlertPopup.SOMETHING_WENT_WRONG_MESSAGE, AlertPopup.error);
+      AlertPopup.show(
+        AlertPopup.SOMETHING_WENT_WRONG_MESSAGE,
+        AlertPopup.error
+      );
       console.debug(error);
     }
   });
