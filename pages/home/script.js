@@ -281,9 +281,11 @@ const getReportApiCall = async (lat, lng, size = 1000, cursor = 0) => {
   reports = [];
 
   const positionChange = searchInput.dataset.positionChange === 'true';
-  const url = `hazard-report?cursor=${cursor}&size=${size}&lat=${
-    positionChange ? positionSecondary.lat : lat
-  }&lng=${positionChange ? positionSecondary.lng : lng}`;
+  //TEMP
+  // const url = `hazard-report?cursor=${cursor}&size=${size}&lat=${
+  //   positionChange ? positionSecondary.lat : lat
+  // }&lng=${positionChange ? positionSecondary.lng : lng}`;
+  const url = `hazard-report`;
 
   const res = await apiRequest(url, { method: 'GET' });
   reports = res.data?.results;

@@ -1,3 +1,4 @@
+import AlertPopup from './assets/components/AlertPopup.js';
 import errorInputHelper from './assets/helpers/error-input-helper.js';
 import {
   checkIfAllNotificationsAreRead,
@@ -75,3 +76,14 @@ channel.addEventListener('message', (event) => {
 loadIcons();
 
 errorInputHelper();
+
+window.addEventListener('online', function () {
+  AlertPopup.show('You are back online', AlertPopup.success);
+});
+
+window.addEventListener('offline', function () {
+  AlertPopup.show(
+    'You are offline right now. You can still view recent hazard reports, but to receive real-time updates, please connect to the internet. Stay safe out there! 🏕️🌲',
+    AlertPopup.warning
+  );
+});
