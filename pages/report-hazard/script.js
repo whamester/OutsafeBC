@@ -743,7 +743,6 @@ enlace.setAttribute('onclick', 'location.href="#review-report"');
  * Step 6: Show Confirmation
  */
 showConfirmationBtn.addEventListener('click', () => {
-  // locationOutput.innerHTML = `${currentReport.location.address} (${currentReport.location.lat},${currentReport.location.lng})`;
   locationOutput.innerHTML = `${currentReport.location.address}`;
   categoryOutput.innerHTML = currentReport.category.name;
   hazardOptionOutput.innerHTML = currentReport.option.name;
