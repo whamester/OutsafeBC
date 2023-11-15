@@ -1,7 +1,7 @@
-const STATIC_RESOURCES_KEY = 'static-resources';
-const APP_RESOURCES_KEY = 'app-resources';
+const STATIC_RESOURCES_KEY = 'static-resources-1';
+const APP_RESOURCES_KEY = 'app-resources-1';
 
-const API_REQUESTS_KEY = 'api-requests';
+const API_REQUESTS_KEY = 'api-requests-1';
 
 const ICONS = [
   'assets/icons/search.svg',
