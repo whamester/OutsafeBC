@@ -5,8 +5,7 @@ import GeoMap from '../../assets/components/GeoMap.js';
 import SearchBar, {
   SearchBarSuggestionCard,
 } from '../../assets/components/SearchBar.js';
-import Modal from '../../assets/components/Modal.js';
-import HazardCard from '../../assets/components/HazardCard.js';
+import HazardCardLayout from '../../assets/components/HazardCardLayout.js';
 import ModalFilter from '../../assets/components/ModalFilter.js';
 import AlertPopup from '../../assets/components/AlertPopup.js';
 import HazardDetailCard from '../../assets/components/HazardDetailCard.js';
@@ -49,8 +48,6 @@ let hazardTempFilters = [];
 let hazardFilters = [];
 let hazardShowCount = 0;
 let flyToTrigger = true;
-
-const alert = new AlertPopup();
 
 let mapOptions = {
   zoomControl: false,
@@ -134,7 +131,7 @@ window.onload = async function () {
   } catch (error) {
     console.error(error, error.message);
 
-    alert.show('Error loading categories', AlertPopup.error, 500);
+    AlertPopup.show('Error loading categories', AlertPopup.error, 500);
   }
 
   try {
@@ -147,32 +144,38 @@ window.onload = async function () {
       const makerExists = geoMap.checkMarkerOnMap(hazardDetail);
 
       // marker currently doesnot exists on the map
-      if (!makerExists)
-        geoMap.createLayerGroups([hazardDetail], markerParams);
-      
+      if (!makerExists) geoMap.createLayerGroups([hazardDetail], markerParams);
+
       flyTo(hazardDetail.location?.lat, hazardDetail.location?.lng);
     }
 
     if (openDetail) {
-      const data = new HazardDetailCard(
-        hazardDetail.id,
-        hazardDetail.category.name,
-        hazardDetail.option.name,
-        hazardDetail.location.address,
-        hazardDetail.created_at,
-        hazardDetail.images,
-        hazardDetail.comment,
-        hazardDetail.category.settings,
-        geolocationDistance(
+      // id, category, hazard, location, date, photos, comment, settings,flagged_count, not_there_count,still_there_count
+      // distance, user, flagged_as_fake, enable_reaction
+      const data = new HazardDetailCard({
+        id: hazardDetail.id,
+        category: hazardDetail.category.name,
+        hazard: hazardDetail.option.name,
+        location: hazardDetail.location.address,
+        photos: hazardDetail.images,
+        comment: hazardDetail.comment,
+        settings: hazardDetail.category.settings,
+        flagged_count: hazardDetail.flagged_count,
+        not_there_count: hazardDetail.not_there_count,
+        still_there_count: hazardDetail.still_there_count,
+        flagged_as_fake: hazardDetail.flagged_as_fake,
+        enable_reaction: hazardDetail.enable_reaction,
+        created_at: hazardDetail.created_at,
+        updated_at: hazardDetail.updated_at,
+        deleted_at: hazardDetail.deleted_at,
+        distance: geolocationDistance(
           hazardDetail.location.lat,
           hazardDetail.location.lng,
           position.lat,
           position.lng
         ),
-        hazardDetail.user,
-        hazardDetail.flagged_as_fake,
-        hazardDetail.enable_reaction
-      );
+        user: hazardDetail.user,
+      });
 
       showHazardDetails(data);
 
@@ -180,7 +183,7 @@ window.onload = async function () {
     }
   } catch (error) {
     console.error(error);
-    alert.show(
+    AlertPopup.show(
       error.message || AlertPopup.SOMETHING_WENT_WRONG_MESSAGE,
       AlertPopup.error,
       500
@@ -190,68 +193,73 @@ window.onload = async function () {
 
 const toggleFilterModal = async (flag) => {
   const filterModal = document.querySelector('.modal-filter');
-  filterModal.classList.toggle("hidden", flag);
+  filterModal.classList.toggle('hidden', flag);
 
-  document.querySelectorAll(".cb").forEach(checkbox => {
+  document.querySelectorAll('.cb').forEach((checkbox) => {
     checkbox.addEventListener('change', hazardFilterTempApply, false);
     checkbox.checked = hazardFilters.includes(checkbox.dataset?.id);
-    checkbox.classList.toggle("selected", checkbox.checked);
+    checkbox.classList.toggle('selected', checkbox.checked);
   });
 
-  if(!flag) {
+  if (!flag) {
     hazardShowCount = geoMap.filterMarkerCount(hazardFilters);
-    filterModal.querySelector(".modal-filter--wrapper-outer").scrollTop = 0;
+    filterModal.querySelector('.modal-filter--wrapper-outer').scrollTop = 0;
     showReportsBtnStatus(hazardShowCount);
   }
 
   showReportsBtn?.addEventListener('click', hazardFilterApply, false);
   clearReportsBtn?.addEventListener('click', clearHazardFilter, false);
 
-  let countTag = filterBtn.querySelector("#hazardFilterCountTag");
+  let countTag = filterBtn.querySelector('#hazardFilterCountTag');
   filterBtn.classList.remove('selected');
 
   if (!countTag) {
     countTag = document.createElement('p');
   }
-  
-  if (hazardFilters.length > 0){
+
+  if (hazardFilters.length > 0) {
     countTag.innerText = hazardFilters.length;
     filterBtn.classList.add('selected');
     countTag.setAttribute('id', 'hazardFilterCountTag');
-    filterBtn.appendChild(countTag)
+    filterBtn.appendChild(countTag);
   } else {
     countTag.remove();
   }
 };
 
-const markerParams =  {
+const markerParams = {
   event: 'click',
   func: async (hazardID) => {
     if (hazardReportPopulated && hazardReportPopulated.parentNode) {
       hazardReportPopulated.parentNode.removeChild(hazardReportPopulated);
     }
-    
+
     const currentReport = await getHazardReportData(hazardID);
 
-    let hazardReport = new HazardDetailCard(
-      currentReport.id,
-      currentReport.hazardCategory.name,
-      currentReport.hazard.name,
-      currentReport.location.address,
-      currentReport.created_at,
-      currentReport.images,
-      currentReport.comment,
-      currentReport.hazardCategory.settings,
-      geolocationDistance(
+    let hazardReport = new HazardDetailCard({
+      id: currentReport.id,
+      category: currentReport.hazardCategory.name,
+      hazard: currentReport.hazard.name,
+      location: currentReport.location.address,
+      photos: currentReport.images,
+      comment: currentReport.comment,
+      settings: currentReport.hazardCategory.settings,
+      flagged_count: currentReport.flagged_count,
+      not_there_count: currentReport.not_there_count,
+      still_there_count: currentReport.still_there_count,
+      flagged_as_fake: currentReport.flagged_as_fake,
+      enable_reaction: currentReport.enable_reaction,
+      created_at: currentReport.created_at,
+      updated_at: currentReport.updated_at,
+      deleted_at: currentReport.deleted_at,
+      distance: geolocationDistance(
         currentReport.location.lat,
         currentReport.location.lng,
         position.lat,
         position.lng
       ),
-      currentReport.user,
-      currentReport.flagged_as_fake,
-      currentReport.enable_reaction
-    );
+      user: currentReport.user,
+    });
 
     showHazardDetails(hazardReport);
   },
@@ -260,7 +268,6 @@ const markerParams =  {
 const flyTo = (lat, lng) => {
   geoMap.map.flyTo([lat, lng], 12, { animate: true });
 };
-
 
 const closeSearchSuggestion = (e) => {
   const boxSuggestion = document.querySelector('.sb-suggestion-wrapper');
@@ -271,21 +278,21 @@ const closeSearchSuggestion = (e) => {
   document.querySelector('.sb-categories-wrapper').style.display = 'flex';
 };
 
-const getReportApiCall = async (lat, lng, size=1000, cursor = 0) => {
+const getReportApiCall = async (lat, lng, size = 1000, cursor = 0) => {
   // clear previous markers
   geoMap.mapLayers.clearLayers();
   // clear previous reports
   reports = [];
 
   const positionChange = searchInput.dataset.positionChange === 'true';
-  const url = `hazard-report?cursor=${cursor}&size=${size}&lat=${
-    positionChange ? positionSecondary.lat : lat
-  }&lng=${
-    positionChange ? positionSecondary.lng : lng
-  }`;
+  //TEMP
+  // const url = `hazard-report?cursor=${cursor}&size=${size}&lat=${
+  //   positionChange ? positionSecondary.lat : lat
+  // }&lng=${positionChange ? positionSecondary.lng : lng}`;
+  const url = `hazard-report`;
 
   const res = await apiRequest(url, { method: 'GET' });
-  reports = res.data?.results
+  reports = res.data?.results;
   hazardCardParams.position = position;
 
   geoMap.createLayerGroups(reports, markerParams);
@@ -318,7 +325,12 @@ const suggestionOnClick = () => {
       positionSecondary = latLng;
       flyTo(latLng.lat, latLng.lng);
       closeSearchSuggestion();
-      await getReportApiCall(latLng.lat, latLng.lng, categoryFilters, hazardFilters);
+      await getReportApiCall(
+        latLng.lat,
+        latLng.lng,
+        categoryFilters,
+        hazardFilters
+      );
       injectCards();
     });
   });
@@ -330,8 +342,7 @@ const quickFiltersOnClick = async ({ target }) => {
   filterBtn.classList.remove('selected');
   const hazardFilterCountTag = document.getElementById('hazardFilterCountTag');
 
-  if (hazardFilterCountTag)
-    hazardFilterCountTag.remove();
+  if (hazardFilterCountTag) hazardFilterCountTag.remove();
 
   const quickFilter = target.closest('.quick-filter');
   const categoryId = quickFilter.dataset.categoryId;
@@ -364,50 +375,58 @@ const injectCards = () => {
   document.querySelector('.sb-cards')?.remove();
 
   if (categoryFilters.length > 0) {
-    hazardCardParams.reports = reports.filter(report => categoryFilters.includes(report.hazardCategory.id));
+    hazardCardParams.reports = reports.filter((report) =>
+      categoryFilters.includes(report.hazardCategory.id)
+    );
   } else if (hazardFilters.length > 0) {
-    hazardCardParams.reports = reports.filter(report => hazardFilters.includes(report.hazard.id));
-  }else {
+    hazardCardParams.reports = reports.filter((report) =>
+      hazardFilters.includes(report.hazard.id)
+    );
+  } else {
     hazardCardParams.reports = reports;
   }
 
   injectHTML([
-    { func: HazardCard, args: hazardCardParams, target: '#hazard-comp' },
+    { func: HazardCardLayout, args: hazardCardParams, target: '#hazard-comp' },
   ]);
 
   document.querySelectorAll('.view-details')?.forEach((detailBtn) => {
-    detailBtn.addEventListener('click', async ({target}) => {
+    detailBtn.addEventListener('click', async ({ target }) => {
       const hazardID = target.dataset.id;
-      const currentReport = await getHazardReportData(hazardID);
+      hazardDetail = await getHazardDetail(hazardID);
 
-      let hazardReport = new HazardDetailCard(
-        currentReport.id,
-        currentReport.hazardCategory.name,
-        currentReport.hazard.name,
-        currentReport.location.address,
-        currentReport.created_at,
-        currentReport.images,
-        currentReport.comment,
-        currentReport.hazardCategory.settings,
-        geolocationDistance(
-          currentReport.location.lat,
-          currentReport.location.lng,
+      const data = new HazardDetailCard({
+        id: hazardDetail.id,
+        category: hazardDetail.category.name,
+        hazard: hazardDetail.option.name,
+        location: hazardDetail.location.address,
+        photos: hazardDetail.images,
+        comment: hazardDetail.comment,
+        settings: hazardDetail.category.settings,
+        flagged_count: hazardDetail.flagged_count,
+        not_there_count: hazardDetail.not_there_count,
+        still_there_count: hazardDetail.still_there_count,
+        flagged_as_fake: hazardDetail.flagged_as_fake,
+        enable_reaction: hazardDetail.enable_reaction,
+        created_at: hazardDetail.created_at,
+        updated_at: hazardDetail.updated_at,
+        deleted_at: hazardDetail.deleted_at,
+        distance: geolocationDistance(
+          hazardDetail.location.lat,
+          hazardDetail.location.lng,
           position.lat,
           position.lng
         ),
-        currentReport.user,
-        currentReport.flagged_as_fake,
-        currentReport.enable_reaction
-      );
+        user: hazardDetail.user,
+      });
 
-      showHazardDetails(hazardReport);
+      showHazardDetails(data);
     });
   });
 
   loadIcons();
   cardsOnClick();
 };
-
 
 const watchGeoLocationSuccess = async ({ coords }) => {
   const lat = coords?.latitude;
@@ -430,10 +449,9 @@ const watchGeoLocationSuccess = async ({ coords }) => {
 };
 
 const watchGeoLocationError = async (err) => {
-  alert.show(`Unable to access geolocation`, AlertPopup.warning);
+  AlertPopup.show(`Unable to access geolocation`, AlertPopup.warning);
   await getReportApiCall(position.lat, position.lng);
 };
-
 
 const onSearchInput = debounce(async ({ target }) => {
   const boxSuggestion = document.querySelector('.sb-suggestion-wrapper');
@@ -481,7 +499,7 @@ async function getHazardReportData(id) {
     const result = await response.json();
     return result.data;
   } catch (error) {
-    alert.show(
+    AlertPopup.show(
       'Reports unavailable at the moment, please try again later or contact support',
       AlertPopup.error
     );
@@ -511,15 +529,15 @@ const showHazardDetails = (hazardReport) => {
   } catch (error) {
     console.error('Error:', error);
   }
-}
+};
 
 const showReportsBtnStatus = (count) => {
   const countNum = Number(count);
   showReportsBtn.disabled = countNum ? false : true;
   showReportsBtn.innerText = `Show ${countNum || ''} reports`;
-}
+};
 
-const hazardFilterTempApply = async ({target}) => {
+const hazardFilterTempApply = async ({ target }) => {
   const hazardId = target?.dataset?.id;
   hazardTempFilters = [...hazardTempFilters.filter((f) => f !== hazardId)];
 
@@ -528,7 +546,7 @@ const hazardFilterTempApply = async ({target}) => {
     // all filters are de-selected
 
     if (hazardTempFilters.length === 0) {
-      hazardShowCount = 0
+      hazardShowCount = 0;
       showReportsBtnStatus(hazardShowCount);
       return;
     }
@@ -544,19 +562,20 @@ const hazardFilterTempApply = async ({target}) => {
 
   hazardShowCount = geoMap.filterMarkerCount(hazardTempFilters);
   showReportsBtnStatus(hazardShowCount);
-}
+};
 
 const hazardFilterApply = async () => {
   // clear all quick filters
   categoryFilters = [];
-  document.querySelectorAll('.quick-filter')
-    ?.forEach(c => c.classList.remove("selected"));
+  document
+    .querySelectorAll('.quick-filter')
+    ?.forEach((c) => c.classList.remove('selected'));
 
   hazardFilters = hazardTempFilters;
   geoMap.filterMarker(categoryFilters, hazardFilters);
   if (document.querySelector('.sb-cards')) injectCards();
   toggleFilterModal(true);
-}
+};
 
 const clearHazardFilter = async () => {
   categoryFilters = [];
@@ -565,7 +584,7 @@ const clearHazardFilter = async () => {
   hazardShowCount = 0;
 
   // clear checkboxes
-  document.querySelectorAll('.cb').forEach(c => {
+  document.querySelectorAll('.cb').forEach((c) => {
     c.classList.remove('selected');
     c.checked = false;
   });
@@ -573,4 +592,4 @@ const clearHazardFilter = async () => {
   showReportsBtnStatus(0);
   geoMap.filterMarker([], hazardFilters);
   if (document.querySelector('.sb-cards')) injectCards();
-}
+};

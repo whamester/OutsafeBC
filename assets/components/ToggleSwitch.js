@@ -1,11 +1,13 @@
-const ToggleSwitch = (id) => {
+const ToggleSwitch = (id, checked) => {
   return `
 	<div class="report-card__toggle_button">
 		<label class="switch">
-			<input type="checkbox" id="ts-${id}" checked>
+			<input type="checkbox" id="ts-${id}" ${checked ? 'checked' : ''}>
 			<span class="slider round"></span>
 		</label>
-		<span id="toggleStatus" class="text-body-3 medium">Ongoing</span>
+		<span id="toggleStatus" class="text-body-3 medium ${
+      checked ? 'text-success-500' : 'text-warning-700'
+    }">${checked ? 'Ongoing' : 'Inactive'}</span>
 	</div>
   	`;
 };

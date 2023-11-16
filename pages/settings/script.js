@@ -290,14 +290,12 @@ async function setNotificationSettings() {
       notifications_enabled: !!pushNotificationSwitch.checked,
     });
 
-    const alert = new AlertPopup();
-    alert.show(
+    AlertPopup.show(
       `Notifications turned ${!!pushNotificationSwitch.checked ? 'on' : 'off'}`
     );
     console.log('Notifications turned on', data, message);
   } catch (error) {
-    const alert = new AlertPopup();
-    alert.show(AlertPopup.SOMETHING_WENT_WRONG_MESSAGE, AlertPopup.error);
+    AlertPopup.show(AlertPopup.SOMETHING_WENT_WRONG_MESSAGE, AlertPopup.error);
     console.log('Notifications turned off', error);
   }
 }

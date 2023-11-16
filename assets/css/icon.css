@@ -3,4 +3,21 @@ i[class^='icon-'] {
   height: 20px;
   background-color: var(--neutral-900);
   flex-shrink: 0;
+  mask-size: cover;
+  -webkit-mask-size: cover;
+}
+
+.icon-close-square {
+  mask: url(../icons/close-square.svg);
+  -webkit-mask-image: url(../icons/close-square.svg);
+}
+
+.icon-warning {
+  mask: url(../icons/warning.svg);
+  -webkit-mask-image: url(../icons/warning.svg);
+}
+
+.icon-checkmark {
+  mask: url(../icons/checkmark.svg);
+  -webkit-mask-image: url(../icons/checkmark.svg);
 }
