@@ -1,7 +1,7 @@
-const STATIC_RESOURCES_KEY = 'static-resources-2';
-const APP_RESOURCES_KEY = 'app-resources-2';
+const STATIC_RESOURCES_KEY = 'static-resources-5';
+const APP_RESOURCES_KEY = 'app-resources-5';
 
-const API_REQUESTS_KEY = 'api-requests-2';
+const API_REQUESTS_KEY = 'api-requests-5';
 
 const ICONS = [
   'assets/icons/search.svg',
@@ -163,34 +163,38 @@ self.addEventListener('install', (event) => {
 
 // lister for activate service worker event
 self.addEventListener('activate', async (event) => {
+  console.log('service worker activate');
   event.waitUntil(
     caches.keys().then((keys) => {
-      return Promise.all(
-        keys
-          .filter((key) => key !== STATIC_RESOURCES_KEY)
-          .map((key) => caches.delete(key))
-      );
+      console.log({ keys });
+      return Promise.all(keys.filter((key) => key !== STATIC_RESOURCES_KEY).map((key) => caches.delete(key)));
     })
   );
 });
 
-const API_REQUESTS_URLS = ['https://enchanting-llama-6664aa.netlify.app'];
-const APP_BLACKLIST = [
-  'https://enchanting-llama-6664aa.netlify.app',
-  '/jawg-terrain',
-  'chrome-extension://',
-];
+const API_REQUESTS_URLS = ['https://outsafebc-api.netlify.app'];
+const APP_BLACKLIST = ['https://outsafebc-api.netlify.app', '/jawg-terrain', 'chrome-extension://'];
 
 self.addEventListener('fetch', (event) => {
   event.respondWith(
     caches.match(event.request).then((cache) => {
-      if (
-        API_REQUESTS_URLS.find((url) => event.request.url.includes(url)) &&
-        event.request.method === 'GET'
-      ) {
-        caches
-          .open(API_REQUESTS_KEY)
-          .then((cache) => cache.add(event.request).catch(console.error));
+      const isAPIRequest = !!API_REQUESTS_URLS.find((url) => event.request.url.includes(url)) && event.request.method === 'GET';
+      if (isAPIRequest) {
+        caches.open(API_REQUESTS_KEY).then((cache) => cache.add(event.request).catch(console.error));
+      }
+
+      console.log({ isAPIRequest, cache });
+      if (cache && isAPIRequest) {
+        fetch(event.request).then((response) =>
+          caches
+            .open(API_REQUESTS_KEY)
+            .then((cache) => {
+              cache.put(event.request, response.clone()).catch(console.error);
+
+              return response;
+            })
+            .catch(console.log)
+        );
       }
 
       return (
@@ -200,15 +204,8 @@ self.addEventListener('fetch', (event) => {
             return caches
               .open(APP_RESOURCES_KEY)
               .then((cache) => {
-                if (
-                  !APP_BLACKLIST.find((url) =>
-                    event.request.url.includes(url)
-                  ) &&
-                  event.request.method === 'GET'
-                ) {
-                  cache
-                    .put(event.request, response.clone())
-                    .catch(console.error);
+                if (!APP_BLACKLIST.find((url) => event.request.url.includes(url)) && event.request.method === 'GET') {
+                  cache.put(event.request, response.clone()).catch(console.error);
                 }
                 return response;
               })
