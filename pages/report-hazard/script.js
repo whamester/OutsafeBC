@@ -76,6 +76,16 @@ window.onload = async function () {
     populateReport();
 
     reportHazardForm.style.height = '100%';
+
+    // Hazard Category and Option required
+    // These events are overwriten when the user selects an option
+    hazardType.onclick = () => {
+      AlertPopup.show('Please select a hazard category', AlertPopup.warning);
+    };
+
+    selectHazardOptionLink.onclick = () => {
+      AlertPopup.show('Please select a hazard option', AlertPopup.warning);
+    };
   } catch (error) {
     AlertPopup.show(error.message || AlertPopup.SOMETHING_WENT_WRONG_MESSAGE, AlertPopup.error, 500);
   }
