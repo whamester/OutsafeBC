@@ -76,9 +76,9 @@ class ReportCardContainer {
   getGallery() {
     let photos = this.photos;
     let galleryContainer = document.createElement('div');
-    galleryContainer.setAttribute('id', 'report-card__image-gallery');
+    galleryContainer.setAttribute('class', 'report-card__image-gallery');
     let gallery = document.createElement('div');
-    gallery.setAttribute('id', 'report-card__picture-container');
+    gallery.setAttribute('class', 'report-card__picture-container');
 
     for (const pic of photos) {
       let image = document.createElement('img');

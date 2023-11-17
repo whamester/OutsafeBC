@@ -147,7 +147,7 @@ class HazardDetailCard extends ReportCardContainer {
       // hide the flag report button
       this.divContainer.querySelector('#flagReportBtn').classList.add('hidden');
     } else {
-      // how the flag report button
+      // show the flag report button
       this.divContainer.querySelector('#flagReportBtn').classList.remove('hidden');
     }
 
@@ -251,7 +251,7 @@ class HazardDetailCard extends ReportCardContainer {
           
           <div class="report-card__spacer-line"></div>
           
-          <div id="report-card__image-gallery"></div>
+          <div class="report-card__image-gallery"></div>
           
           <div class="report-card__spacer-line"></div>
           
@@ -313,7 +313,7 @@ class HazardDetailCard extends ReportCardContainer {
       `;
     // TODO: We can add the edit button for the user if it's the author of the report
 
-    divInner.querySelector('#report-card__image-gallery').appendChild(super.getGallery());
+    divInner.querySelector('.report-card__image-gallery').appendChild(super.getGallery());
     divOuter.appendChild(divInner);
     divContainer.appendChild(divOuter);
 
