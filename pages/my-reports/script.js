@@ -1,6 +1,6 @@
 import { API_URL } from '../../constants.js';
 // Helpers
-import MyReportCard from '../../assets/components/ReportCard.js';
+import MyReportCard from '../../assets/components/MyReportCard.js';
 import { getUserSession } from '../../assets/helpers/storage.js';
 import loadIcons from '../../assets/helpers/load-icons.js';
 import injectHeader from '../../assets/helpers/inject-header.js';
@@ -9,7 +9,6 @@ import Header from '../../assets/components/Header.js';
 import AlertPopup from '../../assets/components/AlertPopup.js';
 import { onToggle } from '../../assets/components/ToggleSwitch.js';
 import ReportsEmpty from '../../assets/components/ReportsEmpty.js';
-
 
 // Variables
 const user = getUserSession();
@@ -21,7 +20,7 @@ const recentReports = document.getElementById('recentReports');
 const olderReports = document.getElementById('olderReports');
 const recentBtn = document.getElementById('recentReportsBtn');
 const olderBtn = document.getElementById('olderReportsBtn');
-const alert = new AlertPopup();
+
 const empty = new ReportsEmpty();
 
 /**
@@ -69,7 +68,7 @@ async function getRecentReports() {
 
     recentReportArr.push(...result.data.results);
   } catch (error) {
-    alert.show(
+    AlertPopup.show(
       'Reports unavailable at the moment, please try again later or contact support',
       AlertPopup.error
     );
@@ -82,28 +81,27 @@ async function displayRecentReports() {
     recentReports.innerHTML = empty.getHTML();
   } else {
     for (const report of recentReportArr) {
-      let hazardReport = new MyReportCard(
-        report.id,
-        report.hazardCategory.name,
-        report.hazard.name,
-        report.location.address,
-        report.created_at,
-        report.images,
-        report.comment,
-        report.hazardCategory.settings
-      );
-      recentReports.appendChild(hazardReport.reportContent());
-
-      document.querySelectorAll('[id^=ts]').forEach((toggleSwitch) => {
-        toggleSwitch.addEventListener('change', (e) => {
-          onToggle(e);
-          // TODO: API call
-        });
+      let hazardReport = new MyReportCard({
+        id: report.id,
+        category: report.hazardCategory.name,
+        hazard: report.hazard.name,
+        location: report.location.address,
+        photos: report.images,
+        comment: report.comment,
+        settings: report.hazardCategory.settings,
+        flagged_count: report.flagged_count,
+        not_there_count: report.not_there_count,
+        still_there_count: report.still_there_count,
+        created_at: report.created_at,
+        deleted_at: report.deleted_at,
+        updated_at: report.updated_at,
       });
+      recentReports.appendChild(hazardReport.reportContent());
 
       loadIcons();
     }
   }
+  toggleSwitchEventlistener();
 }
 
 // Get all the older reports for the logged in user and display them
@@ -119,7 +117,7 @@ async function getOlderReports() {
 
     olderReportArr.push(...result.data.results);
   } catch (error) {
-    alert.show(
+    AlertPopup.show(
       'Reports unavailable at the moment, please try again later or contact support',
       AlertPopup.error
     );
@@ -133,19 +131,75 @@ async function displayOlderReports() {
     olderReports.innerHTML = empty.getHTML();
   } else {
     for (const report of olderReportArr) {
-      let hazardReport = new MyReportCard(
-        report.id,
-        report.hazardCategory.name,
-        report.hazard.name,
-        report.location.address,
-        report.created_at,
-        report.images,
-        report.comment,
-        report.hazardCategory.settings
-      );
+      // id, category, hazard, location, date, photos, comment, settings,flagged_count, not_there_count,still_there_count
+      let hazardReport = new MyReportCard({
+        id: report.id,
+        category: report.hazardCategory.name,
+        hazard: report.hazard.name,
+        location: report.location.address,
+
+        photos: report.images,
+        comment: report.comment,
+        settings: report.hazardCategory.settings,
+        flagged_count: report.flagged_count,
+        not_there_count: report.not_there_count,
+        still_there_count: report.still_there_count,
+
+        created_at: report.created_at,
+        deleted_at: report.deleted_at,
+        updated_at: report.updated_at,
+      });
       olderReports.appendChild(hazardReport.reportContent());
+
       loadIcons();
     }
+    toggleSwitchEventlistener();
   }
   olderReportClicked = true;
+}
+
+// Toggle switch eventlistener
+function toggleSwitchEventlistener() {
+  document.querySelectorAll('[id^=ts]').forEach((toggleSwitch) => {
+    toggleSwitch.onchange = (e) => {
+      onToggle(e);
+      let reportID = e.target.id.slice(3);
+      let toggleState = e.target.checked;
+      updateReportStatus(reportID, toggleState);
+    };
+  });
+}
+
+// Update status of hazard report
+async function updateReportStatus(reportID, activeState) {
+  try {
+    const response = await fetch(
+      `${API_URL}/hazard-report-status?id=${reportID}&is_active=${activeState}`,
+      {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+    const { error, message } = await response.json();
+
+    if (!!error) {
+      AlertPopup.show(`${error}`, AlertPopup.error);
+      if (!activeState) {
+        // TODO: checked true
+      } else {
+        // TODO: checked false
+      }
+    } else {
+      AlertPopup.show(`${message}`, AlertPopup.success);
+    }
+  } catch (error) {
+    AlertPopup.show('Unable to update status at the moment', AlertPopup.error);
+    if (!activeState) {
+      // TODO: checked true
+    } else {
+      // TODO: checked false
+    }
+  }
 }

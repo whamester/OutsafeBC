@@ -1,0 +1,48 @@
+#hazard-option-content {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+#hazard-option-content .div-input {
+  flex-shrink: 0;
+}
+
+#hazard-option-content label {
+  padding: 0.3125rem 0.625rem;
+  cursor: pointer;
+  display: inline-block;
+  margin: 0.3125rem;
+  border-radius: 6.25rem;
+  border: 0.0625rem solid var(--neutral-300);
+  background: var(--neutral-50);
+}
+
+#hazard-option-content input[type='radio']:checked + label {
+  border-radius: 6.25rem;
+  border: 0.0625rem solid var(--neutral-100);
+  background: var(--secondary-500);
+}
+
+#hazard-option-content .container-type {
+  display: flex;
+  gap: 0.2rem;
+  padding: 0.625rem;
+}
+
+#hazard-option-content .checkmark {
+  padding-right: 0.125rem;
+  display: flex;
+  align-items: center;
+}
+
+#hazard-option-content .text-type {
+  display: flex;
+  align-items: center;
+}
+
+#hazard-option-content .category-icon-type {
+  margin: 0;
+  padding: 0;
+  width: 1.25rem;
+  height: 1.25rem;
+}

@@ -1,8 +1,8 @@
 import ReportCard from '../helpers/card-container.js';
 
-class MyReportCard extends ReportCard {
-  constructor(id, category, hazard, location, date, photos, comment, icon) {
-    super(id, category, hazard, location, date, photos, comment, icon);
+class MyReportCard extends ReportCardContainer {
+  constructor(data) {
+    super(data);
   }
 
   reportContent() {

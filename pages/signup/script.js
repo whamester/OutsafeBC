@@ -9,7 +9,6 @@ import Header from '../../assets/components/Header.js';
 import AlertPopup from '../../assets/components/AlertPopup.js';
 import injectHeader from '../../assets/helpers/inject-header.js';
 //Variables
-const alert = new AlertPopup();
 const password = document.getElementById('password-input');
 const confirmPassword = document.getElementById('confirm-password-input');
 const confirmPasswordForm = document.getElementById('confirmPwForm');
@@ -47,14 +46,14 @@ window.onload = function () {
         const { data, error } = await response.json();
 
         if (data?.id) {
-          alert.show('Welcome!');
+          AlertPopup.show('Welcome!');
 
           setUserSession(data);
           window.location.replace('/');
         }
 
         if (!!error) {
-          alert.show(error, AlertPopup.error);
+          AlertPopup.show(error, AlertPopup.error);
         }
       } catch (error) {
         console.debug({ error });
@@ -91,14 +90,14 @@ document
 
       const { data, error } = await response.json();
       if (data?.id) {
-        alert.show('Welcome!');
+        AlertPopup.show('Welcome!');
 
         setUserSession(data);
         window.location.replace('/');
       }
 
       if (!!error) {
-        alert.show(error, AlertPopup.error);
+        AlertPopup.show(error, AlertPopup.error);
       }
     } catch (error) {
       console.debug(error);

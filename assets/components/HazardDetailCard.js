@@ -1,4 +1,4 @@
-import ReportCard from '../helpers/card-container.js';
+import ReportCardContainer from './ReportCardContainer.js';
 import { API_URL } from '../../constants.js';
 import Modal from './Modal.js';
 import { getUserSession } from '../helpers/storage.js';
@@ -6,26 +6,14 @@ import AlertPopup from './AlertPopup.js';
 
 const userSession = getUserSession();
 
-class HazardDetailCard extends ReportCard {
-  constructor(
-    id,
-    category,
-    hazard,
-    location,
-    date,
-    photos,
-    comment,
-    icon,
-    distance,
-    user,
-    flagged_as_fake,
-    enable_reaction
-  ) {
-    super(id, category, hazard, location, date, photos, comment, icon);
-    this.distance = distance;
-    this.user = user;
-    this.flagged_as_fake = flagged_as_fake;
-    this.enable_reaction = enable_reaction;
+const FLAGGED_BY_OTHERS_MESSAGE = 'This report has been flagged as fake by other users';
+const FLAGGED_BY_OTHERS_AND_I_MESSAGE = 'This report has been flagged as fake by you and other users';
+const FLAGGED_BY_ME_MESSAGE = 'This report has been flagged as fake by you';
+
+class HazardDetailCard extends ReportCardContainer {
+  constructor(data) {
+    super(data);
+    this.distance = data.distance;
     this.divContainer = null;
     this.createdByUserLoggedIn = userSession?.email === this.user.email;
   }
@@ -36,15 +24,12 @@ class HazardDetailCard extends ReportCard {
     const loginBtn = document.createElement('button');
     loginBtn.setAttribute('id', 'open-modal-btn');
     loginBtn.setAttribute('class', 'btn btn-primary');
-    loginBtn.addEventListener('click', () =>
-      window.location.assign(`/pages/login/index.html`)
-    );
+    loginBtn.addEventListener('click', () => window.location.assign(`/pages/login/index.html`));
     loginBtn.innerHTML = 'Log in';
 
     modal.show({
       title: 'Please log in to continue',
-      description:
-        'Thank you for helping others have a safe outdoors experience.',
+      description: 'Thank you for helping others have a safe outdoors experience.',
       icon: {
         name: 'icon-exclamation-mark',
         color: '#000000',
@@ -86,8 +71,7 @@ class HazardDetailCard extends ReportCard {
 
     modal.show({
       title: 'Are you sure you want to flag this report as fake?',
-      description:
-        'Your decision helps us ensure the accuracy and reliability of our hazard reporting system.',
+      description: 'Your decision helps us ensure the accuracy and reliability of our hazard reporting system.',
       icon: {
         name: 'icon-flag',
         color: 'var(--error-500)',
@@ -100,103 +84,105 @@ class HazardDetailCard extends ReportCard {
 
   async reportStillThere(option) {
     try {
-      const alert = new AlertPopup();
-
-      const response = await fetch(
-        `${API_URL}/hazard-report-reaction?id=${this.id}`,
-        {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            user_id: userSession?.id,
-            still_there: option,
-          }),
-        }
-      );
+      const response = await fetch(`${API_URL}/hazard-report-reaction?id=${this.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          user_id: userSession?.id,
+          still_there: option,
+        }),
+      });
       const { error, message } = await response.json();
 
       if (!!error) {
-        alert.show(error, AlertPopup.error);
+        AlertPopup.show(error, AlertPopup.error);
         console.error(error);
         return;
       }
       // Success alert
-      alert.show(message, AlertPopup.success);
+      AlertPopup.show(message, AlertPopup.success);
       this.enable_reaction = false;
       this.changeButtonState();
     } catch (error) {
       // Error alert
-      alert.show(
-        'Unable to complete the action at the moment',
-        AlertPopup.error
-      );
+      AlertPopup.show('Unable to complete the action at the moment', AlertPopup.error);
       console.error(error);
     }
   }
 
   async flagAsFake() {
-    const alert = new AlertPopup();
     try {
-      const response = await fetch(
-        `${API_URL}/hazard-report-flag?id=${this.id}`,
-        {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            user_id: userSession?.id,
-          }),
-        }
-      );
+      const response = await fetch(`${API_URL}/hazard-report-flag?id=${this.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          user_id: userSession?.id,
+        }),
+      });
       const { error, message } = await response.json();
 
       if (!!error) {
-        alert.show(error, AlertPopup.error);
+        AlertPopup.show(error, AlertPopup.error);
         console.error(error);
         return;
       }
 
-      alert.show(message, AlertPopup.success);
+      AlertPopup.show(message, AlertPopup.success);
       this.flagged_as_fake = true;
       this.changeButtonState();
     } catch (error) {
       // Error alert
-      alert.show(
-        'Unable to complete the action at the moment',
-        AlertPopup.error
-      );
+      AlertPopup.show('Unable to complete the action at the moment', AlertPopup.error);
       console.error(error);
     }
   }
 
   changeButtonState() {
-    if (this.flagged_as_fake) {
+    //If I have already flagged the report
+    if (!!this.flagged_as_fake) {
+      // hide the flag report button
       this.divContainer.querySelector('#flagReportBtn').classList.add('hidden');
-      this.divContainer
-        .querySelector('#flagReportMessage')
-        .classList.remove('hidden');
     } else {
-      this.divContainer
-        .querySelector('#flagReportBtn')
-        .classList.remove('hidden');
-      this.divContainer
-        .querySelector('#flagReportMessage')
-        .classList.add('hidden');
+      // how the flag report button
+      this.divContainer.querySelector('#flagReportBtn').classList.remove('hidden');
     }
 
+    // If I have flagged the report and others aswell
+    if (this.flagged_as_fake && this.flagged_count > 0) {
+      // show flagged by me and others the message
+      this.divContainer.querySelector('#flagReportMessage').classList.remove('hidden');
+      this.divContainer.querySelector('#flagReportMessage p').innerHTML = FLAGGED_BY_OTHERS_AND_I_MESSAGE;
+    }
+    // If I have flagged the report
+    else if (this.flagged_as_fake) {
+      // show flagged by me message
+      this.divContainer.querySelector('#flagReportMessage').classList.remove('hidden');
+      this.divContainer.querySelector('#flagReportMessage p').innerHTML = FLAGGED_BY_ME_MESSAGE;
+    }
+    // If others have flagged the report
+    else if (this.flagged_count > 0) {
+      // show flagged by others message
+      this.divContainer.querySelector('#flagReportMessage').classList.remove('hidden');
+      this.divContainer.querySelector('#flagReportMessage p').innerHTML = FLAGGED_BY_OTHERS_MESSAGE;
+    }
+    // If the report has not been flagged
+    else {
+      this.divContainer.querySelector('#flagReportMessage').classList.add('hidden');
+    }
+
+    // if enable reaction is false
     if (!this.enable_reaction) {
+      // hide the reaction buttons
       this.divContainer.querySelector('#stillThereBtn').classList.add('hidden');
       this.divContainer.querySelector('#notThereBtn').classList.add('hidden');
     } else {
-      this.divContainer
-        .querySelector('#stillThereBtn')
-        .classList.remove('hidden');
-      this.divContainer
-        .querySelector('#notThereBtn')
-        .classList.remove('hidden');
+      // show the reaction buttons
+      this.divContainer.querySelector('#stillThereBtn').classList.remove('hidden');
+      this.divContainer.querySelector('#notThereBtn').classList.remove('hidden');
     }
   }
 
@@ -283,27 +269,21 @@ class HazardDetailCard extends ReportCard {
           <div class="report-card__user-details">
             <img
               id="user-image"
-              src="${
-                this.user.photo || '../../assets/img/default-nav-image.png'
-              }"
+              src="${this.user.photo || '../../assets/img/default-nav-image.png'}"
               alt="User photo"
             />
-            <p class="text-body-2 regular">${this.user.name}</p>
+            <p class="text-body-2 regular">${this.user.name || 'Anonymous user'}</p>
           </div>
           `
               : ''
           }
           
           <div
-            class="report-card__spacer-line ${
-              this.createdByUserLoggedIn ? 'hidden' : ''
-            }"
+            class="report-card__spacer-line ${this.createdByUserLoggedIn ? 'hidden' : ''}"
           ></div>
           
           <div
-            class="report-card__hazard-detail-buttons ${
-              this.createdByUserLoggedIn ? 'hidden' : ''
-            }"
+            class="report-card__hazard-detail-buttons ${this.createdByUserLoggedIn ? 'hidden' : ''}"
           >
   
             <button class="btn btn-success" id="stillThereBtn">
@@ -324,7 +304,7 @@ class HazardDetailCard extends ReportCard {
             <div id="flagReportMessage" class="message error">
               <i class="icon-flag message__icon"></i>
               <p class="message__content text-body-3 medium">
-                This report has been reported as fake.
+                You have flagged this report as fake.
               </p>
             </div>
 
@@ -333,21 +313,17 @@ class HazardDetailCard extends ReportCard {
       `;
     // TODO: We can add the edit button for the user if it's the author of the report
 
-    divInner
-      .querySelector('#report-card__image-gallery')
-      .appendChild(super.getGallery());
+    divInner.querySelector('#report-card__image-gallery').appendChild(super.getGallery());
     divOuter.appendChild(divInner);
     divContainer.appendChild(divOuter);
 
-    divContainer
-      .querySelector('#stillThereBtn')
-      .addEventListener('click', () => {
-        if (!userSession) {
-          this.showLoginModal();
-        } else {
-          this.reportStillThere(true);
-        }
-      });
+    divContainer.querySelector('#stillThereBtn').addEventListener('click', () => {
+      if (!userSession) {
+        this.showLoginModal();
+      } else {
+        this.reportStillThere(true);
+      }
+    });
 
     divContainer.querySelector('#notThereBtn').addEventListener('click', () => {
       if (!userSession) {
@@ -357,16 +333,13 @@ class HazardDetailCard extends ReportCard {
       }
     });
 
-    divContainer
-      .querySelector('#flagReportBtn')
-      .addEventListener('click', () => {
-        if (!userSession) {
-          this.showLoginModal();
-        } else {
-          // this.flagAsFake();
-          this.showFakeReportConfirmationModal();
-        }
-      });
+    divContainer.querySelector('#flagReportBtn').addEventListener('click', () => {
+      if (!userSession) {
+        this.showLoginModal();
+      } else {
+        this.showFakeReportConfirmationModal();
+      }
+    });
 
     this.divContainer = divContainer;
 
