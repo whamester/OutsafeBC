@@ -100,7 +100,7 @@ class ReportCardContainer {
   }
   getMyReportButtons() {
     const contentHTML = `	
-    ${ToggleSwitch(this.id)}
+    ${ToggleSwitch(this.id, !this.deleted_at)}
     <button class="btn btn-tertiary text-body-3 medium" onclick="window.location.href='/pages/report-hazard/index.html?id=${this.id}#review-report'">
       <i class="icon-edit"></i>
       Edit Report
