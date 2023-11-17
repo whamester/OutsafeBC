@@ -1,4 +1,4 @@
-import ReportCard from '../helpers/card-container.js';
+import ReportCardContainer from "./ReportCardContainer.js";
 
 class MyReportCard extends ReportCardContainer {
   constructor(data) {
