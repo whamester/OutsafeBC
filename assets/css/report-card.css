@@ -69,7 +69,7 @@
   border-radius: 0.25rem;
 }
 
-.btn-tertiary {
+.report-card__my-reports-buttons .btn-tertiary {
   background: none;
   border: none;
 }
@@ -80,11 +80,7 @@
   text-overflow: ellipsis;
 }
 
-i {
-  flex-shrink: 0;
-}
-
-i.icon-edit {
+.report-card__my-reports-buttons i.icon-edit {
   width: 1.2rem;
   height: 1.2rem;
   background-color: var(--neutral-600);
