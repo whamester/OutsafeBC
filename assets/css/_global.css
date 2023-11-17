@@ -83,3 +83,7 @@ ul {
 .d-grid {
   display: grid;
 }
+
+.w-full {
+  width: 100%;
+}
