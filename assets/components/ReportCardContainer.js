@@ -1,4 +1,5 @@
 import DateFormat from '../models/DateFormat.js';
+import ToggleSwitch from './ToggleSwitch.js';
 
 class ReportCardContainer {
   constructor(data) {
