@@ -9,46 +9,47 @@ const getHazardDetail = async (idReport) => {
       const { data, error } = await apiRequest(`hazard-report?id=${idReport}`);
 
       if (error) {
-        const alert = new AlertPopup();
-        alert.show(error, AlertPopup.error, 500);
+        AlertPopup.show(error, AlertPopup.error, 500);
         return;
       }
 
-      hazardDetail.id = data.id;
+      if (data) {
+        hazardDetail.id = data.id;
 
-      hazardDetail.category = {
-        id: data.hazardCategory.id,
-        name: data.hazardCategory.name,
-        settings: data.hazardCategory.settings,
-      };
+        hazardDetail.category = {
+          id: data.hazardCategory.id,
+          name: data.hazardCategory.name,
+          settings: data.hazardCategory.settings,
+        };
 
-      hazardDetail.option = {
-        id: data.hazard.id,
-        name: data.hazard.name,
-      };
+        hazardDetail.option = {
+          id: data.hazard.id,
+          name: data.hazard.name,
+        };
 
-      hazardDetail.images = data.images;
-      hazardDetail.comment = data.comment;
-      hazardDetail.created_at = data.created_at;
-      hazardDetail.deleted_at = data.deleted_at;
-      hazardDetail.updated_at = data.updated_at;
-      hazardDetail.flagged_count = data.flagged_count;
-      hazardDetail.not_there_count = data.not_there_count;
-      hazardDetail.still_there_count = data.still_there_count;
+        hazardDetail.images = data.images;
+        hazardDetail.comment = data.comment;
+        hazardDetail.created_at = data.created_at;
+        hazardDetail.deleted_at = data.deleted_at;
+        hazardDetail.updated_at = data.updated_at;
+        hazardDetail.flagged_count = data.flagged_count;
+        hazardDetail.not_there_count = data.not_there_count;
+        hazardDetail.still_there_count = data.still_there_count;
 
-      hazardDetail.user = {
-        name: data.user.name,
-        email: data.user.email,
-      };
+        hazardDetail.user = {
+          name: data.user.name,
+          email: data.user.email,
+        };
 
-      hazardDetail.location = {
-        lat: data.location.lat,
-        lng: data.location.lng,
-        address: data.location.address,
-      };
+        hazardDetail.location = {
+          lat: data.location.lat,
+          lng: data.location.lng,
+          address: data.location.address,
+        };
 
-      hazardDetail.flagged_as_fake = data.flagged_as_fake
-      hazardDetail.enable_reaction = data.enable_reaction
+        hazardDetail.flagged_as_fake = data.flagged_as_fake;
+        hazardDetail.enable_reaction = data.enable_reaction;
+      }
     }
   } catch (error) {
     console.error(error);

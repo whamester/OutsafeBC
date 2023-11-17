@@ -355,13 +355,13 @@ Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa, soluta!</textare
           const errorBtn = document.getElementById('open-error-alert-btn');
 
           successBtn.addEventListener('click', () => {
-            const alert = new AlertPopup();
-            alert.show('Hello there!');
+
+            AlertPopup.show('Hello there!');
           });
 
           warningBtn.addEventListener('click', () => {
-            const alert = new AlertPopup();
-            alert.show(
+
+            AlertPopup.show(
               'Warning with 5 seconds delay!',
               AlertPopup.warning,
               5000
@@ -369,8 +369,8 @@ Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa, soluta!</textare
           });
 
           errorBtn.addEventListener('click', () => {
-            const alert = new AlertPopup();
-            alert.show(
+
+            AlertPopup.show(
               AlertPopup.SOMETHING_WENT_WRONG_MESSAGE,
               AlertPopup.error
             );

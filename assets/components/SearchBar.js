@@ -34,7 +34,8 @@ const SearchBar = ({ categories }) => {
                   class="sb-search-box--input"
                   placeholder="Search location"/>
               </div>
-              <button 
+              <button
+                id="filterBtn"
                 class="sb-search-box--filter-btn">
                 <i class="icon-filters sb-search-box--filter-btn--icon"></i>
               </button>
@@ -47,7 +48,7 @@ const SearchBar = ({ categories }) => {
           
           <div class="sb-categories">
             <div class="sb-categories-wrapper">
-            ${categories
+            ${categories.length ? categories
               ?.map((item) => {
                 return QuickFilter({
                   id: item.id,
@@ -55,7 +56,7 @@ const SearchBar = ({ categories }) => {
                   icon: item?.ui_settings?.icon ?? 'icon-location-pin-outline',
                 });
               })
-              .join('')}
+              .join('') : ''}
             </div>
           </div>
         </div>

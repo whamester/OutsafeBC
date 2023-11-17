@@ -1,47 +1,43 @@
-.content-wrapper {
-	margin-top: 60px;
-	padding: 2rem 1rem 3rem 1rem;
+#login-main .content-wrapper {
+  margin-top: 60px;
+  padding: 2rem 1rem 3rem 1rem;
 }
 
-.forget-password {
-	margin-top: 2rem;
-	margin-bottom: 2.5rem;
-	background: none;
-	border: none;
+#login-main .forget-password {
+  margin-top: 2rem;
+  margin-bottom: 2.5rem;
+  background: none;
+  border: none;
 }
 
-.align-right {
-	text-align: right;
-	border: 0;
+#login-main .align-right {
+  text-align: right;
+  border: 0;
 }
 
-div > p {
-	color: var(--neutral-500, #667185);
+#login-main h1 {
+  margin-bottom: 0.5rem;
 }
 
-h1 {
-	margin-bottom: 0.5rem;
+#login-main form {
+  margin-top: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
 }
 
-form {
-	margin-top: 2.5rem;
-	display: flex;
-	flex-direction: column;
-	gap: 2rem;
+#login-main .flex-wrapper__bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
 }
 
-.flex-wrapper__bottom {
-	display: flex;
-	flex-direction: column;
-	gap: 1.25rem;
+#login-main .btn,
+#login-main #google-button,
+#login-main input {
+  width: 100%;
 }
 
-.btn,
-#google-button,
-input {
-	width: 100%;
-}
-
-.btn-primary {
-	justify-content: center;
+#login-main .btn-primary {
+  justify-content: center;
 }

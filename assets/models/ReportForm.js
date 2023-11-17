@@ -15,6 +15,7 @@ class ReportForm {
 		}
 		this.comment = null
 		this.images = []
+		this.images2 = []
 	}
 }
 

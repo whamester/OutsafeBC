@@ -1,116 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <link
-      rel="icon"
-      type="image/x-icon"
-      href="../../assets/img/icons/logo-square.png"
-    />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- WPA -->
-    <link rel="manifest" href="../../manifest.json" />
-    <link
-      rel="apple-touch-icon"
-      href="../../assets/css/img/icons/icon-96x96.png"
-    />
-    <meta name="apple-mobile-web-app-status-bar" content="#000000" />
-    <meta name="theme-color" content="#000000" />
+  <link rel="icon" type="image/x-icon" href="../../assets/img/icons/logo-square.png" />
 
-    <!-- leaflet CSS for maps -->
-    <!-- <link rel="stylesheet" href="../../modules/leaflet/leaflet.css"> -->
-    <!-- leaflet JS for maps -->
-    <!-- <script src="../../modules/leaflet/leaflet.js"></script> -->
-    <!-- Firebase JS -->
-    <script src="https://www.gstatic.com/firebasejs/ui/6.0.1/firebase-ui-auth.js"></script>
-    <!-- Firebase CSS -->
-    <link
-      type="text/css"
-      rel="stylesheet"
-      href="https://www.gstatic.com/firebasejs/ui/6.0.1/firebase-ui-auth.css"
-    />
-    <!-- Global Styles -->
-    <link rel="stylesheet" href="../../assets/css/_global.css" />
-    <!-- Feature Styles -->
-    <link rel="stylesheet" href="./style.css" />
-    <!-- Global JS -->
-    <script type="module" src="../../global.js" defer></script>
-    <!-- Feature JS -->
-    <script type="module" src="./script.js" defer></script>
+  <!-- WPA -->
+  <link rel="manifest" href="../../manifest.json" />
+  <link rel="apple-touch-icon" href="../../assets/css/img/icons/icon-96x96.png" />
+  <meta name="apple-mobile-web-app-status-bar" content="#000000" />
+  <meta name="theme-color" content="#000000" />
 
-    <!-- Notifications JS -->
-    <script src="https://js.pusher.com/beams/1.0/push-notifications-cdn.js"></script>
-    <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
-    <!-- End Notifications JS -->
+  <!-- leaflet CSS for maps -->
+  <!-- <link rel="stylesheet" href="../../modules/leaflet/leaflet.css"> -->
+  <!-- leaflet JS for maps -->
+  <!-- <script src="../../modules/leaflet/leaflet.js"></script> -->
+  <!-- Firebase JS -->
+  <script src="https://www.gstatic.com/firebasejs/ui/6.0.1/firebase-ui-auth.js"></script>
+  <!-- Firebase CSS -->
+  <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/6.0.1/firebase-ui-auth.css" />
+  <!-- Global Styles -->
+  <link rel="stylesheet" href="../../assets/css/_global.css" />
+  <!-- Feature Styles -->
+  <link rel="stylesheet" href="./style.css" />
+  <!-- Global JS -->
+  <script type="module" src="../../global.js" defer></script>
+  <!-- Feature JS -->
+  <script type="module" src="./script.js" defer></script>
 
-    <title>Login</title>
-  </head>
+  <!-- Notifications JS -->
+  <script src="https://js.pusher.com/beams/1.0/push-notifications-cdn.js"></script>
+  <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+  <!-- End Notifications JS -->
 
-  <body id="login-body">
-    <main>
-      <script src="https://accounts.google.com/gsi/client" async></script>
-      <div class="content-wrapper">
-        <h1 class="text-heading-1">Log in</h1>
-        <p class="text-body-2">Welcome back! Please enter your details</p>
-        <form id="login-form">
-          <div class="form-field">
-            <label for="email-input" class="text-body-2 medium">Email</label>
-            <div class="form-field__input-container">
-              <input
-                id="email-input"
-                autocomplete="username"
-                type="email"
-                required
-                placeholder="name@email.com"
-              />
-            </div>
+  <title>Login</title>
+</head>
+
+<body id="login-body">
+  <main id="login-main">
+    <script src="https://accounts.google.com/gsi/client" async></script>
+    <div class="content-wrapper">
+      <h1 class="text-heading-1">Log in</h1>
+      <p class="text-body-2 text-neutral-500">Welcome back! Please enter your details</p>
+      <form id="login-form">
+        <div class="form-field">
+          <label for="email-input" class="text-body-2 medium">Email</label>
+          <div class="form-field__input-container">
+            <input id="email-input" autocomplete="username" type="email" required placeholder="name@email.com" />
           </div>
-
-          <div class="form-field with-icon">
-            <label for="password-input" class="text-body-2 medium"
-              >Password*</label
-            >
-            <div class="form-field__input-container">
-              <i class="icon-password-close right pointer" id="show-pw"></i>
-              <i
-                class="icon-password-visible right pointer hidden"
-                id="hide-pw"
-              ></i>
-              <input
-                id="password-input"
-                autocomplete="current-password"
-                type="password"
-                required
-              />
-            </div>
-          </div>
-        </form>
-
-        <div class="align-right">
-          <button class="text-body-2 bold forget-password pointer">
-            Forgot Password?
-          </button>
         </div>
-        <div class="flex-wrapper__bottom">
-          <button type="submit" form="login-form" class="btn btn-primary">
-            Log in
-          </button>
 
-          <div id="google-button"></div>
-
-          <div class="text-body-2 medium text-center">
-            Don't have an account?
-            <a
-              href="/pages/signup/index.html"
-              aria-label="Link to sign up"
-              class="link"
-              >Sign up</a
-            >
+        <div class="form-field with-icon">
+          <label for="password-input" class="text-body-2 medium">Password*</label>
+          <div class="form-field__input-container">
+            <i class="icon-password-close right pointer" id="show-pw"></i>
+            <i class="icon-password-visible right pointer hidden" id="hide-pw"></i>
+            <input id="password-input" autocomplete="current-password" type="password" required />
           </div>
+        </div>
+      </form>
+
+      <div class="align-right">
+        <button class="text-body-2 bold forget-password pointer">
+          Forgot Password?
+        </button>
+      </div>
+      <div class="flex-wrapper__bottom">
+        <button type="submit" form="login-form" class="btn btn-primary">
+          Log in
+        </button>
+
+        <div id="google-button"></div>
+
+        <div class="text-body-2 medium text-center">
+          Don't have an account?
+          <a href="/pages/signup/index.html" aria-label="Link to sign up" class="link">Sign up</a>
         </div>
       </div>
-    </main>
-  </body>
+    </div>
+  </main>
+</body>
+
 </html>

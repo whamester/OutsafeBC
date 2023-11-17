@@ -12,18 +12,18 @@ class MyReportCard extends ReportCard {
     let divInner = document.createElement('div');
     divInner.setAttribute('class', `report-card__inner`);
 
-	divInner.appendChild(super.getHeading())
-	divInner.appendChild(super.getTopInfo())
-	if (this.photos.length>0){
-	divInner.appendChild(super.getGallery())}
-	if (this.comment){
-	divInner.appendChild(super.getDescription())}
-	divInner.appendChild(super.getMyReportButtons())
-	
+    divInner.appendChild(super.getHeading());
+    divInner.appendChild(super.getTopInfo());
+    if (this.photos.length > 0) {
+      divInner.appendChild(super.getGallery());
+    }
+    if (this.comment) {
+      divInner.appendChild(super.getDescription());
+    }
+    divInner.appendChild(super.getMyReportButtons());
 
- 	// 	<div class="report-card__spacer-line"></div>
+    // 	<div class="report-card__spacer-line"></div>
 
-	
     divOuter.appendChild(divInner);
     return divOuter;
   }

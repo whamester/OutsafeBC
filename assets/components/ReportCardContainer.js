@@ -1,24 +1,36 @@
 import DateFormat from '../models/DateFormat.js';
-import ToggleSwitch from '../components/ToggleSwitch.js';
 
-class ReportCard {
-  constructor(id, category, hazard, location, date, photos, comment, settings) {
-    this.id = id;
-    this.category = category;
-    this.hazard = hazard;
-    this.location = location;
-    this.date = new Date(date);
-    this.photos = photos;
-    this.comment = comment;
-    this.settings = settings;
+class ReportCardContainer {
+  constructor(data) {
+    this.id = data.id;
+    this.category = data.category;
+    this.hazard = data.hazard;
+    this.location = data.location;
+    this.photos = data.photos;
+    this.comment = data.comment;
+
+    this.user = data.user;
+
+    this.settings = data.settings;
+
+    this.flagged_count = Number(data.flagged_count) || 0;
+    this.not_there_count = Number(data.not_there_count) || 0;
+    this.still_there_count = Number(data.still_there_count) || 0;
+
+    this.flagged_as_fake = data.flagged_as_fake || false;
+    this.enable_reaction = data.enable_reaction || true;
+
+    this.created_at = data.created_at;
+    this.deleted_at = data.deleted_at;
+    this.updated_at = data.updated_at;
   }
 
   getDateFormatted() {
-    return DateFormat.getDate(this.date);
+    return DateFormat.getDate(new Date(this.created_at));
   }
 
   getTimeFormatted() {
-    return DateFormat.getTime(this.date);
+    return DateFormat.getTime(new Date(this.created_at));
   }
 
   getHeading() {
@@ -39,9 +51,7 @@ class ReportCard {
     const contentHTML = `
     <div class="report-card__details">
       <i class="icon-location-pin-outline" style="background-color: var(--neutral-400)"></i>
-      <p class="text-body-2 regular report-card__location-text">${
-        this.location
-      }</p>
+      <p class="text-body-2 regular report-card__location-text">${this.location}</p>
     </div>
 
     <div class="report-card__date_time">
@@ -78,24 +88,22 @@ class ReportCard {
     return galleryContainer;
   }
 
-  getDescription(){
+  getDescription() {
     const contentHTML = `	
     <p class="text-body-3 regular">Description</p>
-		<p class="text-body-2 regular">${this.comment}</p>`
+		<p class="text-body-2 regular">${this.comment}</p>`;
     const div = document.createElement('div');
     div.setAttribute('class', 'report-card__description');
     div.innerHTML = contentHTML;
     return div;
   }
-  getMyReportButtons(){
+  getMyReportButtons() {
     const contentHTML = `	
     ${ToggleSwitch(this.id)}
-    <button class="btn btn-tertiary text-body-3 medium" onclick="window.location.href='/pages/report-hazard/index.html?id=${
-      this.id
-    }#review-report'">
+    <button class="btn btn-tertiary text-body-3 medium" onclick="window.location.href='/pages/report-hazard/index.html?id=${this.id}#review-report'">
       <i class="icon-edit"></i>
       Edit Report
-    </button>`
+    </button>`;
     const div = document.createElement('div');
     div.setAttribute('class', 'report-card__my-reports-buttons');
     div.innerHTML = contentHTML;
@@ -103,4 +111,4 @@ class ReportCard {
   }
 }
 
-export default ReportCard;
+export default ReportCardContainer;
