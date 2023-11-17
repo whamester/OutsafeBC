@@ -2,13 +2,12 @@ import { API_URL } from '../../constants.js';
 //Components
 import Header from '../../assets/components/Header.js';
 import GeoMap from '../../assets/components/GeoMap.js';
-import SearchBar, {
-  SearchBarSuggestionCard,
-} from '../../assets/components/SearchBar.js';
+import SearchBar, { SearchBarSuggestionCard } from '../../assets/components/SearchBar.js';
 import HazardCardLayout from '../../assets/components/HazardCardLayout.js';
 import ModalFilter from '../../assets/components/ModalFilter.js';
 import AlertPopup from '../../assets/components/AlertPopup.js';
 import HazardDetailCard from '../../assets/components/HazardDetailCard.js';
+import showLoginModal from '../../assets/helpers/showLoginModal.js';
 //Helpers
 import injectHTML from '../../assets/helpers/inject-html.js';
 import injectHeader from '../../assets/helpers/inject-header.js';
@@ -34,13 +33,10 @@ const longitude = Number(url.searchParams.get('lng')) || null;
 
 //Variable Declaration
 let geoMap;
-let position =
-  latitude && longitude
-    ? { lat: latitude, lng: longitude }
-    : Map.DEFAULT_LOCATION;
+let position = latitude && longitude ? { lat: latitude, lng: longitude } : Map.DEFAULT_LOCATION;
 
 let reports = [];
-let positionSecondary = {};
+// let positionSecondary = {};
 let hazardCardParams = {};
 let searchSuggestions = [];
 let categoryFilters = [];
@@ -75,15 +71,9 @@ window.onload = async function () {
 
     searchBarParams.categories = data;
 
-    injectHeader([
-      { func: Header, target: '#home-body', position: 'afterbegin' },
-    ]);
+    injectHeader([{ func: Header, target: '#home-body', position: 'afterbegin' }]);
 
-    injectHTML([
-      { func: GeoMap },
-      { func: SearchBar, args: searchBarParams },
-      { func: ModalFilter, args: searchBarParams.categories },
-    ]);
+    injectHTML([{ func: GeoMap }, { func: SearchBar, args: searchBarParams }, { func: ModalFilter, args: searchBarParams.categories }]);
 
     document.getElementById('reportHazardBtn').addEventListener('click', () => {
       if (!user) {
@@ -93,34 +83,20 @@ window.onload = async function () {
       }
     });
 
-    document
-      .querySelector('.sb-search-box--filter-btn')
-      .addEventListener('click', () => toggleFilterModal(false));
+    document.querySelector('.sb-search-box--filter-btn').addEventListener('click', () => toggleFilterModal(false));
 
-    document
-      .querySelector('.modal-filter--close-btn')
-      .addEventListener('click', () => toggleFilterModal(true));
+    document.querySelector('.modal-filter--close-btn').addEventListener('click', () => toggleFilterModal(true));
 
-    document
-      .querySelector('.sb-search-box--input')
-      .addEventListener('input', (e) => onSearchInput(e));
+    document.querySelector('.sb-search-box--input').addEventListener('input', (e) => onSearchInput(e));
 
-    document
-      .querySelector('.sb-search-box--input')
-      .addEventListener('focus', (e) => {
-        onSearchInput(e);
-        e.target.select();
-      });
+    document.querySelector('.sb-search-box--input').addEventListener('focus', (e) => {
+      onSearchInput(e);
+      e.target.select();
+    });
 
-    document
-      .getElementById('map')
-      .addEventListener('click', closeSearchSuggestion);
+    document.getElementById('map').addEventListener('click', closeSearchSuggestion);
 
-    document
-      .querySelectorAll('.quick-filter')
-      .forEach((filter) =>
-        filter.addEventListener('click', quickFiltersOnClick)
-      );
+    document.querySelectorAll('.quick-filter').forEach((filter) => filter.addEventListener('click', quickFiltersOnClick));
 
     loadIcons();
 
@@ -168,12 +144,7 @@ window.onload = async function () {
         created_at: hazardDetail.created_at,
         updated_at: hazardDetail.updated_at,
         deleted_at: hazardDetail.deleted_at,
-        distance: geolocationDistance(
-          hazardDetail.location.lat,
-          hazardDetail.location.lng,
-          position.lat,
-          position.lng
-        ),
+        distance: geolocationDistance(hazardDetail.location.lat, hazardDetail.location.lng, position.lat, position.lng),
         user: hazardDetail.user,
       });
 
@@ -183,11 +154,7 @@ window.onload = async function () {
     }
   } catch (error) {
     console.error(error);
-    AlertPopup.show(
-      error.message || AlertPopup.SOMETHING_WENT_WRONG_MESSAGE,
-      AlertPopup.error,
-      500
-    );
+    AlertPopup.show(error.message || AlertPopup.SOMETHING_WENT_WRONG_MESSAGE, AlertPopup.error, 500);
   }
 };
 
@@ -252,12 +219,7 @@ const markerParams = {
       created_at: currentReport.created_at,
       updated_at: currentReport.updated_at,
       deleted_at: currentReport.deleted_at,
-      distance: geolocationDistance(
-        currentReport.location.lat,
-        currentReport.location.lng,
-        position.lat,
-        position.lng
-      ),
+      distance: geolocationDistance(currentReport.location.lat, currentReport.location.lng, position.lat, position.lng),
       user: currentReport.user,
     });
 
@@ -271,9 +233,7 @@ const flyTo = (lat, lng) => {
 
 const closeSearchSuggestion = (e) => {
   const boxSuggestion = document.querySelector('.sb-suggestion-wrapper');
-  boxSuggestion.style.display = e?.target?.closest('.sb-search-box')
-    ? 'block'
-    : 'none';
+  boxSuggestion.style.display = e?.target?.closest('.sb-search-box') ? 'block' : 'none';
 
   document.querySelector('.sb-categories-wrapper').style.display = 'flex';
 };
@@ -325,12 +285,7 @@ const suggestionOnClick = () => {
       positionSecondary = latLng;
       flyTo(latLng.lat, latLng.lng);
       closeSearchSuggestion();
-      await getReportApiCall(
-        latLng.lat,
-        latLng.lng,
-        categoryFilters,
-        hazardFilters
-      );
+      await getReportApiCall(latLng.lat, latLng.lng, categoryFilters, hazardFilters);
       injectCards();
     });
   });
@@ -375,20 +330,14 @@ const injectCards = () => {
   document.querySelector('.sb-cards')?.remove();
 
   if (categoryFilters.length > 0) {
-    hazardCardParams.reports = reports.filter((report) =>
-      categoryFilters.includes(report.hazardCategory.id)
-    );
+    hazardCardParams.reports = reports.filter((report) => categoryFilters.includes(report.hazardCategory.id));
   } else if (hazardFilters.length > 0) {
-    hazardCardParams.reports = reports.filter((report) =>
-      hazardFilters.includes(report.hazard.id)
-    );
+    hazardCardParams.reports = reports.filter((report) => hazardFilters.includes(report.hazard.id));
   } else {
     hazardCardParams.reports = reports;
   }
 
-  injectHTML([
-    { func: HazardCardLayout, args: hazardCardParams, target: '#hazard-comp' },
-  ]);
+  injectHTML([{ func: HazardCardLayout, args: hazardCardParams, target: '#hazard-comp' }]);
 
   document.querySelectorAll('.view-details')?.forEach((detailBtn) => {
     detailBtn.addEventListener('click', async ({ target }) => {
@@ -411,12 +360,7 @@ const injectCards = () => {
         created_at: hazardDetail.created_at,
         updated_at: hazardDetail.updated_at,
         deleted_at: hazardDetail.deleted_at,
-        distance: geolocationDistance(
-          hazardDetail.location.lat,
-          hazardDetail.location.lng,
-          position.lat,
-          position.lng
-        ),
+        distance: geolocationDistance(hazardDetail.location.lat, hazardDetail.location.lng, position.lat, position.lng),
         user: hazardDetail.user,
       });
 
@@ -461,8 +405,7 @@ const onSearchInput = debounce(async ({ target }) => {
 
   const searchTerm = target?.value;
 
-  if (searchTerm)
-    searchSuggestions = await geocode({ searchTerm }, 'autocomplete');
+  if (searchTerm) searchSuggestions = await geocode({ searchTerm }, 'autocomplete');
   else searchSuggestions = [];
 
   if (!searchSuggestions.length) {
@@ -499,10 +442,7 @@ async function getHazardReportData(id) {
     const result = await response.json();
     return result.data;
   } catch (error) {
-    AlertPopup.show(
-      'Reports unavailable at the moment, please try again later or contact support',
-      AlertPopup.error
-    );
+    AlertPopup.show('Reports unavailable at the moment, please try again later or contact support', AlertPopup.error);
     return null;
   }
 }
@@ -512,10 +452,7 @@ const showHazardDetails = (hazardReport) => {
   try {
     hazardReportPopulated = hazardReport.hazardCardContent();
 
-    root.insertBefore(
-      hazardReportPopulated,
-      document.getElementById('hazard-comp')
-    );
+    root.insertBefore(hazardReportPopulated, document.getElementById('hazard-comp'));
 
     loadIcons();
 
@@ -567,9 +504,7 @@ const hazardFilterTempApply = async ({ target }) => {
 const hazardFilterApply = async () => {
   // clear all quick filters
   categoryFilters = [];
-  document
-    .querySelectorAll('.quick-filter')
-    ?.forEach((c) => c.classList.remove('selected'));
+  document.querySelectorAll('.quick-filter')?.forEach((c) => c.classList.remove('selected'));
 
   hazardFilters = hazardTempFilters;
   geoMap.filterMarker(categoryFilters, hazardFilters);
