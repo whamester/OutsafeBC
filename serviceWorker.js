@@ -183,7 +183,7 @@ self.addEventListener('fetch', (event) => {
         caches.open(API_REQUESTS_KEY).then((cache) => cache.add(event.request).catch(console.error));
       }
 
-      console.log({ isAPIRequest, cache });
+      // console.log({ isAPIRequest, cache });
       if (cache && isAPIRequest) {
         fetch(event.request).then((response) =>
           caches
