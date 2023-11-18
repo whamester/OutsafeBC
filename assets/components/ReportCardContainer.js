@@ -57,7 +57,7 @@ class ReportCardContainer {
     const icon = this.settings?.detail;
     const contentHTML = `
 			<span class="btn__icon report-card__heading__icon" style="background-color: ${icon.iconBackround}">
-				<i class="${icon.icon}" style="width:1.5rem; height:1.5rem; background-color: white"></i>
+				<i class="${icon.icon}" style="width:1.5rem; height:1.5rem; background-color: var(--white)"></i>
 			</span>
       <p class="text-body-1 semibold">${this.hazard}</p>
     `;
@@ -221,7 +221,7 @@ class ReportCardContainer {
     </div>
     `;
     const div = document.createElement('div');
-    div.setAttribute('class', "report-card__hazard-detail-buttons ${this.createdByUserLoggedIn ? 'hidden' : ''}");
+    div.setAttribute('class', `report-card__hazard-detail-buttons ${this.createdByUserLoggedIn ? 'hidden' : ''}`);
     div.innerHTML = contentHTML;
     return div;
   }
