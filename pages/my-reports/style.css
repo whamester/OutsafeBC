@@ -8,6 +8,10 @@
   gap: 1.5rem;
 }
 
+#olderReports {
+  -webkit-filter: grayscale(1);
+}
+
 .my-reports__top-section {
   padding: 2.5rem 1rem 1.5rem 1rem;
   display: flex;
@@ -35,6 +39,11 @@ input[type='radio'] {
 
 .my-reports__reports-tabs i {
   display: block;
+  background-color: var(--neutral-500);
+}
+
+.my-reports__reports-tabs label {
+  color: var(--neutral-500);
 }
 
 .my-reports__recent-tab,
@@ -45,5 +54,13 @@ input[type='radio'] {
 
 .my-reports__active-tab {
   padding-bottom: 0.75rem;
-  border-bottom: 1px solid black;
+  border-bottom: 0.0625rem solid var(--neutral-900);
+}
+
+.my-reports__active-tab i {
+  background-color: var(--neutral-900);
+}
+
+.my-reports__active-tab label {
+  color: var(--neutral-900);
 }
