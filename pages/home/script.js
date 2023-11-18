@@ -36,7 +36,7 @@ let geoMap;
 let position = latitude && longitude ? { lat: latitude, lng: longitude } : Map.DEFAULT_LOCATION;
 
 let reports = [];
-// let positionSecondary = {};
+let positionSecondary = {};
 let hazardCardParams = {};
 let searchSuggestions = [];
 let categoryFilters = [];
