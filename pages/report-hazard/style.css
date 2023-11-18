@@ -191,6 +191,10 @@ input[type='radio'] {
   .highlight-color{
     color: var(--neutral-700);
   }
+  
+  .icon-chevron-right{
+    background-color: var(--neutral-500) !important;
+  }
 }
 
 
