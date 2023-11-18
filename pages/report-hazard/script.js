@@ -988,7 +988,6 @@ document.getElementById('backButton').addEventListener('click', () => {
   window.location.href = url.href;
 });
 
-
 // highlight breadcrumb
 
 const allSteps = ['#select-location', '#hazard-category', '#hazard-type', '#additional-details', '#upload-photos', '#review-report'];
@@ -997,11 +996,12 @@ const allSteps2 = ['.step1', '.step2', '.step3', '.step4', '.step5', '.step6'];
 function checkCurrentStep() {
   const currentURL = window.location.href;
   const urlFragment = currentURL.substring(currentURL.lastIndexOf('#'));
-
+  console.log(urlFragment);
   const num = allSteps.indexOf(urlFragment);
-
+  if (urlFragment === '#additional-details') {
+    document.getElementById('commentInput').value = '';
+  }
   if (num !== -1) {
-
     allSteps2.forEach((stepClass, index) => {
       const element = document.querySelector(stepClass);
 
