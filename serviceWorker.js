@@ -243,7 +243,7 @@ self.addEventListener('notificationclick', (event) => {
 
   try {
     const id = event.notification.tag?.split('---')?.[0];
-    const url = `https://hilarious-cat-da30a3.netlify.app/pages/home/index.html?id=${id}`;
+    const url = `https://outsafebc.ca/pages/home/index.html?id=${id}&open=true`;
 
     event.waitUntil(
       clients
