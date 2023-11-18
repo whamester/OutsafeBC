@@ -179,7 +179,7 @@ class HazardDetailCard extends ReportCardContainer {
     let divInner = document.createElement('div');
     divInner.setAttribute('class', `report-card__inner`);
     const icon = this.settings?.detail;
-    divInner.appendChild(super.getTopControls());
+    divOuter.appendChild(super.getTopControls());
     divInner.appendChild(super.getHeading());
     divInner.appendChild(super.getDetailTopInfo());
     if (this.photos.length > 0) {
