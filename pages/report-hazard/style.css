@@ -119,7 +119,11 @@ input[type='radio'] {
     display: none;
   }
 
-  header {
+  /* header {
+    display: block;
+  } */
+
+  #report-hazard-body header {
     display: block;
   }
 
@@ -138,10 +142,6 @@ input[type='radio'] {
   .breadcrumb-desktop a {
     text-decoration: none;
   }
-
-  /* .breadcrumb-desktop a:hover {
-    background-color: #e0e0e0;
-  } */
 
   .chevron-right-icon{
     height: 1rem;
