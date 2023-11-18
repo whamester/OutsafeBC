@@ -4,6 +4,7 @@
 }
 
 #hazard-card__outer {
+  border-radius: 0.75rem 0.75rem 0 0;
   width: 100%;
   max-width: 30.625rem;
   position: absolute;
