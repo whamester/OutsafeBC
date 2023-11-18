@@ -37,35 +37,64 @@
 <body id="report-hazard-body">
   <main>
     <div class="loader-start" id="loader"></div>
-    <nav id="fullNavMenu" class="breadbrumb-desktop">
+    <nav id="fullNavMenu" class="breadcrumb-desktop">
       <ul id="navMenu">
         <li>
-          <a id="selectLocation" title="Select the location" href="#select-location">Select Location</a>
+          <a id="selectLocation" title="Select the location" href="#select-location" class="report-hazard-step">
+            <div class="text-body-3 regular step1">
+            Select Location
+          </div>
+          </a>
         </li>
 
         <li>
           <a id="hazardCategoryNav" title="What type of hazard would you like to report?" href="#hazard-category"
-            style="display: none">Hazard Category</a>
+            style="display: none" class="report-hazard-step">
+            <div class="text-body-3 regular step2">
+            <img src="../../assets/icons/chevron-right.svg" class="chevron-right-icon"/>
+            Hazard Category
+            </div>
+          </a>
         </li>
 
         <li>
           <a id="hazardTypeNav" title="What type of wild animal did you spot?" href="#hazard-type"
-            style="display: none">Hazard Type</a>
+            style="display: none" class="report-hazard-step">
+            <div class="text-body-3 regular step3">
+              <img src="../../assets/icons/chevron-right.svg" class="chevron-right-icon"/>
+            Hazard Type
+            </div>
+          </a>
         </li>
 
         <li>
           <a id="hazardDetailNav" title="Would you like to mention any further details?" href="#additional-details"
-            style="display: none">Additional Details</a>
+            style="display: none" class="report-hazard-step">
+            <div class="text-body-3 regular step4">
+              <img src="../../assets/icons/chevron-right.svg" class="chevron-right-icon"/>
+              Additional Details
+            </div>
+            </a>
         </li>
 
         <li>
           <a id="hazardUploadPhotosNav" title="Please upload photos to help others see the reported hazard visually"
-            href="#upload-photos" style="display: none">Upload Photos</a>
+            href="#upload-photos" style="display: none" class="report-hazard-step">
+            <div class="text-body-3 regular step5">
+              <img src="../../assets/icons/chevron-right.svg" class="chevron-right-icon"/>
+              Upload Photos
+            </div>
+            </a>
         </li>
 
         <li>
           <a id="hazardReviewReportNav" title="Review the report before submitting." href="#review-report"
-            style="display: none">Review Report</a>
+            style="display: none" class="report-hazard-step">
+            <div class="text-body-3 regular step6">
+              <img src="../../assets/icons/chevron-right.svg" class="chevron-right-icon"/>
+              Review Report
+            </div>
+            </a>
         </li>
       </ul>
     </nav>
