@@ -98,6 +98,13 @@ window.onload = async function () {
 
     document.querySelectorAll('.quick-filter').forEach((filter) => filter.addEventListener('click', quickFiltersOnClick));
 
+    document.querySelector('.map-controls-recenter-btn').addEventListener('click', () => {
+      flyTo(position.lat, position.lng);
+    });
+
+    mapZoomIn.addEventListener('click', () => geoMap.map.zoomIn());
+    mapZoomOut.addEventListener('click', () => geoMap.map.zoomOut());
+
     loadIcons();
 
     geoMap = new Map(position.lat, position.lng, mapOptions);
