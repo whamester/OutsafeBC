@@ -9,6 +9,19 @@
   margin: 1rem;
 }
 
+.report-card__inner > div:not(:first-child):not(:last-child) {
+  border-bottom: 1px solid var(--neutral-300, #d0d5dd);
+  padding: 1rem 0;
+}
+
+.report-card__inner > div:nth-child(2) {
+  padding-top: 0;
+}
+
+.report-card__inner > div:last-child {
+  padding-top: 1rem;
+}
+
 .report-card__heading {
   display: flex;
   align-items: center;
@@ -29,7 +42,6 @@
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  margin-top: 1.5rem;
 }
 
 .report-card__details {
@@ -54,17 +66,17 @@
   justify-content: space-between;
 }
 
-#report-card__image-gallery {
+.report-card__image-gallery {
   max-width: 100%;
 }
 
-#report-card__picture-container {
+.report-card__picture-container {
   display: flex;
   gap: 0.75rem;
   overflow: scroll;
 }
 
-#report-card__picture-container img {
+.report-card__picture-container img {
   height: 5.125rem;
   border-radius: 0.25rem;
 }
