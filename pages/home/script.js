@@ -482,11 +482,6 @@ const hazardFilterTempApply = async ({ target }) => {
     target.classList.remove('selected');
     // all filters are de-selected
 
-    if (hazardTempFilters.length === 0) {
-      hazardShowCount = 0;
-      showReportsBtnStatus(hazardShowCount);
-      return;
-    }
     hazardShowCount = geoMap.filterMarkerCount(hazardTempFilters);
     showReportsBtnStatus(hazardShowCount);
     return;
