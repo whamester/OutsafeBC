@@ -34,6 +34,25 @@ class ReportCardContainer {
     return DateFormat.getTime(new Date(this.created_at));
   }
 
+  getTopControls() {
+    const contentHTML = `
+
+    <div class="circle-border pointer" id="reportCloseBtn">
+      <i
+        class="icon-close-square"
+        style="background-color: var(--neutral-500)"
+      ></i>
+    </div>
+    <div class="circle-border pointer">
+      <i class="icon-share" style="background-color: var(--neutral-500)"></i>
+    </div>
+`;
+    const div = document.createElement('div');
+    div.setAttribute('class', 'report-card__top-controls');
+    div.innerHTML = contentHTML;
+    return div;
+  }
+
   getHeading() {
     const icon = this.settings?.detail;
     const contentHTML = `
@@ -67,6 +86,42 @@ class ReportCardContainer {
       </div>
     </div>
   `;
+    const div = document.createElement('div');
+    div.setAttribute('class', 'report-card__top-info');
+    div.innerHTML = contentHTML;
+    return div;
+  }
+
+  getDetailTopInfo() {
+    const contentHTML = `
+
+    <div class="report-card__details">
+      <i
+        class="icon-location-pin-outline"
+        style="background-color: var(--neutral-400)"
+      ></i>
+      <p class="text-body-2 regular report-card__location-text">
+        ${this.location}
+      </p>
+    </div>
+  
+    <div class="report-card__date_time">
+      <div class="report-card__details">
+        <i class="icon-date" style="background-color: var(--neutral-400)"></i>
+        <p class="text-body-2 regular">${this.getDateFormatted()}</p>
+      </div>
+  
+      <div class="report-card__details">
+        <i class="icon-time" style="background-color: var(--neutral-400)"></i>
+        <p class="text-body-2 regular">${this.getTimeFormatted()}</p>
+      </div>
+    </div>
+  
+    <div class="report-card__details">
+      <i class="icon-distance" style="background-color: var(--neutral-400)"></i>
+      <p class="text-body-2 regular">${this.distance} km away</p>
+    </div>
+`;
     const div = document.createElement('div');
     div.setAttribute('class', 'report-card__top-info');
     div.innerHTML = contentHTML;
@@ -107,6 +162,66 @@ class ReportCardContainer {
     </button>`;
     const div = document.createElement('div');
     div.setAttribute('class', 'report-card__my-reports-buttons');
+    div.innerHTML = contentHTML;
+    return div;
+  }
+
+  getReportedBy() {
+    const contentHTML = `
+    <p class="text-body-3 regular">
+    Reported by ${this.createdByUserLoggedIn ? 'You' : ''}
+  </p>
+  
+  ${
+    !this.createdByUserLoggedIn
+      ? `
+  <div class="report-card__user-details">
+    <img
+      id="user-image"
+      src="${this.user.photo || '../../assets/img/default-nav-image.png'}"
+      alt="User photo"
+    />
+    <p class="text-body-2 regular">${this.user.name || 'Anonymous user'}</p>
+  </div>
+  `
+      : ''
+  }
+  
+  <div
+    class="${this.createdByUserLoggedIn ? 'hidden' : ''}"
+  ></div>`;
+    const div = document.createElement('div');
+    div.setAttribute('class', 'report-card__reported-by');
+    div.innerHTML = contentHTML;
+    return div;
+  }
+
+  getReportFlagButtons() {
+    const contentHTML = `
+     <button class="btn btn-success" id="stillThereBtn">
+      <i class="icon-check"></i>
+      Still there
+    </button>
+
+    <button class="btn btn-warning" id="notThereBtn">
+      <i class="icon-close"></i>
+      Not there
+    </button>
+
+    <button class="btn btn-error" id="flagReportBtn">
+      <i class="icon-flag"></i>
+      Flag report
+    </button>
+  
+    <div id="flagReportMessage" class="message error">
+      <i class="icon-flag message__icon"></i>
+      <p class="message__content text-body-3 medium">
+        You have flagged this report as fake.
+      </p>
+    </div>
+    `;
+    const div = document.createElement('div');
+    div.setAttribute('class', "report-card__hazard-detail-buttons ${this.createdByUserLoggedIn ? 'hidden' : ''}");
     div.innerHTML = contentHTML;
     return div;
   }
