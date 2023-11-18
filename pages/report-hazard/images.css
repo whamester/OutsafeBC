@@ -40,7 +40,7 @@
 .hide-picture-1 img,
 .hide-picture-2 img,
 .hide-picture-3 img {
-  color: --neutral-500;
+  color: var(--neutral-500);
   width: 1.5625rem;
   height: 1.5rem;
 }
@@ -48,15 +48,15 @@
 .hide-picture-1,
 .hide-picture-2,
 .hide-picture-3 {
-  border-radius: 0.5rem ;
+  border-radius: 0.5rem;
   border: 0.0625rem solid var(--neutral-300);
   background: var(--primary-50);
 }
 
 #displayImagesArea {
   display: flex;
-  gap: 1.5rem;
   justify-content: space-between;
+  padding: 0.1rem;
 }
 
 .picture-1,
@@ -113,9 +113,9 @@
   height: 1.5rem;
 }
 
-.picture-1 img,
-.picture-2 img,
-.picture-3 img {
+.picture-1 > img,
+.picture-2 > img,
+.picture-3 > img {
   border-radius: 0.5rem;
   border: 1px solid var(--neutral-300);
 }

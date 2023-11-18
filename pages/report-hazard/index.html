@@ -263,51 +263,85 @@
       </section>
 
       <section id="review-report" class="page section-container padded">
-        <h1>6. Review the report before submitting.</h1>
+        <h1>Review the report before submitting.</h1>
 
-        <div class="scroll-container">
-          <div>
-            <p>Location:</p>
+        <div id="submitContainer" class="scroll-container">
 
+          <div class="main-submit-section">
+            <div class="submit-section">
+              <p class="text-body-2 semibold text-neutral-900">
+                Location:
+              </p>
+              <a id="editLocation" href="#select-location" class="text-body-2 regular edit-link text-neutral-900">
+                Edit <i class="icon-edit"></i>
+              </a>
+            </div>
             <div>
-              <p id="locationOutput"></p>
-              <a id="editLocation" href="#select-location">Edit</a>
+              <p id="locationOutput" class="submit-value text-body-2 regular"></p>
             </div>
           </div>
 
-          <div id="review-report-category">
-            <p>Type of hazard:</p>
 
+          <div class="main-submit-section">
+            <div class="submit-section">
+              <p class="text-body-2 semibold text-neutral-900">
+                Type of hazard:
+              </p>
+
+              <a id="editCategory" href="#hazard-category" class="text-body-2 regular edit-link text-neutral-900">
+                Edit <i class="icon-edit"></i>
+              </a>
+            </div>
             <div>
-              <p id="categoryOutput"></p>
-              <a id="editCategory" href="#hazard-category">Edit</a>
+              <p id="categoryOutput" class="submit-value text-body-2 regular"></p>
             </div>
           </div>
 
-          <div>
-            <p>Hazard:</p>
 
+          <div id="review-report-category" class="main-submit-section">
+            <div class="submit-section">
+              <p class="text-body-2 semibold text-neutral-900">
+                Hazard:
+              </p>
+
+              <a id="editType" href="#hazard-type" class="text-body-2 regular edit-link text-neutral-900">
+                Edit <i class="icon-edit"></i>
+              </a>
+            </div>
             <div>
-              <p id="hazardOptionOutput"></p>
-              <a id="editType" href="#hazard-type">Edit</a>
+              <p id="hazardOptionOutput" class="submit-value text-body-2 regular"></p>
             </div>
           </div>
 
-          <div>
-            <p>Additional details:</p>
 
+          <div class="main-submit-section">
+            <div class="submit-section">
+              <p class="text-body-2 semibold text-neutral-900">
+                Additional details:
+              </p>
+
+              <a id="editDetails" href="#additional-details" class="text-body-2 regular edit-link text-neutral-900">
+                Edit <i class="icon-edit"></i>
+              </a>
+            </div>
             <div>
-              <p id="commentOutput"></p>
-              <a id="editDetails" href="#additional-details">Edit</a>
+              <p id="commentOutput" class="submit-value text-body-2 regular"></p>
             </div>
           </div>
 
-          <div>
-            <p>Photos:</p>
 
+          <div class="main-submit-section">
+            <div class="submit-section">
+              <p class="text-body-2 semibold text-neutral-900">
+                Photos:
+              </p>
+
+              <a id="editPhotos" href="#upload-photos" class="text-body-2 regular edit-link text-neutral-900">
+                Edit <i class="icon-edit"></i>
+              </a>
+            </div>
             <div>
-              <p id="imagesOutput"></p>
-              <a id="editPhotos" href="#upload-photos">Edit</a>
+              <div id="imagesOutput"></div>
             </div>
           </div>
         </div>

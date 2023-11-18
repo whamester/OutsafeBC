@@ -183,7 +183,7 @@ self.addEventListener('fetch', (event) => {
         caches.open(API_REQUESTS_KEY).then((cache) => cache.add(event.request).catch(console.error));
       }
 
-      console.log({ isAPIRequest, cache });
+      // console.log({ isAPIRequest, cache });
       if (cache && isAPIRequest) {
         fetch(event.request).then((response) =>
           caches
@@ -243,7 +243,7 @@ self.addEventListener('notificationclick', (event) => {
 
   try {
     const id = event.notification.tag?.split('---')?.[0];
-    const url = `https://hilarious-cat-da30a3.netlify.app/pages/home/index.html?id=${id}`;
+    const url = `https://outsafebc.ca/pages/home/index.html?id=${id}&open=true`;
 
     event.waitUntil(
       clients

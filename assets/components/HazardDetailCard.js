@@ -1,8 +1,14 @@
-import ReportCardContainer from './ReportCardContainer.js';
+//Constants
 import { API_URL } from '../../constants.js';
-import Modal from './Modal.js';
-import { getUserSession } from '../helpers/storage.js';
+
+//Components
 import AlertPopup from './AlertPopup.js';
+import ReportCardContainer from './ReportCardContainer.js';
+import Modal from './Modal.js';
+
+//Helpers
+import showLoginModal from '../helpers/showLoginModal.js';
+import { getUserSession } from '../helpers/storage.js';
 
 const userSession = getUserSession();
 
@@ -16,28 +22,6 @@ class HazardDetailCard extends ReportCardContainer {
     this.distance = data.distance;
     this.divContainer = null;
     this.createdByUserLoggedIn = userSession?.email === this.user.email;
-  }
-
-  showLoginModal() {
-    const modal = new Modal();
-
-    const loginBtn = document.createElement('button');
-    loginBtn.setAttribute('id', 'open-modal-btn');
-    loginBtn.setAttribute('class', 'btn btn-primary');
-    loginBtn.addEventListener('click', () => window.location.assign(`/pages/login/index.html`));
-    loginBtn.innerHTML = 'Log in';
-
-    modal.show({
-      title: 'Please log in to continue',
-      description: 'Thank you for helping others have a safe outdoors experience.',
-      icon: {
-        name: 'icon-exclamation-mark',
-        color: '#000000',
-        size: '3.5rem',
-      },
-      actions: loginBtn,
-      enableOverlayClickClose: true,
-    });
   }
 
   showFakeReportConfirmationModal() {
@@ -319,7 +303,7 @@ class HazardDetailCard extends ReportCardContainer {
 
     divContainer.querySelector('#stillThereBtn').addEventListener('click', () => {
       if (!userSession) {
-        this.showLoginModal();
+        showLoginModal();
       } else {
         this.reportStillThere(true);
       }
@@ -327,7 +311,7 @@ class HazardDetailCard extends ReportCardContainer {
 
     divContainer.querySelector('#notThereBtn').addEventListener('click', () => {
       if (!userSession) {
-        this.showLoginModal();
+        showLoginModal();
       } else {
         this.reportStillThere(false);
       }
@@ -335,7 +319,7 @@ class HazardDetailCard extends ReportCardContainer {
 
     divContainer.querySelector('#flagReportBtn').addEventListener('click', () => {
       if (!userSession) {
-        this.showLoginModal();
+        showLoginModal();
       } else {
         this.showFakeReportConfirmationModal();
       }

@@ -5,6 +5,7 @@
 @import url('./hazard-option.css');
 @import url('./comment.css');
 @import url('./images.css');
+@import url('./submit.css');
 
 /* Header */
 #report-hazard-body main {
