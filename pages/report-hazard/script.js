@@ -855,7 +855,9 @@ hazardCategoryElement.addEventListener('click', () => {
 const hazardTypeeElement = document.getElementById('hazardType');
 
 hazardTypeeElement.addEventListener('click', () => {
-  if (currentReport.category.id != null) {
+  if (currentReport.category.id != null && currentReport.category.name === 'Fire') {
+    document.getElementById('hazardDetailNav').style.display = 'block';
+  } else if (currentReport.category.id != null) {
     document.getElementById('hazardTypeNav').style.display = 'block';
   }
 });
@@ -996,7 +998,6 @@ const allSteps2 = ['.step1', '.step2', '.step3', '.step4', '.step5', '.step6'];
 function checkCurrentStep() {
   const currentURL = window.location.href;
   const urlFragment = currentURL.substring(currentURL.lastIndexOf('#'));
-  console.log(urlFragment);
   const num = allSteps.indexOf(urlFragment);
   if (urlFragment === '#additional-details') {
     document.getElementById('commentInput').value = '';
