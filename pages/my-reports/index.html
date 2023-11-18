@@ -46,10 +46,16 @@
         </div>
 
         <div class="my-reports__reports-tabs">
-          <label for="recentReportsBtn">Recent Reports</label>
-          <input type="radio" name="reportsRadioBtn" id="recentReportsBtn" value="recent" />
-          <label for="olderReportsBtn">Older Reports</label>
-          <input type="radio" name="reportsRadioBtn" id="olderReportsBtn" value="older" />
+          <div class="my-reports__recent-tab my-reports__active-tab">
+            <i class="icon-report-submitted"></i>
+            <label for="recentReportsBtn">Recent Reports</label>
+            <input type="radio" name="reportsRadioBtn" id="recentReportsBtn" value="recent" />
+          </div>
+          <div class="my-reports__older-tab">
+            <i class="icon-time"></i>
+            <label for="olderReportsBtn">Older Reports</label>
+            <input type="radio" name="reportsRadioBtn" id="olderReportsBtn" value="older" />
+          </div>
         </div>
       </div>
 
