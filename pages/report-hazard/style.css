@@ -184,6 +184,13 @@ input[type='radio'] {
     margin-left: 5rem;
   }
 
+  .step1, .step2, .step3, .step4, .step5, .step6{
+    color: var(--neutral-500);
+  }
+
+  .highlight-color{
+    color: var(--neutral-700);
+  }
 }
 
 

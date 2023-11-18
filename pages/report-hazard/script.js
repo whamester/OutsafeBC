@@ -1010,9 +1010,11 @@ function checkCurrentStep() {
         if (index === num) {
           element.classList.add('semibold');
           element.classList.remove('regular');
+          element.classList.add('highlight-color');
         } else {
           element.classList.remove('semibold');
           element.classList.add('regular');
+          element.classList.remove('highlight-color');
         }
       }
     });
