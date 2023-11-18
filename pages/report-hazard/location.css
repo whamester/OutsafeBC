@@ -36,3 +36,17 @@
 .leaflet-control-attribution {
   border-radius: 0 0 1rem 1rem;
 }
+
+@media screen and (min-width: 768px) {
+  #select-location .scroll-container {
+    height: calc(100vh - 350px);
+  }
+
+  #fullNavMenu {
+    display: none;
+  }
+
+  #select-location .section-container {
+    /* height: unset; */
+  }
+}

@@ -89,7 +89,8 @@
 #dragAndDropArea,
 .custom-file-upload2 {
   border-radius: 1rem;
-  border: 1px dashed var(--neutral-300);
+  border: 1px dashed var(--neutral-400);
+  border-radius: 1rem;
 }
 
 #upload-photos .scroll-container {

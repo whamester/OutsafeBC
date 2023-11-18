@@ -262,7 +262,7 @@ const getCategories = async () => {
   try {
     let response = await fetch(`${API_URL}/hazard-category`);
     let { data } = await response.json();
-    const content = document.getElementById('hazard-category-content');
+    const content = document.getElementById('hazard-category-content-list');
 
     let arrayIcons = [];
 
@@ -354,6 +354,7 @@ const getCategories = async () => {
 
       categoryContainer.appendChild(radio);
       categoryContainer.appendChild(label);
+
       content.appendChild(categoryContainer);
     }
   } catch (error) {
@@ -488,7 +489,7 @@ document.getElementById('starCameraBtn').addEventListener('click', () => {
   if (currentReport.images.length >= 3) {
     return;
   }
-  document.getElementById('displayCameraArea').style.display = 'block';
+  document.getElementById('displayCameraArea').style.display = 'flex';
   if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
     const mediaPromise = navigator.mediaDevices.getUserMedia({ video: true });
     mediaPromise.then((stream) => {
@@ -540,9 +541,9 @@ fileInput.addEventListener('change', function () {
 
 //Drag and drop to upload picture
 const dragAndDropArea = document.getElementById('dragAndDropArea');
-dragAndDropArea.style.height = '200px';
-dragAndDropArea.style.width = '400px';
-dragAndDropArea.style.background = 'gray';
+// dragAndDropArea.style.height = '200px';
+// dragAndDropArea.style.width = '400px';
+// dragAndDropArea.style.background = 'gray';
 
 dragAndDropArea.addEventListener('dragover', (event) => {
   event.preventDefault();

@@ -113,7 +113,11 @@
 
       <section id="hazard-category" class="page section-container padded">
         <h1>What type of hazard would you like to report?</h1>
-        <div id="hazard-category-content" class="scroll-container"></div>
+        <div id="hazard-category-content" class="scroll-container">
+          <div id="hazard-category-content-list">
+
+          </div>
+        </div>
 
         <button type="button" id="hazardType" class="btn btn-primary continue-btn">
           Continue
@@ -169,35 +173,51 @@
 
         <div class="scroll-container">
           <div id="upload-photos-desktop-content">
-            <label for="starCameraBtn" class="custom-file-upload">
+            <label id="takePictureDesktop" for="starCameraBtn" class="custom-file-upload">
               <button id="starCameraBtn" type="button" style="display: none"></button>
-              <!-- TODO// Add icon here -->
-              <span>Take a picture</span>
-              <span>at the hazard site? Take a picture to add in the report.</span>
+              <i class="icon-camera" style="width: 1.5rem; height: 1.5rem; background: var(--neutral-900);"></i>
+              <div class="label">
+                <span class="text-body-1 semibold text-neutral-900">Take a picture</span>
+                <span class="text-body-3 text-neutral-500">at the hazard site? Take a picture to add in the
+                  report.</span>
+              </div>
             </label>
 
-            <div id="dragAndDropArea">
-              <!-- TODO// Add icon here -->
-              <span>Drop your images here, or </span>
-              <label for="uploadPictureDesktopInput">
-                <input id="uploadPictureDesktopInput" type="file" accept="image/jpeg, image/jpg, image/png" multiple
-                  style="display: none" />
-                <span> <u class="pointer">click to browse</u> </span>
-              </label>
-              <span>File size limit: 10 MB</span>
-            </div>
+            <label id="dragAndDropArea" for="uploadPictureDesktopInput">
+              <i class="icon-plus" style="width: 1.5rem; height: 1.5rem; background: var(--neutral-900);"></i>
 
-            <div id="displayCameraArea" style="display: none">
-              <video id="video" width="320" height="240" autoplay></video>
+              <div class="label">
+                <span>
+                  <span class="text-body-1  text-neutral-900 semibold">Drop your images here, or</span>
+                  <!-- <label for="uploadPictureDesktopInput"> -->
+                  <input id="uploadPictureDesktopInput" type="file" accept="image/jpeg, image/jpg, image/png" multiple
+                    style="display: none" />
+                  <span> <u class="pointer text-body-1 text-neutral-900">click to browse</u> </span>
+                  <!-- </label> -->
+                </span>
+                <span class="text-body-3 text-neutral-500">File size limit: 10 MB</span>
+              </div>
+            </label>
 
-              <button type="button" id="takeDesktopPictureBtn" disabled>
-                Take a photo
-              </button>
-              <button type="button" id="stopCameraBtn" disabled>
-                Stop Camera
-              </button>
+            <div id="displayCameraAreaContainer">
+              <div id="displayCameraArea" style="display: none">
+                <span id="stopCameraBtn" aria-label="Dismiss camera modal" class="pointer"> <i
+                    class="icon-close-square"> </i></span>
 
-              <canvas hidden id="canvasArea" width="320" height="240"></canvas>
+
+                <div style="width:320px;height: 240px ; background: var(--neutral-100); border-radius: 0.5rem;">
+                  <video id="video" width="320" height="240" autoplay></video>
+                </div>
+
+                <div id="displayCameraButtons">
+
+                  <button type="button" id="takeDesktopPictureBtn" class="btn btn-primary" disabled>
+                    Take photo
+                  </button>
+                </div>
+
+                <canvas hidden id="canvasArea" width="320" height="240"></canvas>
+              </div>
             </div>
           </div>
           <div id="upload-photos-mobile-content">
