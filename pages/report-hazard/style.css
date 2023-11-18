@@ -194,6 +194,8 @@ input[type='radio'] {
   
   .icon-chevron-right{
     background-color: var(--neutral-500) !important;
+    width: 1rem !important;
+    height: 1rem !important;
   }
 }
 
