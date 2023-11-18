@@ -2,9 +2,7 @@ import { getUserSession } from '../helpers/storage.js';
 
 const Header = () => {
   const user = getUserSession();
-  const showNavigation =
-    !window.location.pathname.includes('/pages/login') &&
-    !window.location.pathname.includes('/pages/signup');
+  const showNavigation = !window.location.pathname.includes('/pages/login') && !window.location.pathname.includes('/pages/signup');
 
   return `
   <header>
@@ -44,9 +42,7 @@ const Header = () => {
               <img
                 id="avatar"
                 class="pointer" 
-                src="${
-                  user.photo || '../../assets/img/default-nav-image.png'
-                }" alt="User logo"
+                src="${user.photo || '../../assets/img/default-nav-image.png'}" alt="User logo"
                 onerror="this.src = '../../assets/img/default-nav-image.png'"
                 onclick="
                 const menu = document.querySelector('#header-menu'); 
@@ -68,15 +64,19 @@ const Header = () => {
 
    <nav id="header-menu" class="hidden">
       <div class="header-menu__container">
+       
         <ul>
+          <li>
+              <div class="header-menu__container__premium">
+                  <span>🏕️</span> 
+                  <p class="text-body-2 text-neutral-700">Go Premium for Outsafe BC</p>
+              </div>
+          </li>
             <li class="text-body-2">
-              <a href="/pages/settings#myProfile"><i class="icon-profile"></i> <span>Profile</span></a>
+              <a href="/pages/settings#myProfile"><i class="icon-profile"></i> <span>Account Settings</span></a>
             </li>
             <li class="text-body-2">
-              <a href="/pages/my-reports"><i class="icon-reports"></i> <span>My Reports</span></a>
-            </li>
-            <li class="text-body-2">
-              <a href="/pages/settings#settings"><i class="icon-settings"></i> <span>Settings</span></a>
+              <a href="/pages/my-reports"><i class="icon-reports"></i> <span>Report History</span></a>
             </li>
             <li class="text-body-2">
               <a href="/pages/logout"><i class="icon-logout"></i> <span>Logout</span></a>

@@ -4,6 +4,7 @@
 }
 
 #hazard-card__outer {
+  border-radius: 0.75rem 0.75rem 0 0;
   width: 100%;
   max-width: 30.625rem;
   position: absolute;
@@ -15,7 +16,7 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 1rem;
+  margin: 1rem;
 }
 
 .circle-border {

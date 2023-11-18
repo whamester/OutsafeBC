@@ -131,7 +131,7 @@ class HazardDetailCard extends ReportCardContainer {
       // hide the flag report button
       this.divContainer.querySelector('#flagReportBtn').classList.add('hidden');
     } else {
-      // how the flag report button
+      // show the flag report button
       this.divContainer.querySelector('#flagReportBtn').classList.remove('hidden');
     }
 
@@ -179,125 +179,20 @@ class HazardDetailCard extends ReportCardContainer {
     let divInner = document.createElement('div');
     divInner.setAttribute('class', `report-card__inner`);
     const icon = this.settings?.detail;
-    divInner.innerHTML = `
-          <div class="report-card__top-controls">
-            <div class="circle-border pointer" id="reportCloseBtn">
-              <i
-                class="icon-close-square"
-                style="background-color: var(--neutral-500)"
-              ></i>
-            </div>
-            <div class="circle-border pointer">
-              <i class="icon-share" style="background-color: var(--neutral-500)"></i>
-            </div>
-          </div>
-          <div class="report-card__heading">
-            <span
-              class="btn__icon report-card__heading__icon"
-              style="background-color: ${icon.iconBackround}; padding: 0.2rem;"
-            >
-              <i
-                class="${icon.icon}"
-                style="width: 1.5rem; height: 1.5rem; background-color: var(--white)"
-              ></i>
-            </span>
-            <p class="text-body-1 semibold">${this.hazard}</p>
-          </div>
-          
-          <div class="report-card__top-info">
-            <div class="report-card__details">
-              <i
-                class="icon-location-pin-outline"
-                style="background-color: var(--neutral-400)"
-              ></i>
-              <p class="text-body-2 regular report-card__location-text">
-                ${this.location}
-              </p>
-            </div>
-          
-            <div class="report-card__date_time">
-              <div class="report-card__details">
-                <i class="icon-date" style="background-color: var(--neutral-400)"></i>
-                <p class="text-body-2 regular">${super.getDateFormatted()}</p>
-              </div>
-          
-              <div class="report-card__details">
-                <i class="icon-time" style="background-color: var(--neutral-400)"></i>
-                <p class="text-body-2 regular">${super.getTimeFormatted()}</p>
-              </div>
-            </div>
-          
-            <div class="report-card__details">
-              <i class="icon-distance" style="background-color: var(--neutral-400)"></i>
-              <p class="text-body-2 regular">${this.distance} km away</p>
-            </div>
-          </div>
-          
-          <div class="report-card__spacer-line"></div>
-          
-          <div id="report-card__image-gallery"></div>
-          
-          <div class="report-card__spacer-line"></div>
-          
-          <p class="text-body-3 regular">Description</p>
-          <p class="text-body-2 regular">${this.comment}</p>
-          
-          <div class="report-card__spacer-line"></div>
-          <p class="text-body-3 regular">
-            Reported by ${this.createdByUserLoggedIn ? 'You' : ''}
-          </p>
-          
-          ${
-            !this.createdByUserLoggedIn
-              ? `
-          <div class="report-card__user-details">
-            <img
-              id="user-image"
-              src="${this.user.photo || '../../assets/img/default-nav-image.png'}"
-              alt="User photo"
-            />
-            <p class="text-body-2 regular">${this.user.name || 'Anonymous user'}</p>
-          </div>
-          `
-              : ''
-          }
-          
-          <div
-            class="report-card__spacer-line ${this.createdByUserLoggedIn ? 'hidden' : ''}"
-          ></div>
-          
-          <div
-            class="report-card__hazard-detail-buttons ${this.createdByUserLoggedIn ? 'hidden' : ''}"
-          >
-  
-            <button class="btn btn-success" id="stillThereBtn">
-              <i class="icon-check"></i>
-              Still there
-            </button>
+    divOuter.appendChild(super.getTopControls());
+    divInner.appendChild(super.getHeading());
+    divInner.appendChild(super.getDetailTopInfo());
+    if (this.photos.length > 0) {
+      divInner.appendChild(super.getGallery());
+    }
+    if (this.comment) {
+      divInner.appendChild(super.getDescription());
+    }
+    divInner.appendChild(super.getReportedBy());
+    divInner.appendChild(super.getReportFlagButtons());
 
-            <button class="btn btn-warning" id="notThereBtn">
-              <i class="icon-close"></i>
-              Not there
-            </button>
-
-            <button class="btn btn-error" id="flagReportBtn">
-              <i class="icon-flag"></i>
-              Flag report
-            </button>
-          
-            <div id="flagReportMessage" class="message error">
-              <i class="icon-flag message__icon"></i>
-              <p class="message__content text-body-3 medium">
-                You have flagged this report as fake.
-              </p>
-            </div>
-
-
-          </div>
-      `;
     // TODO: We can add the edit button for the user if it's the author of the report
 
-    divInner.querySelector('#report-card__image-gallery').appendChild(super.getGallery());
     divOuter.appendChild(divInner);
     divContainer.appendChild(divOuter);
 
