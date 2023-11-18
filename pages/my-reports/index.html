@@ -1,56 +1,60 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<head>
-	<meta charset="UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/x-icon" href="../../assets/img/icons/logo-square.png" />
 
-	<link rel="icon" type="image/x-icon" href="../../assets/img/icons/logo-square.png">
+    <!-- WPA -->
+    <link rel="manifest" href="../../manifest.json" />
+    <link rel="apple-touch-icon" href="../../assets/css/img/icons/icon-96x96.png" />
+    <meta name="apple-mobile-web-app-status-bar" content="#000000" />
+    <meta name="theme-color" content="#000000" />
 
-	<!-- WPA -->
-	<link rel="manifest" href="../../manifest.json" />
-	<link rel="apple-touch-icon" href="../../assets/css/img/icons/icon-96x96.png" />
-	<meta name="apple-mobile-web-app-status-bar" content="#000000" />
-	<meta name="theme-color" content="#000000" />
+    <!-- leaflet CSS for maps -->
+    <!-- <link rel="stylesheet" href="../../modules/leaflet/leaflet.css"> -->
+    <!-- leaflet JS for maps -->
+    <!-- <script src="../../modules/leaflet/leaflet.js"></script> -->
+    <!-- Firebase JS -->
+    <script src="https://www.gstatic.com/firebasejs/ui/6.0.1/firebase-ui-auth.js"></script>
+    <!-- Firebase CSS -->
+    <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/6.0.1/firebase-ui-auth.css" />
+    <!-- Global Styles -->
+    <link rel="stylesheet" href="../../assets/css/_global.css" />
+    <!-- Feature Styles -->
+    <link rel="stylesheet" href="./style.css" />
+    <!-- Global JS -->
+    <script type="module" src="../../global.js" defer></script>
+    <!-- Feature JS -->
+    <script type="module" src="./script.js" defer></script>
 
-	<!-- leaflet CSS for maps -->
-	<!-- <link rel="stylesheet" href="../../modules/leaflet/leaflet.css"> -->
-	<!-- leaflet JS for maps -->
-	<!-- <script src="../../modules/leaflet/leaflet.js"></script> -->
-	<!-- Firebase JS -->
-	<script src="https://www.gstatic.com/firebasejs/ui/6.0.1/firebase-ui-auth.js"></script>
-	<!-- Firebase CSS -->
-	<link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/6.0.1/firebase-ui-auth.css" />
-	<!-- Global Styles -->
-	<link rel="stylesheet" href="../../assets/css/_global.css" />
-	<!-- Feature Styles -->
-	<link rel="stylesheet" href="./style.css" />
-	<!-- Global JS -->
-	<script type="module" src="../../global.js" defer></script>
-	<!-- Feature JS -->
-	<script type="module" src="./script.js" defer></script>
+    <!-- Notifications JS -->
+    <script src="https://js.pusher.com/beams/1.0/push-notifications-cdn.js"></script>
+    <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+    <!-- End Notifications JS -->
 
-	<!-- Notifications JS -->
-	<script src="https://js.pusher.com/beams/1.0/push-notifications-cdn.js"></script>
-	<script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
-	<!-- End Notifications JS -->
+    <title>My Reports</title>
+  </head>
 
-	<title>My Reports</title>
-</head>
+  <body id="myReportsBody">
+    <main>
+      <div class="my-reports__top-section">
+        <div class="my-reports__heading-text">
+          <h1 class="text-heading-1">My Reports</h1>
+          <p class="text-body-3">Here's the list of the reports you've made.</p>
+        </div>
 
-<body id="myReportsBody">
-	<main>
-		<h1>My Reports</h1>
-		<p>Here's the list of the reports you have made.</p>
+        <div class="my-reports__reports-tabs">
+          <label for="recentReportsBtn">Recent Reports</label>
+          <input type="radio" name="reportsRadioBtn" id="recentReportsBtn" value="recent" />
+          <label for="olderReportsBtn">Older Reports</label>
+          <input type="radio" name="reportsRadioBtn" id="olderReportsBtn" value="older" />
+        </div>
+      </div>
 
-		<label for="recentReportsBtn">Recent Reports</label>
-		<input type="radio" name="reportsRadioBtn" id="recentReportsBtn" value="recent" />
-		<label for="olderReportsBtn">Older Reports</label>
-		<input type="radio" name="reportsRadioBtn" id="olderReportsBtn" value="older" />
-
-		<div id="recentReports"></div>
-		<div id="olderReports"></div>
-	</main>
-</body>
-
+      <div id="recentReports"></div>
+      <div id="olderReports"></div>
+    </main>
+  </body>
 </html>

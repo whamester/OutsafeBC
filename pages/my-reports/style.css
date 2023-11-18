@@ -8,3 +8,22 @@
   gap: 1.5rem;
   margin: 1rem 0;
 }
+
+.my-reports__top-section {
+  padding: 2.5rem 1rem 1.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.my-reports__top-section h1 {
+  margin: 0;
+  margin-bottom: 0.25rem;
+}
+
+input[type=radio] {
+  position: absolute;
+  width: 1em;
+  height: 1em;
+  opacity: 0;
+}
