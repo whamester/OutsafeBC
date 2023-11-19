@@ -1,0 +1,128 @@
+/* Header */
+#report-hazard-body main {
+  overflow: unset;
+  padding: 0;
+}
+
+#report-hazard-body input[type='radio'] {
+  display: none;
+}
+
+/* hide scrollbar but allow scrolling */
+#hazard-category-content,
+.scroll-container {
+  -ms-overflow-style: none; /* for Internet Explorer, Edge */
+  scrollbar-width: none; /* for Firefox */
+}
+/* for Chrome, Safari, and Opera */
+#hazard-category-content::-webkit-scrollbar,
+.scroll-container::-webkit-scrollbar {
+  display: none;
+}
+
+#report-hazard-body header {
+  display: none;
+}
+
+#report-hazard-body .page {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+#report-hazard-body .section-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  height: calc(100vh - 170px);
+}
+
+#report-hazard-body .divider {
+  width: 100%;
+  border-bottom: 1px solid var(--neutral-300);
+}
+
+#report-hazard-body .continue-btn {
+  width: 100%;
+}
+
+#report-hazard-body .breadbrumb-desktop {
+  padding-top: 1rem;
+  margin-left: var(--padding-x);
+  margin-right: var(--padding-x);
+}
+
+#reportHazardForm {
+  padding-top: 1rem;
+  overflow: auto;
+}
+
+#reportHazardForm .padded {
+  margin-left: var(--padding-x);
+  margin-right: var(--padding-x);
+}
+
+#reportHazardForm h1 {
+  margin: 0;
+}
+
+#backButton {
+  border: none;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  text-decoration: none;
+  color: var(--neutral-500);
+  margin: 0.75rem 1rem;
+
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+#backButton .icon-chevron-left {
+  height: 1.5rem;
+  width: 1.5rem;
+  background-color: var(--neutral-500);
+}
+
+#continueBtnContainer {
+  margin-left: var(--padding-x);
+  margin-right: var(--padding-x);
+  padding-top: 1rem;
+}
+
+@media screen and (min-width: 768px) {
+  #report-hazard-body header {
+    display: block;
+  }
+
+  #report-hazard-body main {
+    display: grid;
+    height: calc(100% - 130px);
+  }
+
+  #report-hazard-body .divider {
+    display: none;
+  }
+
+  #report-hazard-body .continue-btn {
+    width: 15.5rem;
+  }
+
+  #report-hazard-body .section-container {
+    height: 100%;
+  }
+
+  #reportHazardForm {
+    padding-top: 1.5rem;
+  }
+
+  #backButton {
+    display: none;
+  }
+
+  #continueBtnContainer {
+    padding-top: 1rem;
+  }
+}

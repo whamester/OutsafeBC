@@ -16,7 +16,7 @@
   background: var(--secondary-500);
 }
 
-#hazard-category-content {
+#hazard-category-content-list {
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -52,4 +52,13 @@ img {
   position: absolute;
   top: -0.5rem;
   right: -0.5rem;
+}
+
+@media screen and (min-width: 768px) {
+  #hazard-category-content-list {
+    display: grid;
+    grid-template-columns: repeat(2, 0.6fr);
+    row-gap: 1.44rem;
+    column-gap: 1.56rem;
+  }
 }

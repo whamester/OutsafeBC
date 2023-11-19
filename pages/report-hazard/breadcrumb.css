@@ -1,0 +1,38 @@
+#report-hazard-body .breadcrumb-desktop {
+  display: none;
+}
+
+@media screen and (min-width: 768px) {
+  #report-hazard-body .breadcrumb-desktop {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    width: fit-content;
+    padding-top: 1rem;
+    padding-left: var(--padding-x);
+    padding-right: var(--padding-x);
+  }
+
+  #report-hazard-body .breadcrumb-desktop ul {
+    display: flex;
+    gap: 10px;
+  }
+
+  #report-hazard-body .breadcrumb-desktop ul li {
+    display: flex;
+    align-items: center;
+  }
+
+  #report-hazard-body .breadcrumb-desktop ul li .report-hazard-step {
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  #report-hazard-body .breadcrumb-desktop ul li i.icon-chevron-right {
+    background-color: var(--neutral-500);
+    width: 1rem;
+    height: 1rem;
+  }
+}

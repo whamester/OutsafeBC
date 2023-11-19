@@ -33,6 +33,24 @@ let allowRedirect = false;
 const FLY_TO_ZOOM = 12;
 const ANIMATION_DURATION = 4;
 
+const STEPS = {
+  location: '#select-location',
+  category: '#hazard-category',
+  hazard: '#hazard-type',
+  comments: '#additional-details',
+  images: '#upload-photos',
+  review: '#review-report',
+};
+
+const STEPS_LABEL = {
+  location: 'Select Location',
+  category: 'Hazard Category',
+  hazard: 'Hazard Type',
+  comments: 'Additional Details',
+  images: 'Upload Photos',
+  review: 'Review Report',
+};
+
 /**
  * Page Init
  */
@@ -73,19 +91,7 @@ window.onload = async function () {
     //Override the current location if the user accepts the permissions
     loadGeolocation();
 
-    populateReport();
-
-    reportHazardForm.style.height = '100%';
-
-    // Hazard Category and Option required
-    // These events are overwriten when the user selects an option
-    hazardType.onclick = () => {
-      AlertPopup.show('Please select a hazard category', AlertPopup.warning);
-    };
-
-    selectHazardOptionLink.onclick = () => {
-      AlertPopup.show('Please select a hazard option', AlertPopup.warning);
-    };
+    // populateReport();
   } catch (error) {
     AlertPopup.show(error.message || AlertPopup.SOMETHING_WENT_WRONG_MESSAGE, AlertPopup.error, 500);
   }
@@ -111,8 +117,6 @@ const updateCurrentReportLocation = async (params) => {
   };
 
   locationAddressLabel.innerHTML = `${currentReport.location.address ? currentReport.location.address : `(${currentReport.location.lat}, ${currentReport.location.lng})`}`;
-  // Continue Button
-  hazardCategory.setAttribute('onclick', 'location.href="#hazard-category"');
 };
 
 const displayCurrentSection = () => {
@@ -128,7 +132,25 @@ const displayCurrentSection = () => {
 
     pagesHandler(pageId);
 
+    if (pageId === STEPS.review) {
+      if (!!idReport) {
+        continueBtnText.innerHTML = 'Update Report';
+      } else {
+        continueBtnText.innerHTML = 'Submit Report';
+      }
+    } else {
+      continueBtnText.innerHTML = 'Continue';
+    }
+
+    if (pageId === STEPS.location) {
+      fullNavMenu.style.visibility = 'hidden';
+    } else {
+      fullNavMenu.style.visibility = 'visible';
+    }
+
     document.body.scrollTop = true;
+
+    generateBreadcrumb();
   } catch (error) {
     console.error({ error });
     AlertPopup.show(error.message || AlertPopup.SOMETHING_WENT_WRONG_MESSAGE, AlertPopup.error);
@@ -165,69 +187,69 @@ const loadGeolocation = async () => {
   }
 };
 
-const populateReport = async () => {
-  if (idReport !== null) {
-    document.getElementById('saveReportBtn').style.display = 'none';
-    document.getElementById('updateReportBtn').style.display = 'initial';
+// const populateReport = async () => {
+//   if (idReport !== null) {
+//     document.getElementById('saveReportBtn').style.display = 'none';
+//     document.getElementById('updateReportBtn').style.display = 'initial';
 
-    const getCollection = async () => {
-      try {
-        let response = await fetch(`${API_URL}/hazard-report?id=${idReport}`);
-        let { data } = await response.json();
+//     const getCollection = async () => {
+//       try {
+//         let response = await fetch(`${API_URL}/hazard-report?id=${idReport}`);
+//         let { data } = await response.json();
 
-        //******* display location ******
-        currentReport.location = data.location;
+//         //******* display location ******
+//         currentReport.location = data.location;
 
-        //******* display category ******
+//         //******* display category ******
 
-        document.querySelectorAll(`input[value="${data.hazardCategory.id}"]`)[0].click();
+//         document.querySelectorAll(`input[value="${data.hazardCategory.id}"]`)[0].click();
 
-        currentReport.category.name = data.hazardCategory.name;
-        categoryOutput.innerHTML = currentReport.category.name;
+//         currentReport.category.name = data.hazardCategory.name;
+//         categoryOutput.innerHTML = currentReport.category.name;
 
-        //******* display type ******
-        setTimeout(function () {
-          document.querySelectorAll(`input[value="${data.hazard.id}"]`)[0].click();
+//         //******* display type ******
+//         setTimeout(function () {
+//           document.querySelectorAll(`input[value="${data.hazard.id}"]`)[0].click();
 
-          currentReport.option.name = data.hazard.name;
-          hazardOptionOutput.innerHTML = currentReport.option.name;
-        }, 50);
+//           currentReport.option.name = data.hazard.name;
+//           hazardOptionOutput.innerHTML = currentReport.option.name;
+//         }, 50);
 
-        //******* display comment ******
+//         //******* display comment ******
 
-        commentInput.value = data.comment;
-        currentReport.comment = data.comment;
-        commentOutput.innerHTML = currentReport.comment || 'No comments';
+//         commentInput.value = data.comment;
+//         currentReport.comment = data.comment;
+//         commentOutput.innerHTML = currentReport.comment || 'No comments';
 
-        //******* display pictures ******
+//         //******* display pictures ******
 
-        data.images.forEach((imageUrl) => {
-          displayImages(imageUrl);
-        });
+//         data.images.forEach((imageUrl) => {
+//           displayImages(imageUrl);
+//         });
 
-        const displayImagesAreaReview = document.getElementById('imagesOutput');
-        if (data.images?.length) {
-          data.images.forEach((imageUrl) => {
-            const imgElement = document.createElement('img');
-            imgElement.src = imageUrl;
-            displayImagesAreaReview.appendChild(imgElement);
-          });
-        } else {
-          displayImagesAreaReview.appendChild(getEmptyImages());
-        }
-      } catch (error) {
-        console.error({ error });
+//         const displayImagesAreaReview = document.getElementById('imagesOutput');
+//         if (data.images?.length) {
+//           data.images.forEach((imageUrl) => {
+//             const imgElement = document.createElement('img');
+//             imgElement.src = imageUrl;
+//             displayImagesAreaReview.appendChild(imgElement);
+//           });
+//         } else {
+//           displayImagesAreaReview.appendChild(getEmptyImages());
+//         }
+//       } catch (error) {
+//         console.error({ error });
 
-        AlertPopup.show(error.message || AlertPopup.SOMETHING_WENT_WRONG_MESSAGE, AlertPopup.error, 6000);
-      }
-    };
+//         AlertPopup.show(error.message || AlertPopup.SOMETHING_WENT_WRONG_MESSAGE, AlertPopup.error, 6000);
+//       }
+//     };
 
-    getCollection();
-  } else {
-    document.getElementById('updateReportBtn').style.display = 'none';
-    document.getElementById('saveReportBtn').style.display = 'flex';
-  }
-};
+//     getCollection();
+//   } else {
+//     document.getElementById('updateReportBtn').style.display = 'none';
+//     document.getElementById('saveReportBtn').style.display = 'flex';
+//   }
+// };
 
 const getAddressFromCoordinates = async (params) => {
   try {
@@ -262,7 +284,7 @@ const getCategories = async () => {
   try {
     let response = await fetch(`${API_URL}/hazard-category`);
     let { data } = await response.json();
-    const content = document.getElementById('hazard-category-content');
+    const content = document.getElementById('hazard-category-content-list');
 
     let arrayIcons = [];
 
@@ -302,9 +324,6 @@ const getCategories = async () => {
         const selectedOptionQuestion = selectedCategory.ui_settings.report_hazard_question ?? [];
 
         populateHazardOptions(options, selectedOptionQuestion);
-
-        // Continue Button
-        hazardType.setAttribute('onclick', 'location.href="#hazard-type"');
 
         const allNewIcons = document.querySelectorAll('.orange-check-icon');
         allNewIcons.forEach((newIcon) => {
@@ -354,6 +373,7 @@ const getCategories = async () => {
 
       categoryContainer.appendChild(radio);
       categoryContainer.appendChild(label);
+
       content.appendChild(categoryContainer);
     }
   } catch (error) {
@@ -395,9 +415,6 @@ const populateHazardOptions = (options, selectedOptionQuestion) => {
       radio.addEventListener('change', (event) => {
         currentReport.option.id = event.target.value;
         currentReport.option.name = option.name;
-
-        // Continue Button
-        selectHazardOptionLink.setAttribute('onclick', 'location.href="#additional-details"');
 
         const allIconTypes = document.querySelectorAll('.category-icon-type');
         allIconTypes.forEach((iconType) => {
@@ -450,9 +467,6 @@ commentInput.addEventListener('change', (event) => {
   currentReport.comment = event.target.value;
 });
 
-// Continue Button
-uploadPicture.setAttribute('onclick', 'location.href="#upload-photos"');
-
 /**
  * Step 5: Images
  */
@@ -488,7 +502,7 @@ document.getElementById('starCameraBtn').addEventListener('click', () => {
   if (currentReport.images.length >= 3) {
     return;
   }
-  document.getElementById('displayCameraArea').style.display = 'block';
+  document.getElementById('displayCameraArea').style.display = 'flex';
   if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
     const mediaPromise = navigator.mediaDevices.getUserMedia({ video: true });
     mediaPromise.then((stream) => {
@@ -540,9 +554,6 @@ fileInput.addEventListener('change', function () {
 
 //Drag and drop to upload picture
 const dragAndDropArea = document.getElementById('dragAndDropArea');
-dragAndDropArea.style.height = '200px';
-dragAndDropArea.style.width = '400px';
-dragAndDropArea.style.background = 'gray';
 
 dragAndDropArea.addEventListener('dragover', (event) => {
   event.preventDefault();
@@ -676,9 +687,6 @@ const displayImages = (base64File) => {
   }
 };
 
-// Continue Button
-showConfirmationBtn.setAttribute('onclick', 'location.href="#review-report"');
-
 const getEmptyImages = () => {
   const emptyImages = document.createElement('p');
   emptyImages.classList.add('submit-value', 'text-body-2', 'regular', 'w-full');
@@ -689,9 +697,72 @@ const getEmptyImages = () => {
 //#endregion
 
 /**
- * Step 6: Show Confirmation
+ *  Back Button
  */
-showConfirmationBtn.addEventListener('click', () => {
+
+document.getElementById('backButton').addEventListener('click', () => {
+  const url = new URL(window.location.href);
+
+  const allSteps = ['#select-location', '#hazard-category', '#hazard-type', '#additional-details', '#upload-photos', '#review-report'];
+
+  const array = allSteps.filter((hash) => (skipHazardOption ? hash !== '#hazard-type' : true));
+  const currentHash = url.hash;
+
+  const currentIndex = array.indexOf(currentHash);
+
+  if (currentIndex === 0) {
+    window.location.replace('/pages/home/index.html');
+    return;
+  }
+
+  const previousIndex = currentIndex - 1;
+  const previousHash = array[previousIndex];
+
+  url.hash = previousHash;
+  window.location.href = url.href;
+});
+
+/**
+ *  Continue Button
+ */
+document.getElementById('continueBtn').addEventListener('click', async () => {
+  const allSteps = Object.values(STEPS);
+
+  const array = allSteps.filter((hash) => (skipHazardOption ? hash !== '#hazard-type' : true));
+
+  const url = new URL(window.location.href);
+  const currentHash = url.hash;
+
+  const currentIndex = array.indexOf(currentHash);
+
+  if (currentHash === STEPS.category && !currentReport.category.id) {
+    AlertPopup.show('Please select a hazard category', AlertPopup.warning);
+
+    return;
+  }
+
+  if (currentHash === STEPS.hazard && !currentReport.option.id) {
+    AlertPopup.show('Please select a hazard option', AlertPopup.warning);
+    return;
+  }
+
+  if (currentHash === STEPS.images) {
+    displayReviewStepInfo();
+  }
+
+  if (currentHash === STEPS.review) {
+    await submitReport();
+    return;
+  }
+
+  const nextIndex = currentIndex + 1;
+  const previousHash = array[nextIndex];
+
+  url.hash = previousHash;
+  window.location.href = url.href;
+});
+
+const displayReviewStepInfo = () => {
   locationOutput.innerHTML = `${currentReport.location.address}`;
   categoryOutput.innerHTML = currentReport.category.name;
   hazardOptionOutput.innerHTML = currentReport.option.name;
@@ -705,14 +776,9 @@ showConfirmationBtn.addEventListener('click', () => {
   } else {
     imagesOutput.appendChild(getEmptyImages());
   }
-});
+};
 
-/**
- * Step 7: Submit Form
- */
-reportHazardForm.addEventListener('submit', async function (event) {
-  event.preventDefault();
-
+const submitReport = async () => {
   try {
     const images = await uploadImageToStorage(currentReport.images);
     //CREATE
@@ -809,7 +875,7 @@ reportHazardForm.addEventListener('submit', async function (event) {
   } catch (error) {
     AlertPopup.show(error.message, AlertPopup.error);
   }
-});
+};
 
 const uploadImageToStorage = async (images) => {
   const fileResponses = await Promise.all(
@@ -842,184 +908,35 @@ const uploadImageToStorage = async (images) => {
 };
 
 /**
- *  Display nav (Breadcrumb)
+ *  Breadcrumb
  */
+const generateBreadcrumb = () => {
+  const allSteps = Object.keys(STEPS).filter((key) => (skipHazardOption ? STEPS?.[key] !== STEPS.hazard : true));
 
-//show buttons when continue
-const hazardCategoryElement = document.getElementById('hazardCategory');
+  const array = allSteps.map((key, index) => ({ index, hash: STEPS[key], label: STEPS_LABEL[key] }));
 
-hazardCategoryElement.addEventListener('click', () => {
-  document.getElementById('hazardCategoryNav').style.display = 'block';
-});
-
-const hazardTypeeElement = document.getElementById('hazardType');
-
-hazardTypeeElement.addEventListener('click', () => {
-  if (currentReport.category.id != null && currentReport.category.name === 'Fire') {
-    document.getElementById('hazardDetailNav').style.display = 'block';
-  } else if (currentReport.category.id != null) {
-    document.getElementById('hazardTypeNav').style.display = 'block';
-  }
-});
-
-const hazardOptionElement = document.getElementById('selectHazardOptionLink');
-
-hazardOptionElement.addEventListener('click', () => {
-  if (currentReport.option.id != null) {
-    document.getElementById('hazardDetailNav').style.display = 'block';
-  }
-});
-
-const hazardCommentElement = document.getElementById('uploadPicture');
-
-hazardCommentElement.addEventListener('click', () => {
-  document.getElementById('hazardUploadPhotosNav').style.display = 'block';
-});
-
-const hazardPhotoElement = document.getElementById('showConfirmationBtn');
-
-hazardPhotoElement.addEventListener('click', () => {
-  document.getElementById('hazardReviewReportNav').style.display = 'block';
-});
-
-//edit buttons
-const editLocationElement = document.getElementById('editLocation');
-
-editLocationElement.addEventListener('click', () => {
-  document.getElementById('hazardCategoryNav').style.display = 'none';
-  document.getElementById('hazardTypeNav').style.display = 'none';
-  document.getElementById('hazardDetailNav').style.display = 'none';
-  document.getElementById('hazardUploadPhotosNav').style.display = 'none';
-  document.getElementById('hazardReviewReportNav').style.display = 'none';
-});
-
-const editCategoryElement = document.getElementById('editCategory');
-
-editCategoryElement.addEventListener('click', () => {
-  document.getElementById('hazardTypeNav').style.display = 'none';
-  document.getElementById('hazardDetailNav').style.display = 'none';
-  document.getElementById('hazardUploadPhotosNav').style.display = 'none';
-  document.getElementById('hazardReviewReportNav').style.display = 'none';
-});
-
-const editTypeElement = document.getElementById('editType');
-
-editTypeElement.addEventListener('click', () => {
-  document.getElementById('hazardDetailNav').style.display = 'none';
-  document.getElementById('hazardUploadPhotosNav').style.display = 'none';
-  document.getElementById('hazardReviewReportNav').style.display = 'none';
-});
-
-const editDetailsElement = document.getElementById('editDetails');
-
-editDetailsElement.addEventListener('click', () => {
-  document.getElementById('hazardUploadPhotosNav').style.display = 'none';
-  document.getElementById('hazardReviewReportNav').style.display = 'none';
-});
-
-const editPhotosElement = document.getElementById('editPhotos');
-
-editPhotosElement.addEventListener('click', () => {
-  document.getElementById('hazardReviewReportNav').style.display = 'none';
-});
-
-//hide buttons when click on nav
-const hazardUploadPhotosNavElement = document.getElementById('selectLocation');
-
-hazardUploadPhotosNavElement.addEventListener('click', () => {
-  document.getElementById('hazardCategoryNav').style.display = 'none';
-  document.getElementById('hazardTypeNav').style.display = 'none';
-  document.getElementById('hazardDetailNav').style.display = 'none';
-  document.getElementById('hazardUploadPhotosNav').style.display = 'none';
-  document.getElementById('hazardReviewReportNav').style.display = 'none';
-});
-
-const hazardCategoryNavElement = document.getElementById('hazardCategoryNav');
-
-hazardCategoryNavElement.addEventListener('click', () => {
-  document.getElementById('hazardTypeNav').style.display = 'none';
-  document.getElementById('hazardDetailNav').style.display = 'none';
-  document.getElementById('hazardUploadPhotosNav').style.display = 'none';
-  document.getElementById('hazardReviewReportNav').style.display = 'none';
-});
-
-const hazardTypeNavElement = document.getElementById('hazardTypeNav');
-
-hazardTypeNavElement.addEventListener('click', () => {
-  document.getElementById('hazardDetailNav').style.display = 'none';
-  document.getElementById('hazardUploadPhotosNav').style.display = 'none';
-  document.getElementById('hazardReviewReportNav').style.display = 'none';
-});
-
-const hazardDetailNavElement = document.getElementById('hazardDetailNav');
-
-hazardDetailNavElement.addEventListener('click', () => {
-  document.getElementById('hazardUploadPhotosNav').style.display = 'none';
-  document.getElementById('hazardReviewReportNav').style.display = 'none';
-});
-
-const hazardUploadPhotosNavEl = document.getElementById('hazardUploadPhotosNav');
-
-hazardUploadPhotosNavEl.addEventListener('click', () => {
-  document.getElementById('hazardReviewReportNav').style.display = 'none';
-});
-
-/**
- *  Back Button
- */
-
-document.getElementById('backButton').addEventListener('click', () => {
   const url = new URL(window.location.href);
-
-  const allSteps = ['#select-location', '#hazard-category', '#hazard-type', '#additional-details', '#upload-photos', '#review-report'];
-
-  const array = allSteps.filter((hash) => (skipHazardOption ? hash !== '#hazard-type' : true));
   const currentHash = url.hash;
 
-  const currentIndex = array.indexOf(currentHash);
+  const NavElement = ({ label, href, current, addChevron }) => `<li>
+      <a title="${label}" href="${href}" class="report-hazard-step text-body-3 ${current ? 'text-neutral-700 semibold' : 'text-neutral-500'}">
+      ${addChevron ? '<i class="icon-chevron-right"></i>' : ''}
+          ${label}
+      </a>
+    </li>`;
 
-  if (currentIndex === 0) {
-    window.location.replace('/pages/home/index.html');
-    return;
+  const elements = [];
+
+  const currentIndex = Object.values(STEPS)
+    .filter((hash) => (skipHazardOption ? hash !== STEPS.hazard : true))
+    .indexOf(currentHash);
+
+  for (let i = 0; i < array.length; i++) {
+    const step = array[i];
+    if (step.index <= currentIndex) {
+      elements.push(NavElement({ label: step.label, href: step.hash, current: step.index === currentIndex, addChevron: step.index > 0 }));
+    }
   }
 
-  const previousIndex = currentIndex - 1;
-  const previousHash = array[previousIndex];
-
-  url.hash = previousHash;
-  window.location.href = url.href;
-});
-
-// highlight breadcrumb
-
-const allSteps = ['#select-location', '#hazard-category', '#hazard-type', '#additional-details', '#upload-photos', '#review-report'];
-const allSteps2 = ['.step1', '.step2', '.step3', '.step4', '.step5', '.step6'];
-
-function checkCurrentStep() {
-  const currentURL = window.location.href;
-  const urlFragment = currentURL.substring(currentURL.lastIndexOf('#'));
-  const num = allSteps.indexOf(urlFragment);
-  if (urlFragment === '#additional-details') {
-    document.getElementById('commentInput').value = '';
-  }
-  if (num !== -1) {
-    allSteps2.forEach((stepClass, index) => {
-      const element = document.querySelector(stepClass);
-
-      if (element) {
-        if (index === num) {
-          element.classList.add('semibold');
-          element.classList.remove('regular');
-          element.classList.add('highlight-color');
-        } else {
-          element.classList.remove('semibold');
-          element.classList.add('regular');
-          element.classList.remove('highlight-color');
-        }
-      }
-    });
-  }
-}
-
-window.addEventListener('load', checkCurrentStep);
-window.addEventListener('popstate', checkCurrentStep);
+  document.getElementById('navMenu').innerHTML = elements.join('');
+};
