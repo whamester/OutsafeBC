@@ -830,7 +830,6 @@ document.getElementById('continueBtn').addEventListener('click', async () => {
 
   const currentIndex = array.indexOf(currentHash);
 
-  console.log({ currentReport });
   if (currentHash === STEPS.category && !currentReport.category.id) {
     AlertPopup.show('Please select a hazard category', AlertPopup.warning);
 

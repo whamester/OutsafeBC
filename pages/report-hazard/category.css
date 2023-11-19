@@ -53,3 +53,12 @@ img {
   top: -0.5rem;
   right: -0.5rem;
 }
+
+@media screen and (min-width: 768px) {
+  #hazard-category-content-list {
+    display: grid;
+    grid-template-columns: repeat(2, 0.6fr);
+    row-gap: 1.44rem;
+    column-gap: 1.56rem;
+  }
+}
