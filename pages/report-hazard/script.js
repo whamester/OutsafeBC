@@ -133,6 +133,12 @@ const displayCurrentSection = () => {
       continueBtnText.innerHTML = 'Continue';
     }
 
+    if (pageId === STEPS.location) {
+      fullNavMenu.style.visibility = 'hidden';
+    } else {
+      fullNavMenu.style.visibility = 'visible';
+    }
+
     document.body.scrollTop = true;
   } catch (error) {
     console.error({ error });

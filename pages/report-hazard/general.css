@@ -30,10 +30,6 @@
   gap: 1rem;
 }
 
-#report-hazard-body .breadbrumb-desktop {
-  display: none;
-}
-
 #report-hazard-body .section-container {
   display: flex;
   flex-direction: column;
@@ -48,6 +44,12 @@
 
 #report-hazard-body .continue-btn {
   width: 100%;
+}
+
+#report-hazard-body .breadbrumb-desktop {
+  padding-top: 1rem;
+  margin-left: var(--padding-x);
+  margin-right: var(--padding-x);
 }
 
 #reportHazardForm {
@@ -98,10 +100,6 @@
   #report-hazard-body main {
     display: grid;
     height: calc(100% - 130px);
-  }
-
-  #report-hazard-body .breadbrumb-desktop {
-    display: block;
   }
 
   #report-hazard-body .divider {
