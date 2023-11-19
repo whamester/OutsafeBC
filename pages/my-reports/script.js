@@ -23,6 +23,15 @@ const olderBtn = document.getElementById('olderReportsBtn');
 
 const empty = new ReportsEmpty();
 
+//Redirect if not logged in
+function redirectUser() {
+  if (!!user) {
+    return;
+  }
+  window.location.replace('/');
+}
+redirectUser();
+
 /**
  * Page Init
  */
@@ -41,21 +50,21 @@ window.onload = function () {
 recentBtn.addEventListener('click', () => {
   recentReports.style.display = 'flex';
   olderReports.style.display = 'none';
-  document.querySelector(".my-reports__recent-tab").classList.add("my-reports__active-tab")
-  document.querySelector(".my-reports__older-tab").classList.remove("my-reports__active-tab")
+  document.querySelector('.my-reports__recent-tab').classList.add('my-reports__active-tab');
+  document.querySelector('.my-reports__older-tab').classList.remove('my-reports__active-tab');
 });
 olderBtn.addEventListener('click', () => {
   if (!olderReportClicked) {
     displayOlderReports();
     recentReports.style.display = 'none';
     olderReports.style.display = 'flex';
-    document.querySelector(".my-reports__older-tab").classList.add("my-reports__active-tab")
-    document.querySelector(".my-reports__recent-tab").classList.remove("my-reports__active-tab")
+    document.querySelector('.my-reports__older-tab').classList.add('my-reports__active-tab');
+    document.querySelector('.my-reports__recent-tab').classList.remove('my-reports__active-tab');
   } else {
     recentReports.style.display = 'none';
     olderReports.style.display = 'flex';
-    document.querySelector(".my-reports__older-tab").classList.add("my-reports__active-tab")
-    document.querySelector(".my-reports__recent-tab").classList.remove("my-reports__active-tab")
+    document.querySelector('.my-reports__older-tab').classList.add('my-reports__active-tab');
+    document.querySelector('.my-reports__recent-tab').classList.remove('my-reports__active-tab');
   }
 });
 
@@ -103,6 +112,7 @@ async function displayRecentReports() {
     }
   }
   toggleSwitchEventlistener();
+  addGreyFilter();
 }
 
 // Get all the older reports for the logged in user and display them
@@ -115,7 +125,6 @@ async function getOlderReports() {
     const result = await response.json();
 
     olderReportArr.push(...result.data.results);
-    console.log(result.data.results);
   } catch (error) {
     AlertPopup.show('Reports unavailable at the moment, please try again later or contact support', AlertPopup.error);
   }
@@ -151,6 +160,7 @@ async function displayOlderReports() {
       loadIcons();
     }
     toggleSwitchEventlistener();
+    addGreyFilter();
   }
   olderReportClicked = true;
 }
@@ -163,6 +173,7 @@ function toggleSwitchEventlistener() {
       let reportID = e.target.id.slice(3);
       let toggleState = e.target.checked;
       updateReportStatus(reportID, toggleState);
+      addGreyFilter();
     };
   });
 }
@@ -197,3 +208,24 @@ async function updateReportStatus(reportID, activeState) {
     }
   }
 }
+
+// Add grey filter to card inner when toggled inactive
+function addGreyFilter() {
+  let toggleStatuses = document.querySelectorAll('.toggleStatus');
+  [].forEach.call(toggleStatuses, function (toggleStatus) {
+    let cardInner = toggleStatus.closest('.report-card__inner');
+    let editButton = cardInner.querySelector('.btn');
+
+    if (toggleStatus.textContent === 'Inactive') {
+      cardInner.classList.add('inactive');
+      editButton.classList.add('disabled');
+      editButton.disabled = true;
+    } else {
+      cardInner.classList.remove('inactive');
+      editButton.classList.remove('disabled');
+      editButton.disabled = false;
+    }
+  });
+}
+
+addGreyFilter();

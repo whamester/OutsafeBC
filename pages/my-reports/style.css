@@ -9,9 +9,20 @@
   padding-bottom: 1rem;
 }
 
-#olderReports {
-  -webkit-filter: grayscale(1);
+#olderReports .btn{
   pointer-events: none;
+}
+
+.report-card__inner.inactive>div:not(:first-child):not(:last-child) {
+  -webkit-filter: grayscale(1);
+}
+
+.disabled {
+  color: var(--neutral-500);
+}
+
+.disabled i {
+  background-color: var(--neutral-500);
 }
 
 .my-reports__top-section {
@@ -65,4 +76,35 @@ input[type='radio'] {
 
 .my-reports__active-tab label {
   color: var(--neutral-900);
+}
+
+@media screen and (min-width: 768px) {
+  #recentReports,
+  #olderReports {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .report-card__outer {
+    width: 25rem;
+  }
+}
+
+@media screen and (min-width: 1440px) {
+  main {
+    max-width: 1440px;
+    margin: auto;
+  }
+
+  #recentReports,
+  #olderReports {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .report-card__outer {
+    width: 25rem;
+  }
 }
