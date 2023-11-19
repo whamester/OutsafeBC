@@ -33,6 +33,15 @@ let allowRedirect = false;
 const FLY_TO_ZOOM = 12;
 const ANIMATION_DURATION = 4;
 
+const STEPS = {
+  location: '#select-location',
+  category: '#hazard-category',
+  hazard: '#hazard-type',
+  comments: '#additional-details',
+  images: '#upload-photos',
+  review: '#review-report',
+};
+
 /**
  * Page Init
  */
@@ -74,18 +83,6 @@ window.onload = async function () {
     loadGeolocation();
 
     populateReport();
-
-    reportHazardForm.style.height = '100%';
-
-    // Hazard Category and Option required
-    // These events are overwriten when the user selects an option
-    hazardType.onclick = () => {
-      AlertPopup.show('Please select a hazard category', AlertPopup.warning);
-    };
-
-    selectHazardOptionLink.onclick = () => {
-      AlertPopup.show('Please select a hazard option', AlertPopup.warning);
-    };
   } catch (error) {
     AlertPopup.show(error.message || AlertPopup.SOMETHING_WENT_WRONG_MESSAGE, AlertPopup.error, 500);
   }
@@ -111,8 +108,6 @@ const updateCurrentReportLocation = async (params) => {
   };
 
   locationAddressLabel.innerHTML = `${currentReport.location.address ? currentReport.location.address : `(${currentReport.location.lat}, ${currentReport.location.lng})`}`;
-  // Continue Button
-  hazardCategory.setAttribute('onclick', 'location.href="#hazard-category"');
 };
 
 const displayCurrentSection = () => {
@@ -127,6 +122,16 @@ const displayCurrentSection = () => {
     }
 
     pagesHandler(pageId);
+
+    if (pageId === STEPS.review) {
+      if (!!idReport) {
+        continueBtnText.innerHTML = 'Update Report';
+      } else {
+        continueBtnText.innerHTML = 'Submit Report';
+      }
+    } else {
+      continueBtnText.innerHTML = 'Continue';
+    }
 
     document.body.scrollTop = true;
   } catch (error) {
@@ -303,9 +308,6 @@ const getCategories = async () => {
 
         populateHazardOptions(options, selectedOptionQuestion);
 
-        // Continue Button
-        hazardType.setAttribute('onclick', 'location.href="#hazard-type"');
-
         const allNewIcons = document.querySelectorAll('.orange-check-icon');
         allNewIcons.forEach((newIcon) => {
           newIcon.style.display = 'none';
@@ -397,9 +399,6 @@ const populateHazardOptions = (options, selectedOptionQuestion) => {
         currentReport.option.id = event.target.value;
         currentReport.option.name = option.name;
 
-        // Continue Button
-        selectHazardOptionLink.setAttribute('onclick', 'location.href="#additional-details"');
-
         const allIconTypes = document.querySelectorAll('.category-icon-type');
         allIconTypes.forEach((iconType) => {
           iconType.style.display = 'none';
@@ -450,9 +449,6 @@ const populateHazardOptions = (options, selectedOptionQuestion) => {
 commentInput.addEventListener('change', (event) => {
   currentReport.comment = event.target.value;
 });
-
-// Continue Button
-uploadPicture.setAttribute('onclick', 'location.href="#upload-photos"');
 
 /**
  * Step 5: Images
@@ -541,9 +537,6 @@ fileInput.addEventListener('change', function () {
 
 //Drag and drop to upload picture
 const dragAndDropArea = document.getElementById('dragAndDropArea');
-// dragAndDropArea.style.height = '200px';
-// dragAndDropArea.style.width = '400px';
-// dragAndDropArea.style.background = 'gray';
 
 dragAndDropArea.addEventListener('dragover', (event) => {
   event.preventDefault();
@@ -677,9 +670,6 @@ const displayImages = (base64File) => {
   }
 };
 
-// Continue Button
-showConfirmationBtn.setAttribute('onclick', 'location.href="#review-report"');
-
 const getEmptyImages = () => {
   const emptyImages = document.createElement('p');
   emptyImages.classList.add('submit-value', 'text-body-2', 'regular', 'w-full');
@@ -690,196 +680,37 @@ const getEmptyImages = () => {
 //#endregion
 
 /**
- * Step 6: Show Confirmation
- */
-showConfirmationBtn.addEventListener('click', () => {
-  locationOutput.innerHTML = `${currentReport.location.address}`;
-  categoryOutput.innerHTML = currentReport.category.name;
-  hazardOptionOutput.innerHTML = currentReport.option.name;
-  commentOutput.innerHTML = currentReport.comment || 'No comments';
-  imagesOutput.innerHTML = '';
-
-  if (currentReport.images?.length) {
-    currentReport.images.forEach((image) => {
-      imagesOutput.innerHTML += `<img src="${image}" height = "100" width = "auto"/>`;
-    });
-  } else {
-    imagesOutput.appendChild(getEmptyImages());
-  }
-});
-
-/**
- * Step 7: Submit Form
- */
-reportHazardForm.addEventListener('submit', async function (event) {
-  event.preventDefault();
-
-  try {
-    const images = await uploadImageToStorage(currentReport.images);
-    //CREATE
-    if (!idReport) {
-      const response = await fetch(`${API_URL}/hazard-report`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          userId: user.id,
-          hazardOptionId: currentReport.option.id,
-          location: {
-            lat: currentReport.location.lat,
-            lng: currentReport.location.lng,
-            address: currentReport.location.address,
-          },
-          comment: currentReport.comment ?? '',
-          images: images,
-        }),
-      });
-
-      if (response.ok) {
-        allowRedirect = true;
-        const { data } = await response.json();
-
-        const modal = new Modal();
-
-        const button = document.createElement('button');
-        button.setAttribute('id', 'open-modal-btn');
-        button.setAttribute('class', 'btn btn-primary');
-        button.addEventListener('click', () =>
-          window.location.assign(`/pages/home/index.html?id=${data.id}&focus=true&zoom=${Map.DEFAULT_MAP_ZOOM}&lat=${data?.location?.lat}&lng=${data?.location?.lng}`)
-        );
-        button.innerHTML = 'Continue Exploring';
-
-        modal.show({
-          title: 'Your report has been submitted!',
-          description: 'Thank you for helping others have a safe outdoors experience.',
-          icon: {
-            name: 'icon-report-submitted',
-            color: '#000000',
-            size: '3.5rem',
-          },
-          actions: button,
-          enableOverlayClickClose: false,
-        });
-      } else {
-        throw new Error('Failed to create report');
-      }
-      return;
-    }
-
-    //UPDATE
-    const response = await fetch(`${API_URL}/hazard-report?id=${idReport}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        userId: user.id,
-        hazardOptionId: currentReport.option.id,
-        location: {
-          lat: currentReport.location.lat,
-          lng: currentReport.location.lng,
-          address: currentReport.location.address,
-        },
-        comment: currentReport.comment ?? '',
-        images: images,
-      }),
-    });
-
-    if (response.ok) {
-      await response.json();
-      allowRedirect = true;
-      const modal = new Modal();
-
-      const button = document.createElement('button');
-      button.setAttribute('id', 'open-modal-btn');
-      button.setAttribute('class', 'btn btn-primary');
-      button.addEventListener('click', () => window.location.replace('/pages/my-reports/index.html'));
-      button.innerHTML = 'Back to My Reports';
-
-      modal.show({
-        title: 'Your report has been updated!',
-        description: 'Thank you for helping others have a safe camping experience.',
-        icon: { name: 'icon-check', color: '#000000', size: '3.5rem' },
-        actions: button,
-        enableOverlayClickClose: false,
-      });
-    } else {
-      throw new Error('Failed to create report');
-    }
-  } catch (error) {
-    AlertPopup.show(error.message, AlertPopup.error);
-  }
-});
-
-const uploadImageToStorage = async (images) => {
-  const fileResponses = await Promise.all(
-    images.map((image) =>
-      fetch(image)
-        .then((res) => res.blob())
-        .then((blob) => {
-          const file = new File([blob], new Date().getTime().toString(), {
-            type: image.split(';')[0].replace('data:', ''),
-          });
-
-          return file;
-        })
-    )
-  );
-
-  const responses = await Promise.all(
-    fileResponses.map((file) =>
-      fetch(`${API_URL}/hazard-image?fileName=${file.name}.${file?.type?.replace('image/', '')}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': file.type,
-        },
-        body: file,
-      }).then((response) => response.json())
-    )
-  );
-
-  return responses.map(({ data }) => data.url);
-};
-
-/**
  *  Display nav (Breadcrumb)
  */
 
 //show buttons when continue
-const hazardCategoryElement = document.getElementById('hazardCategory');
+// const hazardCategoryElement = document.getElementById('hazardCategory');
 
-hazardCategoryElement.addEventListener('click', () => {
-  document.getElementById('hazardCategoryNav').style.display = 'block';
-});
+// hazardCategoryElement.addEventListener('click', () => {
+//   document.getElementById('hazardCategoryNav').style.display = 'block';
+// });
 
-const hazardTypeeElement = document.getElementById('hazardType');
+// const hazardTypeeElement = document.getElementById('hazardType');
 
-hazardTypeeElement.addEventListener('click', () => {
-  if (currentReport.category.id != null) {
-    document.getElementById('hazardTypeNav').style.display = 'block';
-  }
-});
+// hazardTypeeElement.addEventListener('click', () => {
+//   if (currentReport.category.id != null) {
+//     document.getElementById('hazardTypeNav').style.display = 'block';
+//   }
+// });
 
-const hazardOptionElement = document.getElementById('selectHazardOptionLink');
+// const hazardOptionElement = document.getElementById('selectHazardOptionLink');
 
-hazardOptionElement.addEventListener('click', () => {
-  if (currentReport.option.id != null) {
-    document.getElementById('hazardDetailNav').style.display = 'block';
-  }
-});
+// hazardOptionElement.addEventListener('click', () => {
+//   if (currentReport.option.id != null) {
+//     document.getElementById('hazardDetailNav').style.display = 'block';
+//   }
+// });
 
-const hazardCommentElement = document.getElementById('uploadPicture');
+// const hazardCommentElement = document.getElementById('uploadPicture');
 
-hazardCommentElement.addEventListener('click', () => {
-  document.getElementById('hazardUploadPhotosNav').style.display = 'block';
-});
-
-const hazardPhotoElement = document.getElementById('showConfirmationBtn');
-
-hazardPhotoElement.addEventListener('click', () => {
-  document.getElementById('hazardReviewReportNav').style.display = 'block';
-});
+// hazardCommentElement.addEventListener('click', () => {
+//   document.getElementById('hazardUploadPhotosNav').style.display = 'block';
+// });
 
 //edit buttons
 const editLocationElement = document.getElementById('editLocation');
@@ -988,3 +819,186 @@ document.getElementById('backButton').addEventListener('click', () => {
   url.hash = previousHash;
   window.location.href = url.href;
 });
+
+document.getElementById('continueBtn').addEventListener('click', async () => {
+  const allSteps = Object.values(STEPS);
+
+  const array = allSteps.filter((hash) => (skipHazardOption ? hash !== '#hazard-type' : true));
+
+  const url = new URL(window.location.href);
+  const currentHash = url.hash;
+
+  const currentIndex = array.indexOf(currentHash);
+
+  console.log({ currentReport });
+  if (currentHash === STEPS.category && !currentReport.category.id) {
+    AlertPopup.show('Please select a hazard category', AlertPopup.warning);
+
+    return;
+  }
+
+  if (currentHash === STEPS.hazard && !currentReport.option.id) {
+    AlertPopup.show('Please select a hazard option', AlertPopup.warning);
+    return;
+  }
+
+  if (currentHash === STEPS.images) {
+    displayReviewStepInfo();
+  }
+
+  if (currentHash === STEPS.review) {
+    await submitReport();
+    return;
+  }
+
+  const nextIndex = currentIndex + 1;
+  const previousHash = array[nextIndex];
+
+  url.hash = previousHash;
+  window.location.href = url.href;
+});
+
+const displayReviewStepInfo = () => {
+  locationOutput.innerHTML = `${currentReport.location.address}`;
+  categoryOutput.innerHTML = currentReport.category.name;
+  hazardOptionOutput.innerHTML = currentReport.option.name;
+  commentOutput.innerHTML = currentReport.comment || 'No comments';
+  imagesOutput.innerHTML = '';
+
+  if (currentReport.images?.length) {
+    currentReport.images.forEach((image) => {
+      imagesOutput.innerHTML += `<img src="${image}" height = "100" width = "auto"/>`;
+    });
+  } else {
+    imagesOutput.appendChild(getEmptyImages());
+  }
+};
+
+const submitReport = async () => {
+  try {
+    const images = await uploadImageToStorage(currentReport.images);
+    //CREATE
+    if (!idReport) {
+      const response = await fetch(`${API_URL}/hazard-report`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId: user.id,
+          hazardOptionId: currentReport.option.id,
+          location: {
+            lat: currentReport.location.lat,
+            lng: currentReport.location.lng,
+            address: currentReport.location.address,
+          },
+          comment: currentReport.comment ?? '',
+          images: images,
+        }),
+      });
+
+      if (response.ok) {
+        allowRedirect = true;
+        const { data } = await response.json();
+
+        const modal = new Modal();
+
+        const button = document.createElement('button');
+        button.setAttribute('id', 'open-modal-btn');
+        button.setAttribute('class', 'btn btn-primary');
+        button.addEventListener('click', () =>
+          window.location.assign(`/pages/home/index.html?id=${data.id}&focus=true&zoom=${Map.DEFAULT_MAP_ZOOM}&lat=${data?.location?.lat}&lng=${data?.location?.lng}`)
+        );
+        button.innerHTML = 'Continue Exploring';
+
+        modal.show({
+          title: 'Your report has been submitted!',
+          description: 'Thank you for helping others have a safe outdoors experience.',
+          icon: {
+            name: 'icon-report-submitted',
+            color: '#000000',
+            size: '3.5rem',
+          },
+          actions: button,
+          enableOverlayClickClose: false,
+        });
+      } else {
+        throw new Error('Failed to create report');
+      }
+      return;
+    }
+
+    //UPDATE
+    const response = await fetch(`${API_URL}/hazard-report?id=${idReport}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        userId: user.id,
+        hazardOptionId: currentReport.option.id,
+        location: {
+          lat: currentReport.location.lat,
+          lng: currentReport.location.lng,
+          address: currentReport.location.address,
+        },
+        comment: currentReport.comment ?? '',
+        images: images,
+      }),
+    });
+
+    if (response.ok) {
+      await response.json();
+      allowRedirect = true;
+      const modal = new Modal();
+
+      const button = document.createElement('button');
+      button.setAttribute('id', 'open-modal-btn');
+      button.setAttribute('class', 'btn btn-primary');
+      button.addEventListener('click', () => window.location.replace('/pages/my-reports/index.html'));
+      button.innerHTML = 'Back to My Reports';
+
+      modal.show({
+        title: 'Your report has been updated!',
+        description: 'Thank you for helping others have a safe camping experience.',
+        icon: { name: 'icon-check', color: '#000000', size: '3.5rem' },
+        actions: button,
+        enableOverlayClickClose: false,
+      });
+    } else {
+      throw new Error('Failed to create report');
+    }
+  } catch (error) {
+    AlertPopup.show(error.message, AlertPopup.error);
+  }
+};
+
+const uploadImageToStorage = async (images) => {
+  const fileResponses = await Promise.all(
+    images.map((image) =>
+      fetch(image)
+        .then((res) => res.blob())
+        .then((blob) => {
+          const file = new File([blob], new Date().getTime().toString(), {
+            type: image.split(';')[0].replace('data:', ''),
+          });
+
+          return file;
+        })
+    )
+  );
+
+  const responses = await Promise.all(
+    fileResponses.map((file) =>
+      fetch(`${API_URL}/hazard-image?fileName=${file.name}.${file?.type?.replace('image/', '')}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': file.type,
+        },
+        body: file,
+      }).then((response) => response.json())
+    )
+  );
+
+  return responses.map(({ data }) => data.url);
+};

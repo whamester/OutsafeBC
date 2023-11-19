@@ -120,7 +120,7 @@ window.onload = async function () {
       const makerExists = geoMap.checkMarkerOnMap(hazardDetail);
 
       // marker currently doesnot exists on the map
-      if (!makerExists) geoMap.createLayerGroups([hazardDetail], markerParams);
+      if (!makerExists) geoMap.createLayerGroups([{ ...hazardDetail, hazardCategory: hazardDetail.category, hazard: hazardDetail.option }], markerParams);
 
       flyTo(hazardDetail.location?.lat, hazardDetail.location?.lng);
     }

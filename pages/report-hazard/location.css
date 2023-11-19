@@ -17,7 +17,7 @@
 .select-location-content {
   border-radius: 1rem;
   border: 1px solid var(--neutral-300);
-  height: 70%;
+  height: 80%;
 }
 
 .select-location-content__header {
@@ -38,15 +38,11 @@
 }
 
 @media screen and (min-width: 768px) {
-  #select-location .scroll-container {
-    height: calc(100vh - 350px);
-  }
-
   #fullNavMenu {
     display: none;
   }
 
-  #select-location .section-container {
-    /* height: unset; */
+  #map {
+    min-height: 300px;
   }
 }
