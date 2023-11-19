@@ -73,8 +73,27 @@ input[type='radio'] {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    gap: 1.5rem;
-    margin: 1rem 0;
+  }
+
+  .report-card__outer {
+    width: 25rem;
   }
 }
 
+@media screen and (min-width: 1440px) {
+  main {
+    max-width: 1440px;
+    margin: auto;
+  }
+
+  #recentReports,
+  #olderReports {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .report-card__outer {
+    width: 25rem;
+  }
+}

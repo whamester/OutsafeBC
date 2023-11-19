@@ -23,6 +23,17 @@ const olderBtn = document.getElementById('olderReportsBtn');
 
 const empty = new ReportsEmpty();
 
+//Redirect if not logged in
+function redirectUser() {
+  if (!!user) {
+    console.log('user');
+    return;
+  }
+  window.location.replace('/');
+  console.log('no user');
+}
+redirectUser();
+
 /**
  * Page Init
  */
@@ -41,21 +52,21 @@ window.onload = function () {
 recentBtn.addEventListener('click', () => {
   recentReports.style.display = 'flex';
   olderReports.style.display = 'none';
-  document.querySelector(".my-reports__recent-tab").classList.add("my-reports__active-tab")
-  document.querySelector(".my-reports__older-tab").classList.remove("my-reports__active-tab")
+  document.querySelector('.my-reports__recent-tab').classList.add('my-reports__active-tab');
+  document.querySelector('.my-reports__older-tab').classList.remove('my-reports__active-tab');
 });
 olderBtn.addEventListener('click', () => {
   if (!olderReportClicked) {
     displayOlderReports();
     recentReports.style.display = 'none';
     olderReports.style.display = 'flex';
-    document.querySelector(".my-reports__older-tab").classList.add("my-reports__active-tab")
-    document.querySelector(".my-reports__recent-tab").classList.remove("my-reports__active-tab")
+    document.querySelector('.my-reports__older-tab').classList.add('my-reports__active-tab');
+    document.querySelector('.my-reports__recent-tab').classList.remove('my-reports__active-tab');
   } else {
     recentReports.style.display = 'none';
     olderReports.style.display = 'flex';
-    document.querySelector(".my-reports__older-tab").classList.add("my-reports__active-tab")
-    document.querySelector(".my-reports__recent-tab").classList.remove("my-reports__active-tab")
+    document.querySelector('.my-reports__older-tab').classList.add('my-reports__active-tab');
+    document.querySelector('.my-reports__recent-tab').classList.remove('my-reports__active-tab');
   }
 });
 
