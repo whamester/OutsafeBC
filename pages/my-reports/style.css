@@ -9,9 +9,20 @@
   padding-bottom: 1rem;
 }
 
-#olderReports {
-  -webkit-filter: grayscale(1);
+#olderReports .btn{
   pointer-events: none;
+}
+
+.report-card__inner.inactive>div:not(:first-child):not(:last-child) {
+  -webkit-filter: grayscale(1);
+}
+
+.disabled {
+  color: var(--neutral-500);
+}
+
+.disabled i {
+  background-color: var(--neutral-500);
 }
 
 .my-reports__top-section {

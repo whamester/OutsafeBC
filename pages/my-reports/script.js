@@ -114,6 +114,7 @@ async function displayRecentReports() {
     }
   }
   toggleSwitchEventlistener();
+  addGreyFilter();
 }
 
 // Get all the older reports for the logged in user and display them
@@ -162,6 +163,7 @@ async function displayOlderReports() {
       loadIcons();
     }
     toggleSwitchEventlistener();
+    addGreyFilter();
   }
   olderReportClicked = true;
 }
@@ -174,6 +176,7 @@ function toggleSwitchEventlistener() {
       let reportID = e.target.id.slice(3);
       let toggleState = e.target.checked;
       updateReportStatus(reportID, toggleState);
+      addGreyFilter();
     };
   });
 }
@@ -208,3 +211,24 @@ async function updateReportStatus(reportID, activeState) {
     }
   }
 }
+
+// Add grey filter to card inner when toggled inactive
+function addGreyFilter() {
+  let toggleStatuses = document.querySelectorAll('.toggleStatus');
+  [].forEach.call(toggleStatuses, function (toggleStatus) {
+    let cardInner = toggleStatus.closest('.report-card__inner');
+    let editButton = cardInner.querySelector('.btn');
+
+    if (toggleStatus.textContent === 'Inactive') {
+      cardInner.classList.add('inactive');
+      editButton.classList.add('disabled');
+      editButton.disabled = true;
+    } else {
+      cardInner.classList.remove('inactive');
+      editButton.classList.remove('disabled');
+      editButton.disabled = false;
+    }
+  });
+}
+
+addGreyFilter();
