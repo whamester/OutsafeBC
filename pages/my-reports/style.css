@@ -8,3 +8,15 @@
   gap: 1.5rem;
   margin: 1rem 0;
 }
+
+@media screen and (min-width: 768px) {
+  #recentReports,
+  #olderReports {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin: 1rem 0;
+  }
+}
+
