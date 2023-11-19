@@ -115,6 +115,7 @@ async function getOlderReports() {
     const result = await response.json();
 
     olderReportArr.push(...result.data.results);
+    console.log(result.data.results);
   } catch (error) {
     AlertPopup.show('Reports unavailable at the moment, please try again later or contact support', AlertPopup.error);
   }
