@@ -618,19 +618,6 @@ const displayImages = (base64File) => {
   const img = document.createElement('img');
   img.setAttribute('src', base64File);
 
-  img.addEventListener('load', function () {
-    if (img.naturalWidth < img.naturalHeight) {
-      img.style.width = 'auto';
-      img.style.height = '84px';
-    } else if (img.naturalWidth > img.naturalHeight) {
-      img.style.width = '101px';
-      img.style.height = 'auto';
-    } else {
-      img.style.width = 'auto';
-      img.style.height = '84px';
-    }
-  });
-
   const deleteButton = document.createElement('button');
   deleteButton.type = 'button';
   deleteButton.classList.add('delete-button');
@@ -767,8 +754,8 @@ const displayReviewStepInfo = (report) => {
   imagesOutput.innerHTML = '';
 
   if (report.images?.length) {
-    report.images.forEach((image) => {
-      imagesOutput.innerHTML += `<img src="${image}" height = "100" width = "auto"/>`;
+    report.images.forEach((image, index) => {
+      imagesOutput.innerHTML += `<img src="${image}" alt="Hazard image ${index + 1}"/>`;
     });
   } else {
     imagesOutput.appendChild(getEmptyImages());
