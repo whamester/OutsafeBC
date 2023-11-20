@@ -111,6 +111,9 @@ window.onload = async function () {
     await getReportApiCall(position.lat, position.lng);
 
     Map.watchGeoLocation(watchGeoLocationSuccess, watchGeoLocationError);
+    
+    // clear recenter btn focus
+    geoMap.map.on('drag', () => recenterBtn?.blur());
   } catch (error) {
     console.error(error, error.message);
 

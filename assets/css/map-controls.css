@@ -1,19 +1,22 @@
 #map-controls {
+  display: inline-flex;
   position: fixed;
-  bottom: 150px;
-  right: 18px;
+  right: 1.19rem;
+  bottom: 8.06rem;
+  flex-direction: column;
+  gap: 2rem;
 }
 
 .map-controls-zoom {
   display: flex;
-  width: 32px;
-  height: 78px;
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-start;
-  border-radius: 100px;
   border: 1px solid var(--neutral-300);
+  border-radius: 6.25rem;
   background-color: var(--white);
+  width: 2rem;
+  height: 4.875rem;
 }
 
 .map-controls-zoom-btn:first-of-type {
@@ -24,34 +27,49 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: transparent;
   border: none;
+  background-color: transparent;
   width: 100%;
   height: 100%;
+}
+
+.map-controls-zoom-btn i {
+  background-color: var(--neutral-700);
 }
 
 .map-controls-recenter {
-  margin-top: 32px;
-  border-radius: 100px;
   border: 1px solid var(--neutral-300);
+  border-radius: 6.25rem;
   background: var(--white);
-  width: 32px;
-  height: 32px;
+  width: 2rem;
+  height: 2rem;
 }
 
 .map-controls-recenter-btn {
-  background-color: transparent;
-  width: 100%;
-  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   border: none;
-  padding: 1.6px 1.647px 3.247px 3.2px;
+  border-radius: 6.25rem;
+  background: url("/assets/icons/current-location.svg");
+  background-position: center center;
+  background-size: 20px 20px;
+  background-repeat: no-repeat;
+  background-color: transparent;
+  width: 100%;
+  height: 100%;
+}
+
+.map-controls-recenter-btn:focus {
+  background: url("/assets/icons/current-location-active.svg");
+  background-position: center center;
+  background-size: 20px 20px;
+  background-repeat: no-repeat;
 }
 
 @media only screen and (min-width: 768px) {
   #map-controls {
-    right: 80px;
+    right: 5rem;
+    bottom: 3.94rem;
   }
 }
