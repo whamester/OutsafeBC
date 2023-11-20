@@ -159,17 +159,22 @@ self.addEventListener('install', (event) => {
       cache.addAll(ASSETS);
     })
   );
+
+  self.skipWaiting();
+  console.log('service worker installed');
 });
 
 // lister for activate service worker event
 self.addEventListener('activate', async (event) => {
-  console.log('service worker activate');
   event.waitUntil(
     caches.keys().then((keys) => {
       console.log({ keys });
       return Promise.all(keys.filter((key) => key !== STATIC_RESOURCES_KEY).map((key) => caches.delete(key)));
     })
   );
+
+  self.clients.claim();
+  console.log('service worker activate');
 });
 
 const API_REQUESTS_URLS = ['https://outsafebc-api.netlify.app'];
