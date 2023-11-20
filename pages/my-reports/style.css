@@ -6,5 +6,105 @@
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  margin: 1rem 0;
+  padding-bottom: 1rem;
+}
+
+#olderReports .btn{
+  pointer-events: none;
+}
+
+.report-card__inner.inactive>div:not(:first-child):not(:last-child) {
+  -webkit-filter: grayscale(1);
+}
+
+.disabled {
+  color: var(--neutral-500);
+}
+
+.disabled i {
+  background-color: var(--neutral-500);
+}
+
+.my-reports__top-section {
+  padding: 2.5rem 1rem 1.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.my-reports__top-section h1 {
+  margin: 0;
+  margin-bottom: 0.25rem;
+}
+
+input[type='radio'] {
+  position: absolute;
+  width: 1em;
+  height: 1em;
+  opacity: 0;
+}
+
+.my-reports__reports-tabs {
+  width: 100%;
+  display: flex;
+  gap: 2.5rem;
+}
+
+.my-reports__reports-tabs i {
+  display: block;
+  background-color: var(--neutral-500);
+}
+
+.my-reports__reports-tabs label {
+  color: var(--neutral-500);
+}
+
+.my-reports__recent-tab,
+.my-reports__older-tab {
+  display: flex;
+  gap: 0.62rem;
+}
+
+.my-reports__active-tab {
+  padding-bottom: 0.75rem;
+  border-bottom: 0.0625rem solid var(--neutral-900);
+}
+
+.my-reports__active-tab i {
+  background-color: var(--neutral-900);
+}
+
+.my-reports__active-tab label {
+  color: var(--neutral-900);
+}
+
+@media screen and (min-width: 768px) {
+  #recentReports,
+  #olderReports {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .report-card__outer {
+    width: 25rem;
+  }
+}
+
+@media screen and (min-width: 1440px) {
+  main {
+    max-width: 1440px;
+    margin: auto;
+  }
+
+  #recentReports,
+  #olderReports {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .report-card__outer {
+    width: 25rem;
+  }
 }

@@ -5,7 +5,7 @@ const ToggleSwitch = (id, checked) => {
 			<input type="checkbox" id="ts-${id}" ${checked ? 'checked' : ''}>
 			<span class="slider round"></span>
 		</label>
-		<span id="toggleStatus" class="text-body-3 medium ${
+		<span class="toggleStatus" class="text-body-3 medium ${
       checked ? 'text-success-500' : 'text-warning-700'
     }">${checked ? 'Ongoing' : 'Inactive'}</span>
 	</div>
@@ -15,7 +15,7 @@ const ToggleSwitch = (id, checked) => {
 export const onToggle = ({ target }) => {
   const toggleSwitch = target;
   const toggleElem = toggleSwitch.closest('.report-card__toggle_button');
-  const toggleStatus = toggleElem.querySelector('#toggleStatus');
+  const toggleStatus = toggleElem.querySelector('.toggleStatus');
 
   if (toggleSwitch.checked) {
     toggleStatus.textContent = 'Ongoing';
