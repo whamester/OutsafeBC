@@ -23,14 +23,23 @@ const olderBtn = document.getElementById('olderReportsBtn');
 
 const empty = new ReportsEmpty();
 
+//Redirect if not logged in
+function redirectUser() {
+  if (!!user) {
+    return;
+  }
+  window.location.replace('/');
+}
+redirectUser();
+
 /**
  * Page Init
  */
 window.onload = function () {
   // Inject Header
-  injectHeader([
-    { func: Header, target: '#myReportsBody', position: 'afterbegin' },
-  ]);
+  injectHeader([{ func: Header, target: '#myReportsBody', position: 'afterbegin' }]);
+
+  loadIcons();
 
   // Checkbox toggle
   // Set the recentBtn to be checked initially
@@ -41,15 +50,21 @@ window.onload = function () {
 recentBtn.addEventListener('click', () => {
   recentReports.style.display = 'flex';
   olderReports.style.display = 'none';
+  document.querySelector('.my-reports__recent-tab').classList.add('my-reports__active-tab');
+  document.querySelector('.my-reports__older-tab').classList.remove('my-reports__active-tab');
 });
 olderBtn.addEventListener('click', () => {
   if (!olderReportClicked) {
     displayOlderReports();
     recentReports.style.display = 'none';
     olderReports.style.display = 'flex';
+    document.querySelector('.my-reports__older-tab').classList.add('my-reports__active-tab');
+    document.querySelector('.my-reports__recent-tab').classList.remove('my-reports__active-tab');
   } else {
     recentReports.style.display = 'none';
     olderReports.style.display = 'flex';
+    document.querySelector('.my-reports__older-tab').classList.add('my-reports__active-tab');
+    document.querySelector('.my-reports__recent-tab').classList.remove('my-reports__active-tab');
   }
 });
 
@@ -60,18 +75,13 @@ async function getRecentReports() {
   try {
     recentReportArr.splice(0, recentReportArr.length);
 
-    const response = await fetch(
-      `${API_URL}/hazard-report?user_id=${userID}&type=recent`
-    );
+    const response = await fetch(`${API_URL}/hazard-report?user_id=${userID}&type=recent`);
     // TODO: Pagination
     const result = await response.json();
 
     recentReportArr.push(...result.data.results);
   } catch (error) {
-    AlertPopup.show(
-      'Reports unavailable at the moment, please try again later or contact support',
-      AlertPopup.error
-    );
+    AlertPopup.show('Reports unavailable at the moment, please try again later or contact support', AlertPopup.error);
   }
 }
 
@@ -102,6 +112,7 @@ async function displayRecentReports() {
     }
   }
   toggleSwitchEventlistener();
+  addGreyFilter();
 }
 
 // Get all the older reports for the logged in user and display them
@@ -109,18 +120,13 @@ async function getOlderReports() {
   try {
     olderReportArr.splice(0, olderReportArr.length);
 
-    const response = await fetch(
-      `${API_URL}/hazard-report?user_id=${userID}&type=past`
-    );
+    const response = await fetch(`${API_URL}/hazard-report?user_id=${userID}&type=past`);
     // TODO: pagination
     const result = await response.json();
 
     olderReportArr.push(...result.data.results);
   } catch (error) {
-    AlertPopup.show(
-      'Reports unavailable at the moment, please try again later or contact support',
-      AlertPopup.error
-    );
+    AlertPopup.show('Reports unavailable at the moment, please try again later or contact support', AlertPopup.error);
   }
 }
 
@@ -154,6 +160,7 @@ async function displayOlderReports() {
       loadIcons();
     }
     toggleSwitchEventlistener();
+    addGreyFilter();
   }
   olderReportClicked = true;
 }
@@ -166,6 +173,7 @@ function toggleSwitchEventlistener() {
       let reportID = e.target.id.slice(3);
       let toggleState = e.target.checked;
       updateReportStatus(reportID, toggleState);
+      addGreyFilter();
     };
   });
 }
@@ -173,15 +181,12 @@ function toggleSwitchEventlistener() {
 // Update status of hazard report
 async function updateReportStatus(reportID, activeState) {
   try {
-    const response = await fetch(
-      `${API_URL}/hazard-report-status?id=${reportID}&is_active=${activeState}`,
-      {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    );
+    const response = await fetch(`${API_URL}/hazard-report-status?id=${reportID}&is_active=${activeState}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
     const { error, message } = await response.json();
 
     if (!!error) {
@@ -203,3 +208,24 @@ async function updateReportStatus(reportID, activeState) {
     }
   }
 }
+
+// Add grey filter to card inner when toggled inactive
+function addGreyFilter() {
+  let toggleStatuses = document.querySelectorAll('.toggleStatus');
+  [].forEach.call(toggleStatuses, function (toggleStatus) {
+    let cardInner = toggleStatus.closest('.report-card__inner');
+    let editButton = cardInner.querySelector('.btn');
+
+    if (toggleStatus.textContent === 'Inactive') {
+      cardInner.classList.add('inactive');
+      editButton.classList.add('disabled');
+      editButton.disabled = true;
+    } else {
+      cardInner.classList.remove('inactive');
+      editButton.classList.remove('disabled');
+      editButton.disabled = false;
+    }
+  });
+}
+
+addGreyFilter();

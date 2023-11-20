@@ -62,6 +62,7 @@ const ICONS = [
   'assets/icons/marker/icon-infrastructure-focused.svg',
   'assets/icons/marker/icon-insects-focused.svg',
   'assets/icons/current-location.svg',
+  'assets/icons/current-location-active.svg',
   'assets/icons/close-square.svg',
   'assets/icons/date.svg',
   'assets/icons/password-close.svg',
@@ -159,17 +160,22 @@ self.addEventListener('install', (event) => {
       cache.addAll(ASSETS);
     })
   );
+
+  self.skipWaiting();
+  console.log('service worker installed');
 });
 
 // lister for activate service worker event
 self.addEventListener('activate', async (event) => {
-  console.log('service worker activate');
   event.waitUntil(
     caches.keys().then((keys) => {
       console.log({ keys });
       return Promise.all(keys.filter((key) => key !== STATIC_RESOURCES_KEY).map((key) => caches.delete(key)));
     })
   );
+
+  self.clients.claim();
+  console.log('service worker activate');
 });
 
 const API_REQUESTS_URLS = ['https://outsafebc-api.netlify.app'];
