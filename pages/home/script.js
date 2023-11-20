@@ -79,7 +79,7 @@ window.onload = async function () {
       if (!user) {
         showLoginModal();
       } else {
-        window.location = '/pages/report-hazard';
+        window.location = `/pages/report-hazard/index.html?lat=${position.lat}&lng=${position.lng}`;
       }
     });
 
@@ -130,7 +130,7 @@ window.onload = async function () {
       const makerExists = geoMap.checkMarkerOnMap(hazardDetail);
 
       // marker currently doesnot exists on the map
-      if (!makerExists) geoMap.createLayerGroups([hazardDetail], markerParams);
+      if (!makerExists) geoMap.createLayerGroups([{ ...hazardDetail, hazardCategory: hazardDetail.category, hazard: hazardDetail.option }], markerParams);
 
       flyTo(hazardDetail.location?.lat, hazardDetail.location?.lng);
     }
@@ -414,7 +414,7 @@ const watchGeoLocationSuccess = async ({ coords }) => {
 };
 
 const watchGeoLocationError = async (err) => {
-  AlertPopup.show(`Unable to access geolocation`, AlertPopup.warning);
+  // AlertPopup.show(`Unable to access geolocation`, AlertPopup.warning);
   await getReportApiCall(position.lat, position.lng);
 };
 

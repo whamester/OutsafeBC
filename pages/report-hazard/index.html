@@ -35,46 +35,16 @@
 </head>
 
 <body id="report-hazard-body">
+  <div class="loader-start" id="loader"></div>
+  <nav id="fullNavMenu" class="breadcrumb-desktop">
+    <ul id="navMenu">
+    </ul>
+  </nav>
+  <button id="backButton" class="back-button-mobile">
+    <i class="icon-chevron-left"></i>
+    Back
+  </button>
   <main>
-    <div class="loader-start" id="loader"></div>
-    <nav id="fullNavMenu" class="breadbrumb-desktop">
-      <ul id="navMenu">
-        <li>
-          <a id="selectLocation" title="Select the location" href="#select-location">Select Location</a>
-        </li>
-
-        <li>
-          <a id="hazardCategoryNav" title="What type of hazard would you like to report?" href="#hazard-category"
-            style="display: none">Hazard Category</a>
-        </li>
-
-        <li>
-          <a id="hazardTypeNav" title="What type of wild animal did you spot?" href="#hazard-type"
-            style="display: none">Hazard Type</a>
-        </li>
-
-        <li>
-          <a id="hazardDetailNav" title="Would you like to mention any further details?" href="#additional-details"
-            style="display: none">Additional Details</a>
-        </li>
-
-        <li>
-          <a id="hazardUploadPhotosNav" title="Please upload photos to help others see the reported hazard visually"
-            href="#upload-photos" style="display: none">Upload Photos</a>
-        </li>
-
-        <li>
-          <a id="hazardReviewReportNav" title="Review the report before submitting." href="#review-report"
-            style="display: none">Review Report</a>
-        </li>
-      </ul>
-    </nav>
-    <button id="backButton" class="back-button-mobile">
-      <img src="../../assets/icons/chevron-left.svg" alt="Back" class="back-arrow" />
-      Back
-    </button>
-    <div class="divider"></div>
-
     <form id="reportHazardForm">
       <section id="select-location" class="page">
         <div class="section-container">
@@ -103,24 +73,15 @@
           </div>
         </div>
 
-        <button type="button" id="hazardCategory" class="btn btn-primary continue-btn padded">
-          Continue
-          <span class="btn__icon">
-            <i class="icon-arrow-right"></i>
-          </span>
-        </button>
       </section>
 
       <section id="hazard-category" class="page section-container padded">
         <h1>What type of hazard would you like to report?</h1>
-        <div id="hazard-category-content" class="scroll-container"></div>
+        <div id="hazard-category-content" class="scroll-container">
+          <div id="hazard-category-content-list">
+          </div>
+        </div>
 
-        <button type="button" id="hazardType" class="btn btn-primary continue-btn">
-          Continue
-          <span class="btn__icon">
-            <i class="icon-arrow-right"></i>
-          </span>
-        </button>
       </section>
 
       <section id="hazard-type" class="page section-container padded">
@@ -130,12 +91,6 @@
 
         </div>
 
-        <button type="button" id="selectHazardOptionLink" class="btn btn-primary continue-btn">
-          Continue
-          <span class="btn__icon">
-            <i class="icon-arrow-right"></i>
-          </span>
-        </button>
       </section>
 
       <section id="additional-details" class="page section-container">
@@ -152,13 +107,6 @@
           </div>
         </div>
 
-
-        <button type="button" id="uploadPicture" class="btn btn-primary continue-btn padded">
-          Continue
-          <span class="btn__icon">
-            <i class="icon-arrow-right"></i>
-          </span>
-        </button>
       </section>
 
       <section id="upload-photos" class="page section-container padded">
@@ -169,35 +117,49 @@
 
         <div class="scroll-container">
           <div id="upload-photos-desktop-content">
-            <label for="starCameraBtn" class="custom-file-upload">
+            <label id="takePictureDesktop" for="starCameraBtn" class="custom-file-upload">
               <button id="starCameraBtn" type="button" style="display: none"></button>
-              <!-- TODO// Add icon here -->
-              <span>Take a picture</span>
-              <span>at the hazard site? Take a picture to add in the report.</span>
+              <i class="icon-camera" style="width: 1.5rem; height: 1.5rem; background: var(--neutral-900);"></i>
+              <div class="label">
+                <span class="text-body-1 semibold text-neutral-900">Take a picture</span>
+                <span class="text-body-3 text-neutral-500">at the hazard site? Take a picture to add in the
+                  report.</span>
+              </div>
             </label>
 
-            <div id="dragAndDropArea">
-              <!-- TODO// Add icon here -->
-              <span>Drop your images here, or </span>
-              <label for="uploadPictureDesktopInput">
-                <input id="uploadPictureDesktopInput" type="file" accept="image/jpeg, image/jpg, image/png" multiple
-                  style="display: none" />
-                <span> <u class="pointer">click to browse</u> </span>
-              </label>
-              <span>File size limit: 10 MB</span>
-            </div>
+            <label id="dragAndDropArea" for="uploadPictureDesktopInput">
+              <i class="icon-plus" style="width: 1.5rem; height: 1.5rem; background: var(--neutral-900);"></i>
 
-            <div id="displayCameraArea" style="display: none">
-              <video id="video" width="320" height="240" autoplay></video>
+              <div class="label">
+                <span>
+                  <span class="text-body-1  text-neutral-900 semibold">Drop your images here, or</span>
+                  <input id="uploadPictureDesktopInput" type="file" accept="image/jpeg, image/jpg, image/png" multiple
+                    style="display: none" />
+                  <span> <u class="pointer text-body-1 text-neutral-900">click to browse</u> </span>
+                </span>
+                <span class="text-body-3 text-neutral-500">File size limit: 10 MB</span>
+              </div>
+            </label>
 
-              <button type="button" id="takeDesktopPictureBtn" disabled>
-                Take a photo
-              </button>
-              <button type="button" id="stopCameraBtn" disabled>
-                Stop Camera
-              </button>
+            <div id="displayCameraAreaContainer">
+              <div id="displayCameraArea" style="display: none">
+                <span id="stopCameraBtn" aria-label="Dismiss camera modal" class="pointer"> <i
+                    class="icon-close-square"> </i></span>
 
-              <canvas hidden id="canvasArea" width="320" height="240"></canvas>
+
+                <div style="width:320px;height: 240px ; background: var(--neutral-100); border-radius: 0.5rem;">
+                  <video id="video" width="320" height="240" autoplay></video>
+                </div>
+
+                <div id="displayCameraButtons">
+
+                  <button type="button" id="takeDesktopPictureBtn" class="btn btn-primary" disabled>
+                    Take photo
+                  </button>
+                </div>
+
+                <canvas hidden id="canvasArea" width="320" height="240"></canvas>
+              </div>
             </div>
           </div>
           <div id="upload-photos-mobile-content">
@@ -254,12 +216,6 @@
             </div>
           </div>
         </div>
-        <button type="button" id="showConfirmationBtn" class="btn btn-primary continue-btn">
-          Continue
-          <span class="btn__icon">
-            <i class="icon-arrow-right"></i>
-          </span>
-        </button>
       </section>
 
       <section id="review-report" class="page section-container padded">
@@ -268,99 +224,87 @@
         <div id="submitContainer" class="scroll-container">
 
           <div class="main-submit-section">
-            <div class="submit-section">
-              <p class="text-body-2 semibold text-neutral-900">
-                Location:
-              </p>
-              <a id="editLocation" href="#select-location" class="text-body-2 regular edit-link text-neutral-900">
-                Edit <i class="icon-edit"></i>
-              </a>
-            </div>
-            <div>
+            <p class="text-body-2 semibold text-neutral-900 main-submit-section__label">
+              Location:
+            </p>
+            <a id="editLocation" href="#select-location"
+              class="text-body-2 regular edit-link text-neutral-900 main-submit-section__link">
+              Edit <i class="icon-edit"></i>
+            </a>
+            <div class="main-submit-section__content">
               <p id="locationOutput" class="submit-value text-body-2 regular"></p>
             </div>
           </div>
 
 
           <div class="main-submit-section">
-            <div class="submit-section">
-              <p class="text-body-2 semibold text-neutral-900">
-                Type of hazard:
-              </p>
 
-              <a id="editCategory" href="#hazard-category" class="text-body-2 regular edit-link text-neutral-900">
-                Edit <i class="icon-edit"></i>
-              </a>
-            </div>
-            <div>
+            <p class="text-body-2 semibold text-neutral-900 main-submit-section__label">
+              Type of hazard:
+            </p>
+
+            <a id="editCategory" href="#hazard-category"
+              class="text-body-2 regular edit-link text-neutral-900 main-submit-section__link">
+              Edit <i class="icon-edit"></i>
+            </a>
+            <div class="main-submit-section__content">
               <p id="categoryOutput" class="submit-value text-body-2 regular"></p>
             </div>
           </div>
 
 
           <div id="review-report-category" class="main-submit-section">
-            <div class="submit-section">
-              <p class="text-body-2 semibold text-neutral-900">
-                Hazard:
-              </p>
-
-              <a id="editType" href="#hazard-type" class="text-body-2 regular edit-link text-neutral-900">
-                Edit <i class="icon-edit"></i>
-              </a>
-            </div>
-            <div>
+            <p class="text-body-2 semibold text-neutral-900 main-submit-section__label">
+              Hazard:
+            </p>
+            <a id="editType" href="#hazard-type"
+              class="text-body-2 regular edit-link text-neutral-900 main-submit-section__link">
+              Edit <i class="icon-edit"></i>
+            </a>
+            <div class="main-submit-section__content">
               <p id="hazardOptionOutput" class="submit-value text-body-2 regular"></p>
             </div>
           </div>
 
 
           <div class="main-submit-section">
-            <div class="submit-section">
-              <p class="text-body-2 semibold text-neutral-900">
-                Additional details:
-              </p>
-
-              <a id="editDetails" href="#additional-details" class="text-body-2 regular edit-link text-neutral-900">
-                Edit <i class="icon-edit"></i>
-              </a>
-            </div>
-            <div>
+            <p class="text-body-2 semibold text-neutral-900 main-submit-section__label">
+              Additional details:
+            </p>
+            <a id="editDetails" href="#additional-details"
+              class="text-body-2 regular edit-link text-neutral-900 main-submit-section__link">
+              Edit <i class="icon-edit"></i>
+            </a>
+            <div class="main-submit-section__content">
               <p id="commentOutput" class="submit-value text-body-2 regular"></p>
             </div>
           </div>
 
 
           <div class="main-submit-section">
-            <div class="submit-section">
-              <p class="text-body-2 semibold text-neutral-900">
-                Photos:
-              </p>
-
-              <a id="editPhotos" href="#upload-photos" class="text-body-2 regular edit-link text-neutral-900">
-                Edit <i class="icon-edit"></i>
-              </a>
-            </div>
-            <div>
+            <p class="text-body-2 semibold text-neutral-900 main-submit-section__label">
+              Photos:
+            </p>
+            <a id="editPhotos" href="#upload-photos"
+              class="text-body-2 regular edit-link text-neutral-900 main-submit-section__link">
+              Edit <i class="icon-edit"></i>
+            </a>
+            <div class="main-submit-section__content review-images">
               <div id="imagesOutput"></div>
             </div>
           </div>
         </div>
-
-        <button id="saveReportBtn" type="submit" class="submit btn btn-primary continue-btn">
-          Submit Report
-          <span class="btn__icon">
-            <i class="icon-arrow-right"></i>
-          </span>
-        </button>
-
-        <button id="updateReportBtn" type="submit" class="submit btn btn-primary continue-btn">
-          Update Report
-          <span class="btn__icon">
-            <i class="icon-arrow-right"></i>
-          </span>
-        </button>
       </section>
     </form>
+
+    <div id="continueBtnContainer">
+      <button type="button" id="continueBtn" class="btn btn-primary continue-btn" style="height: fit-content;">
+        <span id="continueBtnText">Continue</span>
+        <span class="btn__icon">
+          <i class="icon-arrow-right"></i>
+        </span>
+      </button>
+    </div>
   </main>
 </body>
 
