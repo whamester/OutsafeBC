@@ -519,7 +519,8 @@ const clearHazardFilter = async () => {
     c.checked = false;
   });
 
-  showReportsBtnStatus(0);
+  hazardShowCount = geoMap.filterMarkerCount(hazardTempFilters);
+  showReportsBtnStatus(hazardShowCount);
   geoMap.filterMarker([], hazardFilters);
   if (document.querySelector('.sb-cards')) injectCards();
 };
