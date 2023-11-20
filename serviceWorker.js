@@ -62,6 +62,7 @@ const ICONS = [
   'assets/icons/marker/icon-infrastructure-focused.svg',
   'assets/icons/marker/icon-insects-focused.svg',
   'assets/icons/current-location.svg',
+  'assets/icons/current-location-active.svg',
   'assets/icons/close-square.svg',
   'assets/icons/date.svg',
   'assets/icons/password-close.svg',

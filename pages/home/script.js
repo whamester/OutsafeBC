@@ -98,12 +98,22 @@ window.onload = async function () {
 
     document.querySelectorAll('.quick-filter').forEach((filter) => filter.addEventListener('click', quickFiltersOnClick));
 
+    document.querySelector('.map-controls-recenter-btn').addEventListener('click', () => {
+      flyTo(position.lat, position.lng);
+    });
+
+    mapZoomIn.addEventListener('click', () => geoMap.map.zoomIn());
+    mapZoomOut.addEventListener('click', () => geoMap.map.zoomOut());
+
     loadIcons();
 
     geoMap = new Map(position.lat, position.lng, mapOptions);
     await getReportApiCall(position.lat, position.lng);
 
     Map.watchGeoLocation(watchGeoLocationSuccess, watchGeoLocationError);
+    
+    // clear recenter btn focus
+    geoMap.map.on('drag', () => recenterBtn?.blur());
   } catch (error) {
     console.error(error, error.message);
 
