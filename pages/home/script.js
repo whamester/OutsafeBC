@@ -79,7 +79,7 @@ window.onload = async function () {
       if (!user) {
         showLoginModal();
       } else {
-        window.location = '/pages/report-hazard';
+        window.location = `/pages/report-hazard/index.html?lat=${position.lat}&lng=${position.lng}`;
       }
     });
 
@@ -393,7 +393,7 @@ const watchGeoLocationSuccess = async ({ coords }) => {
 };
 
 const watchGeoLocationError = async (err) => {
-  AlertPopup.show(`Unable to access geolocation`, AlertPopup.warning);
+  // AlertPopup.show(`Unable to access geolocation`, AlertPopup.warning);
   await getReportApiCall(position.lat, position.lng);
 };
 

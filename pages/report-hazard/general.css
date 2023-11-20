@@ -87,6 +87,8 @@
 }
 
 #continueBtnContainer {
+  display: flex;
+  align-items: end;
   margin-left: var(--padding-x);
   margin-right: var(--padding-x);
   padding-top: 1rem;

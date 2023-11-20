@@ -18,20 +18,19 @@ import geocode from '../../assets/helpers/geocode.js';
 import injectHeader from '../../assets/helpers/inject-header.js';
 
 //Variable Declaration
-const currentReport = new ReportForm();
-let position = Map.DEFAULT_LOCATION;
+const url = new URL(window.location.href);
+const idReport = url.searchParams.get('id');
+const latitude = Number(url.searchParams.get('lat')) || null;
+const longitude = Number(url.searchParams.get('lng')) || null;
+
+let currentReport = new ReportForm();
+let position = latitude && longitude ? { lat: latitude, lng: longitude } : Map.DEFAULT_LOCATION;
 
 let mapInstance = null;
 let skipHazardOption = false;
 const user = getUserSession();
 
-const url = new URL(window.location.href);
-const idReport = url.searchParams.get('id');
-
 let allowRedirect = false;
-
-const FLY_TO_ZOOM = 12;
-const ANIMATION_DURATION = 4;
 
 const STEPS = {
   location: '#select-location',
@@ -56,7 +55,7 @@ const STEPS_LABEL = {
  */
 
 //Loading animation (White overlay)
-const loader = new LoaderAnimation();
+LoaderAnimation.initialize();
 
 //to display the correct section
 window.onload = async function () {
@@ -77,21 +76,22 @@ window.onload = async function () {
     displayCurrentSection();
     window.addEventListener('hashchange', displayCurrentSection);
 
-    // Loads the map even if the user has not accepted the permissions
-    mapInstance = new Map(position.lat, position.lng);
-    mapInstance.setMarkerOnMap(position.lat, position.lng, {
-      draggable: true,
-    }); //TODO: Consult with design the message of the marker
+    getCategories();
 
-    if (mapInstance) {
-      mapInstance.map.on('click', onSelectLocation);
+    if (!idReport) {
+      // Loads the map even if the user has not accepted the permissions
+      mapInstance = new Map(position.lat, position.lng);
+      mapInstance.setMarkerOnMap(position.lat, position.lng, {
+        draggable: true,
+      });
+      if (mapInstance) {
+        mapInstance.map.on('click', onSelectLocation);
+      }
+
+      loadGeolocation();
+    } else {
+      populateReport(idReport);
     }
-
-    await updateCurrentReportLocation(position);
-    //Override the current location if the user accepts the permissions
-    loadGeolocation();
-
-    // populateReport();
   } catch (error) {
     AlertPopup.show(error.message || AlertPopup.SOMETHING_WENT_WRONG_MESSAGE, AlertPopup.error, 500);
   }
@@ -148,6 +148,18 @@ const displayCurrentSection = () => {
       fullNavMenu.style.visibility = 'visible';
     }
 
+    if (pageId === STEPS.location && idReport && !mapInstance) {
+      // Display the position of the report location
+      mapInstance = new Map(currentReport.location.lat, currentReport.location.lng);
+      mapInstance.setMarkerOnMap(currentReport.location.lat, currentReport.location.lng, {
+        draggable: true,
+      });
+
+      if (mapInstance) {
+        mapInstance.map.on('click', onSelectLocation);
+      }
+    }
+
     document.body.scrollTop = true;
 
     generateBreadcrumb();
@@ -171,15 +183,12 @@ const pagesHandler = (pageId = '#select-location') => {
 
 const loadGeolocation = async () => {
   try {
-    position = await Map.getCurrentLocation();
+    // position = await Map.getCurrentLocation();
     await updateCurrentReportLocation(position);
     mapInstance.setMarkerOnMap(position.lat, position.lng, {
       draggable: true,
     });
-    mapInstance.map.flyTo([position.lat, position.lng], FLY_TO_ZOOM, {
-      animate: true,
-      duration: ANIMATION_DURATION,
-    });
+    // mapInstance.map.flyTo([position.lat, position.lng], FLY_TO_ZOOM);
   } catch (error) {
     console.error(error);
 
@@ -187,69 +196,49 @@ const loadGeolocation = async () => {
   }
 };
 
-// const populateReport = async () => {
-//   if (idReport !== null) {
-//     document.getElementById('saveReportBtn').style.display = 'none';
-//     document.getElementById('updateReportBtn').style.display = 'initial';
+const populateReport = async (id) => {
+  if (id !== null) {
+    const getSingleReport = async () => {
+      try {
+        let response = await fetch(`${API_URL}/hazard-report?id=${id}`);
+        let { data } = await response.json();
 
-//     const getCollection = async () => {
-//       try {
-//         let response = await fetch(`${API_URL}/hazard-report?id=${idReport}`);
-//         let { data } = await response.json();
+        const editReport = new ReportForm();
+        editReport.category = {
+          id: data.hazardCategory.id,
+          name: data.hazardCategory.name,
+        };
 
-//         //******* display location ******
-//         currentReport.location = data.location;
+        editReport.option = {
+          id: data.hazard.id,
+          name: data.hazard.name,
+        };
 
-//         //******* display category ******
+        editReport.location = {
+          lat: data.location.lat,
+          lng: data.location.lng,
+          address: data.location.address,
+        };
 
-//         document.querySelectorAll(`input[value="${data.hazardCategory.id}"]`)[0].click();
+        editReport.comment = data.comment;
 
-//         currentReport.category.name = data.hazardCategory.name;
-//         categoryOutput.innerHTML = currentReport.category.name;
+        editReport.images = data.images;
 
-//         //******* display type ******
-//         setTimeout(function () {
-//           document.querySelectorAll(`input[value="${data.hazard.id}"]`)[0].click();
+        displayReviewStepInfo(editReport);
 
-//           currentReport.option.name = data.hazard.name;
-//           hazardOptionOutput.innerHTML = currentReport.option.name;
-//         }, 50);
+        setFormValues(editReport);
 
-//         //******* display comment ******
+        currentReport = { ...editReport };
+      } catch (error) {
+        console.error({ error });
 
-//         commentInput.value = data.comment;
-//         currentReport.comment = data.comment;
-//         commentOutput.innerHTML = currentReport.comment || 'No comments';
+        AlertPopup.show(error.message || AlertPopup.SOMETHING_WENT_WRONG_MESSAGE, AlertPopup.error, 6000);
+      }
+    };
 
-//         //******* display pictures ******
-
-//         data.images.forEach((imageUrl) => {
-//           displayImages(imageUrl);
-//         });
-
-//         const displayImagesAreaReview = document.getElementById('imagesOutput');
-//         if (data.images?.length) {
-//           data.images.forEach((imageUrl) => {
-//             const imgElement = document.createElement('img');
-//             imgElement.src = imageUrl;
-//             displayImagesAreaReview.appendChild(imgElement);
-//           });
-//         } else {
-//           displayImagesAreaReview.appendChild(getEmptyImages());
-//         }
-//       } catch (error) {
-//         console.error({ error });
-
-//         AlertPopup.show(error.message || AlertPopup.SOMETHING_WENT_WRONG_MESSAGE, AlertPopup.error, 6000);
-//       }
-//     };
-
-//     getCollection();
-//   } else {
-//     document.getElementById('updateReportBtn').style.display = 'none';
-//     document.getElementById('saveReportBtn').style.display = 'flex';
-//   }
-// };
+    getSingleReport();
+  }
+};
 
 const getAddressFromCoordinates = async (params) => {
   try {
@@ -376,12 +365,20 @@ const getCategories = async () => {
 
       content.appendChild(categoryContainer);
     }
+
+    const savedCategory = document.getElementById(`category-${currentReport.category.id}-radio`);
+    if (idReport && savedCategory) {
+      savedCategory.click();
+    }
+
+    const savedOption = document.getElementById(`option-${currentReport.option.id}-radio`);
+    if (idReport && savedOption) {
+      savedOption.click();
+    }
   } catch (error) {
     AlertPopup.show(error.message || AlertPopup.SOMETHING_WENT_WRONG_MESSAGE, AlertPopup.error);
   }
 };
-
-getCategories();
 
 /**
  * Step 3: Hazard Options List
@@ -728,7 +725,7 @@ document.getElementById('backButton').addEventListener('click', () => {
 document.getElementById('continueBtn').addEventListener('click', async () => {
   const allSteps = Object.values(STEPS);
 
-  const array = allSteps.filter((hash) => (skipHazardOption ? hash !== '#hazard-type' : true));
+  const array = allSteps.filter((hash) => (skipHazardOption ? hash !== STEPS.hazard : true));
 
   const url = new URL(window.location.href);
   const currentHash = url.hash;
@@ -747,7 +744,7 @@ document.getElementById('continueBtn').addEventListener('click', async () => {
   }
 
   if (currentHash === STEPS.images) {
-    displayReviewStepInfo();
+    displayReviewStepInfo(currentReport);
   }
 
   if (currentHash === STEPS.review) {
@@ -756,26 +753,38 @@ document.getElementById('continueBtn').addEventListener('click', async () => {
   }
 
   const nextIndex = currentIndex + 1;
-  const previousHash = array[nextIndex];
+  const nextHash = array[nextIndex];
 
-  url.hash = previousHash;
+  url.hash = nextHash;
   window.location.href = url.href;
 });
 
-const displayReviewStepInfo = () => {
-  locationOutput.innerHTML = `${currentReport.location.address}`;
-  categoryOutput.innerHTML = currentReport.category.name;
-  hazardOptionOutput.innerHTML = currentReport.option.name;
-  commentOutput.innerHTML = currentReport.comment || 'No comments';
+const displayReviewStepInfo = (report) => {
+  locationOutput.innerHTML = `${report.location.address}`;
+  categoryOutput.innerHTML = report.category.name;
+  hazardOptionOutput.innerHTML = report.option.name;
+  commentOutput.innerHTML = report.comment || 'No comments';
   imagesOutput.innerHTML = '';
 
-  if (currentReport.images?.length) {
-    currentReport.images.forEach((image) => {
+  if (report.images?.length) {
+    report.images.forEach((image) => {
       imagesOutput.innerHTML += `<img src="${image}" height = "100" width = "auto"/>`;
     });
   } else {
     imagesOutput.appendChild(getEmptyImages());
   }
+};
+
+const setFormValues = (report) => {
+  locationAddressLabel.innerHTML = `${report.location.address ? report.location.address : `(${report.location.lat}, ${currentReport.location.lng})`}`;
+
+  // Category and hazard are being set inside getCategories
+
+  commentInput.value = report.comment;
+
+  report.images.forEach((imageUrl) => {
+    displayImages(imageUrl);
+  });
 };
 
 const submitReport = async () => {
@@ -918,7 +927,8 @@ const generateBreadcrumb = () => {
   const url = new URL(window.location.href);
   const currentHash = url.hash;
 
-  const NavElement = ({ label, href, current, addChevron }) => `<li>
+  const NavElement = ({ label, href, current, addChevron }) => `
+   <li>
       <a title="${label}" href="${href}" class="report-hazard-step text-body-3 ${current ? 'text-neutral-700 semibold' : 'text-neutral-500'}">
       ${addChevron ? '<i class="icon-chevron-right"></i>' : ''}
           ${label}
