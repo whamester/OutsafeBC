@@ -36,47 +36,15 @@
 
 <body id="report-hazard-body">
   <div class="loader-start" id="loader"></div>
-  <nav id="fullNavMenu" class="breadbrumb-desktop">
+  <nav id="fullNavMenu" class="breadcrumb-desktop">
     <ul id="navMenu">
-      <li>
-        <a id="selectLocation" title="Select the location" href="#select-location">Select Location</a>
-      </li>
-
-      <li>
-        <a id="hazardCategoryNav" title="What type of hazard would you like to report?" href="#hazard-category"
-          style="display: none">Hazard Category</a>
-      </li>
-
-      <li>
-        <a id="hazardTypeNav" title="What type of wild animal did you spot?" href="#hazard-type"
-          style="display: none">Hazard Type</a>
-      </li>
-
-      <li>
-        <a id="hazardDetailNav" title="Would you like to mention any further details?" href="#additional-details"
-          style="display: none">Additional Details</a>
-      </li>
-
-      <li>
-        <a id="hazardUploadPhotosNav" title="Please upload photos to help others see the reported hazard visually"
-          href="#upload-photos" style="display: none">Upload Photos</a>
-      </li>
-
-      <li>
-        <a id="hazardReviewReportNav" title="Review the report before submitting." href="#review-report"
-          style="display: none">Review Report</a>
-      </li>
     </ul>
   </nav>
-
+  <button id="backButton" class="back-button-mobile">
+    <i class="icon-chevron-left"></i>
+    Back
+  </button>
   <main>
-
-    <button id="backButton" class="back-button-mobile">
-      <i class="icon-chevron-left"></i>
-      Back
-    </button>
-    <div class="divider"></div>
-
     <form id="reportHazardForm">
       <section id="select-location" class="page">
         <div class="section-container">
@@ -165,11 +133,9 @@
               <div class="label">
                 <span>
                   <span class="text-body-1  text-neutral-900 semibold">Drop your images here, or</span>
-                  <!-- <label for="uploadPictureDesktopInput"> -->
                   <input id="uploadPictureDesktopInput" type="file" accept="image/jpeg, image/jpg, image/png" multiple
                     style="display: none" />
                   <span> <u class="pointer text-body-1 text-neutral-900">click to browse</u> </span>
-                  <!-- </label> -->
                 </span>
                 <span class="text-body-3 text-neutral-500">File size limit: 10 MB</span>
               </div>
@@ -258,79 +224,72 @@
         <div id="submitContainer" class="scroll-container">
 
           <div class="main-submit-section">
-            <div class="submit-section">
-              <p class="text-body-2 semibold text-neutral-900">
-                Location:
-              </p>
-              <a id="editLocation" href="#select-location" class="text-body-2 regular edit-link text-neutral-900">
-                Edit <i class="icon-edit"></i>
-              </a>
-            </div>
-            <div>
+            <p class="text-body-2 semibold text-neutral-900 main-submit-section__label">
+              Location:
+            </p>
+            <a id="editLocation" href="#select-location"
+              class="text-body-2 regular edit-link text-neutral-900 main-submit-section__link">
+              Edit <i class="icon-edit"></i>
+            </a>
+            <div class="main-submit-section__content">
               <p id="locationOutput" class="submit-value text-body-2 regular"></p>
             </div>
           </div>
 
 
           <div class="main-submit-section">
-            <div class="submit-section">
-              <p class="text-body-2 semibold text-neutral-900">
-                Type of hazard:
-              </p>
 
-              <a id="editCategory" href="#hazard-category" class="text-body-2 regular edit-link text-neutral-900">
-                Edit <i class="icon-edit"></i>
-              </a>
-            </div>
-            <div>
+            <p class="text-body-2 semibold text-neutral-900 main-submit-section__label">
+              Type of hazard:
+            </p>
+
+            <a id="editCategory" href="#hazard-category"
+              class="text-body-2 regular edit-link text-neutral-900 main-submit-section__link">
+              Edit <i class="icon-edit"></i>
+            </a>
+            <div class="main-submit-section__content">
               <p id="categoryOutput" class="submit-value text-body-2 regular"></p>
             </div>
           </div>
 
 
           <div id="review-report-category" class="main-submit-section">
-            <div class="submit-section">
-              <p class="text-body-2 semibold text-neutral-900">
-                Hazard:
-              </p>
-
-              <a id="editType" href="#hazard-type" class="text-body-2 regular edit-link text-neutral-900">
-                Edit <i class="icon-edit"></i>
-              </a>
-            </div>
-            <div>
+            <p class="text-body-2 semibold text-neutral-900 main-submit-section__label">
+              Hazard:
+            </p>
+            <a id="editType" href="#hazard-type"
+              class="text-body-2 regular edit-link text-neutral-900 main-submit-section__link">
+              Edit <i class="icon-edit"></i>
+            </a>
+            <div class="main-submit-section__content">
               <p id="hazardOptionOutput" class="submit-value text-body-2 regular"></p>
             </div>
           </div>
 
 
           <div class="main-submit-section">
-            <div class="submit-section">
-              <p class="text-body-2 semibold text-neutral-900">
-                Additional details:
-              </p>
-
-              <a id="editDetails" href="#additional-details" class="text-body-2 regular edit-link text-neutral-900">
-                Edit <i class="icon-edit"></i>
-              </a>
-            </div>
-            <div>
+            <p class="text-body-2 semibold text-neutral-900 main-submit-section__label">
+              Additional details:
+            </p>
+            <a id="editDetails" href="#additional-details"
+              class="text-body-2 regular edit-link text-neutral-900 main-submit-section__link">
+              Edit <i class="icon-edit"></i>
+            </a>
+            <div class="main-submit-section__content">
               <p id="commentOutput" class="submit-value text-body-2 regular"></p>
             </div>
           </div>
 
 
           <div class="main-submit-section">
-            <div class="submit-section">
-              <p class="text-body-2 semibold text-neutral-900">
-                Photos:
-              </p>
-
-              <a id="editPhotos" href="#upload-photos" class="text-body-2 regular edit-link text-neutral-900">
-                Edit <i class="icon-edit"></i>
-              </a>
-            </div>
-            <div>
+            <p class="text-body-2 semibold text-neutral-900 main-submit-section__label">
+              Photos:
+            </p>
+            <a id="editPhotos" href="#upload-photos"
+              class="text-body-2 regular edit-link text-neutral-900 main-submit-section__link">
+              Edit <i class="icon-edit"></i>
+            </a>
+            <div class="main-submit-section__content review-images">
               <div id="imagesOutput"></div>
             </div>
           </div>
@@ -338,7 +297,7 @@
       </section>
     </form>
 
-    <div style="display: flex; align-items: end;" id="continueBtnContainer">
+    <div id="continueBtnContainer">
       <button type="button" id="continueBtn" class="btn btn-primary continue-btn" style="height: fit-content;">
         <span id="continueBtnText">Continue</span>
         <span class="btn__icon">

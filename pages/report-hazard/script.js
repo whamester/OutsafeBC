@@ -18,20 +18,19 @@ import geocode from '../../assets/helpers/geocode.js';
 import injectHeader from '../../assets/helpers/inject-header.js';
 
 //Variable Declaration
-const currentReport = new ReportForm();
-let position = Map.DEFAULT_LOCATION;
+const url = new URL(window.location.href);
+const idReport = url.searchParams.get('id');
+const latitude = Number(url.searchParams.get('lat')) || null;
+const longitude = Number(url.searchParams.get('lng')) || null;
+
+let currentReport = new ReportForm();
+let position = latitude && longitude ? { lat: latitude, lng: longitude } : Map.DEFAULT_LOCATION;
 
 let mapInstance = null;
 let skipHazardOption = false;
 const user = getUserSession();
 
-const url = new URL(window.location.href);
-const idReport = url.searchParams.get('id');
-
 let allowRedirect = false;
-
-const FLY_TO_ZOOM = 12;
-const ANIMATION_DURATION = 4;
 
 const STEPS = {
   location: '#select-location',
@@ -42,12 +41,21 @@ const STEPS = {
   review: '#review-report',
 };
 
+const STEPS_LABEL = {
+  location: 'Select Location',
+  category: 'Hazard Category',
+  hazard: 'Hazard Type',
+  comments: 'Additional Details',
+  images: 'Upload Photos',
+  review: 'Review Report',
+};
+
 /**
  * Page Init
  */
 
 //Loading animation (White overlay)
-const loader = new LoaderAnimation();
+LoaderAnimation.initialize();
 
 //to display the correct section
 window.onload = async function () {
@@ -68,21 +76,22 @@ window.onload = async function () {
     displayCurrentSection();
     window.addEventListener('hashchange', displayCurrentSection);
 
-    // Loads the map even if the user has not accepted the permissions
-    mapInstance = new Map(position.lat, position.lng);
-    mapInstance.setMarkerOnMap(position.lat, position.lng, {
-      draggable: true,
-    }); //TODO: Consult with design the message of the marker
+    getCategories();
 
-    if (mapInstance) {
-      mapInstance.map.on('click', onSelectLocation);
+    if (!idReport) {
+      // Loads the map even if the user has not accepted the permissions
+      mapInstance = new Map(position.lat, position.lng);
+      mapInstance.setMarkerOnMap(position.lat, position.lng, {
+        draggable: true,
+      });
+      if (mapInstance) {
+        mapInstance.map.on('click', onSelectLocation);
+      }
+
+      loadGeolocation();
+    } else {
+      populateReport(idReport);
     }
-
-    await updateCurrentReportLocation(position);
-    //Override the current location if the user accepts the permissions
-    loadGeolocation();
-
-    populateReport();
   } catch (error) {
     AlertPopup.show(error.message || AlertPopup.SOMETHING_WENT_WRONG_MESSAGE, AlertPopup.error, 500);
   }
@@ -139,7 +148,21 @@ const displayCurrentSection = () => {
       fullNavMenu.style.visibility = 'visible';
     }
 
+    if (pageId === STEPS.location && idReport && !mapInstance) {
+      // Display the position of the report location
+      mapInstance = new Map(currentReport.location.lat, currentReport.location.lng);
+      mapInstance.setMarkerOnMap(currentReport.location.lat, currentReport.location.lng, {
+        draggable: true,
+      });
+
+      if (mapInstance) {
+        mapInstance.map.on('click', onSelectLocation);
+      }
+    }
+
     document.body.scrollTop = true;
+
+    generateBreadcrumb();
   } catch (error) {
     console.error({ error });
     AlertPopup.show(error.message || AlertPopup.SOMETHING_WENT_WRONG_MESSAGE, AlertPopup.error);
@@ -160,15 +183,12 @@ const pagesHandler = (pageId = '#select-location') => {
 
 const loadGeolocation = async () => {
   try {
-    position = await Map.getCurrentLocation();
+    // position = await Map.getCurrentLocation();
     await updateCurrentReportLocation(position);
     mapInstance.setMarkerOnMap(position.lat, position.lng, {
       draggable: true,
     });
-    mapInstance.map.flyTo([position.lat, position.lng], FLY_TO_ZOOM, {
-      animate: true,
-      duration: ANIMATION_DURATION,
-    });
+    // mapInstance.map.flyTo([position.lat, position.lng], FLY_TO_ZOOM);
   } catch (error) {
     console.error(error);
 
@@ -176,56 +196,39 @@ const loadGeolocation = async () => {
   }
 };
 
-const populateReport = async () => {
-  if (idReport !== null) {
-    document.getElementById('saveReportBtn').style.display = 'none';
-    document.getElementById('updateReportBtn').style.display = 'initial';
-
-    const getCollection = async () => {
+const populateReport = async (id) => {
+  if (id !== null) {
+    const getSingleReport = async () => {
       try {
-        let response = await fetch(`${API_URL}/hazard-report?id=${idReport}`);
+        let response = await fetch(`${API_URL}/hazard-report?id=${id}`);
         let { data } = await response.json();
 
-        //******* display location ******
-        currentReport.location = data.location;
+        const editReport = new ReportForm();
+        editReport.category = {
+          id: data.hazardCategory.id,
+          name: data.hazardCategory.name,
+        };
 
-        //******* display category ******
+        editReport.option = {
+          id: data.hazard.id,
+          name: data.hazard.name,
+        };
 
-        document.querySelectorAll(`input[value="${data.hazardCategory.id}"]`)[0].click();
+        editReport.location = {
+          lat: data.location.lat,
+          lng: data.location.lng,
+          address: data.location.address,
+        };
 
-        currentReport.category.name = data.hazardCategory.name;
-        categoryOutput.innerHTML = currentReport.category.name;
+        editReport.comment = data.comment;
 
-        //******* display type ******
-        setTimeout(function () {
-          document.querySelectorAll(`input[value="${data.hazard.id}"]`)[0].click();
+        editReport.images = data.images;
 
-          currentReport.option.name = data.hazard.name;
-          hazardOptionOutput.innerHTML = currentReport.option.name;
-        }, 50);
+        displayReviewStepInfo(editReport);
 
-        //******* display comment ******
+        setFormValues(editReport);
 
-        commentInput.value = data.comment;
-        currentReport.comment = data.comment;
-        commentOutput.innerHTML = currentReport.comment || 'No comments';
-
-        //******* display pictures ******
-
-        data.images.forEach((imageUrl) => {
-          displayImages(imageUrl);
-        });
-
-        const displayImagesAreaReview = document.getElementById('imagesOutput');
-        if (data.images?.length) {
-          data.images.forEach((imageUrl) => {
-            const imgElement = document.createElement('img');
-            imgElement.src = imageUrl;
-            displayImagesAreaReview.appendChild(imgElement);
-          });
-        } else {
-          displayImagesAreaReview.appendChild(getEmptyImages());
-        }
+        currentReport = { ...editReport };
       } catch (error) {
         console.error({ error });
 
@@ -233,10 +236,7 @@ const populateReport = async () => {
       }
     };
 
-    getCollection();
-  } else {
-    document.getElementById('updateReportBtn').style.display = 'none';
-    document.getElementById('saveReportBtn').style.display = 'flex';
+    getSingleReport();
   }
 };
 
@@ -365,12 +365,20 @@ const getCategories = async () => {
 
       content.appendChild(categoryContainer);
     }
+
+    const savedCategory = document.getElementById(`category-${currentReport.category.id}-radio`);
+    if (idReport && savedCategory) {
+      savedCategory.click();
+    }
+
+    const savedOption = document.getElementById(`option-${currentReport.option.id}-radio`);
+    if (idReport && savedOption) {
+      savedOption.click();
+    }
   } catch (error) {
     AlertPopup.show(error.message || AlertPopup.SOMETHING_WENT_WRONG_MESSAGE, AlertPopup.error);
   }
 };
-
-getCategories();
 
 /**
  * Step 3: Hazard Options List
@@ -610,19 +618,6 @@ const displayImages = (base64File) => {
   const img = document.createElement('img');
   img.setAttribute('src', base64File);
 
-  img.addEventListener('load', function () {
-    if (img.naturalWidth < img.naturalHeight) {
-      img.style.width = 'auto';
-      img.style.height = '84px';
-    } else if (img.naturalWidth > img.naturalHeight) {
-      img.style.width = '101px';
-      img.style.height = 'auto';
-    } else {
-      img.style.width = 'auto';
-      img.style.height = '84px';
-    }
-  });
-
   const deleteButton = document.createElement('button');
   deleteButton.type = 'button';
   deleteButton.classList.add('delete-button');
@@ -686,121 +681,6 @@ const getEmptyImages = () => {
 //#endregion
 
 /**
- *  Display nav (Breadcrumb)
- */
-
-//show buttons when continue
-// const hazardCategoryElement = document.getElementById('hazardCategory');
-
-// hazardCategoryElement.addEventListener('click', () => {
-//   document.getElementById('hazardCategoryNav').style.display = 'block';
-// });
-
-// const hazardTypeeElement = document.getElementById('hazardType');
-
-// hazardTypeeElement.addEventListener('click', () => {
-//   if (currentReport.category.id != null) {
-//     document.getElementById('hazardTypeNav').style.display = 'block';
-//   }
-// });
-
-// const hazardOptionElement = document.getElementById('selectHazardOptionLink');
-
-// hazardOptionElement.addEventListener('click', () => {
-//   if (currentReport.option.id != null) {
-//     document.getElementById('hazardDetailNav').style.display = 'block';
-//   }
-// });
-
-// const hazardCommentElement = document.getElementById('uploadPicture');
-
-// hazardCommentElement.addEventListener('click', () => {
-//   document.getElementById('hazardUploadPhotosNav').style.display = 'block';
-// });
-
-//edit buttons
-const editLocationElement = document.getElementById('editLocation');
-
-editLocationElement.addEventListener('click', () => {
-  document.getElementById('hazardCategoryNav').style.display = 'none';
-  document.getElementById('hazardTypeNav').style.display = 'none';
-  document.getElementById('hazardDetailNav').style.display = 'none';
-  document.getElementById('hazardUploadPhotosNav').style.display = 'none';
-  document.getElementById('hazardReviewReportNav').style.display = 'none';
-});
-
-const editCategoryElement = document.getElementById('editCategory');
-
-editCategoryElement.addEventListener('click', () => {
-  document.getElementById('hazardTypeNav').style.display = 'none';
-  document.getElementById('hazardDetailNav').style.display = 'none';
-  document.getElementById('hazardUploadPhotosNav').style.display = 'none';
-  document.getElementById('hazardReviewReportNav').style.display = 'none';
-});
-
-const editTypeElement = document.getElementById('editType');
-
-editTypeElement.addEventListener('click', () => {
-  document.getElementById('hazardDetailNav').style.display = 'none';
-  document.getElementById('hazardUploadPhotosNav').style.display = 'none';
-  document.getElementById('hazardReviewReportNav').style.display = 'none';
-});
-
-const editDetailsElement = document.getElementById('editDetails');
-
-editDetailsElement.addEventListener('click', () => {
-  document.getElementById('hazardUploadPhotosNav').style.display = 'none';
-  document.getElementById('hazardReviewReportNav').style.display = 'none';
-});
-
-const editPhotosElement = document.getElementById('editPhotos');
-
-editPhotosElement.addEventListener('click', () => {
-  document.getElementById('hazardReviewReportNav').style.display = 'none';
-});
-
-//hide buttons when click on nav
-const hazardUploadPhotosNavElement = document.getElementById('selectLocation');
-
-hazardUploadPhotosNavElement.addEventListener('click', () => {
-  document.getElementById('hazardCategoryNav').style.display = 'none';
-  document.getElementById('hazardTypeNav').style.display = 'none';
-  document.getElementById('hazardDetailNav').style.display = 'none';
-  document.getElementById('hazardUploadPhotosNav').style.display = 'none';
-  document.getElementById('hazardReviewReportNav').style.display = 'none';
-});
-
-const hazardCategoryNavElement = document.getElementById('hazardCategoryNav');
-
-hazardCategoryNavElement.addEventListener('click', () => {
-  document.getElementById('hazardTypeNav').style.display = 'none';
-  document.getElementById('hazardDetailNav').style.display = 'none';
-  document.getElementById('hazardUploadPhotosNav').style.display = 'none';
-  document.getElementById('hazardReviewReportNav').style.display = 'none';
-});
-
-const hazardTypeNavElement = document.getElementById('hazardTypeNav');
-
-hazardTypeNavElement.addEventListener('click', () => {
-  document.getElementById('hazardDetailNav').style.display = 'none';
-  document.getElementById('hazardUploadPhotosNav').style.display = 'none';
-  document.getElementById('hazardReviewReportNav').style.display = 'none';
-});
-
-const hazardDetailNavElement = document.getElementById('hazardDetailNav');
-
-hazardDetailNavElement.addEventListener('click', () => {
-  document.getElementById('hazardUploadPhotosNav').style.display = 'none';
-  document.getElementById('hazardReviewReportNav').style.display = 'none';
-});
-
-const hazardUploadPhotosNavEl = document.getElementById('hazardUploadPhotosNav');
-
-hazardUploadPhotosNavEl.addEventListener('click', () => {
-  document.getElementById('hazardReviewReportNav').style.display = 'none';
-});
-
-/**
  *  Back Button
  */
 
@@ -826,10 +706,13 @@ document.getElementById('backButton').addEventListener('click', () => {
   window.location.href = url.href;
 });
 
+/**
+ *  Continue Button
+ */
 document.getElementById('continueBtn').addEventListener('click', async () => {
   const allSteps = Object.values(STEPS);
 
-  const array = allSteps.filter((hash) => (skipHazardOption ? hash !== '#hazard-type' : true));
+  const array = allSteps.filter((hash) => (skipHazardOption ? hash !== STEPS.hazard : true));
 
   const url = new URL(window.location.href);
   const currentHash = url.hash;
@@ -848,7 +731,7 @@ document.getElementById('continueBtn').addEventListener('click', async () => {
   }
 
   if (currentHash === STEPS.images) {
-    displayReviewStepInfo();
+    displayReviewStepInfo(currentReport);
   }
 
   if (currentHash === STEPS.review) {
@@ -857,26 +740,38 @@ document.getElementById('continueBtn').addEventListener('click', async () => {
   }
 
   const nextIndex = currentIndex + 1;
-  const previousHash = array[nextIndex];
+  const nextHash = array[nextIndex];
 
-  url.hash = previousHash;
+  url.hash = nextHash;
   window.location.href = url.href;
 });
 
-const displayReviewStepInfo = () => {
-  locationOutput.innerHTML = `${currentReport.location.address}`;
-  categoryOutput.innerHTML = currentReport.category.name;
-  hazardOptionOutput.innerHTML = currentReport.option.name;
-  commentOutput.innerHTML = currentReport.comment || 'No comments';
+const displayReviewStepInfo = (report) => {
+  locationOutput.innerHTML = `${report.location.address}`;
+  categoryOutput.innerHTML = report.category.name;
+  hazardOptionOutput.innerHTML = report.option.name;
+  commentOutput.innerHTML = report.comment || 'No comments';
   imagesOutput.innerHTML = '';
 
-  if (currentReport.images?.length) {
-    currentReport.images.forEach((image) => {
-      imagesOutput.innerHTML += `<img src="${image}" height = "100" width = "auto"/>`;
+  if (report.images?.length) {
+    report.images.forEach((image, index) => {
+      imagesOutput.innerHTML += `<img src="${image}" alt="Hazard image ${index + 1}"/>`;
     });
   } else {
     imagesOutput.appendChild(getEmptyImages());
   }
+};
+
+const setFormValues = (report) => {
+  locationAddressLabel.innerHTML = `${report.location.address ? report.location.address : `(${report.location.lat}, ${currentReport.location.lng})`}`;
+
+  // Category and hazard are being set inside getCategories
+
+  commentInput.value = report.comment;
+
+  report.images.forEach((imageUrl) => {
+    displayImages(imageUrl);
+  });
 };
 
 const submitReport = async () => {
@@ -1006,4 +901,39 @@ const uploadImageToStorage = async (images) => {
   );
 
   return responses.map(({ data }) => data.url);
+};
+
+/**
+ *  Breadcrumb
+ */
+const generateBreadcrumb = () => {
+  const allSteps = Object.keys(STEPS).filter((key) => (skipHazardOption ? STEPS?.[key] !== STEPS.hazard : true));
+
+  const array = allSteps.map((key, index) => ({ index, hash: STEPS[key], label: STEPS_LABEL[key] }));
+
+  const url = new URL(window.location.href);
+  const currentHash = url.hash;
+
+  const NavElement = ({ label, href, current, addChevron }) => `
+   <li>
+      <a title="${label}" href="${href}" class="report-hazard-step text-body-3 ${current ? 'text-neutral-700 semibold' : 'text-neutral-500'}">
+      ${addChevron ? '<i class="icon-chevron-right"></i>' : ''}
+          ${label}
+      </a>
+    </li>`;
+
+  const elements = [];
+
+  const currentIndex = Object.values(STEPS)
+    .filter((hash) => (skipHazardOption ? hash !== STEPS.hazard : true))
+    .indexOf(currentHash);
+
+  for (let i = 0; i < array.length; i++) {
+    const step = array[i];
+    if (step.index <= currentIndex) {
+      elements.push(NavElement({ label: step.label, href: step.hash, current: step.index === currentIndex, addChevron: step.index > 0 }));
+    }
+  }
+
+  document.getElementById('navMenu').innerHTML = elements.join('');
 };

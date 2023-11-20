@@ -1,6 +1,7 @@
 @import url('../../assets/css/white-transition.css');
 
 @import url('./general.css');
+@import url('./breadcrumb.css');
 
 @import url('./location.css');
 @import url('./category.css');

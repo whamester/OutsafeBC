@@ -37,11 +37,6 @@
   height: calc(100vh - 170px);
 }
 
-#report-hazard-body .divider {
-  width: 100%;
-  border-bottom: 1px solid var(--neutral-300);
-}
-
 #report-hazard-body .continue-btn {
   width: 100%;
 }
@@ -73,11 +68,14 @@
   cursor: pointer;
   text-decoration: none;
   color: var(--neutral-500);
-  margin: 0.75rem 1rem;
 
   display: flex;
   gap: 0.5rem;
   align-items: center;
+
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--neutral-300);
 }
 
 #backButton .icon-chevron-left {
@@ -87,6 +85,8 @@
 }
 
 #continueBtnContainer {
+  display: flex;
+  align-items: end;
   margin-left: var(--padding-x);
   margin-right: var(--padding-x);
   padding-top: 1rem;
@@ -100,10 +100,6 @@
   #report-hazard-body main {
     display: grid;
     height: calc(100% - 130px);
-  }
-
-  #report-hazard-body .divider {
-    display: none;
   }
 
   #report-hazard-body .continue-btn {
