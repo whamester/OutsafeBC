@@ -238,7 +238,7 @@ const closeSearchSuggestion = (e) => {
   document.querySelector('.sb-categories-wrapper').style.display = 'flex';
 };
 
-const getReportApiCall = async (lat, lng, size = 1000, cursor = 0) => {
+const getReportApiCall = async (lat, lng) => {
   // clear previous markers
   geoMap.mapLayers.clearLayers();
   // clear previous reports
@@ -247,7 +247,7 @@ const getReportApiCall = async (lat, lng, size = 1000, cursor = 0) => {
   // search position
   const positionChange = searchInput.dataset.positionChange === 'true';
 
-  const url = `hazard-report?cursor=${cursor}&size=${size}&lat=${
+  const url = `hazard-report?lat=${
     positionChange ? positionSecondary.lat : lat
   }&lng=${positionChange ? positionSecondary.lng : lng}&type=recent&active_only=true`;
 
