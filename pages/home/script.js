@@ -238,18 +238,18 @@ const closeSearchSuggestion = (e) => {
   document.querySelector('.sb-categories-wrapper').style.display = 'flex';
 };
 
-const getReportApiCall = async (lat, lng, size = 1000, cursor = 0) => {
+const getReportApiCall = async (lat, lng) => {
   // clear previous markers
   geoMap.mapLayers.clearLayers();
   // clear previous reports
   reports = [];
 
+  // search position
   const positionChange = searchInput.dataset.positionChange === 'true';
-  //TEMP
-  // const url = `hazard-report?cursor=${cursor}&size=${size}&lat=${
-  //   positionChange ? positionSecondary.lat : lat
-  // }&lng=${positionChange ? positionSecondary.lng : lng}`;
-  const url = `hazard-report`;
+
+  const url = `hazard-report?lat=${
+    positionChange ? positionSecondary.lat : lat
+  }&lng=${positionChange ? positionSecondary.lng : lng}&type=recent&active_only=true`;
 
   const res = await apiRequest(url, { method: 'GET' });
   reports = res.data?.results;
@@ -377,18 +377,29 @@ const watchGeoLocationSuccess = async ({ coords }) => {
   const lng = coords?.longitude;
   geoMap.setMarkerOnMap(lat, lng);
 
-  // update current user position
-  position = {
-    lat,
-    lng,
-  };
-
   // If there is a report id in the query params and the focus param is set, don't pan to the user's location
   // but to the report's location
   if (flyToTrigger && !(!!idReport && (!!focusMarker || !!openDetail))) {
+    // update current user position
+    position = {
+      lat,
+      lng,
+    };
+
     await getReportApiCall(lat, lng);
     flyTo(lat, lng);
     flyToTrigger = false;
+  }
+
+  const distanceDiff = geolocationDistance(lat, lng, position.lat, position.lng);
+
+  // if user moves more than 25Km's 
+  // change his current position to get new reports
+  if (distanceDiff > 25) {
+    position = {
+      lat,
+      lng,
+    };
   }
 };
 
