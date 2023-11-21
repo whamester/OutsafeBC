@@ -11,14 +11,19 @@
   bottom: 0;
   z-index: 3;
 
-  /* Mobile bottom card styling */
+  transition:
+    transform 0.5s,
+    border-radius 0.5s;
+  transform: translateY(0);
+
   overflow-y: hidden;
   height: 30vh;
 }
 
 #hazard-card__outer:not(.not-selectable) {
   transition:
-    var(--default-transitions),
+    transform 0.5s,
+    border-radius 0.5s,
     height 0.5s;
 }
 
@@ -27,6 +32,7 @@
   justify-content: space-between;
   align-items: flex-start;
   margin: 1rem;
+  
   cursor: grab;
 }
 
