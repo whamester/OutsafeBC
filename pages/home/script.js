@@ -487,65 +487,76 @@ const showHazardDetails = (hazardReport) => {
     reportCloseBtn.style.display = 'none';
 
     // Bottom sheet
-    const draggableArea = document.querySelector('.report-card__top-controls');
-    const sheetContents = document.querySelector('.report-card__outer');
+    const dragIcon = document.querySelector('.report-card__top-controls');
+    const content = document.querySelector('#hazard-card__outer');
 
+    let isDragging = false,
+      startY,
+      startHeight;
 
-    let sheetHeight; // in vh
-    const setSheetHeight = (value) => {
-      sheetHeight = Math.max(0, Math.min(90, value));
-      sheetContents.style.height = `${sheetHeight}vh`;
+    let updateHeight = (height) => {
+      //updating sheet height
+      content.style.height = `${height}vh`;
+    };
+    // Set initial height
+    updateHeight(40);
+
+    let dragStart = (e) => {
+      isDragging = true;
+
+      //recording intitial y position and sheet height
+      startY = e.pageY || e.touches?.[0].pageY;
+      startHeight = parseInt(content.style.height);
     };
 
-    const touchPosition = (event) => (event.touches ? event.touches[0] : event);
-    let dragPosition;
-    const onDragStart = (event) => {
-      dragPosition = touchPosition(event).pageY;
-      sheetContents.classList.add('not-selectable');
-      draggableArea.style.cursor = document.body.style.cursor = 'grabbing';
+    let dragging = (e) => {
+      //return if isDragging is false
+      if (!isDragging) return;
+
+      //calculating new height of sheet by using starty and start height
+      let delta = startY - (e.pageY || e.touches?.[0].pageY);
+      let newHeight = startHeight + (delta / window.innerHeight) * 100;
+
+      //calling updateHeight function with new height as argument
+      updateHeight(newHeight);
     };
 
-    const onDragMove = (event) => {
-      if (dragPosition === undefined) return;
-      const y = touchPosition(event).pageY;
-      const deltaY = dragPosition - y;
-      const deltaHeight = (deltaY / window.innerHeight) * 100;
-      setSheetHeight(sheetHeight + deltaHeight);
+    let dragStop = () => {
+      isDragging = false;
 
-      // Restrict dragging to the top of the screen
-      if (sheetHeight < 0) {
-        setSheetHeight(0);
+      //setting sheet height based on the sheet current height or position
+      let sheetHeight = parseInt(content.style.height);
+
+      //if height is greater than 75 making sheet full screen else making it to 50vh
+      sheetHeight < 20 ? closeSheet() : sheetHeight > 55 ? maxHeight(90) : minHeight(40);
+    };
+
+    let minHeight = (min) => {
+      updateHeight(min);
+      reportShareBtn.style.display = 'none';
+      reportCloseBtn.style.display = 'none';
+    };
+
+    let maxHeight = (max) => {
+      updateHeight(max);
+      reportShareBtn.style.display = 'flex';
+      reportCloseBtn.style.display = 'flex';
+    };
+
+    let closeSheet = () => {
+      // Close the report card using removeChild
+      if (hazardReportPopulated.parentNode) {
+        hazardReportPopulated.parentNode.removeChild(hazardReportPopulated);
       }
-
-      dragPosition = y;
     };
 
-    const onDragEnd = () => {
-      dragPosition = undefined;
-      sheetContents.classList.remove('not-selectable');
-      draggableArea.style.cursor = document.body.style.cursor = '';
+    dragIcon.addEventListener('mousedown', dragStart);
+    dragIcon.addEventListener('mousemove', dragging);
+    content.addEventListener('mouseup', dragStop);
 
-      // Adjust the end position to either collapse or expand fully
-      if (sheetHeight < 65) {
-        setSheetHeight(0);
-
-        // Close the report card using removeChild
-        if (hazardReportPopulated.parentNode) {
-          hazardReportPopulated.parentNode.removeChild(hazardReportPopulated);
-        }
-      } else {
-        setSheetHeight(90);
-        reportShareBtn.style.display = 'flex';
-        reportCloseBtn.style.display = 'flex';
-      }
-    };
-
-    draggableArea.addEventListener('mousedown', onDragStart);
-    draggableArea.addEventListener('touchstart', onDragStart);
-    sheetContents.addEventListener('mousemove', onDragMove);
-    sheetContents.addEventListener('touchmove', onDragMove);
-    sheetContents.addEventListener('mouseup', onDragEnd);
-    sheetContents.addEventListener('touchend', onDragEnd);
+    dragIcon.addEventListener('touchstart', dragStart);
+    dragIcon.addEventListener('touchmove', dragging);
+    content.addEventListener('touchend', dragStop);
   } catch (error) {
     console.error('Error:', error);
   }
