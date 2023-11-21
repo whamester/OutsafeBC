@@ -491,9 +491,12 @@ const showHazardDetails = (hazardReport) => {
       if (windowWidth.matches) {
         reportShareBtn.style.display = 'flex';
         reportCloseBtn.style.display = 'flex';
+        content.style.height = "100%";
       } else {
         reportShareBtn.style.display = 'none';
         reportCloseBtn.style.display = 'none';
+        // Set initial height
+        updateHeight(40);
       }
     }
 
@@ -513,8 +516,6 @@ const showHazardDetails = (hazardReport) => {
       //updating sheet height
       content.style.height = `${height}vh`;
     };
-    // Set initial height
-    updateHeight(40);
 
     let dragStart = (e) => {
       isDragging = true;

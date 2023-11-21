@@ -78,6 +78,7 @@
     border-radius: 0.75rem;
     top: 14.3rem;
     left: 5rem;
+    height: fit-content;
   }
   
   .draggable-thumb {
