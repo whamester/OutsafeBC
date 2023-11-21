@@ -27,7 +27,7 @@
 
 .camera-icon img,
 .plus-icon img {
-  color: --neutral-900;
+  color: var(--neutral-900);
   width: 1.5625rem;
   height: 1.5rem;
   margin-bottom: 1.25rem;
@@ -57,6 +57,9 @@
   display: flex;
   justify-content: space-between;
   padding: 0.1rem;
+  gap: 1rem;
+  overflow-x: auto;
+  flex-direction: column;
 }
 
 .picture-1,
@@ -65,8 +68,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 6.3125rem;
-  height: 5.25rem;
+  flex-shrink: 0;
+  height: 212px;
+  width: 100%;
 }
 
 .hide-picture-1,
@@ -89,7 +93,8 @@
 #dragAndDropArea,
 .custom-file-upload2 {
   border-radius: 1rem;
-  border: 1px dashed var(--neutral-300);
+  border: 1px dashed var(--neutral-400);
+  border-radius: 1rem;
 }
 
 #upload-photos .scroll-container {
@@ -102,12 +107,14 @@
 .picture-2,
 .picture-3 {
   position: relative;
+  border-radius: 0.5rem;
+  border: 1px solid var(--neutral-300);
 }
 
 .delete-button {
   position: absolute;
-  top: 0;
-  right: 0;
+  top: 1rem;
+  right: 1rem;
   border: none;
   width: 1.5rem;
   height: 1.5rem;
@@ -116,6 +123,115 @@
 .picture-1 > img,
 .picture-2 > img,
 .picture-3 > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 30%;
   border-radius: 0.5rem;
-  border: 1px solid var(--neutral-300);
+}
+
+@media screen and (min-width: 768px) {
+  #displayImagesArea {
+    justify-content: flex-start;
+    gap: 1.5rem;
+    flex-direction: row;
+  }
+
+  #upload-photos-desktop-content {
+    display: flex !important;
+    gap: 1.5rem;
+  }
+
+  #upload-photos-mobile-content {
+    display: none;
+  }
+
+  #displayImagesArea > div[class^='picture-'] {
+    height: 13.25rem;
+    width: calc((100% - 3.4rem) / 3);
+  }
+
+  #takePictureDesktop,
+  #dragAndDropArea {
+    flex: 1;
+  }
+
+  #takePictureDesktop,
+  #dragAndDropArea {
+    padding: 2rem;
+    display: flex;
+    gap: 1.25rem;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  #takePictureDesktop .label,
+  #dragAndDropArea .label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  #displayCameraAreaContainer {
+    position: absolute;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+  }
+
+  #displayCameraArea {
+    position: relative;
+    padding: 4.5rem 3rem 3rem 3rem;
+    background: white;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 1rem;
+    box-shadow: 1px 1px 18px #d9d9d9;
+  }
+
+  #displayCameraArea video {
+    border-radius: 0.5rem;
+  }
+
+  #displayCameraButtons {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #stopCameraBtn {
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    display: flex;
+    padding: 0.4rem;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    border-radius: 6.25rem;
+    border: 1px solid var(--neutral-300, #d0d5dd);
+    background: var(--white, #fff);
+  }
+
+  #stopCameraBtn i {
+    background-color: var(--neutral-500);
+    width: 1.2rem;
+    height: 1.2rem;
+  }
+
+  .picture-1,
+  .picture-2,
+  .picture-3 {
+    height: 212px;
+    width: 340px;
+  }
 }

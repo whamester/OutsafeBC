@@ -1,11 +1,8 @@
-#select-location .scroll-container {
-  height: calc(100vh - 280px);
-  overflow-y: auto;
-}
-
 #report-hazard-body #map {
   height: 100%;
-  width: 100%;
+  min-height: 250px;
+  border-radius: 0 0 1rem 1rem;
+  border: 1px solid var(--neutral-300);
 }
 
 .select-location-header {
@@ -15,12 +12,14 @@
 }
 
 .select-location-content {
-  border-radius: 1rem;
-  border: 1px solid var(--neutral-300);
-  height: 70%;
+  height: calc(100% - 60px);
 }
 
 .select-location-content__header {
+  border-radius: 1rem 1rem 0 0;
+  border: 1px solid var(--neutral-300);
+  border-bottom: 0;
+
   padding: 1rem;
   display: flex;
   flex-direction: column;
@@ -35,4 +34,15 @@
 #map,
 .leaflet-control-attribution {
   border-radius: 0 0 1rem 1rem;
+}
+
+@media screen and (min-width: 768px) {
+  #report-hazard-body #map {
+    min-height: 300px;
+    height: 100%;
+  }
+
+  #select-location .scroll-container {
+    height: calc(100vh - 400px);
+  }
 }

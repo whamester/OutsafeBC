@@ -79,7 +79,7 @@ window.onload = async function () {
       if (!user) {
         showLoginModal();
       } else {
-        window.location = '/pages/report-hazard';
+        window.location = `/pages/report-hazard/index.html?lat=${position.lat}&lng=${position.lng}`;
       }
     });
 
@@ -111,7 +111,7 @@ window.onload = async function () {
     await getReportApiCall(position.lat, position.lng);
 
     Map.watchGeoLocation(watchGeoLocationSuccess, watchGeoLocationError);
-    
+
     // clear recenter btn focus
     geoMap.map.on('drag', () => recenterBtn?.blur());
   } catch (error) {
@@ -130,7 +130,7 @@ window.onload = async function () {
       const makerExists = geoMap.checkMarkerOnMap(hazardDetail);
 
       // marker currently doesnot exists on the map
-      if (!makerExists) geoMap.createLayerGroups([hazardDetail], markerParams);
+      if (!makerExists) geoMap.createLayerGroups([{ ...hazardDetail, hazardCategory: hazardDetail.category, hazard: hazardDetail.option }], markerParams);
 
       flyTo(hazardDetail.location?.lat, hazardDetail.location?.lng);
     }
@@ -257,9 +257,7 @@ const getReportApiCall = async (lat, lng) => {
   // search position
   const positionChange = searchInput.dataset.positionChange === 'true';
 
-  const url = `hazard-report?lat=${
-    positionChange ? positionSecondary.lat : lat
-  }&lng=${positionChange ? positionSecondary.lng : lng}&type=recent&active_only=true`;
+  const url = `hazard-report?lat=${positionChange ? positionSecondary.lat : lat}&lng=${positionChange ? positionSecondary.lng : lng}&type=recent&active_only=true`;
 
   const res = await apiRequest(url, { method: 'GET' });
   reports = res.data?.results;
@@ -403,7 +401,7 @@ const watchGeoLocationSuccess = async ({ coords }) => {
 
   const distanceDiff = geolocationDistance(lat, lng, position.lat, position.lng);
 
-  // if user moves more than 25Km's 
+  // if user moves more than 25Km's
   // change his current position to get new reports
   if (distanceDiff > 25) {
     position = {
@@ -414,7 +412,7 @@ const watchGeoLocationSuccess = async ({ coords }) => {
 };
 
 const watchGeoLocationError = async (err) => {
-  AlertPopup.show(`Unable to access geolocation`, AlertPopup.warning);
+  // AlertPopup.show(`Unable to access geolocation`, AlertPopup.warning);
   await getReportApiCall(position.lat, position.lng);
 };
 
@@ -478,12 +476,100 @@ const showHazardDetails = (hazardReport) => {
     loadIcons();
 
     // Close report card
+    const reportShareBtn = document.getElementById('reportShareBtn');
     const reportCloseBtn = document.getElementById('reportCloseBtn');
     reportCloseBtn.addEventListener('click', () => {
       if (hazardReportPopulated.parentNode) {
         hazardReportPopulated.parentNode.removeChild(hazardReportPopulated);
       }
     });
+
+    //
+
+    // Bottom sheet
+    const content = document.querySelector('#hazard-card__outer');
+    let windowWidth = window.matchMedia('(min-width: 768px)');
+
+    let updateHeight = (height) => {
+      //updating sheet height
+      content.style.height = `${height}vh`;
+    };
+
+    function mediaQueryCheck(windowWidth) {
+      if (windowWidth.matches) {
+        reportShareBtn.style.display = 'flex';
+        reportCloseBtn.style.display = 'flex';
+        content.style.height = 'fit-content';
+      } else {
+        reportShareBtn.style.display = 'none';
+        reportCloseBtn.style.display = 'none';
+        // Set initial height
+        updateHeight(40);
+
+        let isDragging = false,
+          startY,
+          startHeight;
+
+        let dragStart = (e) => {
+          isDragging = true;
+
+          //recording intitial y position and sheet height
+          startY = e.pageY || e.touches?.[0].pageY;
+          startHeight = parseInt(content.style.height);
+        };
+
+        let dragging = (e) => {
+          //return if isDragging is false
+          if (!isDragging) return;
+
+          //calculating new height of sheet by using starty and start height
+          let delta = startY - (e.pageY || e.touches?.[0].pageY);
+          let newHeight = startHeight + (delta / window.innerHeight) * 100;
+
+          //calling updateHeight function with new height as argument
+          updateHeight(newHeight);
+        };
+
+        let dragStop = () => {
+          isDragging = false;
+
+          //setting sheet height based on the sheet current height or position
+          let sheetHeight = parseInt(content.style.height);
+
+          //if height is greater than 75 making sheet full screen else making it to 50vh
+          sheetHeight < 20 ? closeSheet() : sheetHeight > 55 ? maxHeight(90) : minHeight(40);
+        };
+
+        let minHeight = (min) => {
+          updateHeight(min);
+          reportShareBtn.style.display = 'none';
+          reportCloseBtn.style.display = 'none';
+        };
+
+        let maxHeight = (max) => {
+          updateHeight(max);
+          reportShareBtn.style.display = 'flex';
+          reportCloseBtn.style.display = 'flex';
+        };
+
+        let closeSheet = () => {
+          // Close the report card using removeChild
+          if (hazardReportPopulated.parentNode) {
+            hazardReportPopulated.parentNode.removeChild(hazardReportPopulated);
+          }
+        };
+
+        content.addEventListener('mousedown', dragStart);
+        content.addEventListener('mousemove', dragging);
+        content.addEventListener('mouseup', dragStop);
+
+        content.addEventListener('touchstart', dragStart);
+        content.addEventListener('touchmove', dragging);
+        content.addEventListener('touchend', dragStop);
+      }
+    }
+    mediaQueryCheck(windowWidth);
+    windowWidth.addListener(mediaQueryCheck);
   } catch (error) {
     console.error('Error:', error);
   }
