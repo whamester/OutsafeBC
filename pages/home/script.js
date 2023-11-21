@@ -487,7 +487,6 @@ const showHazardDetails = (hazardReport) => {
     //
 
     // Bottom sheet
-    const dragIcon = document.querySelector('.draggable-thumb');
     const content = document.querySelector('#hazard-card__outer');
     let windowWidth = window.matchMedia('(min-width: 768px)');
 
@@ -506,72 +505,71 @@ const showHazardDetails = (hazardReport) => {
         reportCloseBtn.style.display = 'none';
         // Set initial height
         updateHeight(40);
-        
+
         let isDragging = false,
           startY,
           startHeight;
-    
+
         let dragStart = (e) => {
           isDragging = true;
-    
+
           //recording intitial y position and sheet height
           startY = e.pageY || e.touches?.[0].pageY;
           startHeight = parseInt(content.style.height);
         };
-    
+
         let dragging = (e) => {
           //return if isDragging is false
           if (!isDragging) return;
-    
+
           //calculating new height of sheet by using starty and start height
           let delta = startY - (e.pageY || e.touches?.[0].pageY);
           let newHeight = startHeight + (delta / window.innerHeight) * 100;
-    
+
           //calling updateHeight function with new height as argument
           updateHeight(newHeight);
         };
-    
+
         let dragStop = () => {
           isDragging = false;
-    
+
           //setting sheet height based on the sheet current height or position
           let sheetHeight = parseInt(content.style.height);
-    
+
           //if height is greater than 75 making sheet full screen else making it to 50vh
           sheetHeight < 20 ? closeSheet() : sheetHeight > 55 ? maxHeight(90) : minHeight(40);
         };
-    
+
         let minHeight = (min) => {
           updateHeight(min);
           reportShareBtn.style.display = 'none';
           reportCloseBtn.style.display = 'none';
         };
-    
+
         let maxHeight = (max) => {
           updateHeight(max);
           reportShareBtn.style.display = 'flex';
           reportCloseBtn.style.display = 'flex';
         };
-    
+
         let closeSheet = () => {
           // Close the report card using removeChild
           if (hazardReportPopulated.parentNode) {
             hazardReportPopulated.parentNode.removeChild(hazardReportPopulated);
           }
         };
-    
-        dragIcon.addEventListener('mousedown', dragStart);
-        dragIcon.addEventListener('mousemove', dragging);
+
+        content.addEventListener('mousedown', dragStart);
+        content.addEventListener('mousemove', dragging);
         content.addEventListener('mouseup', dragStop);
-    
-        dragIcon.addEventListener('touchstart', dragStart);
-        dragIcon.addEventListener('touchmove', dragging);
+
+        content.addEventListener('touchstart', dragStart);
+        content.addEventListener('touchmove', dragging);
         content.addEventListener('touchend', dragStop);
       }
     }
     mediaQueryCheck(windowWidth);
     windowWidth.addListener(mediaQueryCheck);
-
   } catch (error) {
     console.error('Error:', error);
   }
