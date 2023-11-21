@@ -81,6 +81,5 @@
 
   .draggable-thumb {
     display: none;
-    pointer-events: none;
   }
 }
