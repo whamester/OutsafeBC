@@ -483,8 +483,23 @@ const showHazardDetails = (hazardReport) => {
         hazardReportPopulated.parentNode.removeChild(hazardReportPopulated);
       }
     });
-    reportShareBtn.style.display = 'none';
-    reportCloseBtn.style.display = 'none';
+
+    //
+    let windowWidth = window.matchMedia('(min-width: 768px)');
+
+    function mediaQueryCheck(windowWidth) {
+      if (windowWidth.matches) {
+        reportShareBtn.style.display = 'flex';
+        reportCloseBtn.style.display = 'flex';
+      } else {
+        reportShareBtn.style.display = 'none';
+        reportCloseBtn.style.display = 'none';
+      }
+    }
+
+    mediaQueryCheck(windowWidth);
+
+    windowWidth.addListener(mediaQueryCheck);
 
     // Bottom sheet
     const dragIcon = document.querySelector('.report-card__top-controls');

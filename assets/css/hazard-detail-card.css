@@ -70,3 +70,19 @@
 .report-card__top-info {
   flex-grow: 0;
 }
+
+@media screen and (min-width: 768px) {
+
+  #hazard-card__outer {
+    position: absolute;
+    border-radius: 0.75rem;
+    top: 14.3rem;
+    left: 5rem;
+  }
+  
+  .draggable-thumb {
+    display: none;
+  }
+
+
+ }
