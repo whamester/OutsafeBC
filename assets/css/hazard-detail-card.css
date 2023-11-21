@@ -10,6 +10,16 @@
   position: absolute;
   bottom: 0;
   z-index: 3;
+
+  /* Mobile bottom card styling */
+  overflow-y: hidden;
+  height: 30vh;
+}
+
+#hazard-card__outer:not(.not-selectable) {
+  transition:
+    var(--default-transitions),
+    height 0.5s;
 }
 
 .report-card__top-controls {
@@ -17,6 +27,7 @@
   justify-content: space-between;
   align-items: flex-start;
   margin: 1rem;
+  cursor: grab;
 }
 
 .circle-border {
@@ -53,4 +64,15 @@
   height: 1.75rem;
   border-radius: 6.25rem;
   object-fit: cover;
+}
+
+.draggable-thumb {
+  width: 4.8125rem;
+  height: 0.25rem;
+  background: var(--neutral-neutral-300, #d0d5dd);
+  border-radius: 0.125rem;
+}
+
+.report-card__top-info {
+  flex-grow: 0;
 }

@@ -111,7 +111,7 @@ window.onload = async function () {
     await getReportApiCall(position.lat, position.lng);
 
     Map.watchGeoLocation(watchGeoLocationSuccess, watchGeoLocationError);
-    
+
     // clear recenter btn focus
     geoMap.map.on('drag', () => recenterBtn?.blur());
   } catch (error) {
@@ -257,9 +257,7 @@ const getReportApiCall = async (lat, lng) => {
   // search position
   const positionChange = searchInput.dataset.positionChange === 'true';
 
-  const url = `hazard-report?lat=${
-    positionChange ? positionSecondary.lat : lat
-  }&lng=${positionChange ? positionSecondary.lng : lng}&type=recent&active_only=true`;
+  const url = `hazard-report?lat=${positionChange ? positionSecondary.lat : lat}&lng=${positionChange ? positionSecondary.lng : lng}&type=recent&active_only=true`;
 
   const res = await apiRequest(url, { method: 'GET' });
   reports = res.data?.results;
@@ -403,7 +401,7 @@ const watchGeoLocationSuccess = async ({ coords }) => {
 
   const distanceDiff = geolocationDistance(lat, lng, position.lat, position.lng);
 
-  // if user moves more than 25Km's 
+  // if user moves more than 25Km's
   // change his current position to get new reports
   if (distanceDiff > 25) {
     position = {
@@ -478,12 +476,76 @@ const showHazardDetails = (hazardReport) => {
     loadIcons();
 
     // Close report card
+    const reportShareBtn = document.getElementById('reportShareBtn');
     const reportCloseBtn = document.getElementById('reportCloseBtn');
     reportCloseBtn.addEventListener('click', () => {
       if (hazardReportPopulated.parentNode) {
         hazardReportPopulated.parentNode.removeChild(hazardReportPopulated);
       }
     });
+    reportShareBtn.style.display = 'none';
+    reportCloseBtn.style.display = 'none';
+
+    // Bottom sheet
+    const draggableArea = document.querySelector('.report-card__top-controls');
+    const sheetContents = document.querySelector('.report-card__outer');
+
+
+    let sheetHeight; // in vh
+    const setSheetHeight = (value) => {
+      sheetHeight = Math.max(0, Math.min(90, value));
+      sheetContents.style.height = `${sheetHeight}vh`;
+    };
+
+    const touchPosition = (event) => (event.touches ? event.touches[0] : event);
+    let dragPosition;
+    const onDragStart = (event) => {
+      dragPosition = touchPosition(event).pageY;
+      sheetContents.classList.add('not-selectable');
+      draggableArea.style.cursor = document.body.style.cursor = 'grabbing';
+    };
+
+    const onDragMove = (event) => {
+      if (dragPosition === undefined) return;
+      const y = touchPosition(event).pageY;
+      const deltaY = dragPosition - y;
+      const deltaHeight = (deltaY / window.innerHeight) * 100;
+      setSheetHeight(sheetHeight + deltaHeight);
+
+      // Restrict dragging to the top of the screen
+      if (sheetHeight < 0) {
+        setSheetHeight(0);
+      }
+
+      dragPosition = y;
+    };
+
+    const onDragEnd = () => {
+      dragPosition = undefined;
+      sheetContents.classList.remove('not-selectable');
+      draggableArea.style.cursor = document.body.style.cursor = '';
+
+      // Adjust the end position to either collapse or expand fully
+      if (sheetHeight < 65) {
+        setSheetHeight(0);
+
+        // Close the report card using removeChild
+        if (hazardReportPopulated.parentNode) {
+          hazardReportPopulated.parentNode.removeChild(hazardReportPopulated);
+        }
+      } else {
+        setSheetHeight(90);
+        reportShareBtn.style.display = 'flex';
+        reportCloseBtn.style.display = 'flex';
+      }
+    };
+
+    draggableArea.addEventListener('mousedown', onDragStart);
+    draggableArea.addEventListener('touchstart', onDragStart);
+    sheetContents.addEventListener('mousemove', onDragMove);
+    sheetContents.addEventListener('touchmove', onDragMove);
+    sheetContents.addEventListener('mouseup', onDragEnd);
+    sheetContents.addEventListener('touchend', onDragEnd);
   } catch (error) {
     console.error('Error:', error);
   }
