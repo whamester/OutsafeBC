@@ -485,13 +485,22 @@ const showHazardDetails = (hazardReport) => {
     });
 
     //
+
+    // Bottom sheet
+    const dragIcon = document.querySelector('.draggable-thumb');
+    const content = document.querySelector('#hazard-card__outer');
     let windowWidth = window.matchMedia('(min-width: 768px)');
+
+    let updateHeight = (height) => {
+      //updating sheet height
+      content.style.height = `${height}vh`;
+    };
 
     function mediaQueryCheck(windowWidth) {
       if (windowWidth.matches) {
         reportShareBtn.style.display = 'flex';
         reportCloseBtn.style.display = 'flex';
-        content.style.height = "100%";
+        content.style.height = 'fit-content';
       } else {
         reportShareBtn.style.display = 'none';
         reportCloseBtn.style.display = 'none';
@@ -499,23 +508,12 @@ const showHazardDetails = (hazardReport) => {
         updateHeight(40);
       }
     }
-
     mediaQueryCheck(windowWidth);
-
     windowWidth.addListener(mediaQueryCheck);
-
-    // Bottom sheet
-    const dragIcon = document.querySelector('.report-card__top-controls');
-    const content = document.querySelector('#hazard-card__outer');
 
     let isDragging = false,
       startY,
       startHeight;
-
-    let updateHeight = (height) => {
-      //updating sheet height
-      content.style.height = `${height}vh`;
-    };
 
     let dragStart = (e) => {
       isDragging = true;
