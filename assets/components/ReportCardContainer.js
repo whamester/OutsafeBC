@@ -36,15 +36,22 @@ class ReportCardContainer {
 
   getTopControls() {
     const contentHTML = `
-
-    <div class="circle-border pointer" id="reportCloseBtn">
-      <i
-        class="icon-close-square"
-        style="background-color: var(--neutral-500)"
-      ></i>
+    <div>
+      <div class="circle-border pointer" id="reportCloseBtn">
+        <i
+          class="icon-close-square"
+          style="background-color: var(--neutral-500)"
+        ></i>
+      </div>
     </div>
-    <div class="circle-border pointer">
-      <i class="icon-share" style="background-color: var(--neutral-500)"></i>
+
+    <div class="draggable-thumb">
+    </div>
+
+    <div>
+      <div class="circle-border pointer" id="reportShareBtn">
+        <i class="icon-share" style="background-color: var(--neutral-500)"></i>
+      </div>
     </div>
 `;
     const div = document.createElement('div');
