@@ -53,8 +53,8 @@ main{
 
 .content-wrapper {
   padding: 20px;
-  margin-left: 11.81rem;
-  margin-right: 8.62rem;
+  width: 411px;
+  margin: auto;
 }
 
 .content-image {
@@ -69,10 +69,9 @@ main{
 }
 
 .content-image img {
-  max-width: auto;
-  height: auto;
+  height: 685px;
   padding-top: 6.12rem;
-  padding-bottom: 7.12rem;
+  padding-bottom: 7.5rem;
   padding-left: 8.62rem;
 }
 }
