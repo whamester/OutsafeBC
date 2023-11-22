@@ -31,11 +31,15 @@
   justify-content: center;
 }
 
-.content-image{
+#signup-main .full-signup .content-image{
   display: none;
 }
 
 @media screen and (min-width: 768px) {
+
+#signup-main .full-signup .content-image{
+  display: block;
+}
 
 main{
   padding-left: 0;
