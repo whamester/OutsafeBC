@@ -1,3 +1,5 @@
+@import url(../css/notification-item.css);
+
 header {
   background: var(--primary-900, #0f1815);
   border-bottom: 1px solid var(--neutral-200, #e4e7ec);
@@ -10,13 +12,6 @@ header {
   align-items: center;
 }
 
-#header-content,
-#header-menu {
-  max-width: 80rem;
-  margin: auto;
-  /* MAX WIDTH */
-}
-
 #header-nav {
   display: flex;
   gap: 1rem;
@@ -26,7 +21,7 @@ header {
 #avatar {
   width: 1.75rem;
   height: 1.75rem;
-  border-radius: 50%;
+  border-radius: 0.8rem;
 }
 
 i[class^='icon-notification'] {
@@ -45,7 +40,7 @@ i[class^='icon-notification'] {
   position: relative;
 }
 
-#header-menu .header-menu__container {
+.header-menu__container {
   position: absolute;
   float: right;
   left: 0;
@@ -53,33 +48,35 @@ i[class^='icon-notification'] {
   z-index: 10;
 }
 
-#header-menu ul {
+.header-menu__container ul {
   border-radius: 0.5rem;
   border: 1px solid var(--neutral-200, #e4e7ec);
   background: var(--white, #fff);
   box-shadow: 0px 5px 15px 0px rgba(0, 0, 0, 0.05);
-
   display: flex;
   flex-direction: column;
-  width: 100%;
-
+  padding: 0 1rem;
   background-color: var(--white);
 }
 
-#header-menu ul li {
-  padding: 1rem;
+.header-menu__container ul li {
+  padding: 1rem 0;
   color: var(--neutral-700);
 }
 
-#header-menu ul li a {
+.header-menu__container ul li a {
   text-decoration: none;
   display: flex;
   gap: 1rem;
   align-items: center;
-  color: inherit;
+  color: var(--neutral-700);
 }
 
-#header-menu ul li a:hover {
+.header-menu__container ul li:not(:last-child) {
+  border-bottom: 1px solid var(--neutral-200);
+}
+
+.header-menu__container ul li a:hover {
   color: var(--neutral-900);
   font-weight: 500;
 }
@@ -90,15 +87,41 @@ i[class^='icon-notification'] {
   background-color: var(--neutral-700);
 }
 
-#header-menu ul li a:hover i[class^='icon-'] {
+.header-menu__container ul li a:hover i[class^='icon-'] {
   background-color: var(--neutral-900);
 }
 
+.header-menu__container__premium {
+  border-radius: 0.3125rem;
+  background: var(--neutral-100);
+  display: flex;
+  padding: 0.5rem;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.header-menu__container__premium p {
+  font-size: 0.625rem;
+}
+
 @media screen and (min-width: 500px) {
-  #header-menu .header-menu__container {
-    right: 0.3rem;
+  .header-menu__container {
+    right: 0.2rem;
     left: unset;
-    width: 12.25rem;
+    width: 13.25rem;
     margin-top: 0.3rem;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  #header-content,
+  #header-menu {
+    padding-left: var(--padding-x);
+    padding-right: var(--padding-x);
+  }
+
+  .header-menu__container {
+    margin-right: var(--padding-x);
   }
 }

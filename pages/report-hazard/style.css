@@ -1,25 +1,11 @@
-#map {
-	height: 400px;
-	width: 100%;
-}
+@import url('../../assets/css/white-transition.css');
 
-#dragAndDropArea,
-.custom-file-upload2 {
-	border: dashed;
-}
+@import url('./general.css');
+@import url('./breadcrumb.css');
 
-.custom-file-upload {
-	border: solid;
-}
-
-/* /For easy testing on a mobile browser, this property is temporary */
-
-#imagesFirstOutput2 > img {
-	display: grid;
-	grid-template-columns: 1fr;
-}
-
-img {
-	width: 10%;
-	height: auto;
-}
+@import url('./location.css');
+@import url('./category.css');
+@import url('./hazard-option.css');
+@import url('./comment.css');
+@import url('./images.css');
+@import url('./submit.css');

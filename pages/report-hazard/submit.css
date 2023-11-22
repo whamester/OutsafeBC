@@ -1,0 +1,112 @@
+#submitContainer {
+  border-radius: 1rem;
+  border: 1px solid var(--neutral-300);
+  background: var(--white);
+  padding-top: 1.69rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+#submitContainer .edit-link {
+  justify-self: end;
+  text-decoration: none;
+}
+
+#submitContainer .submit-value {
+  border-radius: 0.375rem;
+  background: var(--neutral-100);
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+  color: var(--neutral-900);
+}
+
+#submitContainer .edit-link {
+  display: inline-block;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  margin: 0;
+  gap: 0.5rem;
+}
+
+#submitContainer .icon-edit {
+  background: var(--neutral-900);
+}
+
+#submitContainer .main-submit-section {
+  margin-bottom: 2.5rem;
+}
+
+#submitContainer .main-submit-section__label {
+  float: left;
+}
+
+#submitContainer .main-submit-section__link {
+  float: right;
+}
+
+#submitContainer .main-submit-section__content {
+  clear: both;
+  padding-top: 1rem;
+}
+
+#imagesOutput {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  gap: 16px;
+  max-height: 212px;
+}
+
+#submitContainer #imagesOutput img {
+  border-radius: 0.38606rem;
+  border: 0.386px solid var(--neutral-300);
+  width: 9.15rem;
+  height: 6.25rem;
+  object-fit: cover;
+  object-position: 50% 30%;
+}
+
+@media screen and (min-width: 768px) {
+  #submitContainer {
+    padding: 2.81rem 3.38rem;
+  }
+
+  #submitContainer .main-submit-section {
+    display: grid;
+    grid-template-columns: 10rem fit-content(800px) fit-content(100px);
+  }
+
+  #submitContainer .submit-value {
+    width: fit-content;
+  }
+
+  #submitContainer .main-submit-section__label {
+    float: none;
+  }
+
+  #submitContainer .main-submit-section__link {
+    float: none;
+    grid-column: 3;
+    grid-row: 1;
+    margin-left: 1rem;
+  }
+
+  #submitContainer .main-submit-section__content {
+    clear: none;
+    padding-top: unset;
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  #submitContainer .main-submit-section__content.review-images {
+    overflow-y: auto;
+  }
+
+  #submitContainer #imagesOutput img {
+    width: 7.89794rem;
+    height: 5.11519rem;
+  }
+}

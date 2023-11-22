@@ -6,11 +6,16 @@
 
 @import url(./button.css);
 @import url(./input.css);
+@import url(./badge.css);
+@import url(./checkbox.css);
+@import url(./message.css);
+
 @import url(./header.css);
 
 @import url(./alert-popup.css);
 @import url(./modal.css);
 @import url(./report-card.css);
+@import url(./hazard-detail-card.css);
 @import url(./toggle-switch.css);
 
 :root {
@@ -34,10 +39,8 @@ body {
 main {
   overflow-y: auto;
   height: calc(100vh - 60px);
-  /* 100vh minus the header height */
-  max-width: 80rem;
-  margin: auto;
-  /* MAX WIDTH */
+  padding-left: var(--padding-x);
+  padding-right: var(--padding-x);
 }
 
 #root {
@@ -79,4 +82,8 @@ ul {
 
 .d-grid {
   display: grid;
+}
+
+.w-full {
+  width: 100%;
 }

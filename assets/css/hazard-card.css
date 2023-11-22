@@ -1,3 +1,10 @@
+#hazard-comp {
+  position: absolute;
+  bottom: 25px;
+  left: 0;
+  width: 100vw;
+}
+
 .sb-cards-btn--back {
   display: flex;
   align-items: center;
@@ -10,16 +17,15 @@
 }
 
 .sb-cards {
-  position: fixed;
-  bottom: 15px;
-  left: 15px;
-  width: 100%;
+  margin: auto;
+  padding-left: var(--padding-x);
   overflow: hidden;
 }
 
 .sb-cards-wrapper {
   grid-gap: 15px;
   grid-auto-flow: column;
+  margin: auto;
   width: 100%;
   overflow-x: auto;
   scrollbar-width: none;
@@ -40,10 +46,11 @@
   padding: 12px;
   width: 70vw;
   height: 200px;
+  scroll-margin-right: 150px;
 }
 
 .sb-cards--item:last-of-type {
-  margin-right: 30px;
+  margin-right: 16px;
 }
 
 .sb-card-header--box {
@@ -58,5 +65,12 @@
 
 .sb-cards-info--box {
   margin-top: 16px;
-  padding-inline: 8px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  width: calc(100% - 24px);
+}
+
+#viewDetailsBtn {
+  margin-top: 20px;
 }

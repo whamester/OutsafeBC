@@ -1,5 +1,33 @@
 i[class^='icon-'] {
-	width: 20px;
-	height: 20px;
-	background-color: var(--neutral-900);
+  width: 20px;
+  height: 20px;
+  background-color: var(--neutral-900);
+  flex-shrink: 0;
+  mask-size: cover;
+  -webkit-mask-size: cover;
+}
+
+.icon-close-square {
+  mask: url(../icons/close-square.svg);
+  -webkit-mask-image: url(../icons/close-square.svg);
+}
+
+.icon-warning {
+  mask: url(../icons/warning.svg);
+  -webkit-mask-image: url(../icons/warning.svg);
+}
+
+.icon-checkmark {
+  mask: url(../icons/checkmark.svg);
+  -webkit-mask-image: url(../icons/checkmark.svg);
+}
+
+.icon-chevron-right {
+  mask: url(../icons/chevron-right.svg);
+  -webkit-mask-image: url(../icons/chevron-right.svg);
+}
+
+.icon-chevron-left {
+  mask: url(../icons/chevron-left.svg);
+  -webkit-mask-image: url(../icons/chevron-left.svg);
 }

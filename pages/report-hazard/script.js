@@ -9,28 +9,55 @@ import { API_URL } from '../../constants.js';
 import Header from '../../assets/components/Header.js';
 import AlertPopup from '../../assets/components/AlertPopup.js';
 import Modal from '../../assets/components/Modal.js';
+import LoaderAnimation from '../../assets/components/WhiteTransition.js';
 
 //Helpers
 import { getUserSession } from '../../assets/helpers/storage.js';
 import readImage from '../../assets/helpers/read-image.js';
-import injectHTML from '../../assets/helpers/inject-html.js';
 import geocode from '../../assets/helpers/geocode.js';
+import injectHeader from '../../assets/helpers/inject-header.js';
 
 //Variable Declaration
-const currentReport = new ReportForm();
-let position = Map.DEFAULT_LOCATION;
+const url = new URL(window.location.href);
+const idReport = url.searchParams.get('id');
+const latitude = Number(url.searchParams.get('lat')) || null;
+const longitude = Number(url.searchParams.get('lng')) || null;
+
+let currentReport = new ReportForm();
+let position = latitude && longitude ? { lat: latitude, lng: longitude } : Map.DEFAULT_LOCATION;
 
 let mapInstance = null;
 let skipHazardOption = false;
 const user = getUserSession();
 
-const url = new URL(window.location.href);
-const idReport = url.searchParams.get('id');
+let allowRedirect = false;
+
+const STEPS = {
+  location: '#select-location',
+  category: '#hazard-category',
+  hazard: '#hazard-type',
+  comments: '#additional-details',
+  images: '#upload-photos',
+  review: '#review-report',
+};
+
+const STEPS_LABEL = {
+  location: 'Select Location',
+  category: 'Hazard Category',
+  hazard: 'Hazard Type',
+  comments: 'Additional Details',
+  images: 'Upload Photos',
+  review: 'Review Report',
+};
 
 /**
  * Page Init
  */
 
+//Loading animation (White overlay)
+LoaderAnimation.initialize();
+
+//to display the correct section
 window.onload = async function () {
   try {
     if (!user) {
@@ -38,37 +65,47 @@ window.onload = async function () {
       return;
     }
 
-    injectHTML([
-      { func: Header, target: '#report-hazard-body', position: 'afterbegin' },
-    ]);
+    if (idReport) {
+      window.location.hash = '#review-report';
+    } else {
+      window.location.hash = '#select-location';
+    }
+
+    injectHeader([{ func: Header, target: '#report-hazard-body', position: 'afterbegin' }]);
 
     displayCurrentSection();
     window.addEventListener('hashchange', displayCurrentSection);
 
-    // Loads the map even if the user has not accepted the permissions
-    mapInstance = new Map(position.lat, position.lng);
-    mapInstance.setMarkerOnMap(position.lat, position.lng, {
-      draggable: true,
-    }); //TODO: Consult with design the message of the marker
+    getCategories();
 
-    if (mapInstance) {
-      mapInstance.map.on('click', onSelectLocation);
+    if (!idReport) {
+      // Loads the map even if the user has not accepted the permissions
+      mapInstance = new Map(position.lat, position.lng);
+      mapInstance.setMarkerOnMap(position.lat, position.lng, {
+        draggable: true,
+      });
+      if (mapInstance) {
+        mapInstance.map.on('click', onSelectLocation);
+      }
+
+      loadGeolocation();
+    } else {
+      populateReport(idReport);
     }
-
-    await updateCurrentReportLocation(position);
-    //Override the current location if the user accepts the permissions
-    loadGeolocation();
-
-    populateReport();
   } catch (error) {
-    const alert = new AlertPopup();
-    alert.show(
-      error.message || AlertPopup.SOMETHING_WENT_WRONG_MESSAGE,
-      AlertPopup.error,
-      500
-    );
+    AlertPopup.show(error.message || AlertPopup.SOMETHING_WENT_WRONG_MESSAGE, AlertPopup.error, 500);
   }
 };
+
+// Event listener for the 'beforeunload' event
+window.addEventListener('beforeunload', function (e) {
+  const values = [currentReport.category.id, currentReport.comment, currentReport.images.length, currentReport.option.id];
+
+  if (values.some((value) => !!value) && !allowRedirect) {
+    e.preventDefault();
+    e.returnValue = '';
+  }
+});
 
 const updateCurrentReportLocation = async (params) => {
   const address = await getAddressFromCoordinates(params);
@@ -79,11 +116,12 @@ const updateCurrentReportLocation = async (params) => {
     address: address,
   };
 
-  locationAddressInput.value = `${currentReport.location.address} (${currentReport.location.lat}, ${currentReport.location.lng})`;
+  locationAddressLabel.innerHTML = `${currentReport.location.address ? currentReport.location.address : `(${currentReport.location.lat}, ${currentReport.location.lng})`}`;
 };
 
 const displayCurrentSection = () => {
   try {
+    let pageId = location.hash ? location.hash : '#select-location';
     if (skipHazardOption && location.hash === '#hazard-type') {
       window.location.hash = '#additional-details';
     }
@@ -92,112 +130,113 @@ const displayCurrentSection = () => {
       document.getElementById('review-report-category').classList.add('hidden');
     }
 
-    const allPages = document.querySelectorAll('section.page');
+    pagesHandler(pageId);
 
-    const pageId = location.hash ? location.hash : '#select-location';
-    for (let page of allPages) {
-      if (pageId === '#' + page.id) {
-        page.style.display = 'block';
+    if (pageId === STEPS.review) {
+      if (!!idReport) {
+        continueBtnText.innerHTML = 'Update Report';
       } else {
-        page.style.display = 'none';
+        continueBtnText.innerHTML = 'Submit Report';
+      }
+    } else {
+      continueBtnText.innerHTML = 'Continue';
+    }
+
+    if (pageId === STEPS.location) {
+      fullNavMenu.style.visibility = 'hidden';
+    } else {
+      fullNavMenu.style.visibility = 'visible';
+    }
+
+    if (pageId === STEPS.location && idReport && !mapInstance) {
+      // Display the position of the report location
+      mapInstance = new Map(currentReport.location.lat, currentReport.location.lng);
+      mapInstance.setMarkerOnMap(currentReport.location.lat, currentReport.location.lng, {
+        draggable: true,
+      });
+
+      if (mapInstance) {
+        mapInstance.map.on('click', onSelectLocation);
       }
     }
+
+    document.body.scrollTop = true;
+
+    generateBreadcrumb();
   } catch (error) {
-    const alert = new AlertPopup();
-    alert.show(
-      error.message || AlertPopup.SOMETHING_WENT_WRONG_MESSAGE,
-      AlertPopup.error
-    );
+    console.error({ error });
+    AlertPopup.show(error.message || AlertPopup.SOMETHING_WENT_WRONG_MESSAGE, AlertPopup.error);
+  }
+};
+
+const pagesHandler = (pageId = '#select-location') => {
+  const allPages = document.querySelectorAll('section.page');
+
+  for (let page of allPages) {
+    if (pageId === '#' + page.id) {
+      page.style.display = 'flex';
+    } else {
+      page.style.display = 'none';
+    }
   }
 };
 
 const loadGeolocation = async () => {
   try {
-    position = await Map.getCurrentLocation();
+    // position = await Map.getCurrentLocation();
     await updateCurrentReportLocation(position);
     mapInstance.setMarkerOnMap(position.lat, position.lng, {
       draggable: true,
     });
-    // mapInstance.map.flyTo([position.lat, position.lng], Map.CURRENT_ZOOM, {
-    //   animate: true,
-    //   duration: 2,
-    // });
+    // mapInstance.map.flyTo([position.lat, position.lng], FLY_TO_ZOOM);
   } catch (error) {
-    console.log(error);
+    console.error(error);
 
-    const alert = new AlertPopup();
-    alert.show(
-      error.message || AlertPopup.SOMETHING_WENT_WRONG_MESSAGE,
-      AlertPopup.error
-    );
+    AlertPopup.show(error.message || AlertPopup.SOMETHING_WENT_WRONG_MESSAGE, AlertPopup.error);
   }
 };
 
-const populateReport = async () => {
-  if (idReport !== null) {
-    document.getElementById('saveReportBtn').style.display = 'none';
-    document.getElementById('updateReportBtn').style.display = 'initial';
-
-    const getCollection = async () => {
+const populateReport = async (id) => {
+  if (id !== null) {
+    const getSingleReport = async () => {
       try {
-        let response = await fetch(`${API_URL}/hazard-report?id=${idReport}`);
+        let response = await fetch(`${API_URL}/hazard-report?id=${id}`);
         let { data } = await response.json();
 
-        //******* display location ******
-        currentReport.location = data.location;
+        const editReport = new ReportForm();
+        editReport.category = {
+          id: data.hazardCategory.id,
+          name: data.hazardCategory.name,
+        };
 
-        //******* display category ******
+        editReport.option = {
+          id: data.hazard.id,
+          name: data.hazard.name,
+        };
 
-        document
-          .querySelectorAll(`input[value="${data.hazardCategory.id}"]`)[0]
-          .click();
+        editReport.location = {
+          lat: data.location.lat,
+          lng: data.location.lng,
+          address: data.location.address,
+        };
 
-        currentReport.category.name = data.hazardCategory.name;
-        categoryOutput.innerHTML = currentReport.category.name;
+        editReport.comment = data.comment;
 
-        //******* display type ******
-        setTimeout(function () {
-          document
-            .querySelectorAll(`input[value="${data.hazard.id}"]`)[0]
-            .click();
+        editReport.images = data.images;
 
-          currentReport.option.name = data.hazard.name;
-          hazardOptionOutput.innerHTML = currentReport.option.name;
-        }, 50);
+        displayReviewStepInfo(editReport);
 
-        //******* display comment ******
+        setFormValues(editReport);
 
-        commentInput.value = data.comment;
-        currentReport.comment = data.comment;
-        commentOutput.innerHTML = currentReport.comment;
-
-        //******* display pictures ******
-
-        data.images.forEach((imageUrl) => {
-          displayImages(imageUrl);
-        });
-
-        const displayImagesAreaReview = document.getElementById('imagesOutput');
-        data.images.forEach((imageUrl) => {
-          const imgElement = document.createElement('img');
-          imgElement.src = imageUrl;
-          displayImagesAreaReview.appendChild(imgElement);
-        });
+        currentReport = { ...editReport };
       } catch (error) {
-        console.log({ error });
-        const alert = new AlertPopup();
-        alert.show(
-          error.message || AlertPopup.SOMETHING_WENT_WRONG_MESSAGE,
-          AlertPopup.error,
-          6000
-        );
+        console.error({ error });
+
+        AlertPopup.show(error.message || AlertPopup.SOMETHING_WENT_WRONG_MESSAGE, AlertPopup.error, 6000);
       }
     };
 
-    getCollection();
-  } else {
-    document.getElementById('updateReportBtn').style.display = 'none';
-    document.getElementById('saveReportBtn').style.display = 'initial';
+    getSingleReport();
   }
 };
 
@@ -206,9 +245,7 @@ const getAddressFromCoordinates = async (params) => {
     const data = await geocode(params, 'reverse-geocode');
 
     const properties = data?.[0].properties;
-    const address = [properties?.address_line1, properties?.address_line2]
-      .filter((value) => !!value)
-      .join(' ');
+    const address = [properties?.address_line1, properties?.address_line2].filter((value) => !!value).join(' ');
 
     return address;
   } catch (error) {
@@ -236,11 +273,25 @@ const getCategories = async () => {
   try {
     let response = await fetch(`${API_URL}/hazard-category`);
     let { data } = await response.json();
-    const content = document.getElementById('hazard-category-content');
+    const content = document.getElementById('hazard-category-content-list');
+
+    let arrayIcons = [];
+
+    data.forEach((category) => {
+      if (category.name && category.ui_settings.icon) {
+        const iconParts = category.ui_settings.icon.toLowerCase().split('-');
+        if (iconParts.length >= 2) {
+          arrayIcons.push(iconParts[1]);
+        }
+      }
+    });
 
     for (let i = 0; i < data.length; i++) {
       const category = data[i];
-      const div = document.createElement('div');
+
+      const categoryContainer = document.createElement('div');
+      categoryContainer.classList.add('category-container');
+
       const radio = document.createElement('input');
 
       radio.setAttribute('type', 'radio');
@@ -254,56 +305,103 @@ const getCategories = async () => {
         currentReport.option.name = null;
 
         const selectedCategoryId = event.target.value;
-        const selectedCategory = data.find(
-          (category) => category.id === selectedCategoryId
-        );
+        const selectedCategory = data.find((category) => category.id === selectedCategoryId);
         currentReport.category.id = selectedCategoryId;
         currentReport.category.name = category.name;
 
         const options = selectedCategory.options ?? [];
+        const selectedOptionQuestion = selectedCategory.ui_settings.report_hazard_question ?? [];
 
-        populateHazardOptions(options);
+        populateHazardOptions(options, selectedOptionQuestion);
+
+        const allNewIcons = document.querySelectorAll('.orange-check-icon');
+        allNewIcons.forEach((newIcon) => {
+          newIcon.style.display = 'none';
+        });
+
+        const selectedLabel = document.querySelector(`label[for=${radio.id}]`);
+        const newIcon = selectedLabel.querySelector('.orange-check-icon');
+        if (newIcon) {
+          newIcon.style.display = 'block';
+        }
       });
 
       const label = document.createElement('label');
 
       label.setAttribute('id', `category-${category.id}-label`);
       label.setAttribute('for', `category-${category.id}-radio`);
-      label.innerHTML = category.name;
+      label.classList.add('label-container');
+      label.innerHTML = `<img class="category-icon" src="../../assets/icons/${arrayIcons[i]}-outline.svg" alt="${arrayIcons[i]}">`;
 
-      div.appendChild(radio);
-      div.appendChild(label);
+      const textContainer = document.createElement('div');
+      textContainer.classList.add('text-container');
 
-      content.appendChild(div);
+      const categoryName = document.createElement('p');
+      categoryName.innerHTML = category.name;
+      categoryName.classList.add('title-hazard');
+      categoryName.classList.add('text-body-1');
+      categoryName.classList.add('bold');
+
+      const categoryDescription = document.createElement('p');
+      categoryDescription.innerHTML = category.description;
+      categoryDescription.classList.add('description-hazard');
+      categoryDescription.classList.add('text-body-3');
+      categoryDescription.classList.add('medium');
+
+      textContainer.appendChild(categoryName);
+      textContainer.appendChild(categoryDescription);
+
+      label.appendChild(textContainer);
+
+      const newIcon = document.createElement('img');
+      newIcon.setAttribute('src', '../../assets/icons/circle-check-filled.svg');
+      newIcon.setAttribute('alt', 'circle-check-filled');
+      newIcon.classList.add('orange-check-icon');
+      newIcon.style.display = 'none';
+      label.appendChild(newIcon);
+
+      categoryContainer.appendChild(radio);
+      categoryContainer.appendChild(label);
+
+      content.appendChild(categoryContainer);
+    }
+
+    const savedCategory = document.getElementById(`category-${currentReport.category.id}-radio`);
+    if (idReport && savedCategory) {
+      savedCategory.click();
+    }
+
+    const savedOption = document.getElementById(`option-${currentReport.option.id}-radio`);
+    if (idReport && savedOption) {
+      savedOption.click();
     }
   } catch (error) {
-    const alert = new AlertPopup();
-    alert.show(
-      error.message || AlertPopup.SOMETHING_WENT_WRONG_MESSAGE,
-      AlertPopup.error
-    );
+    AlertPopup.show(error.message || AlertPopup.SOMETHING_WENT_WRONG_MESSAGE, AlertPopup.error);
   }
 };
-
-getCategories();
 
 /**
  * Step 3: Hazard Options List
  */
 
-const populateHazardOptions = (options) => {
+const populateHazardOptions = (options, selectedOptionQuestion) => {
   try {
-    document.getElementById('hazard-option-content').innerHTML = '';
+    const hazardOptionContent = document.getElementById('hazard-option-content');
+    hazardOptionContent.innerHTML = '';
+
     if (options.length === 1) {
       currentReport.option.id = options[0].id;
       currentReport.option.name = options[0].name;
       skipHazardOption = true;
     }
 
+    document.getElementById('hazardTypeQuestion').innerHTML = selectedOptionQuestion;
+
     for (let i = 0; i < options.length; i++) {
       const option = options[i];
 
       const div = document.createElement('div');
+      div.classList.add('div-input');
       const radio = document.createElement('input');
 
       radio.setAttribute('type', 'radio');
@@ -314,24 +412,48 @@ const populateHazardOptions = (options) => {
       radio.addEventListener('change', (event) => {
         currentReport.option.id = event.target.value;
         currentReport.option.name = option.name;
+
+        const allIconTypes = document.querySelectorAll('.category-icon-type');
+        allIconTypes.forEach((iconType) => {
+          iconType.style.display = 'none';
+        });
+
+        const selectedLabel = document.querySelector(`label[for=${radio.id}]`);
+        const iconType = selectedLabel.querySelector('.category-icon-type');
+        if (iconType) {
+          iconType.style.display = 'block';
+        }
       });
 
       const label = document.createElement('label');
       label.setAttribute('id', `option-${option.id}-label`);
       label.setAttribute('for', `option-${option.id}-radio`);
-      label.innerHTML = option.name;
+
+      const divContainer = document.createElement('div');
+      divContainer.classList.add('container-type');
+
+      const div1Icon = document.createElement('div');
+      div1Icon.innerHTML = '<img class="category-icon-type" src="../../assets/icons/checkmark.svg" style="display: none">';
+      div1Icon.classList.add('checkmark');
+
+      const div2Text = document.createElement('div');
+      div2Text.innerHTML = option.name;
+      div2Text.classList.add('text-type');
+      div2Text.classList.add('text-body-1');
+      div2Text.classList.add('medium');
+
+      divContainer.appendChild(div1Icon);
+      divContainer.appendChild(div2Text);
+
+      label.appendChild(divContainer);
 
       div.appendChild(radio);
       div.appendChild(label);
 
-      document.getElementById('hazard-option-content').appendChild(div);
+      hazardOptionContent.appendChild(div);
     }
   } catch (error) {
-    const alert = new AlertPopup();
-    alert.show(
-      error.message || AlertPopup.SOMETHING_WENT_WRONG_MESSAGE,
-      AlertPopup.error
-    );
+    AlertPopup.show(error.message || AlertPopup.SOMETHING_WENT_WRONG_MESSAGE, AlertPopup.error);
   }
 };
 
@@ -357,11 +479,9 @@ function checkMobileDevice() {
     navigator.userAgent.match(/BlackBerry/i) ||
     navigator.userAgent.match(/Windows Phone/i)
   ) {
-    document.getElementById('upload-photos-desktop-content').style.display =
-      'none';
+    document.getElementById('upload-photos-desktop-content').style.display = 'none';
   } else {
-    document.getElementById('upload-photos-mobile-content').style.display =
-      'none';
+    document.getElementById('upload-photos-mobile-content').style.display = 'none';
   }
 }
 
@@ -379,7 +499,7 @@ document.getElementById('starCameraBtn').addEventListener('click', () => {
   if (currentReport.images.length >= 3) {
     return;
   }
-  document.getElementById('displayCameraArea').style.display = 'block';
+  document.getElementById('displayCameraArea').style.display = 'flex';
   if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
     const mediaPromise = navigator.mediaDevices.getUserMedia({ video: true });
     mediaPromise.then((stream) => {
@@ -392,16 +512,12 @@ document.getElementById('starCameraBtn').addEventListener('click', () => {
       console.error(error);
       canvasContext.font = '20px Tahoma';
       canvasContext.fillText(error, 20, 100);
-      const alert = new AlertPopup();
-      alert.show('Error taking the picture', AlertPopup.warning);
+
+      AlertPopup.show('Error taking the picture', AlertPopup.warning);
     });
     document.getElementById('takeDesktopPictureBtn').disabled = false;
   } else {
-    const alert = new AlertPopup();
-    alert.show(
-      "This browser doesn't support media devices",
-      AlertPopup.warning
-    );
+    AlertPopup.show("This browser doesn't support media devices", AlertPopup.warning);
   }
 });
 
@@ -415,22 +531,16 @@ const stopCamera = () => {
 };
 document.getElementById('stopCameraBtn').addEventListener('click', stopCamera);
 
-document
-  .getElementById('takeDesktopPictureBtn')
-  .addEventListener('click', () => {
-    if (currentReport.images.length < 3) {
-      canvasContext.drawImage(video, 0, 0);
-      const canvasDataURL = canvasArea.toDataURL();
+document.getElementById('takeDesktopPictureBtn').addEventListener('click', () => {
+  if (currentReport.images.length < 3) {
+    canvasContext.drawImage(video, 0, 0);
+    const canvasDataURL = canvasArea.toDataURL();
 
-      displayImages(canvasDataURL);
-    } else {
-      const alert = new AlertPopup();
-      alert.show(
-        'You have reached the limit of pictures allowed',
-        AlertPopup.warning
-      );
-    }
-  });
+    displayImages(canvasDataURL);
+  } else {
+    AlertPopup.show('You have reached the limit of pictures allowed', AlertPopup.warning);
+  }
+});
 
 //Click to upload a picture
 const fileInput = document.getElementById('uploadPictureDesktopInput');
@@ -441,9 +551,6 @@ fileInput.addEventListener('change', function () {
 
 //Drag and drop to upload picture
 const dragAndDropArea = document.getElementById('dragAndDropArea');
-dragAndDropArea.style.height = '200px';
-dragAndDropArea.style.width = '400px';
-dragAndDropArea.style.background = 'gray';
 
 dragAndDropArea.addEventListener('dragover', (event) => {
   event.preventDefault();
@@ -463,12 +570,8 @@ dragAndDropArea.addEventListener('drop', (event) => {
 //#endregion
 
 //#region  Mobile Images
-const takeMobilePictureBtnInput = document.getElementById(
-  'takeMobilePictureBtn'
-);
-const uploadPictureMobileInput = document.getElementById(
-  'uploadPictureMobileInput'
-);
+const takeMobilePictureBtnInput = document.getElementById('takeMobilePictureBtn');
+const uploadPictureMobileInput = document.getElementById('uploadPictureMobileInput');
 takeMobilePictureBtnInput.addEventListener('change', handleFileSelection);
 uploadPictureMobileInput.addEventListener('change', handleFileSelection);
 
@@ -482,18 +585,13 @@ function handleFileSelection(event) {
 //#region Mobile and Desktop Image Functions
 const saveFile = (files) => {
   if (currentReport.images.length >= 3) {
-    const alert = new AlertPopup();
-    alert.show(
-      'You have reached the limit of pictures allowed',
-      AlertPopup.warning
-    );
+    AlertPopup.show('You have reached the limit of pictures allowed', AlertPopup.warning);
     return;
   }
   const selectedFiles = Array.isArray(files) ? files : [files];
 
   if (selectedFiles.length > 3) {
-    const alert = new AlertPopup();
-    alert.show('You can only upload 3 images', AlertPopup.warning);
+    AlertPopup.show('You can only upload 3 images', AlertPopup.warning);
   }
   selectedFiles?.splice(0, 3)?.forEach((file) => {
     try {
@@ -501,56 +599,182 @@ const saveFile = (files) => {
         displayImages(target.result);
       });
     } catch (error) {
-      const alert = new AlertPopup();
-      alert.show('Error uploading the image', AlertPopup.warning);
+      AlertPopup.show('Error uploading the image', AlertPopup.warning);
     }
   });
 };
 
 const displayImages = (base64File) => {
   const imagesArea = document.getElementById('displayImagesArea');
+  let divNumber = -1;
+
+  for (let i = 1; i <= 3; i++) {
+    if (currentReport.images2.indexOf(`picture-${i}`) === -1) {
+      divNumber = i;
+      break;
+    }
+  }
+
   const img = document.createElement('img');
   img.setAttribute('src', base64File);
-  img.style.width = '200px';
-  img.style.height = '200px';
-  imagesArea.append(img);
 
+  const deleteButton = document.createElement('button');
+  deleteButton.type = 'button';
+  deleteButton.classList.add('delete-button');
+  deleteButton.addEventListener('click', function () {
+    imagesArea.querySelector(`.picture-${divNumber}`).removeChild(img);
+    imagesArea.querySelector(`.picture-${divNumber}`).removeChild(deleteButton);
+
+    imagesArea.querySelector(`.hide-picture-${divNumber}`).style.display = 'flex';
+
+    const hidePicture = imagesArea.querySelector(`.hide-picture-${divNumber}`);
+    hidePicture.style.display = 'block';
+    hidePicture.style.display = 'flex';
+    hidePicture.style.alignItems = 'center';
+    hidePicture.style.justifyContent = 'center';
+    hidePicture.style.width = '100%';
+    hidePicture.style.height = '100%';
+
+    const index = currentReport.images2.indexOf(`picture-${divNumber}`);
+    if (index !== -1) {
+      currentReport.images.splice(index, 1);
+      currentReport.images2.splice(index, 1);
+    }
+
+    if (currentReport.images2.length < 3) {
+      document.getElementById('starCameraBtn').removeAttribute('disabled');
+      document.getElementById('dragAndDropArea').removeAttribute('disabled');
+      document.getElementById('uploadPictureDesktopInput').removeAttribute('disabled');
+    }
+
+    if (currentReport.images2.length === 2) {
+      startCamera();
+    }
+  });
+
+  deleteButton.style.background = `url('../../assets/icons/remove.svg') no-repeat center`;
+  deleteButton.style.border = 'none';
+
+  imagesArea.querySelector(`.hide-picture-${divNumber}`).style.display = 'none';
+  imagesArea.querySelector(`.picture-${divNumber}`).appendChild(img);
+  imagesArea.querySelector(`.picture-${divNumber}`).appendChild(deleteButton);
+
+  currentReport.images2.push(`picture-${divNumber}`);
   currentReport.images.push(base64File);
 
-  if (currentReport.images.length === 3) {
+  if (currentReport.images2.length === 3) {
     document.getElementById('starCameraBtn').setAttribute('disabled', true);
     document.getElementById('dragAndDropArea').setAttribute('disabled', true);
-    document
-      .getElementById('uploadPictureDesktopInput')
-      .setAttribute('disabled', true);
+    document.getElementById('uploadPictureDesktopInput').setAttribute('disabled', true);
 
     stopCamera();
   }
 };
+
+const getEmptyImages = () => {
+  const emptyImages = document.createElement('p');
+  emptyImages.classList.add('submit-value', 'text-body-2', 'regular', 'w-full');
+  emptyImages.innerHTML = 'No images added';
+
+  return emptyImages;
+};
 //#endregion
 
 /**
- * Step 6: Show Confirmation
+ *  Back Button
  */
-showConfirmationBtn.addEventListener('click', () => {
-  locationOutput.innerHTML = `${currentReport.location.address} (${currentReport.location.lat},${currentReport.location.lng})`;
-  categoryOutput.innerHTML = currentReport.category.name;
-  hazardOptionOutput.innerHTML = currentReport.option.name;
-  commentOutput.innerHTML = currentReport.comment;
-  imagesOutput.innerHTML = '';
 
-  currentReport.images.forEach((image) => {
-    imagesOutput.innerHTML += `<img src="${image}" width="150" />`;
-  });
+document.getElementById('backButton').addEventListener('click', () => {
+  const url = new URL(window.location.href);
+
+  const allSteps = ['#select-location', '#hazard-category', '#hazard-type', '#additional-details', '#upload-photos', '#review-report'];
+
+  const array = allSteps.filter((hash) => (skipHazardOption ? hash !== '#hazard-type' : true));
+  const currentHash = url.hash;
+
+  const currentIndex = array.indexOf(currentHash);
+
+  if (currentIndex === 0) {
+    window.location.replace('/pages/home/index.html');
+    return;
+  }
+
+  const previousIndex = currentIndex - 1;
+  const previousHash = array[previousIndex];
+
+  url.hash = previousHash;
+  window.location.href = url.href;
 });
 
 /**
- * Step 7: Submit Form
+ *  Continue Button
  */
-reportHazardForm.addEventListener('submit', async function (event) {
-  event.preventDefault();
+document.getElementById('continueBtn').addEventListener('click', async () => {
+  const allSteps = Object.values(STEPS);
 
-  console.log({ currentReport });
+  const array = allSteps.filter((hash) => (skipHazardOption ? hash !== STEPS.hazard : true));
+
+  const url = new URL(window.location.href);
+  const currentHash = url.hash;
+
+  const currentIndex = array.indexOf(currentHash);
+
+  if (currentHash === STEPS.category && !currentReport.category.id) {
+    AlertPopup.show('Please select a hazard category', AlertPopup.warning);
+
+    return;
+  }
+
+  if (currentHash === STEPS.hazard && !currentReport.option.id) {
+    AlertPopup.show('Please select a hazard option', AlertPopup.warning);
+    return;
+  }
+
+  if (currentHash === STEPS.images) {
+    displayReviewStepInfo(currentReport);
+  }
+
+  if (currentHash === STEPS.review) {
+    await submitReport();
+    return;
+  }
+
+  const nextIndex = currentIndex + 1;
+  const nextHash = array[nextIndex];
+
+  url.hash = nextHash;
+  window.location.href = url.href;
+});
+
+const displayReviewStepInfo = (report) => {
+  locationOutput.innerHTML = `${report.location.address}`;
+  categoryOutput.innerHTML = report.category.name;
+  hazardOptionOutput.innerHTML = report.option.name;
+  commentOutput.innerHTML = report.comment || 'No comments';
+  imagesOutput.innerHTML = '';
+
+  if (report.images?.length) {
+    report.images.forEach((image, index) => {
+      imagesOutput.innerHTML += `<img src="${image}" alt="Hazard image ${index + 1}"/>`;
+    });
+  } else {
+    imagesOutput.appendChild(getEmptyImages());
+  }
+};
+
+const setFormValues = (report) => {
+  locationAddressLabel.innerHTML = `${report.location.address ? report.location.address : `(${report.location.lat}, ${currentReport.location.lng})`}`;
+
+  // Category and hazard are being set inside getCategories
+
+  commentInput.value = report.comment;
+
+  report.images.forEach((imageUrl) => {
+    displayImages(imageUrl);
+  });
+};
+
+const submitReport = async () => {
   try {
     const images = await uploadImageToStorage(currentReport.images);
     //CREATE
@@ -574,7 +798,8 @@ reportHazardForm.addEventListener('submit', async function (event) {
       });
 
       if (response.ok) {
-        await response.json();
+        allowRedirect = true;
+        const { data } = await response.json();
 
         const modal = new Modal();
 
@@ -582,15 +807,18 @@ reportHazardForm.addEventListener('submit', async function (event) {
         button.setAttribute('id', 'open-modal-btn');
         button.setAttribute('class', 'btn btn-primary');
         button.addEventListener('click', () =>
-          window.location.replace('/pages/home')
+          window.location.assign(`/pages/home/index.html?id=${data.id}&focus=true&zoom=${Map.DEFAULT_MAP_ZOOM}&lat=${data?.location?.lat}&lng=${data?.location?.lng}`)
         );
         button.innerHTML = 'Continue Exploring';
 
         modal.show({
           title: 'Your report has been submitted!',
-          description:
-            'Thank you for helping others have a safe camping experience.',
-          icon: { name: 'icon-check', color: '#000000', size: '3.5rem' },
+          description: 'Thank you for helping others have a safe outdoors experience.',
+          icon: {
+            name: 'icon-report-submitted',
+            color: '#000000',
+            size: '3.5rem',
+          },
           actions: button,
           enableOverlayClickClose: false,
         });
@@ -621,21 +849,18 @@ reportHazardForm.addEventListener('submit', async function (event) {
 
     if (response.ok) {
       await response.json();
-
+      allowRedirect = true;
       const modal = new Modal();
 
       const button = document.createElement('button');
       button.setAttribute('id', 'open-modal-btn');
       button.setAttribute('class', 'btn btn-primary');
-      button.addEventListener('click', () =>
-        window.location.replace('/pages/my-reports')
-      );
+      button.addEventListener('click', () => window.location.replace('/pages/my-reports/index.html'));
       button.innerHTML = 'Back to My Reports';
 
       modal.show({
         title: 'Your report has been updated!',
-        description:
-          'Thank you for helping others have a safe camping experience.',
+        description: 'Thank you for helping others have a safe camping experience.',
         icon: { name: 'icon-check', color: '#000000', size: '3.5rem' },
         actions: button,
         enableOverlayClickClose: false,
@@ -644,10 +869,9 @@ reportHazardForm.addEventListener('submit', async function (event) {
       throw new Error('Failed to create report');
     }
   } catch (error) {
-    const alert = new AlertPopup();
-    alert.show(error.message, AlertPopup.error);
+    AlertPopup.show(error.message, AlertPopup.error);
   }
-});
+};
 
 const uploadImageToStorage = async (images) => {
   const fileResponses = await Promise.all(
@@ -666,19 +890,13 @@ const uploadImageToStorage = async (images) => {
 
   const responses = await Promise.all(
     fileResponses.map((file) =>
-      fetch(
-        `${API_URL}/hazard-image?fileName=${file.name}.${file?.type?.replace(
-          'image/',
-          ''
-        )}`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': file.type,
-          },
-          body: file,
-        }
-      ).then((response) => response.json())
+      fetch(`${API_URL}/hazard-image?fileName=${file.name}.${file?.type?.replace('image/', '')}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': file.type,
+        },
+        body: file,
+      }).then((response) => response.json())
     )
   );
 
@@ -686,166 +904,36 @@ const uploadImageToStorage = async (images) => {
 };
 
 /**
- *  Display nav
+ *  Breadcrumb
  */
+const generateBreadcrumb = () => {
+  const allSteps = Object.keys(STEPS).filter((key) => (skipHazardOption ? STEPS?.[key] !== STEPS.hazard : true));
 
-//show buttons when continue
-const hazardCategoryElement = document.getElementById('hazardCategory');
+  const array = allSteps.map((key, index) => ({ index, hash: STEPS[key], label: STEPS_LABEL[key] }));
 
-hazardCategoryElement.addEventListener('click', () => {
-  document.getElementById('hazardCategoryNav').style.display = 'block';
-});
+  const url = new URL(window.location.href);
+  const currentHash = url.hash;
 
-const hazardTypeeElement = document.getElementById('hazardType');
+  const NavElement = ({ label, href, current, addChevron }) => `
+   <li>
+      <a title="${label}" href="${href}" class="report-hazard-step text-body-3 ${current ? 'text-neutral-700 semibold' : 'text-neutral-500'}">
+      ${addChevron ? '<i class="icon-chevron-right"></i>' : ''}
+          ${label}
+      </a>
+    </li>`;
 
-hazardTypeeElement.addEventListener('click', () => {
-  document.getElementById('hazardTypeNav').style.display = 'block';
-});
+  const elements = [];
 
-const hazardOptionElement = document.getElementById('selectHazardOptionLink');
+  const currentIndex = Object.values(STEPS)
+    .filter((hash) => (skipHazardOption ? hash !== STEPS.hazard : true))
+    .indexOf(currentHash);
 
-hazardOptionElement.addEventListener('click', () => {
-  document.getElementById('hazardDetailNav').style.display = 'block';
-});
-
-const hazardCommentElement = document.getElementById('uploadPicture');
-
-hazardCommentElement.addEventListener('click', () => {
-  document.getElementById('hazardUploadPhotosNav').style.display = 'block';
-});
-
-const hazardPhotoElement = document.getElementById('showConfirmationBtn');
-
-hazardPhotoElement.addEventListener('click', () => {
-  document.getElementById('hazardReviewReportNav').style.display = 'block';
-});
-
-//edit buttons
-const editLocationElement = document.getElementById('editLocation');
-
-editLocationElement.addEventListener('click', () => {
-  document.getElementById('hazardCategoryNav').style.display = 'none';
-  document.getElementById('hazardTypeNav').style.display = 'none';
-  document.getElementById('hazardDetailNav').style.display = 'none';
-  document.getElementById('hazardUploadPhotosNav').style.display = 'none';
-  document.getElementById('hazardReviewReportNav').style.display = 'none';
-});
-
-const editCategoryElement = document.getElementById('editCategory');
-
-editCategoryElement.addEventListener('click', () => {
-  document.getElementById('hazardTypeNav').style.display = 'none';
-  document.getElementById('hazardDetailNav').style.display = 'none';
-  document.getElementById('hazardUploadPhotosNav').style.display = 'none';
-  document.getElementById('hazardReviewReportNav').style.display = 'none';
-});
-
-const editTypeElement = document.getElementById('editType');
-
-editTypeElement.addEventListener('click', () => {
-  document.getElementById('hazardDetailNav').style.display = 'none';
-  document.getElementById('hazardUploadPhotosNav').style.display = 'none';
-  document.getElementById('hazardReviewReportNav').style.display = 'none';
-});
-
-const editDetailsElement = document.getElementById('editDetails');
-
-editDetailsElement.addEventListener('click', () => {
-  document.getElementById('hazardUploadPhotosNav').style.display = 'none';
-  document.getElementById('hazardReviewReportNav').style.display = 'none';
-});
-
-const editPhotosElement = document.getElementById('editPhotos');
-
-editPhotosElement.addEventListener('click', () => {
-  document.getElementById('hazardReviewReportNav').style.display = 'none';
-});
-
-//hide buttons when click on nav
-const hazardUploadPhotosNavElement = document.getElementById('selectLocation');
-
-hazardUploadPhotosNavElement.addEventListener('click', () => {
-  document.getElementById('hazardCategoryNav').style.display = 'none';
-  document.getElementById('hazardTypeNav').style.display = 'none';
-  document.getElementById('hazardDetailNav').style.display = 'none';
-  document.getElementById('hazardUploadPhotosNav').style.display = 'none';
-  document.getElementById('hazardReviewReportNav').style.display = 'none';
-});
-
-const hazardCategoryNavElement = document.getElementById('hazardCategoryNav');
-
-hazardCategoryNavElement.addEventListener('click', () => {
-  document.getElementById('hazardTypeNav').style.display = 'none';
-  document.getElementById('hazardDetailNav').style.display = 'none';
-  document.getElementById('hazardUploadPhotosNav').style.display = 'none';
-  document.getElementById('hazardReviewReportNav').style.display = 'none';
-});
-
-const hazardTypeNavElement = document.getElementById('hazardTypeNav');
-
-hazardTypeNavElement.addEventListener('click', () => {
-  document.getElementById('hazardDetailNav').style.display = 'none';
-  document.getElementById('hazardUploadPhotosNav').style.display = 'none';
-  document.getElementById('hazardReviewReportNav').style.display = 'none';
-});
-
-const hazardDetailNavElement = document.getElementById('hazardDetailNav');
-
-hazardDetailNavElement.addEventListener('click', () => {
-  document.getElementById('hazardUploadPhotosNav').style.display = 'none';
-  document.getElementById('hazardReviewReportNav').style.display = 'none';
-});
-
-const hazardUploadPhotosNavEl = document.getElementById(
-  'hazardUploadPhotosNav'
-);
-
-hazardUploadPhotosNavEl.addEventListener('click', () => {
-  document.getElementById('hazardReviewReportNav').style.display = 'none';
-});
-
-//Delete pictures
-var displayImagesArea = document.getElementById('displayImagesArea');
-var images = displayImagesArea.getElementsByTagName('img');
-const delete1Element = document.getElementById('delete1');
-
-delete1Element.addEventListener('click', () => {
-  var firstImage = images[0];
-  var noImageText = document.createElement('img');
-  displayImagesArea.replaceChild(noImageText, firstImage);
-
-  var index = 0;
-  if (index !== -1) {
-    currentReport.images[0] = null;
+  for (let i = 0; i < array.length; i++) {
+    const step = array[i];
+    if (step.index <= currentIndex) {
+      elements.push(NavElement({ label: step.label, href: step.hash, current: step.index === currentIndex, addChevron: step.index > 0 }));
+    }
   }
-  document.getElementById('delete1').style.display = 'none';
-});
 
-const delete2Element = document.getElementById('delete2');
-
-delete2Element.addEventListener('click', () => {
-  var secondImage = images[1];
-  var noImageText = document.createElement('img');
-  displayImagesArea.replaceChild(noImageText, secondImage);
-
-  var index = 1;
-  if (index !== -1) {
-    currentReport.images[1] = null;
-  }
-  document.getElementById('delete2').style.display = 'none';
-});
-
-const delete3Element = document.getElementById('delete3');
-
-delete3Element.addEventListener('click', () => {
-  var thirdImage = images[2];
-
-  var noImageText = document.createElement('img');
-  displayImagesArea.replaceChild(noImageText, thirdImage);
-
-  var index = 2;
-  if (index !== -1) {
-    currentReport.images[2] = null;
-  }
-  document.getElementById('delete3').style.display = 'none';
-});
+  document.getElementById('navMenu').innerHTML = elements.join('');
+};

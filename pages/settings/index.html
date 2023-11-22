@@ -13,14 +13,17 @@
     <meta name="apple-mobile-web-app-status-bar" content="#000000" />
     <meta name="theme-color" content="#000000" />
 
-    <!-- Global Styles -->
-    <link rel="stylesheet" href="../../assets/css/_global.css" />
-    <!-- Feature Styles -->
-    <link rel="stylesheet" href="./style.css" />
-    <!-- Global JS -->
-    <script type="module" src="../../global.js" defer></script>
-    <!-- Feature JS -->
-    <script type="module" src="./script.js" defer></script>
+	<link rel="icon" type="image/x-icon" href="../../assets/img/icons/logo-square.png">
+
+	<!-- WPA -->
+	<link rel="manifest" href="../../manifest.json" />
+	<link rel="apple-touch-icon" href="../../assets/css/img/icons/icon-96x96.png" />
+	<meta name="apple-mobile-web-app-status-bar" content="#000000" />
+	<meta name="theme-color" content="#000000" />
+  <!-- Notifications JS -->
+  <script src="https://js.pusher.com/beams/1.0/push-notifications-cdn.js"></script>
+  <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+  <!-- End Notifications JS -->
 
     <title>Account Settings</title>
   </head>
@@ -28,6 +31,7 @@
   <body id="profile-body">
     <main>
       <h1>Account Settings</h1>
+
 
       <label for="dropdownMenu">Choose a menu item:</label>
       <select name="dropdownMenu" id="dropdownMenu">

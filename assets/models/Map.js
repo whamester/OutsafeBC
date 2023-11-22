@@ -1,20 +1,22 @@
 import { JAWG_ACCESS_TOKEN } from '../../constants.js';
 class Map {
   map = null;
-  mapLayers = {};
+  mapLayers = new L.LayerGroup();
   currentMarker = null;
+  locationWatcher = null;
   static CURRENT_ZOOM = 12;
   static MAP_ID = 'map';
   static MAX_ZOOM = 22;
+  static DEFAULT_MAP_ZOOM = 12; // If we don't set the zoom level, 12 is the default of Leaflet
   static DEFAULT_LOCATION = {
-    lat: 49.2,
-    lng: -123.12,
+    lat: 55.72,
+    lng: -127.64,
   };
 
-  constructor(lat, lng, customConfig) {
+  constructor(lat, lng, customConfig = {}) {
     this.map = L.map(Map.MAP_ID, { ...customConfig }).setView(
       [lat, lng],
-      Map.CURRENT_ZOOM
+      customConfig.CURRENT_ZOOM ?? Map.CURRENT_ZOOM
     );
 
     L.tileLayer(
@@ -45,25 +47,35 @@ class Map {
   }
 
   createLayerGroups(hazards, markerParams = {}) {
-    const layers = {};
     hazards?.forEach((hazard, idx) => {
-      const pinIcon = Map.createIcon();
-      const key = hazard?.hazard?.name?.toLowerCase();
+      const categoryId = hazard?.hazardCategory?.id;
+      const subCategoryId = hazard?.hazard?.id;
+      const iconName = `marker/${hazard?.hazardCategory?.settings?.icon}.svg`
+      const pinIcon = Map.createIcon({iconName});
+      
       const marker = L.marker([hazard?.location?.lat, hazard?.location?.lng], {
         icon: pinIcon,
       });
 
-      if (markerParams.event)
-        marker.on(markerParams.event, () => markerParams.func(idx));
+      marker.id = hazard.id
+      marker.category_id = categoryId;
+      marker.sub_category_id = subCategoryId;
 
-      if (layers[key]) layers[key].push(marker);
-      else layers[key] = [marker];
+      if (markerParams.event)
+        marker.on(markerParams.event, () => markerParams.func(hazard?.id, hazard?.location?.lat, hazard?.location?.lng));
+
+      this.mapLayers.addLayer(marker);
     });
 
-    for (const key in layers)
-      layers[key] = L.layerGroup(layers[key]).addTo(this.map);
+    this.mapLayers.addTo(this.map);
+  }
 
-    this.mapLayers = layers;
+  checkMarkerOnMap(hazard) {
+    let markerExists = false;
+    this.mapLayers.eachLayer(maker => {
+      if (maker.id === hazard.id) markerExists = true;
+    });
+    return markerExists;
   }
 
   setMarkerOnMap(lat, lng, markerParams = {}) {
@@ -76,10 +88,31 @@ class Map {
     }).addTo(this.map);
   }
 
+  filterMarker(categoryIdArr = [], subCategoryIdArr = []) {
+    this.mapLayers.eachLayer(marker => {
+      this.map.removeLayer(marker);
+      if (subCategoryIdArr.length === 0 && (categoryIdArr.length === 0 || categoryIdArr.includes(marker.category_id))) {
+        this.map.addLayer(marker);
+      } else if (categoryIdArr.length === 0 && (subCategoryIdArr.length === 0 || (subCategoryIdArr.includes(marker.sub_category_id)))) {
+        this.map.addLayer(marker);
+      }
+    });
+  }
+
+  filterMarkerCount(subCategoryIdArr = []) {
+    let count = 0;
+    this.mapLayers.eachLayer(marker => {
+      if (subCategoryIdArr.includes(marker.sub_category_id)) {
+        count++;
+      }
+    });
+    return count;
+  }
+
   static watchGeoLocation(success, error, customOptions = {}) {
     // check if browser supports geolocation
     if (!('geolocation' in navigator)) {
-      console.log('Geolocation not supported on your browser.');
+      console.error('Geolocation not supported on your browser.');
       return;
     }
 
@@ -91,13 +124,21 @@ class Map {
       ...customOptions,
     };
 
-    navigator.geolocation.watchPosition(success, error, navigatorOptions);
+    navigator.geolocation.watchPosition(
+      async (data) => {
+        const { coords } = data;
+        this.locationWatcher = coords;
+        success(data)
+      },
+      error,
+      navigatorOptions
+    );
   }
 
   static async getCurrentLocation() {
     // check if browser supports geolocation
     if (!('geolocation' in navigator)) {
-      console.log('Geolocation not supported on your browser.');
+      console.error('Geolocation not supported on your browser.');
       return;
     }
 
@@ -123,7 +164,7 @@ class Map {
         lng: longitude,
       };
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
       //TODO: default lat, long values on error
       return Map.DEFAULT_LOCATION;
     }

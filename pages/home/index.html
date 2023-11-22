@@ -5,6 +5,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <link rel="icon" type="image/x-icon" href="../../assets/img/icons/logo-square.png">
+
   <!-- WPA -->
   <link rel="manifest" href="../../manifest.json">
   <link rel="apple-touch-icon" href="../../assets/css/img/icons/icon-96x96.png">
@@ -24,12 +26,20 @@
   <!-- Feature JS -->
   <script type="module" src="./script.js" defer></script>
 
+
+
   <title>Outsafe BC</title>
 </head>
 
 <body id="home-body">
-  <main id="root"></main>
+  <div id="root">
+  </div>
   <noscript>You need to enable JavaScript to run this app.</noscript>
+  
+  <!-- Notifications JS -->
+  <script src="https://js.pusher.com/beams/1.0/push-notifications-cdn.js"></script>
+  <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+  <!-- End Notifications JS -->
 </body>
 
 </html>
