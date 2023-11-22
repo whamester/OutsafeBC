@@ -94,6 +94,7 @@ window.onload = async function () {
       populateReport(idReport);
     }
   } catch (error) {
+    console.error({ error });
     AlertPopup.show(error.message || AlertPopup.SOMETHING_WENT_WRONG_MESSAGE, AlertPopup.error, 500);
   }
 };
@@ -377,6 +378,8 @@ const getCategories = async () => {
       savedOption.click();
     }
   } catch (error) {
+    console.error({ error });
+
     AlertPopup.show(error.message || AlertPopup.SOMETHING_WENT_WRONG_MESSAGE, AlertPopup.error);
   }
 };
@@ -454,6 +457,8 @@ const populateHazardOptions = (options, selectedOptionQuestion) => {
       hazardOptionContent.appendChild(div);
     }
   } catch (error) {
+    console.error({ error });
+
     AlertPopup.show(error.message || AlertPopup.SOMETHING_WENT_WRONG_MESSAGE, AlertPopup.error);
   }
 };
@@ -523,12 +528,21 @@ document.getElementById('starCameraBtn').addEventListener('click', () => {
 });
 
 const stopCamera = () => {
-  document.getElementById('displayCameraArea').style.display = 'none';
-  const tracks = video.srcObject.getTracks();
-  tracks.forEach((track) => track.stop());
-  document.getElementById('starCameraBtn').disabled = false;
-  document.getElementById('stopCameraBtn').disabled = true;
-  document.getElementById('takeDesktopPictureBtn').disabled = true;
+  try {
+    document.getElementById('displayCameraArea').style.display = 'none';
+    if (video) {
+      const tracks = video?.srcObject?.getTracks();
+      if (Array.isArray(tracks)) {
+        tracks.forEach((track) => track.stop());
+      }
+    }
+
+    document.getElementById('starCameraBtn').disabled = false;
+    document.getElementById('stopCameraBtn').disabled = true;
+    document.getElementById('takeDesktopPictureBtn').disabled = true;
+  } catch (error) {
+    console.error(error);
+  }
 };
 document.getElementById('stopCameraBtn').addEventListener('click', stopCamera);
 
@@ -874,6 +888,7 @@ const submitReport = async () => {
       throw new Error('Failed to create report');
     }
   } catch (error) {
+    console.error({ error });
     stopButtonLoading('continueBtn', { reset: true });
 
     AlertPopup.show(error.message, AlertPopup.error);
