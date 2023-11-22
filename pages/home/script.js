@@ -21,6 +21,7 @@ import { getUserSession } from '../../assets/helpers/storage.js';
 import Map from '../../assets/models/Map.js';
 import HazardReport from '../../assets/models/HazardReport.js';
 import getHazardDetail from '../../assets/helpers/get-hazard-detail.js';
+import DateFormat from '../../assets/models/DateFormat.js';
 
 // URL params
 const url = new URL(window.location.href);
@@ -523,11 +524,20 @@ const showHazardDetails = (hazardReport) => {
 
     reportShareBtn.addEventListener("click", async () => {
       try {
+        const dateObj1 = new Date(hazardReport.created_at);
+        const date1 = DateFormat.getDate(dateObj1);
+        const time1 = DateFormat.getTime(dateObj1);
+
+        const dateObj2 = new Date(hazardReport.updated_at);
+        const date2 = DateFormat.getDate(dateObj2);
+        const time2 = DateFormat.getTime(dateObj2);
+
         const data = {
           title: hazardReport.hazard,
-          text: hazardReport.location,
+          text: `Hazard: ${hazardReport.hazard}\nLocation: ${hazardReport.location}\nReported: ${date1 + ' ' + time1}\nUpdated: ${hazardReport.updated_at ?  date2 + ' ' + time2 : 'N/A'}`,
           url,
         };
+        
         await navigator.share(data);
       } catch (err) {
         console.error('Share error: ', err);
