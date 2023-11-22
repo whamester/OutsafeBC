@@ -78,15 +78,19 @@
       <section id="notificationsSettings" style="display: none">
         <h2 class="text-heading-2">Notifications</h2>
 
-        <div class="account-settings__notifications_text">
-          <img src="../../assets/icons/notification-no.svg" alt="Notification bell icon" />
-          <h3>Allow Push Notifications</h3>
-          <p>Get real-time updats for nearby reported hazards.</p>
+        <div class="account-settings__notifications-details">
+          <i class="icon-notification-no" style="background-color: var(--neutral-700)"></i>
+          <div class="notifications-details__text">
+            <h3>Allow Push Notifications</h3>
+            <p>Get real-time updats for nearby reported hazards.</p>
+          </div>
         </div>
 
-        <div class="form-check form-switch">
-          <label class="form-check-label" for="pushNotificationSwitch"></label>
-          <input class="form-check-input" type="checkbox" role="switch" id="pushNotificationSwitch" />
+        <div class="report-card__toggle_button">
+          <label class="switch">
+            <input type="checkbox" id="pushNotificationSwitch" />
+            <span class="slider round"></span>
+          </label>
         </div>
       </section>
 
