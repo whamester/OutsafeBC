@@ -7,6 +7,8 @@ class ReportCardContainer {
     this.category = data.category;
     this.hazard = data.hazard;
     this.location = data.location;
+    this.lat = data.lat;
+    this.lng = data.lng;
     this.photos = data.photos;
     this.comment = data.comment;
 
@@ -69,9 +71,12 @@ class ReportCardContainer {
       <p class="text-body-1 semibold">${this.hazard}</p>
     `;
     const div = document.createElement('div');
+    const wrapper = document.createElement('div');
+    wrapper.setAttribute('class', 'report-card__heading-wrapper');
     div.setAttribute('class', 'report-card__heading');
     div.innerHTML = contentHTML;
-    return div;
+    wrapper.appendChild(div);
+    return wrapper;
   }
 
   getTopInfo() {

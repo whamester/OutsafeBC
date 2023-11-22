@@ -8,7 +8,7 @@
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 2;
+  z-index: 10;
   clip-path: circle(150% at 100% 0);
   transition: clip-path 1.9s ease-in-out;
 }

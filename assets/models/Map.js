@@ -3,8 +3,9 @@ class Map {
   map = null;
   mapLayers = new L.LayerGroup();
   currentMarker = null;
+  relativeMarker = null;
   locationWatcher = null;
-  static CURRENT_ZOOM = 12;
+  static CURRENT_ZOOM = 20;
   static MAP_ID = 'map';
   static MAX_ZOOM = 22;
   static DEFAULT_MAP_ZOOM = 12; // If we don't set the zoom level, 12 is the default of Leaflet
@@ -24,7 +25,7 @@ class Map {
       {
         attribution:
           '<a href="http://jawg.io" title="Tiles Courtesy of Jawg Maps" target="_blank">&copy; <b>Jawg</b>Maps</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-        minZoom: 0,
+        minZoom: 5,
         maxZoom: Map.MAX_ZOOM,
         accessToken: JAWG_ACCESS_TOKEN,
       }
@@ -36,7 +37,7 @@ class Map {
   static createIcon(iconParams = {}) {
     const icon = new L.Icon({
       iconUrl: `/assets/icons/${
-        iconParams?.iconName ?? 'location-pin-fill-red.svg'
+        iconParams?.iconName ?? 'current-location-map-pin.svg'
       }`,
       iconSize: [40, 40],
       iconAnchor: [20, 40],
@@ -50,9 +51,9 @@ class Map {
     hazards?.forEach((hazard, idx) => {
       const categoryId = hazard?.hazardCategory?.id;
       const subCategoryId = hazard?.hazard?.id;
-      const iconName = `marker/${hazard?.hazardCategory?.settings?.icon}.svg`
-      const pinIcon = Map.createIcon({iconName});
-      
+      const iconName = `marker/${hazard?.hazardCategory?.settings?.icon}.svg`;
+      const iconNameFocus = `marker/${hazard?.hazardCategory?.settings?.icon}-focused.svg`;
+      const pinIcon = Map.createIcon({iconName: markerParams.focus ? iconNameFocus: iconName});
       const marker = L.marker([hazard?.location?.lat, hazard?.location?.lng], {
         icon: pinIcon,
       });
@@ -60,6 +61,9 @@ class Map {
       marker.id = hazard.id
       marker.category_id = categoryId;
       marker.sub_category_id = subCategoryId;
+      marker.active = false;
+      marker.icon_name = iconName;
+      marker.icon_name_focused = iconNameFocus;
 
       if (markerParams.event)
         marker.on(markerParams.event, () => markerParams.func(hazard?.id, hazard?.location?.lat, hazard?.location?.lng));
@@ -71,18 +75,36 @@ class Map {
   }
 
   checkMarkerOnMap(hazard) {
-    let markerExists = false;
-    this.mapLayers.eachLayer(maker => {
-      if (maker.id === hazard.id) markerExists = true;
-    });
-    return markerExists;
+    for(const marker of this.mapLayers.getLayers()) {
+      if (marker.id === hazard.id) {
+        const iconName = marker.icon_name_focused;
+        marker.setIcon(Map.createIcon({iconName}));
+        marker.active = true;
+        return true;
+      }
+    }
+
+    return false;
   }
 
   setMarkerOnMap(lat, lng, markerParams = {}) {
     if (this.currentMarker) this.map.removeLayer(this.currentMarker);
 
-    const pinIcon = Map.createIcon(markerParams.icon);
+    const pinIcon = Map.createIcon({iconName: markerParams.icon});
     this.currentMarker = L.marker([lat, lng], {
+      ...markerParams.marker,
+      icon: pinIcon,
+    }).addTo(this.map);
+  }
+
+  setRelativeMarkerOnMap(lat, lng, markerParams = {}) {
+    if (this.relativeMarker) this.map.removeLayer(this.relativeMarker);
+    if (!!markerParams.removeOnly) return;
+    const pinIcon = Map.createIcon({
+      iconName: 'location-pin-fill-red.svg', 
+      iconSize: [30, 30]
+    });
+    this.relativeMarker = L.marker([lat, lng], {
       ...markerParams.marker,
       icon: pinIcon,
     }).addTo(this.map);
@@ -101,6 +123,12 @@ class Map {
 
   filterMarkerCount(subCategoryIdArr = []) {
     let count = 0;
+    
+    // when no filter option is applied give count of all reports
+    if (subCategoryIdArr.length === 0) {
+      return this.mapLayers.getLayers().length;
+    }
+
     this.mapLayers.eachLayer(marker => {
       if (subCategoryIdArr.includes(marker.sub_category_id)) {
         count++;

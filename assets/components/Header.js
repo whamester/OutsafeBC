@@ -16,6 +16,7 @@ const Header = () => {
           user
             ? `
             <div class="notification-container pointer">
+            <span class="badge hidden"></span>
               <i id="no-notifications" class="icon-notification-no"  onclick="
                     const menu = document.querySelector('#notifications-popup');
                     document.querySelector('#header-menu').classList.add('hidden');

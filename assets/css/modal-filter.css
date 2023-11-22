@@ -2,11 +2,36 @@
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 100;
+  z-index: 10;
+  animation-duration: 0.5s;
+  /* ANIMATION */
+  animation-name: modalFilterAnimation;
+  transition-timing-function: ease-in;
   background-color: var(--white);
   width: 100vw;
   height: 100vh;
-  overflow: hidden;
+}
+
+.modal-filter h3 {
+  margin: 0;
+  margin-top: 1rem;
+  color: var(--neutral-900);
+  font-style: normal;
+  font-weight: 600;
+  font-size: var(--body-1-size);
+  line-height: 1.5rem;
+}
+
+#closeBtnDesktop {
+  display: none;
+}
+
+.checkbox label {
+  color: var(--neutral-800);
+  font-style: normal;
+  font-weight: 400;
+  font-size: var(--body-2-size);
+  line-height: 1.5rem
 }
 
 .modal-filter--wrapper-outer {
@@ -14,10 +39,11 @@
   margin-bottom: 116px;
   height: calc(100% - 116px - 72px);
   overflow-y: auto;
+  scroll-behavior: smooth;
 }
 
 .modal-filter--wrapper-inner {
-  height: calc(100% + 200px);
+  height: calc(100% + 450px);
 }
 
 .modal-filter--top {
@@ -30,15 +56,20 @@
 }
 
 .modal-filter--close-btn {
-  margin-left: -2px;
-  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid var(--neutral-300);
+  border-radius: 6.25rem;
   background-color: transparent;
   padding: 0;
+  width: 2rem;
+  height: 2rem;
 }
 
 .modal-filter--close-btn img {
-  width: 32px;
-  height: 32px;
+  width: 1.25rem;
+  height: 1.25rem;
 }
 
 .modal-filter--heading-box {
@@ -70,32 +101,123 @@
   position: fixed;
   bottom: 0;
   left: 0;
-  width: 100%;
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.00) 0%, #FFF 100%);
+  width: 100%;
 }
 
 .modal-filter--bottom-wrapper {
+  display: flex;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  justify-content: right;
+  align-items: center;
   border-top: 1px solid var(--neutral-200);
   background: var(--neutral-50);
   width: 100%;
   height: 72px;
-  display: flex;
-  align-items: center;
-  justify-content: right;
-  position: absolute;
-  left: 0;
-  bottom: 0;
 }
 
 .modal-filter--clear-btn {
-  background-color: transparent;
-  border: none;
-  text-decoration: underline;
-  color: var(--primary-500);
-  padding: 0;
   margin-right: 16px;
+  border: none;
+  background-color: transparent;
+  padding: 0;
+  color: var(--primary-500);
+  text-decoration: underline;
+  font-size: var(--body-2-size);
 }
 
 .modal-filter--show-btn {
   margin-right: 16px;
+  font-size: var(--body-2-size);
+}
+
+/* Scroller */
+.modal-filter--wrapper-outer::-webkit-scrollbar {
+  display: block;
+  width: 6px;
+  height: 6px;
+}
+
+.modal-filter--wrapper-outer::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.modal-filter--wrapper-outer::-webkit-scrollbar-thumb {
+  border-radius: 2px;
+  background: var(--neutral-300);
+}
+
+.modal-filter--wrapper-outer::-webkit-scrollbar-thumb:hover {
+  background: var(--neutral-400);
+}
+/* Scroller */
+
+@media only screen and (min-width: 768px) {
+  .modal-filter {
+    position: absolute;
+    top: 14.3rem;
+    left: 5rem;
+    animation: none;
+    transition: none;
+    border-radius: 0.75rem;
+    padding: 1rem;
+    width: calc(410px - 32px);
+    height: 22rem;
+    z-index: 4;
+  }
+
+  .modal-filter--catergories-wrapper-outer {
+    margin: 0;
+    margin-right: 1rem;
+  }
+
+  #closeBtnDesktop {
+    display: block;
+    position: absolute;
+    top: 0;
+    right: -45px;
+    cursor: pointer;
+    border: 1px solid var(--neutral-300);
+    border-radius: 6.25rem;
+    background-image: url(/assets/icons/close-square.svg);
+    background-position: center center;
+    background-size: 1.2rem 1.2rem;
+    background-repeat: no-repeat;
+    background-color: var(--white);
+    padding: 0;
+    width: 2rem;
+    height: 2rem;
+  }
+
+  .modal-filter--top {
+    display: none;
+  }
+
+  .modal-filter--wrapper-outer {
+    margin: 0;
+    height: calc(100% - 72px);
+  }
+
+  .modal-filter--bottom {
+    position: absolute;
+  }
+  
+  .modal-filter--bottom-wrapper {
+    background-color: var(--white);
+  }
+}
+
+
+@keyframes modalFilterAnimation {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }

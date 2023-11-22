@@ -16,6 +16,7 @@ import { getUserSession } from '../../assets/helpers/storage.js';
 import readImage from '../../assets/helpers/read-image.js';
 import geocode from '../../assets/helpers/geocode.js';
 import injectHeader from '../../assets/helpers/inject-header.js';
+import { showButtonLoading, stopButtonLoading } from '../../assets/helpers/set-action-button.js';
 
 //Variable Declaration
 const url = new URL(window.location.href);
@@ -93,6 +94,7 @@ window.onload = async function () {
       populateReport(idReport);
     }
   } catch (error) {
+    console.error({ error });
     AlertPopup.show(error.message || AlertPopup.SOMETHING_WENT_WRONG_MESSAGE, AlertPopup.error, 500);
   }
 };
@@ -151,7 +153,7 @@ const displayCurrentSection = () => {
     if (pageId === STEPS.location && idReport && !mapInstance) {
       // Display the position of the report location
       mapInstance = new Map(currentReport.location.lat, currentReport.location.lng);
-      mapInstance.setMarkerOnMap(currentReport.location.lat, currentReport.location.lng, {
+      mapInstance.setRelativeMarkerOnMap(currentReport.location.lat, currentReport.location.lng, {
         draggable: true,
       });
 
@@ -259,7 +261,7 @@ const getAddressFromCoordinates = async (params) => {
  */
 
 const onSelectLocation = async (event) => {
-  mapInstance.setMarkerOnMap(event.latlng.lat, event.latlng.lng, {
+  mapInstance.setRelativeMarkerOnMap(event.latlng.lat, event.latlng.lng, {
     draggable: true,
   });
   await updateCurrentReportLocation(event.latlng);
@@ -376,6 +378,8 @@ const getCategories = async () => {
       savedOption.click();
     }
   } catch (error) {
+    console.error({ error });
+
     AlertPopup.show(error.message || AlertPopup.SOMETHING_WENT_WRONG_MESSAGE, AlertPopup.error);
   }
 };
@@ -453,6 +457,8 @@ const populateHazardOptions = (options, selectedOptionQuestion) => {
       hazardOptionContent.appendChild(div);
     }
   } catch (error) {
+    console.error({ error });
+
     AlertPopup.show(error.message || AlertPopup.SOMETHING_WENT_WRONG_MESSAGE, AlertPopup.error);
   }
 };
@@ -522,12 +528,21 @@ document.getElementById('starCameraBtn').addEventListener('click', () => {
 });
 
 const stopCamera = () => {
-  document.getElementById('displayCameraArea').style.display = 'none';
-  const tracks = video.srcObject.getTracks();
-  tracks.forEach((track) => track.stop());
-  document.getElementById('starCameraBtn').disabled = false;
-  document.getElementById('stopCameraBtn').disabled = true;
-  document.getElementById('takeDesktopPictureBtn').disabled = true;
+  try {
+    document.getElementById('displayCameraArea').style.display = 'none';
+    if (video) {
+      const tracks = video?.srcObject?.getTracks();
+      if (Array.isArray(tracks)) {
+        tracks.forEach((track) => track.stop());
+      }
+    }
+
+    document.getElementById('starCameraBtn').disabled = false;
+    document.getElementById('stopCameraBtn').disabled = true;
+    document.getElementById('takeDesktopPictureBtn').disabled = true;
+  } catch (error) {
+    console.error(error);
+  }
 };
 document.getElementById('stopCameraBtn').addEventListener('click', stopCamera);
 
@@ -776,6 +791,7 @@ const setFormValues = (report) => {
 
 const submitReport = async () => {
   try {
+    showButtonLoading('continueBtn');
     const images = await uploadImageToStorage(currentReport.images);
     //CREATE
     if (!idReport) {
@@ -822,9 +838,11 @@ const submitReport = async () => {
           actions: button,
           enableOverlayClickClose: false,
         });
+        stopButtonLoading('continueBtn');
       } else {
         throw new Error('Failed to create report');
       }
+
       return;
     }
 
@@ -865,10 +883,14 @@ const submitReport = async () => {
         actions: button,
         enableOverlayClickClose: false,
       });
+      stopButtonLoading('continueBtn', { reset: true });
     } else {
       throw new Error('Failed to create report');
     }
   } catch (error) {
+    console.error({ error });
+    stopButtonLoading('continueBtn', { reset: true });
+
     AlertPopup.show(error.message, AlertPopup.error);
   }
 };
