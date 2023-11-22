@@ -20,8 +20,8 @@ class ReportCardContainer {
     this.not_there_count = Number(data.not_there_count) || 0;
     this.still_there_count = Number(data.still_there_count) || 0;
 
-    this.flagged_as_fake = data.flagged_as_fake || false;
-    this.enable_reaction = data.enable_reaction || true;
+    this.flagged_as_fake = !!data.flagged_as_fake;
+    this.enable_reaction = !!data.enable_reaction;
 
     this.created_at = data.created_at;
     this.deleted_at = data.deleted_at;
