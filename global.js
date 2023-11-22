@@ -2,7 +2,6 @@ import AlertPopup from './assets/components/AlertPopup.js';
 import errorInputHelper from './assets/helpers/error-input-helper.js';
 import { checkIfAllNotificationsAreRead, displayNotificationItem } from './assets/helpers/inject-header.js';
 import loadIcons from './assets/helpers/load-icons.js';
-import { setAllActionButtons } from './assets/helpers/set-action-button.js';
 import { addNotification, getUserSession } from './assets/helpers/storage.js';
 
 if ('serviceWorker' in navigator) {
@@ -66,8 +65,6 @@ channel.addEventListener('message', (event) => {
 loadIcons();
 
 errorInputHelper();
-
-setAllActionButtons();
 
 window.addEventListener('online', function () {
   AlertPopup.show('You are back online', AlertPopup.success);
