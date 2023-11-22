@@ -39,6 +39,7 @@
 
 #report-hazard-body .continue-btn {
   width: 100%;
+  height: fit-content;
 }
 
 #report-hazard-body .breadbrumb-desktop {

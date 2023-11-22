@@ -9,6 +9,11 @@
 
   <link rel="stylesheet" href="../../assets/css/_global.css" />
 
+  <!-- Notifications JS -->
+  <script src="https://js.pusher.com/beams/1.0/push-notifications-cdn.js"></script>
+  <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+  <!-- End Notifications JS -->
+
   <script src="../../global.js" defer type="module"></script>
 
   <title>Components</title>
@@ -55,6 +60,12 @@
     [id='textarea-section']>section>h3 {
       padding-top: 1rem;
     }
+
+    @keyframes spin {
+      100% {
+        transform: rotate(-360deg)
+      }
+    }
   </style>
 
   <script>
@@ -96,8 +107,38 @@
           Primary
           <span class="btn__icon">
             <i class="icon-arrow-right"></i>
+
           </span>
         </button>
+
+        <button id="action-button" class="btn btn-primary btn-action">
+          Action Button
+          <span class="btn__icon">
+            <i class="icon-arrow-right main-icon"></i>
+
+            <div class="loading-finished-icon hidden">
+              <i class="icon-checkmark"></i>
+
+            </div>
+            <div class="btn__icon__loader" style="font-size: 3px;">
+              <div class="spinner"></div>
+            </div>
+          </span>
+        </button>
+
+        <script type="module">
+          import { showButtonLoading, stopButtonLoading } from '../../assets/helpers/set-action-button.js';
+          const actionButton = document.getElementById('action-button')
+
+          actionButton.addEventListener('click', () => {
+            showButtonLoading('action-button');
+
+
+            setTimeout(() => {
+              stopButtonLoading('action-button', { reset: true })
+            }, 1500)
+          })
+        </script>
         <button class="btn btn-secondary">
           <i class="icon-check"></i>
           Secondary
@@ -281,6 +322,7 @@ Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa, soluta!</textare
     </section>
 
     <section id="message-section">
+      <h2>Message</h2>
 
       <div class="message error">
         <i class="icon-flag message__icon"></i>

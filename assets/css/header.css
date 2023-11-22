@@ -34,6 +34,17 @@ i[class^='icon-notification'] {
   display: flex;
   gap: 1rem;
   align-items: center;
+  position: relative;
+}
+
+.notification-container .badge {
+  position: absolute;
+  background-color: var(--error-500);
+  z-index: 10;
+  width: 0.5rem;
+  height: 0.5rem;
+  top: 2px;
+  right: 3px;
 }
 
 #header-menu {
