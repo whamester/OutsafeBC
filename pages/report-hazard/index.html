@@ -298,10 +298,16 @@
     </form>
 
     <div id="continueBtnContainer">
-      <button type="button" id="continueBtn" class="btn btn-primary continue-btn" style="height: fit-content;">
+      <button type="button" id="continueBtn" class="btn btn-primary continue-btn btn-action">
         <span id="continueBtnText">Continue</span>
         <span class="btn__icon">
           <i class="icon-arrow-right"></i>
+          <div class="loading-finished-icon hidden">
+            <i class="icon-checkmark"></i>
+          </div>
+          <div class="btn__icon__loader" style="font-size: 3px;">
+            <div class="spinner"></div>
+          </div>
         </span>
       </button>
     </div>

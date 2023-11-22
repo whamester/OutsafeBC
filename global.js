@@ -1,10 +1,8 @@
 import AlertPopup from './assets/components/AlertPopup.js';
 import errorInputHelper from './assets/helpers/error-input-helper.js';
-import {
-  checkIfAllNotificationsAreRead,
-  displayNotificationItem,
-} from './assets/helpers/inject-header.js';
+import { checkIfAllNotificationsAreRead, displayNotificationItem } from './assets/helpers/inject-header.js';
 import loadIcons from './assets/helpers/load-icons.js';
+import { setAllActionButtons } from './assets/helpers/set-action-button.js';
 import { addNotification, getUserSession } from './assets/helpers/storage.js';
 
 if ('serviceWorker' in navigator) {
@@ -38,14 +36,8 @@ if ('serviceWorker' in navigator) {
     beamsClient
       .start()
       .then((beamsClient) => beamsClient.getDeviceId())
-      .then((deviceId) =>
-        console.log('Successfully registered with Beams. Device ID:', deviceId)
-      )
-      .then((data) =>
-        user?.notifications_enabled
-          ? beamsClient.addDeviceInterest(user?.id)
-          : data
-      )
+      .then((deviceId) => console.log('Successfully registered with Beams. Device ID:', deviceId))
+      .then((data) => (user?.notifications_enabled ? beamsClient.addDeviceInterest(user?.id) : data))
       .then(() => beamsClient.removeDeviceInterest('all'))
       .then(() => beamsClient.getDeviceInterests())
       .then((data) => (!user ? beamsClient.clearDeviceInterests() : data))
@@ -60,8 +52,6 @@ channel.addEventListener('message', (event) => {
 
   const data = event.data;
   const user = getUserSession();
-
-  console.log(user.email, data?.user?.email);
   if (!!user && user.email !== data?.user?.email) {
     addNotification(user.id, { ...data, read: false });
     displayNotificationItem({ ...data, read: false });
@@ -76,6 +66,8 @@ channel.addEventListener('message', (event) => {
 loadIcons();
 
 errorInputHelper();
+
+setAllActionButtons();
 
 window.addEventListener('online', function () {
   AlertPopup.show('You are back online', AlertPopup.success);

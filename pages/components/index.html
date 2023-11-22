@@ -9,6 +9,11 @@
 
   <link rel="stylesheet" href="../../assets/css/_global.css" />
 
+  <!-- Notifications JS -->
+  <script src="https://js.pusher.com/beams/1.0/push-notifications-cdn.js"></script>
+  <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+  <!-- End Notifications JS -->
+
   <script src="../../global.js" defer type="module"></script>
 
   <title>Components</title>
@@ -55,6 +60,37 @@
     [id='textarea-section']>section>h3 {
       padding-top: 1rem;
     }
+
+    .loading {
+      width: 1.2em;
+      height: 1.2em;
+      border-radius: 50%;
+      box-shadow:
+        0 -3em 0 rgba(255, 255, 255, 1),
+        2.25em -2.25em rgba(255, 255, 255, 0.875),
+        3em 0 rgba(255, 255, 255, 0.75),
+        2.25em 2.25em rgba(255, 255, 255, 0.625),
+        0 3em rgba(255, 255, 255, 0.5),
+        -2.25em 2.25em rgba(255, 255, 255, 0.375),
+        -3em 0 rgba(255, 255, 255, 0.25),
+        -2.25em -2.25em rgba(255, 255, 255, 0.125);
+
+
+
+      /* box-shadow: 0 -15px 0 rgba(255, 255, 255, 1), 16px -8px rgba(255, 255, 255, 0.875), 15px 0 rgba(255, 255, 255, 0.75), 16px 16px rgba(255, 255, 255, 0.625), 0 3em rgba(255, 255, 255, 0.5), -2.25em 2.25em rgba(255, 255, 255, 0.375), -3em 0 rgba(255, 255, 255, 0.25), -2.25em -2.25em rgba(255, 255, 255, 0.125); */
+      animation: spin 2.2s linear infinite;
+
+    }
+
+    .loading-finished .loading {
+      display: none;
+    }
+
+    @keyframes spin {
+      100% {
+        transform: rotate(-360deg)
+      }
+    }
   </style>
 
   <script>
@@ -96,6 +132,22 @@
           Primary
           <span class="btn__icon">
             <i class="icon-arrow-right"></i>
+
+          </span>
+        </button>
+
+        <button id="action-button" class="btn btn-primary btn-action">
+          Action Button
+          <span class="btn__icon">
+            <i class="icon-arrow-right main-icon"></i>
+
+            <div class="loading-finished-icon hidden">
+              <i class="icon-checkmark"></i>
+
+            </div>
+            <div class="btn__icon__loader" style="font-size: 3px;">
+              <div class="spinner"></div>
+            </div>
           </span>
         </button>
         <button class="btn btn-secondary">
@@ -281,6 +333,7 @@ Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa, soluta!</textare
     </section>
 
     <section id="message-section">
+      <h2>Message</h2>
 
       <div class="message error">
         <i class="icon-flag message__icon"></i>
