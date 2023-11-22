@@ -21,13 +21,14 @@ import { getUserSession } from '../../assets/helpers/storage.js';
 import Map from '../../assets/models/Map.js';
 import HazardReport from '../../assets/models/HazardReport.js';
 import getHazardDetail from '../../assets/helpers/get-hazard-detail.js';
+import DateFormat from '../../assets/models/DateFormat.js';
 
 // URL params
 const url = new URL(window.location.href);
 const idReport = url.searchParams.get('id');
 const openDetail = url.searchParams.get('open') === 'true' && !!idReport;
 const focusMarker = url.searchParams.get('focus') === 'true' && !!idReport;
-const zoom = url.searchParams.get('zoom') ?? 4;
+const zoom = parseInt(url.searchParams.get('zoom')) || 12;
 const latitude = Number(url.searchParams.get('lat')) || null;
 const longitude = Number(url.searchParams.get('lng')) || null;
 
@@ -87,6 +88,8 @@ window.onload = async function () {
 
     document.querySelector('.modal-filter--close-btn').addEventListener('click', () => toggleFilterModal(true));
 
+    document.querySelector('#closeBtnDesktop').addEventListener('click', () => toggleFilterModal(true));
+
     document.querySelector('.sb-search-box--input').addEventListener('input', (e) => onSearchInput(e));
 
     document.querySelector('.sb-search-box--input').addEventListener('focus', (e) => {
@@ -130,7 +133,7 @@ window.onload = async function () {
       const makerExists = geoMap.checkMarkerOnMap(hazardDetail);
 
       // marker currently doesnot exists on the map
-      if (!makerExists) geoMap.createLayerGroups([{ ...hazardDetail, hazardCategory: hazardDetail.category, hazard: hazardDetail.option }], markerParams);
+      if (!makerExists) geoMap.createLayerGroups([{ ...hazardDetail, hazardCategory: hazardDetail.category, hazard: hazardDetail.option }], {...markerParams, focus: true});
 
       flyTo(hazardDetail.location?.lat, hazardDetail.location?.lng);
     }
@@ -143,6 +146,8 @@ window.onload = async function () {
         category: hazardDetail.category.name,
         hazard: hazardDetail.option.name,
         location: hazardDetail.location.address,
+        lat: hazardDetail.location.lat,
+        lng: hazardDetail.location.lng,
         photos: hazardDetail.images,
         comment: hazardDetail.comment,
         settings: hazardDetail.category.settings,
@@ -218,6 +223,8 @@ const markerParams = {
       category: currentReport.hazardCategory.name,
       hazard: currentReport.hazard.name,
       location: currentReport.location.address,
+      lat: hazardDetail.location.lat,
+      lng: hazardDetail.location.lng,
       photos: currentReport.images,
       comment: currentReport.comment,
       settings: currentReport.hazardCategory.settings,
@@ -233,7 +240,9 @@ const markerParams = {
       user: currentReport.user,
     });
 
+    changeActiveMarkerIcon(currentReport.location.lat, currentReport.location.lng);
     showHazardDetails(hazardReport);
+    flyTo(currentReport.location.lat, currentReport.location.lng);
   },
 };
 
@@ -271,11 +280,29 @@ const getReportApiCall = async (lat, lng) => {
   }
 };
 
+const changeActiveMarkerIcon = (lat, lng) => {
+  for(const marker of geoMap.mapLayers.getLayers()) {
+    const mCoords = marker.getLatLng();
+    if (marker.active) {
+      marker.setIcon(Map.createIcon({iconName: marker.icon_name}));
+      marker.setZIndexOffset(null);
+      marker.active = false;
+    }
+
+    if(lat === mCoords.lat && lng === mCoords.lng) {
+      marker.setIcon(Map.createIcon({iconName: marker.icon_name_focused}));
+      marker.setZIndexOffset(1000);
+      marker.active = true;
+    }
+  }
+}
+
 const cardsOnClick = () => {
   document.querySelectorAll('.sb-cards--item').forEach((card) => {
     card.addEventListener('click', function () {
       const details = JSON.parse(this.dataset.details);
       flyTo(details.location?.lat, details.location?.lng);
+      changeActiveMarkerIcon(details.location?.lat, details.location?.lng);
     });
   });
 };
@@ -292,6 +319,7 @@ const suggestionOnClick = () => {
       searchInput.dataset.positionChange = 'true';
       positionSecondary = latLng;
       flyTo(latLng.lat, latLng.lng);
+      geoMap.setRelativeMarkerOnMap(latLng.lat, latLng.lng);
       closeSearchSuggestion();
       await getReportApiCall(latLng.lat, latLng.lng, categoryFilters, hazardFilters);
       injectCards();
@@ -347,6 +375,13 @@ const injectCards = () => {
 
   injectHTML([{ func: HazardCardLayout, args: hazardCardParams, target: '#hazard-comp' }]);
 
+  document.querySelector('.sb-cards-btn--back').addEventListener('click', () => {
+    document.querySelector('.sb-cards').remove(); document.querySelector('.btn-report-hazard').style.display = 'flex'; 
+    searchInput.dataset.positionChange='false';
+    searchInput.value='';
+    geoMap.setRelativeMarkerOnMap(0, 0, {removeOnly: true});
+  }, false);
+
   document.querySelectorAll('.view-details')?.forEach((detailBtn) => {
     detailBtn.addEventListener('click', async ({ target }) => {
       const hazardID = target.dataset.id;
@@ -357,6 +392,8 @@ const injectCards = () => {
         category: hazardDetail.category.name,
         hazard: hazardDetail.option.name,
         location: hazardDetail.location.address,
+        lat: hazardDetail.location.lat,
+        lng: hazardDetail.location.lng,
         photos: hazardDetail.images,
         comment: hazardDetail.comment,
         settings: hazardDetail.category.settings,
@@ -383,7 +420,7 @@ const injectCards = () => {
 const watchGeoLocationSuccess = async ({ coords }) => {
   const lat = coords?.latitude;
   const lng = coords?.longitude;
-  geoMap.setMarkerOnMap(lat, lng);
+  geoMap.setMarkerOnMap(lat, lng, {icon: 'current-location-map-pin.svg'});
 
   // If there is a report id in the query params and the focus param is set, don't pan to the user's location
   // but to the report's location
@@ -396,6 +433,7 @@ const watchGeoLocationSuccess = async ({ coords }) => {
 
     await getReportApiCall(lat, lng);
     flyTo(lat, lng);
+    recenterBtn.focus();
     flyToTrigger = false;
   }
 
@@ -471,17 +509,55 @@ const showHazardDetails = (hazardReport) => {
   try {
     hazardReportPopulated = hazardReport.hazardCardContent();
 
-    root.insertBefore(hazardReportPopulated, document.getElementById('hazard-comp'));
+    root.appendChild(hazardReportPopulated, document.getElementById('hazard-comp'));
+
+    const cardBackBtn = document.querySelector('.sb-cards-btn--back');
+    if(cardBackBtn) cardBackBtn.style.display = 'none';
 
     loadIcons();
 
     // Close report card
     const reportShareBtn = document.getElementById('reportShareBtn');
+
+    const baseUrl = window.location.origin;
+    const url = baseUrl + `/pages/home/index.html?id=${hazardReport.id}&focus=true&open=true&zoom=12&lat=${hazardReport.lat}&lng=${hazardReport.lng}`;
+
+    reportShareBtn.addEventListener("click", async () => {
+      try {
+        const dateObj1 = new Date(hazardReport.created_at);
+        const date1 = DateFormat.getDate(dateObj1);
+        const time1 = DateFormat.getTime(dateObj1);
+
+        const dateObj2 = new Date(hazardReport.updated_at);
+        const date2 = DateFormat.getDate(dateObj2);
+        const time2 = DateFormat.getTime(dateObj2);
+
+        const data = {
+          title: hazardReport.hazard,
+          text: `Hazard: ${hazardReport.hazard}\nLocation: ${hazardReport.location}\nReported: ${date1 + ' ' + time1}\nUpdated: ${hazardReport.updated_at ?  date2 + ' ' + time2 : 'N/A'}\n`,
+          url,
+        };
+
+        await navigator.share(data);
+      } catch (err) {
+        console.error('Share error: ', err);
+
+        try {
+          await navigator.clipboard.writeText(url);
+          AlertPopup.show('Link Copied!', AlertPopup.success);
+        } catch (err) {
+          console.error('Clipboard error: ', err);
+        }
+      }
+    }, false);
+
     const reportCloseBtn = document.getElementById('reportCloseBtn');
     reportCloseBtn.addEventListener('click', () => {
       if (hazardReportPopulated.parentNode) {
         hazardReportPopulated.parentNode.removeChild(hazardReportPopulated);
       }
+      if (cardBackBtn) cardBackBtn.style.display = 'flex';
+      changeActiveMarkerIcon(0, 0);
     });
 
     //
@@ -499,12 +575,12 @@ const showHazardDetails = (hazardReport) => {
       if (windowWidth.matches) {
         reportShareBtn.style.display = 'flex';
         reportCloseBtn.style.display = 'flex';
-        content.style.height = 'fit-content';
+        // content.style.height = 'fit-content';
       } else {
         reportShareBtn.style.display = 'none';
         reportCloseBtn.style.display = 'none';
         // Set initial height
-        updateHeight(40);
+        // updateHeight(40);
 
         let isDragging = false,
           startY,
@@ -556,6 +632,8 @@ const showHazardDetails = (hazardReport) => {
           // Close the report card using removeChild
           if (hazardReportPopulated.parentNode) {
             hazardReportPopulated.parentNode.removeChild(hazardReportPopulated);
+            if (cardBackBtn) cardBackBtn.style.display = 'flex';
+            changeActiveMarkerIcon(0, 0);
           }
         };
 

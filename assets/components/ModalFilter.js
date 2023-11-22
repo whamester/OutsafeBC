@@ -4,10 +4,11 @@ const ModalFilter = (categories) => {
   return `
     <div
       class="modal-filter hidden">
+      <button id="closeBtnDesktop"></button>
       <div class="modal-filter--top">
         <button 
           class="modal-filter--close-btn">
-          <img src="/assets/icons/close.svg"/>
+          <img src="/assets/icons/close-square.svg"/>
         </button>
         <div class="modal-filter--heading-box">
           <h2 class="modal-filter--heading-txt">Filters</h2>

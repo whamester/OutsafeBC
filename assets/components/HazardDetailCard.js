@@ -12,9 +12,9 @@ import { getUserSession } from '../helpers/storage.js';
 
 const userSession = getUserSession();
 
-const FLAGGED_BY_OTHERS_MESSAGE = 'This report has been flagged as fake by other users';
-const FLAGGED_BY_OTHERS_AND_I_MESSAGE = 'This report has been flagged as fake by you and other users';
-const FLAGGED_BY_ME_MESSAGE = 'This report has been flagged as fake by you';
+const FLAGGED_BY_OTHERS_MESSAGE = 'This report has been flagged by other users';
+const FLAGGED_BY_OTHERS_AND_I_MESSAGE = 'This report has been flagged by you and other users';
+const FLAGGED_BY_ME_MESSAGE = 'This report has been flagged by you';
 
 class HazardDetailCard extends ReportCardContainer {
   constructor(data) {
