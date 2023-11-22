@@ -101,6 +101,12 @@ class Map {
 
   filterMarkerCount(subCategoryIdArr = []) {
     let count = 0;
+    
+    // when no filter option is applied give count of all reports
+    if (subCategoryIdArr.length === 0) {
+      return this.mapLayers.getLayers().length;
+    }
+
     this.mapLayers.eachLayer(marker => {
       if (subCategoryIdArr.includes(marker.sub_category_id)) {
         count++;

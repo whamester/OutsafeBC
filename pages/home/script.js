@@ -589,11 +589,6 @@ const hazardFilterTempApply = async ({ target }) => {
     target.classList.remove('selected');
     // all filters are de-selected
 
-    if (hazardTempFilters.length === 0) {
-      hazardShowCount = 0;
-      showReportsBtnStatus(hazardShowCount);
-      return;
-    }
     hazardShowCount = geoMap.filterMarkerCount(hazardTempFilters);
     showReportsBtnStatus(hazardShowCount);
     return;
@@ -631,7 +626,8 @@ const clearHazardFilter = async () => {
     c.checked = false;
   });
 
-  showReportsBtnStatus(0);
+  hazardShowCount = geoMap.filterMarkerCount(hazardTempFilters);
+  showReportsBtnStatus(hazardShowCount);
   geoMap.filterMarker([], hazardFilters);
   if (document.querySelector('.sb-cards')) injectCards();
 };
