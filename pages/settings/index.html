@@ -72,18 +72,20 @@
       <section id="changePasswordSettings" style="display: none">
         <h2 class="text-heading-2">Change Password</h2>
         <p>We will send you a link to change your password.</p>
-        <button id="resetPwBtn">Reset Password</button>
+        <button id="resetPwBtn" class="btn btn-primary">Send link via email</button>
       </section>
 
       <section id="notificationsSettings" style="display: none">
         <h2 class="text-heading-2">Notifications</h2>
-        <img src="../../assets/icons/notification-no.svg" alt="Notification bell icon" />
-        <h3>Allow Push Notifications</h3>
-        <p>Get real-time updats for nearby reported hazards.</p>
-        <div id="permissionStatus"></div>
+
+        <div class="account-settings__notifications_text">
+          <img src="../../assets/icons/notification-no.svg" alt="Notification bell icon" />
+          <h3>Allow Push Notifications</h3>
+          <p>Get real-time updats for nearby reported hazards.</p>
+        </div>
 
         <div class="form-check form-switch">
-          <label class="form-check-label" for="pushNotificationSwitch">Push Notifications</label>
+          <label class="form-check-label" for="pushNotificationSwitch"></label>
           <input class="form-check-input" type="checkbox" role="switch" id="pushNotificationSwitch" />
         </div>
       </section>
@@ -91,7 +93,11 @@
       <section id="securitySettings" style="display: none">
         <h2 class="text-heading-2">Delete Account</h2>
         <p>If you no longer want to use Outsafe BC, you can permanently delete your account. You can’t undo this action!</p>
-        <button id="deleteAccountBtn">Delete Account</button>
+
+        <button id="deleteAccountBtn" class="btn btn-error">
+          <i class="icon-check"></i>
+          Delete Account
+        </button>
       </section>
     </main>
   </body>
