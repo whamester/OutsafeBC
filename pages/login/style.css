@@ -80,10 +80,9 @@ main{
 }
 
 .content-image img {
-  max-width: auto;
-  height: auto;
+  height: 685px;
   padding-top: 6.12rem;
-  padding-bottom: 7.12rem;
+  padding-bottom: 7.5rem;
   padding-left: 8.62rem;
 }
 }
