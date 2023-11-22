@@ -1,115 +1,97 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+    <link rel="icon" type="image/x-icon" href="../../assets/img/icons/logo-square.png" />
+
     <!-- WPA -->
     <link rel="manifest" href="../../manifest.json" />
-    <link
-      rel="apple-touch-icon"
-      href="../../assets/css/img/icons/icon-96x96.png"
-    />
+    <link rel="apple-touch-icon" href="../../assets/css/img/icons/icon-96x96.png" />
     <meta name="apple-mobile-web-app-status-bar" content="#000000" />
     <meta name="theme-color" content="#000000" />
 
-	<link rel="icon" type="image/x-icon" href="../../assets/img/icons/logo-square.png">
-
-	<!-- WPA -->
-	<link rel="manifest" href="../../manifest.json" />
-	<link rel="apple-touch-icon" href="../../assets/css/img/icons/icon-96x96.png" />
-	<meta name="apple-mobile-web-app-status-bar" content="#000000" />
-	<meta name="theme-color" content="#000000" />
-  <!-- Notifications JS -->
-  <script src="https://js.pusher.com/beams/1.0/push-notifications-cdn.js"></script>
-  <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
-  <!-- End Notifications JS -->
+    <!-- leaflet CSS for maps -->
+    <link rel="stylesheet" href="../../modules/leaflet/leaflet.css" />
+    <!-- leaflet JS for maps -->
+    <script src="../../modules/leaflet/leaflet.js"></script>
+    <!-- Global Styles -->
+    <link rel="stylesheet" href="../../assets/css/_global.css" />
+    <!-- Global JS -->
+    <script type="module" src="../../global.js" defer></script>
+    <!-- Feature Styles -->
+    <link rel="stylesheet" href="./style.css" />
+    <!-- Feature JS -->
+    <script type="module" src="./script.js" defer></script>
+    <!-- Notifications JS -->
+    <script src="https://js.pusher.com/beams/1.0/push-notifications-cdn.js"></script>
+    <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+    <!-- End Notifications JS -->
 
     <title>Account Settings</title>
   </head>
 
   <body id="profile-body">
     <main>
-      <h1>Account Settings</h1>
+      <h1 class="text-heading-1">Account Settings</h1>
 
-
-      <label for="dropdownMenu">Choose a menu item:</label>
-      <select name="dropdownMenu" id="dropdownMenu">
-        <option value="basicInfoOptn" selected>Basic Info</option>
-        <option value="passwordOptn">Password</option>
-        <option value="notificationsOtp">Notifications</option>
-        <option value="securityOtn">Security</option>
+      <label for="dropdownMenu"></label>
+      <select name="dropdownMenu" id="dropdownMenu" class="text-body-1 medium">
+        <option value="basicInfoOptn" selected class="text-body-1 medium">Basic Info</option>
+        <option value="passwordOptn" class="text-body-1 medium">Password</option>
+        <option value="notificationsOtp" class="text-body-1 medium">Notifications</option>
+        <option value="securityOtn" class="text-body-1 medium">Security</option>
       </select>
 
-      <section id="basicInfoSettings">
-        <h2>Basic Info</h2>
+      <section id="basicInfoSettings" style="display: none">
+        <h2 class="text-heading-2">Basic Info</h2>
 
-        <img src="#" alt="User profile picture" id="profilePhoto" />
+        <div class="account-settings__profile-picture">
+          <img src="#" alt="User profile picture" id="profilePhoto" />
 
-        <div id="fileDropWrapper">
-          <label for="inputImage" id="dropArea">
-            <input type="file" accept="image/*" id="inputImage" hidden />
-            Drop your image here, or click to browse
-          </label>
+          <div class="account-settings__profile-picture-btns">
+            <button class="btn btn-secondary">Upload Image</button>
+            <button class="btn btn-error">Delete</button>
+          </div>
         </div>
 
         <form id="profileForm">
-          <label for="name">Name</label>
-          <input type="text" id="name" required />
-          <label for="email">Email address</label>
-          <input type="email" id="email" readonly />
+          <label for="name" class="text-body-2 medium">Name</label>
+          <input type="text" id="name" required class="text-body-2 regular" />
         </form>
-        <button type="submit" id="saveProfileInfoBtn" form="profileForm">
-          Save
-        </button>
+
+        <div class="account-settings__email">
+          <label for="email" class="text-body-2 medium">Email address</label>
+          <input type="email" id="email" readonly class="text-body-2 regular" />
+        </div>
+
+        <button type="submit" id="saveProfileInfoBtn" form="profileForm" class="btn btn-primary">Save Changes</button>
       </section>
 
-      <section id="changePasswordSettings">
-        <h2>Change Password</h2>
+      <section id="changePasswordSettings" style="display: none">
+        <h2 class="text-heading-2">Change Password</h2>
         <p>We will send you a link to change your password.</p>
         <button id="resetPwBtn">Reset Password</button>
-
-        <div id="resetPwPopup">
-          <button id="resetPwSaveBtn">Reset Password</button>
-          <button id="resetPwCanelBtn">Cancel</button>
-        </div>
       </section>
 
-      <section id="notificationsSettings">
-        <h2>Notifications</h2>
-        <img
-          src="../../assets/icons/notification-no.svg"
-          alt="Notification bell icon"
-        />
+      <section id="notificationsSettings" style="display: none">
+        <h2 class="text-heading-2">Notifications</h2>
+        <img src="../../assets/icons/notification-no.svg" alt="Notification bell icon" />
         <h3>Allow Push Notifications</h3>
         <p>Get real-time updats for nearby reported hazards.</p>
         <div id="permissionStatus"></div>
 
         <div class="form-check form-switch">
-          <label class="form-check-label" for="pushNotificationSwitch"
-            >Push Notifications</label
-          >
-          <input
-            class="form-check-input"
-            type="checkbox"
-            role="switch"
-            id="pushNotificationSwitch"
-          />
+          <label class="form-check-label" for="pushNotificationSwitch">Push Notifications</label>
+          <input class="form-check-input" type="checkbox" role="switch" id="pushNotificationSwitch" />
         </div>
       </section>
 
-      <section id="securitySettings">
-        <h2>Delete Account</h2>
-        <p>
-          If you no longer want to use Outsafe BC, you can permanently delete
-          your account. You can’t undo this action!
-        </p>
+      <section id="securitySettings" style="display: none">
+        <h2 class="text-heading-2">Delete Account</h2>
+        <p>If you no longer want to use Outsafe BC, you can permanently delete your account. You can’t undo this action!</p>
         <button id="deleteAccountBtn">Delete Account</button>
-        <div id="deleteAccountConfirm">
-          <h2>Are you sure you want to delete your account?</h2>
-          <button id="deleteAccountYesBtn">Yes</button>
-          <button id="deleteAccountNoBtn">No</button>
-        </div>
       </section>
     </main>
   </body>

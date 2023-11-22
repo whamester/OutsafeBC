@@ -1,9 +1,5 @@
 import readImage from '../../assets/helpers/read-image.js';
-import {
-  getUserSession,
-  setUserSession,
-  updateUserSession,
-} from '../../assets/helpers/storage.js';
+import { getUserSession, setUserSession, updateUserSession } from '../../assets/helpers/storage.js';
 import { API_URL } from '../../constants.js';
 
 import Header from '../../assets/components/Header.js';
@@ -16,6 +12,11 @@ const dropArea = document.getElementById('dropArea');
 const inputFile = document.getElementById('inputImage');
 const nameField = document.getElementById('name');
 const emailField = document.getElementById('email');
+const basicInfoSettings = document.getElementById('basicInfoSettings');
+const changePasswordSettings = document.getElementById('changePasswordSettings');
+const notificationsSettings = document.getElementById('notificationsSettings');
+const securitySettings = document.getElementById('securitySettings');
+const dropdownMenu = document.getElementById('dropdownMenu');
 
 let userID = user?.id;
 let picture;
@@ -29,17 +30,33 @@ let changedFields = {
  * Page Init
  */
 window.onload = function () {
-  injectHeader([
-    { func: Header, target: '#profile-body', position: 'afterbegin' },
-  ]);
+  injectHeader([{ func: Header, target: '#profile-body', position: 'afterbegin' }]);
+  basicInfoSettings.style.display = 'flex';
 };
 
 nameField.addEventListener('input', () => {
   changedFields.name = true;
 });
 
-inputFile.addEventListener('input', () => {
-  changedFields.photo = true;
+// SPA for sections
+dropdownMenu.addEventListener('change', () => {
+  const settingsMap = {
+    basicInfoOptn: basicInfoSettings,
+    passwordOptn: changePasswordSettings,
+    notificationsOtp: notificationsSettings,
+    securityOtn: securitySettings,
+  };
+
+  // Hide all settings elements
+  for (const settingsElement of Object.values(settingsMap)) {
+    settingsElement.style.display = 'none';
+  }
+
+  // Show the selected settings element
+  const selectedSettings = settingsMap[dropdownMenu.value];
+  if (selectedSettings) {
+    selectedSettings.style.display = 'flex';
+  }
 });
 
 //Show user information
@@ -122,8 +139,6 @@ function togglePwModal() {
 }
 
 resetPwBtn.addEventListener('click', togglePwModal);
-resetPwSaveBtn.addEventListener('click', togglePwModal);
-resetPwCanelBtn.addEventListener('click', togglePwModal);
 
 // Profile photo
 function showProfilePic(url = '#') {
@@ -131,8 +146,6 @@ function showProfilePic(url = '#') {
 }
 
 showProfilePic(user?.photo);
-
-inputFile.addEventListener('change', loadImage);
 
 function loadImage() {
   picture = inputFile.files[0];
@@ -142,32 +155,15 @@ function loadImage() {
   });
 }
 
-dropArea.addEventListener('dragover', (e) => {
-  e.preventDefault();
-});
-
-dropArea.addEventListener('drop', (e) => {
-  e.preventDefault();
-
-  inputFile.files = e.dataTransfer.files;
-  loadImage();
-});
-
 async function saveProfilePicture() {
   try {
-    const response = await fetch(
-      `${API_URL}/user-image?userId=${userID}.${picture?.type?.replace(
-        'image/',
-        ''
-      )}`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': picture.type,
-        },
-        body: picture,
-      }
-    );
+    const response = await fetch(`${API_URL}/user-image?userId=${userID}.${picture?.type?.replace('image/', '')}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': picture.type,
+      },
+      body: picture,
+    });
     const result = await response.json();
     return result;
   } catch (error) {
@@ -183,8 +179,6 @@ function toggleDelModal() {
 }
 
 deleteAccountBtn.addEventListener('click', toggleDelModal);
-deleteAccountNoBtn.addEventListener('click', toggleDelModal);
-deleteAccountYesBtn.addEventListener('click', deleteAccount);
 
 async function deleteAccount() {
   try {
@@ -218,28 +212,23 @@ function checkPermissions() {
   const permissionStatus = document.getElementById('permissionStatus');
 
   if ('Notification' in window) {
-    navigator.permissions
-      .query({ name: 'notifications' })
-      .then((notificationPermissionStatus) => {
-        if (notificationPermissionStatus.state !== 'granted') {
-          const pElement = document.createElement('p');
-          pElement.textContent =
-            'Push Notification permissions are not granted';
-          permissionStatus.appendChild(pElement);
-        }
-      });
+    navigator.permissions.query({ name: 'notifications' }).then((notificationPermissionStatus) => {
+      if (notificationPermissionStatus.state !== 'granted') {
+        const pElement = document.createElement('p');
+        pElement.textContent = 'Push Notification permissions are not granted';
+        permissionStatus.appendChild(pElement);
+      }
+    });
   }
 
   if ('geolocation' in navigator) {
-    navigator.permissions
-      .query({ name: 'geolocation' })
-      .then((geolocationPermissionStatus) => {
-        if (geolocationPermissionStatus.state !== 'granted') {
-          const pElement = document.createElement('p');
-          pElement.textContent = 'Geolocation permissions are not granted';
-          permissionStatus.appendChild(pElement);
-        }
-      });
+    navigator.permissions.query({ name: 'geolocation' }).then((geolocationPermissionStatus) => {
+      if (geolocationPermissionStatus.state !== 'granted') {
+        const pElement = document.createElement('p');
+        pElement.textContent = 'Geolocation permissions are not granted';
+        permissionStatus.appendChild(pElement);
+      }
+    });
   }
 }
 checkPermissions();
@@ -290,10 +279,7 @@ async function setNotificationSettings() {
       notifications_enabled: !!pushNotificationSwitch.checked,
     });
 
-    AlertPopup.show(
-      `Notifications turned ${!!pushNotificationSwitch.checked ? 'on' : 'off'}`
-    );
-    console.log('Notifications turned on', data, message);
+    AlertPopup.show(`Notifications turned ${!!pushNotificationSwitch.checked ? 'on' : 'off'}`);
   } catch (error) {
     AlertPopup.show(AlertPopup.SOMETHING_WENT_WRONG_MESSAGE, AlertPopup.error);
     console.log('Notifications turned off', error);
@@ -301,7 +287,3 @@ async function setNotificationSettings() {
 }
 
 pushNotificationSwitch.addEventListener('change', setNotificationSettings);
-
-logOutBtn.addEventListener('click', () => {
-  window.location.replace('/pages/logout');
-});
