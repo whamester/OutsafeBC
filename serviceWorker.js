@@ -1,7 +1,7 @@
-const STATIC_RESOURCES_KEY = 'static-resources-6';
-const APP_RESOURCES_KEY = 'app-resources-6';
+const STATIC_RESOURCES_KEY = 'static-resources-5';
+const APP_RESOURCES_KEY = 'app-resources-5';
 
-const API_REQUESTS_KEY = 'api-requests-6';
+const API_REQUESTS_KEY = 'api-requests-5';
 
 const ICONS = [
   'assets/icons/search.svg',
@@ -190,25 +190,27 @@ self.addEventListener('fetch', (event) => {
         if (event.request.method !== 'GET') {
           return response;
         }
+
         if (isAPIRequest) {
-          return caches
-            .open(API_REQUESTS_KEY)
-            .then((cache) => {
-              cache.put(event.request, response.clone()).catch(console.error);
-
-              return response;
-            })
-            .catch(console.log);
+          try {
+            const cache = await caches.open(API_REQUESTS_KEY);
+            if (cache) {
+              await cache.put(event.request, response.clone());
+            }
+          } catch (error) {
+            console.error(error);
+          }
         }
-        if (!APP_BLACKLIST.find((url) => event.request.url.includes(url))) {
-          return caches
-            .open(APP_RESOURCES_KEY)
-            .then((cache) => {
-              cache.put(event.request, response.clone()).catch(console.error);
 
-              return response;
-            })
-            .catch(console.log);
+        if (!APP_BLACKLIST.find((url) => event.request.url.includes(url))) {
+          try {
+            const cache = await caches.open(APP_RESOURCES_KEY);
+            if (cache) {
+              await cache.put(event.request, response.clone());
+            }
+          } catch (error) {
+            console.error(error);
+          }
         }
         return response;
       })
