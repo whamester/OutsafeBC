@@ -523,12 +523,19 @@ document.getElementById('starCameraBtn').addEventListener('click', () => {
 });
 
 const stopCamera = () => {
-  document.getElementById('displayCameraArea').style.display = 'none';
-  const tracks = video.srcObject.getTracks();
-  tracks.forEach((track) => track.stop());
-  document.getElementById('starCameraBtn').disabled = false;
-  document.getElementById('stopCameraBtn').disabled = true;
-  document.getElementById('takeDesktopPictureBtn').disabled = true;
+  try {
+    document.getElementById('displayCameraArea').style.display = 'none';
+    if (video) {
+      const tracks = video?.srcObject?.getTracks();
+      tracks.forEach((track) => track.stop());
+    }
+
+    document.getElementById('starCameraBtn').disabled = false;
+    document.getElementById('stopCameraBtn').disabled = true;
+    document.getElementById('takeDesktopPictureBtn').disabled = true;
+  } catch (error) {
+    console.error(error);
+  }
 };
 document.getElementById('stopCameraBtn').addEventListener('click', stopCamera);
 
