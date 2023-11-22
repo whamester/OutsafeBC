@@ -4,6 +4,7 @@
   background: var(--white, #fff);
   box-shadow: 0px 2px 1px 0px rgba(0, 0, 0, 0.05);
   gap: 1rem;
+  position: relative;
 }
 
 .report-card__inner {
@@ -78,8 +79,31 @@
 .report-card__picture-container {
   display: flex;
   gap: 0.75rem;
-  overflow: scroll;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding-bottom: 0.75rem;
 }
+
+/* Scroller */
+.report-card__picture-container::-webkit-scrollbar {
+  display: block;
+  width: 6px;
+  height: 6px;
+}
+
+.report-card__picture-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.report-card__picture-container::-webkit-scrollbar-thumb {
+  border-radius: 2px;
+  background: var(--neutral-300);
+}
+
+.report-card__picture-container::-webkit-scrollbar-thumb:hover {
+  background: var(--neutral-400);
+}
+/* Scroller */
 
 .report-card__picture-container img {
   height: 5.125rem;

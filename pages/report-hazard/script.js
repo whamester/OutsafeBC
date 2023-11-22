@@ -151,7 +151,7 @@ const displayCurrentSection = () => {
     if (pageId === STEPS.location && idReport && !mapInstance) {
       // Display the position of the report location
       mapInstance = new Map(currentReport.location.lat, currentReport.location.lng);
-      mapInstance.setMarkerOnMap(currentReport.location.lat, currentReport.location.lng, {
+      mapInstance.setRelativeMarkerOnMap(currentReport.location.lat, currentReport.location.lng, {
         draggable: true,
       });
 
@@ -259,7 +259,7 @@ const getAddressFromCoordinates = async (params) => {
  */
 
 const onSelectLocation = async (event) => {
-  mapInstance.setMarkerOnMap(event.latlng.lat, event.latlng.lng, {
+  mapInstance.setRelativeMarkerOnMap(event.latlng.lat, event.latlng.lng, {
     draggable: true,
   });
   await updateCurrentReportLocation(event.latlng);
