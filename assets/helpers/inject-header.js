@@ -4,11 +4,7 @@ import NotificationsEmpty from '../components/NotificationsEmpty.js';
 import loadIcons from '../helpers/load-icons.js';
 import Map from '../models/Map.js';
 import injectHTML from './inject-html.js';
-import {
-  getNotifications,
-  getUserSession,
-  updateNotificationAsRead,
-} from './storage.js';
+import { getNotifications, getUserSession, updateNotificationAsRead } from './storage.js';
 
 const user = getUserSession();
 
@@ -46,9 +42,7 @@ const injectHeader = (params) => {
           updateNotificationAsRead(user.id, notification.id);
         });
 
-        const listItems = document.querySelectorAll(
-          '#notifications-popup ul li'
-        );
+        const listItems = document.querySelectorAll('#notifications-popup ul li');
 
         listItems.forEach((item) => {
           item.classList.add('notification__item--read');
@@ -80,17 +74,13 @@ export const displayNotificationItem = (report) => {
     } else {
       insertedElement = list.appendChild(listItem);
     }
-    const detailsButton = insertedElement.querySelector(
-      '.notification__body__button'
-    );
+    const detailsButton = insertedElement.querySelector('.notification__body__button');
 
     if (detailsButton) {
       detailsButton.addEventListener('click', () => {
         insertedElement.classList.add('notification__item--read');
         updateNotificationAsRead(user.id, report.id);
-        window.location.replace(
-          `/pages/home/index.html?id=${report.id}&open=true&zoom=${Map.DEFAULT_MAP_ZOOM}&lat=${report.location.lat}&lng=${report.location.lng}`
-        );
+        window.location.replace(`/pages/home/index.html?id=${report.id}&open=true&zoom=${Map.DEFAULT_MAP_ZOOM}&lat=${report.location.lat}&lng=${report.location.lng}`);
 
         checkIfAllNotificationsAreRead();
       });
@@ -102,24 +92,16 @@ export const displayNotificationItem = (report) => {
 
 export const checkIfAllNotificationsAreRead = () => {
   const noNotificationsIcon = document.getElementById('no-notifications');
-  const withNotificationsIcon = document.getElementById('with-notifications');
+  const badge = document.querySelector('.badge');
 
   const notifications = user ? getNotifications(user.id) : [];
 
-  if (
-    Array.isArray(notifications) &&
-    noNotificationsIcon &&
-    withNotificationsIcon
-  ) {
-    const readAll = notifications
-      .map((n) => !!n.read)
-      .every((value) => !!value);
+  if (Array.isArray(notifications) && noNotificationsIcon && badge) {
+    const readAll = notifications.map((n) => !!n.read).every((value) => !!value);
     if (readAll) {
-      noNotificationsIcon.classList.remove('hidden');
-      withNotificationsIcon.classList.add('hidden');
+      badge.classList.add('hidden');
     } else {
-      noNotificationsIcon.classList.add('hidden');
-      withNotificationsIcon.classList.remove('hidden');
+      badge.classList.remove('hidden');
     }
   }
 
