@@ -1,7 +1,7 @@
-const STATIC_RESOURCES_KEY = 'static-resources-5';
-const APP_RESOURCES_KEY = 'app-resources-5';
+const STATIC_RESOURCES_KEY = 'static-resources-6';
+const APP_RESOURCES_KEY = 'app-resources-6';
 
-const API_REQUESTS_KEY = 'api-requests-5';
+const API_REQUESTS_KEY = 'api-requests-6';
 
 const ICONS = [
   'assets/icons/search.svg',
@@ -183,43 +183,38 @@ const APP_BLACKLIST = ['https://outsafebc-api.netlify.app', '/jawg-terrain', 'ch
 
 self.addEventListener('fetch', (event) => {
   event.respondWith(
-    caches.match(event.request).then((cache) => {
-      const isAPIRequest = !!API_REQUESTS_URLS.find((url) => event.request.url.includes(url)) && event.request.method === 'GET';
-      if (isAPIRequest) {
-        caches.open(API_REQUESTS_KEY).then((cache) => cache.add(event.request).catch(console.error));
-      }
+    fetch(event.request)
+      .then(async (response) => {
+        const isAPIRequest = !!API_REQUESTS_URLS.find((url) => event.request.url.includes(url)) && event.request.method === 'GET';
 
-      // console.log({ isAPIRequest, cache });
-      if (cache && isAPIRequest) {
-        fetch(event.request).then((response) =>
-          caches
+        if (event.request.method !== 'GET') {
+          return response;
+        }
+        if (isAPIRequest) {
+          return caches
             .open(API_REQUESTS_KEY)
             .then((cache) => {
               cache.put(event.request, response.clone()).catch(console.error);
 
               return response;
             })
-            .catch(console.log)
-        );
-      }
+            .catch(console.log);
+        }
+        if (!APP_BLACKLIST.find((url) => event.request.url.includes(url))) {
+          return caches
+            .open(APP_RESOURCES_KEY)
+            .then((cache) => {
+              cache.put(event.request, response.clone()).catch(console.error);
 
-      return (
-        cache ||
-        fetch(event.request)
-          .then(async (response) => {
-            return caches
-              .open(APP_RESOURCES_KEY)
-              .then((cache) => {
-                if (!APP_BLACKLIST.find((url) => event.request.url.includes(url)) && event.request.method === 'GET') {
-                  cache.put(event.request, response.clone()).catch(console.error);
-                }
-                return response;
-              })
-              .catch(console.log);
-          })
-          .catch(console.log)
-      );
-    })
+              return response;
+            })
+            .catch(console.log);
+        }
+        return response;
+      })
+      .catch(() => {
+        return caches.match(event.request);
+      })
   );
 });
 
