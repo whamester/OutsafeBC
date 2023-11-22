@@ -534,10 +534,10 @@ const showHazardDetails = (hazardReport) => {
 
         const data = {
           title: hazardReport.hazard,
-          text: `Hazard: ${hazardReport.hazard}\nLocation: ${hazardReport.location}\nReported: ${date1 + ' ' + time1}\nUpdated: ${hazardReport.updated_at ?  date2 + ' ' + time2 : 'N/A'}`,
+          text: `Hazard: ${hazardReport.hazard}\nLocation: ${hazardReport.location}\nReported: ${date1 + ' ' + time1}\nUpdated: ${hazardReport.updated_at ?  date2 + ' ' + time2 : 'N/A'}\n`,
           url,
         };
-        
+
         await navigator.share(data);
       } catch (err) {
         console.error('Share error: ', err);
