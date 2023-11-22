@@ -6,10 +6,8 @@ const errorInputHelper = () => {
   formField.forEach((element) => {
     try {
       const icon = document.createElement('i');
-      const input = element.querySelector('input');
-      const inputContainer = element.querySelector(
-        '.form-field__input-container'
-      );
+      const input = element.querySelector('input') || element.querySelector('textarea');
+      const inputContainer = element.querySelector('.form-field__input-container');
       const inputAttributes = [...input.attributes];
       const isDisabled = inputAttributes.find((value) => {
         return value.name === 'disabled';
@@ -23,9 +21,7 @@ const errorInputHelper = () => {
 
       icon.setAttribute('class', 'icon-exclamation-mark');
       icon.style.mask = `url(../../assets/icons/exclamation-mark.svg)`;
-      icon.style[
-        '-webkit-mask-image'
-      ] = `url(../../assets/icons/exclamation-mark.svg)`;
+      icon.style['-webkit-mask-image'] = `url(../../assets/icons/exclamation-mark.svg)`;
       icon.style['mask-size'] = 'cover';
       icon.style['-webkit-mask-size'] = 'cover';
       inputContainer.appendChild(icon);

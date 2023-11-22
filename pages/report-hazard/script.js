@@ -16,6 +16,7 @@ import { getUserSession } from '../../assets/helpers/storage.js';
 import readImage from '../../assets/helpers/read-image.js';
 import geocode from '../../assets/helpers/geocode.js';
 import injectHeader from '../../assets/helpers/inject-header.js';
+import { showButtonLoading, stopButtonLoading } from '../../assets/helpers/set-action-button.js';
 
 //Variable Declaration
 const url = new URL(window.location.href);
@@ -776,6 +777,7 @@ const setFormValues = (report) => {
 
 const submitReport = async () => {
   try {
+    showButtonLoading('continueBtn');
     const images = await uploadImageToStorage(currentReport.images);
     //CREATE
     if (!idReport) {
@@ -822,9 +824,11 @@ const submitReport = async () => {
           actions: button,
           enableOverlayClickClose: false,
         });
+        stopButtonLoading('continueBtn');
       } else {
         throw new Error('Failed to create report');
       }
+
       return;
     }
 
@@ -865,10 +869,13 @@ const submitReport = async () => {
         actions: button,
         enableOverlayClickClose: false,
       });
+      stopButtonLoading('continueBtn', { reset: true });
     } else {
       throw new Error('Failed to create report');
     }
   } catch (error) {
+    stopButtonLoading('continueBtn', { reset: true });
+
     AlertPopup.show(error.message, AlertPopup.error);
   }
 };
