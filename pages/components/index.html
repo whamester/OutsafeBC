@@ -61,31 +61,6 @@
       padding-top: 1rem;
     }
 
-    .loading {
-      width: 1.2em;
-      height: 1.2em;
-      border-radius: 50%;
-      box-shadow:
-        0 -3em 0 rgba(255, 255, 255, 1),
-        2.25em -2.25em rgba(255, 255, 255, 0.875),
-        3em 0 rgba(255, 255, 255, 0.75),
-        2.25em 2.25em rgba(255, 255, 255, 0.625),
-        0 3em rgba(255, 255, 255, 0.5),
-        -2.25em 2.25em rgba(255, 255, 255, 0.375),
-        -3em 0 rgba(255, 255, 255, 0.25),
-        -2.25em -2.25em rgba(255, 255, 255, 0.125);
-
-
-
-      /* box-shadow: 0 -15px 0 rgba(255, 255, 255, 1), 16px -8px rgba(255, 255, 255, 0.875), 15px 0 rgba(255, 255, 255, 0.75), 16px 16px rgba(255, 255, 255, 0.625), 0 3em rgba(255, 255, 255, 0.5), -2.25em 2.25em rgba(255, 255, 255, 0.375), -3em 0 rgba(255, 255, 255, 0.25), -2.25em -2.25em rgba(255, 255, 255, 0.125); */
-      animation: spin 2.2s linear infinite;
-
-    }
-
-    .loading-finished .loading {
-      display: none;
-    }
-
     @keyframes spin {
       100% {
         transform: rotate(-360deg)
@@ -150,6 +125,35 @@
             </div>
           </span>
         </button>
+
+        <button id="action-button" class="btn btn-primary btn-action">
+          Action Button
+          <span class="btn__icon">
+            <i class="icon-arrow-right main-icon"></i>
+
+            <div class="loading-finished-icon hidden">
+              <i class="icon-checkmark"></i>
+
+            </div>
+            <div class="btn__icon__loader" style="font-size: 3px;">
+              <div class="spinner"></div>
+            </div>
+          </span>
+        </button>
+
+        <script type="module">
+          import { showButtonLoading, stopButtonLoading } from '../../assets/helpers/set-action-button.js';
+          const actionButton = document.getElementById('action-button')
+
+          actionButton.addEventListener('click', () => {
+            showButtonLoading('action-button');
+
+
+            setTimeout(() => {
+              stopButtonLoading('action-button', { reset: true })
+            }, 1500)
+          })
+        </script>
         <button class="btn btn-secondary">
           <i class="icon-check"></i>
           Secondary

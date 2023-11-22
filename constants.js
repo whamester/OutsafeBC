@@ -1,6 +1,6 @@
-// export const API_URL = 'https://outsafebc-api.netlify.app/.netlify/functions';
+export const API_URL = 'https://outsafebc-api.netlify.app/.netlify/functions';
 
-export const API_URL = 'http://localhost:8888/.netlify/functions';
+// export const API_URL = 'http://localhost:8888/.netlify/functions';
 
 export const USER_STORAGE = 'user';
 

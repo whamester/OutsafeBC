@@ -799,35 +799,35 @@ const submitReport = async () => {
         }),
       });
 
-      // if (response.ok) {
-      //   allowRedirect = true;
-      //   const { data } = await response.json();
+      if (response.ok) {
+        allowRedirect = true;
+        const { data } = await response.json();
 
-      //   const modal = new Modal();
+        const modal = new Modal();
 
-      //   const button = document.createElement('button');
-      //   button.setAttribute('id', 'open-modal-btn');
-      //   button.setAttribute('class', 'btn btn-primary');
-      //   button.addEventListener('click', () =>
-      //     window.location.assign(`/pages/home/index.html?id=${data.id}&focus=true&zoom=${Map.DEFAULT_MAP_ZOOM}&lat=${data?.location?.lat}&lng=${data?.location?.lng}`)
-      //   );
-      //   button.innerHTML = 'Continue Exploring';
+        const button = document.createElement('button');
+        button.setAttribute('id', 'open-modal-btn');
+        button.setAttribute('class', 'btn btn-primary');
+        button.addEventListener('click', () =>
+          window.location.assign(`/pages/home/index.html?id=${data.id}&focus=true&zoom=${Map.DEFAULT_MAP_ZOOM}&lat=${data?.location?.lat}&lng=${data?.location?.lng}`)
+        );
+        button.innerHTML = 'Continue Exploring';
 
-      //   modal.show({
-      //     title: 'Your report has been submitted!',
-      //     description: 'Thank you for helping others have a safe outdoors experience.',
-      //     icon: {
-      //       name: 'icon-report-submitted',
-      //       color: '#000000',
-      //       size: '3.5rem',
-      //     },
-      //     actions: button,
-      //     enableOverlayClickClose: true,
-      //   });
-      // } else {
-      //   throw new Error('Failed to create report');
-      // }
-      stopButtonLoading('continueBtn');
+        modal.show({
+          title: 'Your report has been submitted!',
+          description: 'Thank you for helping others have a safe outdoors experience.',
+          icon: {
+            name: 'icon-report-submitted',
+            color: '#000000',
+            size: '3.5rem',
+          },
+          actions: button,
+          enableOverlayClickClose: false,
+        });
+        stopButtonLoading('continueBtn');
+      } else {
+        throw new Error('Failed to create report');
+      }
 
       return;
     }
@@ -867,13 +867,14 @@ const submitReport = async () => {
         description: 'Thank you for helping others have a safe camping experience.',
         icon: { name: 'icon-check', color: '#000000', size: '3.5rem' },
         actions: button,
-        enableOverlayClickClose: true,
+        enableOverlayClickClose: false,
       });
+      stopButtonLoading('continueBtn', { reset: true });
     } else {
       throw new Error('Failed to create report');
     }
   } catch (error) {
-    stopButtonLoading('continueBtn');
+    stopButtonLoading('continueBtn', { reset: true });
 
     AlertPopup.show(error.message, AlertPopup.error);
   }
