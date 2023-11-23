@@ -79,12 +79,11 @@
   #signup-main .content-image img {
     position: absolute;
     top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    max-width: 100%;
+    left: 17.24rem;
+    transform: translateY(-50%);
     max-height: 100%;
     width: auto;
-    height: auto;
-    padding-left: 17.24rem;
-  }
+    height: 39.7rem;
+}
+
 }
