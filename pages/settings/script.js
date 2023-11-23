@@ -273,31 +273,6 @@ async function deleteAccount() {
 }
 
 // Update settings
-// Check permission status
-// function checkPermissions() {
-//   const permissionStatus = document.getElementById('permissionStatus');
-
-//   if ('Notification' in window) {
-//     navigator.permissions.query({ name: 'notifications' }).then((notificationPermissionStatus) => {
-//       if (notificationPermissionStatus.state !== 'granted') {
-//         // const pElement = document.createElement('p');
-//         // pElement.textContent = 'Push Notification permissions are not granted';
-//         // permissionStatus.appendChild(pElement);
-//       }
-//     });
-//   }
-
-//   if ('geolocation' in navigator) {
-//     navigator.permissions.query({ name: 'geolocation' }).then((geolocationPermissionStatus) => {
-//       if (geolocationPermissionStatus.state !== 'granted') {
-//         // const pElement = document.createElement('p');
-//         // pElement.textContent = 'Geolocation permissions are not granted';
-//         // permissionStatus.appendChild(pElement);
-//       }
-//     });
-//   }
-// }
-// checkPermissions();
 
 // Check status of push notification setting
 async function getNotificationSettings() {
