@@ -90,7 +90,9 @@
     border-radius: 0.75rem;
     top: 14.3rem;
     left: 5rem;
-    height: 24rem;
+    height: fit-content;
+    max-height: 24rem;
+    overflow: auto;
   }
 
   .report-card__inner {

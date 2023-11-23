@@ -181,7 +181,6 @@ self.addEventListener('activate', async (event) => {
 const API_REQUESTS_URLS = ['https://outsafebc-api.netlify.app'];
 const APP_BLACKLIST = ['https://outsafebc-api.netlify.app', '/jawg-terrain', 'chrome-extension://'];
 
-
 self.addEventListener('fetch', (event) => {
   event.respondWith(
     fetch(event.request)

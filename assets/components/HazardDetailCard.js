@@ -126,13 +126,19 @@ class HazardDetailCard extends ReportCardContainer {
   }
 
   changeButtonState() {
-    //If I have already flagged the report
-    if (!!this.flagged_as_fake) {
+    //If I have already flagged the report or if enable reaction is false
+    if (!!this.flagged_as_fake || !this.enable_reaction) {
       // hide the flag report button
       this.divContainer.querySelector('#flagReportBtn').classList.add('hidden');
+      // hide the reaction buttons
+      this.divContainer.querySelector('#stillThereBtn').classList.add('hidden');
+      this.divContainer.querySelector('#notThereBtn').classList.add('hidden');
     } else {
       // show the flag report button
       this.divContainer.querySelector('#flagReportBtn').classList.remove('hidden');
+      // show the reaction buttons
+      this.divContainer.querySelector('#stillThereBtn').classList.remove('hidden');
+      this.divContainer.querySelector('#notThereBtn').classList.remove('hidden');
     }
 
     // If I have flagged the report and others aswell
@@ -155,18 +161,7 @@ class HazardDetailCard extends ReportCardContainer {
     }
     // If the report has not been flagged
     else {
-      this.divContainer.querySelector('#flagReportMessage').classList.add('hidden');
-    }
-
-    // if enable reaction is false
-    if (!this.enable_reaction) {
-      // hide the reaction buttons
-      this.divContainer.querySelector('#stillThereBtn').classList.add('hidden');
-      this.divContainer.querySelector('#notThereBtn').classList.add('hidden');
-    } else {
-      // show the reaction buttons
-      this.divContainer.querySelector('#stillThereBtn').classList.remove('hidden');
-      this.divContainer.querySelector('#notThereBtn').classList.remove('hidden');
+      this.divContainer.querySelector('.report-card__hazard-detail-buttons').classList.add('hidden');
     }
   }
 

@@ -165,6 +165,7 @@ class ReportCardContainer {
     div.innerHTML = contentHTML;
     return div;
   }
+
   getMyReportButtons() {
     const contentHTML = `	
     ${ToggleSwitch(this.id, !this.deleted_at)}

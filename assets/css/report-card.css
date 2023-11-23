@@ -11,12 +11,17 @@
   margin: 1rem;
   display: flex;
   flex-direction: column;
-  height: calc(100% - 2rem);
+  max-height: calc(100% - 2rem);
 }
 
 .report-card__inner > div:not(:first-child):not(:last-child) {
   border-bottom: 1px solid var(--neutral-300, #d0d5dd);
   padding: 1rem 0;
+}
+
+.report-card__inner > div:nth-last-child(1 of :not(.hidden)) {
+  border-bottom: none;
+  padding-bottom: 0;
 }
 
 .report-card__inner > div:nth-child(2) {
@@ -25,6 +30,12 @@
 
 .report-card__inner > div:last-child {
   padding-top: 1rem;
+}
+
+.report-card__inner > .report-card__reported-by {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .report-card__heading {
