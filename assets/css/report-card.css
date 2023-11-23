@@ -11,7 +11,7 @@
   margin: 1rem;
   display: flex;
   flex-direction: column;
-  max-height: calc(100% - 2rem);
+  /* max-height: calc(100% - 2rem); */
 }
 
 .report-card__inner > div:not(:first-child):not(:last-child) {
@@ -136,4 +136,16 @@
   width: 1.2rem;
   height: 1.2rem;
   background-color: var(--neutral-600);
+}
+
+@media screen and (min-width: 768px) {
+  .report-card__outer {
+    width: 25rem;
+  }
+}
+
+@media screen and (min-width: 1440px) {
+  .report-card__outer {
+    width: 25rem;
+  }
 }

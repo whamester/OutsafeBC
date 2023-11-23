@@ -139,6 +139,12 @@ class HazardDetailCard extends ReportCardContainer {
       // show the reaction buttons
       this.divContainer.querySelector('#stillThereBtn').classList.remove('hidden');
       this.divContainer.querySelector('#notThereBtn').classList.remove('hidden');
+
+      if (!!this.flagged_count) {
+        this.divContainer.querySelector('.report-card__hazard-detail-buttons').classList.add('hidden');
+      } else {
+        this.divContainer.querySelector('.report-card__hazard-detail-buttons').classList.remove('hidden');
+      }
     }
 
     // If I have flagged the report and others aswell
@@ -159,10 +165,6 @@ class HazardDetailCard extends ReportCardContainer {
       this.divContainer.querySelector('#flagReportMessage').classList.remove('hidden');
       this.divContainer.querySelector('#flagReportMessage p').innerHTML = FLAGGED_BY_OTHERS_MESSAGE;
     }
-    // If the report has not been flagged
-    else {
-      this.divContainer.querySelector('.report-card__hazard-detail-buttons').classList.add('hidden');
-    }
   }
 
   hazardCardContent() {
@@ -173,6 +175,10 @@ class HazardDetailCard extends ReportCardContainer {
     divOuter.setAttribute('class', `report-card__outer`);
     let divInner = document.createElement('div');
     divInner.setAttribute('class', `report-card__inner`);
+
+    const scrollContainer = document.createElement('div');
+    scrollContainer.setAttribute('class', 'report-card__scroll-container');
+    scrollContainer.appendChild(divInner);
 
     divOuter.appendChild(super.getTopControls());
     divInner.appendChild(super.getHeading());
@@ -188,7 +194,7 @@ class HazardDetailCard extends ReportCardContainer {
 
     // TODO: We can add the edit button for the user if it's the author of the report
 
-    divOuter.appendChild(divInner);
+    divOuter.appendChild(scrollContainer);
     divContainer.appendChild(divOuter);
 
     divContainer.querySelector('#stillThereBtn').addEventListener('click', () => {

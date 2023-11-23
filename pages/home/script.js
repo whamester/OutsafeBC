@@ -577,7 +577,9 @@ const showHazardDetails = (hazardReport) => {
 
     let updateHeight = (height) => {
       //updating sheet height
-      content.style.height = `${height}vh`;
+      if (window.matchMedia('(max-width: 768px)').matches) {
+        content.style.height = `${height}vh`;
+      }
     };
 
     function mediaQueryCheck(windowWidth) {
