@@ -120,6 +120,10 @@ main section {
 }
 
 @media screen and (min-width: 768px) {
+  main {
+    padding-top: 10.75rem;
+  }
+
   #dropdownMenu {
     display: none;
   }
