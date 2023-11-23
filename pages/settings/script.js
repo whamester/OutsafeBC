@@ -8,7 +8,6 @@ import AlertPopup from '../../assets/components/AlertPopup.js';
 
 const user = getUserSession();
 
-const dropArea = document.getElementById('dropArea');
 const inputFile = document.getElementById('inputImage');
 const nameField = document.getElementById('name');
 const emailField = document.getElementById('email');
@@ -39,25 +38,92 @@ nameField.addEventListener('input', () => {
 });
 
 // SPA for sections
-dropdownMenu.addEventListener('change', () => {
-  const settingsMap = {
-    basicInfoOptn: basicInfoSettings,
-    passwordOptn: changePasswordSettings,
-    notificationsOtp: notificationsSettings,
-    securityOtn: securitySettings,
-  };
+const settingsMap = {
+  basicInfoOptn: basicInfoSettings,
+  passwordOptn: changePasswordSettings,
+  notificationsOtp: notificationsSettings,
+  securityOtn: securitySettings,
+};
 
-  // Hide all settings elements
+let currentSelectedOption = null;
+
+function toggleSettingsDisplay(selectedSetting) {
   for (const settingsElement of Object.values(settingsMap)) {
     settingsElement.style.display = 'none';
   }
 
-  // Show the selected settings element
-  const selectedSettings = settingsMap[dropdownMenu.value];
-  if (selectedSettings) {
-    selectedSettings.style.display = 'flex';
+  if (selectedSetting) {
+    selectedSetting.style.display = 'flex';
   }
+}
+
+// Set the initial selected option to the first option in the dropdown
+const initialOption = dropdownMenu.options[0].value;
+dropdownMenu.value = initialOption;
+
+// Initialize the state based on the initially selected option
+currentSelectedOption = initialOption;
+updateActiveButton(); // This will add the 'active' class to the corresponding button
+toggleSettingsDisplay(settingsMap[initialOption]);
+
+// Dropdown menu
+dropdownMenu.addEventListener('change', () => {
+  const selectedSettings = settingsMap[dropdownMenu.value];
+  currentSelectedOption = dropdownMenu.value;
+  toggleSettingsDisplay(selectedSettings);
+  updateActiveButton();
 });
+
+// Side menu
+function setupSideMenuButton(btnId, settingKey) {
+  const button = document.getElementById(btnId);
+
+  // Add a click event listener to each side menu button
+  button.addEventListener('click', function () {
+    dropdownMenu.value = settingKey; // Set the dropdown value
+    const selectedSettings = settingsMap[settingKey];
+    currentSelectedOption = settingKey;
+    toggleSettingsDisplay(selectedSettings);
+    updateActiveButton();
+    toggleButton(btnId); // Add 'active' class to the clicked button
+  });
+}
+
+function updateActiveButton() {
+  var buttons = document.querySelectorAll('.account-settings__menu-btn');
+  buttons.forEach(function (button) {
+    button.classList.remove('active');
+  });
+
+  const activeButton = document.getElementById(currentSelectedOption);
+  if (activeButton) {
+    activeButton.classList.add('active');
+  } else {
+    // If no active button is found, default to the first button
+    const defaultButton = document.getElementById('btn1'); // Adjust the ID accordingly
+    if (defaultButton) {
+      defaultButton.classList.add('active');
+      currentSelectedOption = 'basicInfoOptn'; // Set the corresponding setting key
+    }
+  }
+}
+
+// Initialize the state based on the currently selected option
+updateActiveButton();
+
+// Setup side menu buttons
+setupSideMenuButton('btn1', 'basicInfoOptn');
+setupSideMenuButton('btn2', 'passwordOptn');
+setupSideMenuButton('btn3', 'notificationsOtp');
+setupSideMenuButton('btn4', 'securityOtn');
+
+function toggleButton(btnId) {
+  var buttons = document.querySelectorAll('.account-settings__menu-btn');
+  buttons.forEach(function (button) {
+    button.classList.remove('active');
+  });
+  document.getElementById(btnId).classList.add('active');
+}
 
 //Show user information
 function showUserInfo() {

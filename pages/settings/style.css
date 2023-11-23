@@ -11,8 +11,26 @@ h3 {
   align-items: center;
   gap: 0.5rem;
   border-radius: 1rem;
-  border: 1px solid var(--neutral-neutral-200, #e4e7ec);
+  font-size: var(--body-1-large-size);
+  letter-spacing: var(--body-1-large-letter-spacing);
+  line-height: var(--body-1-large-line-height);
+  font-weight: 500;
+  color: var(--neutral-neutral-900, #101928);
+  background: var(--secondary-secondary-200, #edf4f2);
+  border: 1px solid var(--neutral-200, #e4e7ec);
+}
+
+option {
+  font-size: var(--body-1-large-size);
+  letter-spacing: var(--body-1-large-letter-spacing);
+  line-height: var(--body-1-large-line-height);
+  font-weight: 400;
+  color: var(--neutral-neutral-500, #667185);
   background: var(--white, #fff);
+}
+
+.account-settings__side-menu {
+  display: none;
 }
 
 main section {
@@ -24,7 +42,7 @@ main section {
   align-items: flex-start;
   gap: 2rem;
   border-radius: 1rem;
-  border: 1px solid var(--neutral-neutral-200, #e4e7ec);
+  border: 1px solid var(--neutral-200, #e4e7ec);
   background: var(--white, #fff);
 }
 
@@ -56,7 +74,7 @@ input {
   gap: 0.5rem;
   align-self: stretch;
   border-radius: 0.5rem;
-  border: 1px solid var(--neutral-neutral-300, #d0d5dd);
+  border: 1px solid var(--neutral-300, #d0d5dd);
   background: var(--white, #fff);
 
   /* Shadow/xs */
@@ -80,4 +98,68 @@ input {
   align-items: flex-start;
   gap: 0.75rem;
   align-self: stretch;
+}
+
+#sideMenu {
+  display: none;
+  width: 18.875rem;
+  height: fit-content;
+  padding: 1.5rem 1rem;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+  border-radius: 1rem;
+  border: 1px solid var(--neutral-200, #e4e7ec);
+  background: var(--white, #fff);
+}
+
+.account-settings__menu-btn {
+  display: flex;
+  padding: 0.5rem 1rem;
+  align-items: flex-start;
+  gap: 0.5rem;
+  align-self: stretch;
+  border-radius: 0.5rem;
+  font-size: var(--body-1-large-size);
+  letter-spacing: var(--body-1-large-letter-spacing);
+  line-height: var(--body-1-large-line-height);
+  font-weight: 400;
+  color: var(--neutral-500, #667185);
+  text-decoration: none;
+  transition: background-color 0.3s;
+}
+
+.account-settings__menu-btn:hover {
+  background-color: var(--neutral-100, #f0f2f5);
+}
+
+.account-settings__menu-btn.active {
+  background: var(--secondary-200, #edf4f2);
+  color: var(--neutral-900, #101928);
+  font-weight: 500;
+}
+
+@media screen and (min-width: 768px) {
+  #dropdownMenu {
+    display: none;
+  }
+
+  #sideMenu {
+    display: flex;
+  }
+
+  .account-settings__menu {
+    display: flex;
+  }
+  .account-settings__wrapper {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+  }
+}
+
+@media screen and (min-width: 1440px) {
+  main {
+    max-width: 1440px;
+    margin: auto;
+  }
 }

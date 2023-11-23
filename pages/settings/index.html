@@ -36,73 +36,86 @@
     <main>
       <h1 class="text-heading-1">Account Settings</h1>
 
-      <label for="dropdownMenu"></label>
-      <select name="dropdownMenu" id="dropdownMenu" class="text-body-1 medium">
-        <option value="basicInfoOptn" selected class="text-body-1 medium">Basic Info</option>
-        <option value="passwordOptn" class="text-body-1 medium">Password</option>
-        <option value="notificationsOtp" class="text-body-1 medium">Notifications</option>
-        <option value="securityOtn" class="text-body-1 medium">Security</option>
-      </select>
+      <div class="account-settings__wrapper">
+        <div class="account-settings__menu">
+          <label for="dropdownMenu"></label>
+          <select name="dropdownMenu" id="dropdownMenu" class="text-body-1 medium">
+            <option value="basicInfoOptn" selected class="text-body-1 medium">Basic Info</option>
+            <option value="passwordOptn" class="text-body-1 medium">Password</option>
+            <option value="notificationsOtp" class="text-body-1 medium">Notifications</option>
+            <option value="securityOtn" class="text-body-1 medium">Security</option>
+          </select>
 
-      <section id="basicInfoSettings" style="display: none">
-        <h2 class="text-heading-2">Basic Info</h2>
-
-        <div class="account-settings__profile-picture">
-          <img src="#" alt="User profile picture" id="profilePhoto" />
-
-          <div class="account-settings__profile-picture-btns">
-            <button class="btn btn-secondary">Upload Image</button>
-            <button class="btn btn-error">Delete</button>
+          <div class="account-settings__side-menu" id="sideMenu">
+            <a href="#" class="account-settings__menu-btn" id="btn1">Basic Info</a>
+            <a href="#" class="account-settings__menu-btn" id="btn2">Password</a>
+            <a href="#" class="account-settings__menu-btn" id="btn3">Notifications</a>
+            <a href="#" class="account-settings__menu-btn" id="btn4">Security</a>
           </div>
         </div>
 
-        <form id="profileForm">
-          <label for="name" class="text-body-2 medium">Name</label>
-          <input type="text" id="name" required class="text-body-2 regular" />
-        </form>
+        <div class="account-settings_content">
+          <section id="basicInfoSettings" style="display: none">
+            <h2 class="text-heading-2">Basic Info</h2>
 
-        <div class="account-settings__email">
-          <label for="email" class="text-body-2 medium">Email address</label>
-          <input type="email" id="email" readonly class="text-body-2 regular" />
+            <div class="account-settings__profile-picture">
+              <img src="#" alt="User profile picture" id="profilePhoto" />
+
+              <div class="account-settings__profile-picture-btns">
+                <button class="btn btn-secondary">Upload Image</button>
+                <button class="btn btn-error">Delete</button>
+              </div>
+            </div>
+
+            <form id="profileForm">
+              <label for="name" class="text-body-2 medium">Name</label>
+              <input type="text" id="name" required class="text-body-2 regular" />
+            </form>
+
+            <div class="account-settings__email">
+              <label for="email" class="text-body-2 medium">Email address</label>
+              <input type="email" id="email" readonly class="text-body-2 regular" />
+            </div>
+
+            <button type="submit" id="saveProfileInfoBtn" form="profileForm" class="btn btn-primary">Save Changes</button>
+          </section>
+
+          <section id="changePasswordSettings" style="display: none">
+            <h2 class="text-heading-2">Change Password</h2>
+            <p>We will send you a link to change your password.</p>
+            <button id="resetPwBtn" class="btn btn-primary">Send link via email</button>
+          </section>
+
+          <section id="notificationsSettings" style="display: none">
+            <h2 class="text-heading-2">Notifications</h2>
+
+            <div class="account-settings__notifications-details">
+              <i class="icon-notification-no" style="background-color: var(--neutral-700)"></i>
+              <div class="notifications-details__text">
+                <h3>Allow Push Notifications</h3>
+                <p>Get real-time updats for nearby reported hazards.</p>
+              </div>
+            </div>
+
+            <div class="report-card__toggle_button">
+              <label class="switch">
+                <input type="checkbox" id="pushNotificationSwitch" />
+                <span class="slider round"></span>
+              </label>
+            </div>
+          </section>
+
+          <section id="securitySettings" style="display: none">
+            <h2 class="text-heading-2">Delete Account</h2>
+            <p>If you no longer want to use Outsafe BC, you can permanently delete your account. You can’t undo this action!</p>
+
+            <button id="deleteAccountBtn" class="btn btn-error">
+              <i class="icon-check"></i>
+              Delete Account
+            </button>
+          </section>
         </div>
-
-        <button type="submit" id="saveProfileInfoBtn" form="profileForm" class="btn btn-primary">Save Changes</button>
-      </section>
-
-      <section id="changePasswordSettings" style="display: none">
-        <h2 class="text-heading-2">Change Password</h2>
-        <p>We will send you a link to change your password.</p>
-        <button id="resetPwBtn" class="btn btn-primary">Send link via email</button>
-      </section>
-
-      <section id="notificationsSettings" style="display: none">
-        <h2 class="text-heading-2">Notifications</h2>
-
-        <div class="account-settings__notifications-details">
-          <i class="icon-notification-no" style="background-color: var(--neutral-700)"></i>
-          <div class="notifications-details__text">
-            <h3>Allow Push Notifications</h3>
-            <p>Get real-time updats for nearby reported hazards.</p>
-          </div>
-        </div>
-
-        <div class="report-card__toggle_button">
-          <label class="switch">
-            <input type="checkbox" id="pushNotificationSwitch" />
-            <span class="slider round"></span>
-          </label>
-        </div>
-      </section>
-
-      <section id="securitySettings" style="display: none">
-        <h2 class="text-heading-2">Delete Account</h2>
-        <p>If you no longer want to use Outsafe BC, you can permanently delete your account. You can’t undo this action!</p>
-
-        <button id="deleteAccountBtn" class="btn btn-error">
-          <i class="icon-check"></i>
-          Delete Account
-        </button>
-      </section>
+      </div>
     </main>
   </body>
 </html>
