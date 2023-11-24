@@ -1,5 +1,5 @@
 .loader-start {
-  background: #fff;
+  background: #D8E8E2;
   width: 100%;
   height: 100vh;
   display: flex;
@@ -9,9 +9,27 @@
   top: 0;
   left: 0;
   z-index: 10;
-  clip-path: circle(150% at 100% 0);
+  /* clip-path: circle(150% at 100% 0); */
+  
+  /* Circle */
+  clip-path: circle(72.0% at 50% 50%);
+  
+  /* Bevel */
+  /* clip-path: polygon(20% 0%, 80% 0%, 100% 20%, 100% 80%, 80% 100%, 20% 100%, 0% 80%, 0% 20%); */
+
+  /* square */
+  /* clip-path: inset(0 0 0 0); */
   transition: clip-path 1.9s ease-in-out;
 }
 .loader-end {
-  clip-path: circle(0% at 100% 100%);
+  /* clip-path: circle(0% at 100% 100%); */
+
+  /* Circle */
+  clip-path: circle(0% at 50% 50%);
+
+  /* Bevel */
+  /* clip-path: polygon(50% 50%, 50% 50%, 50% 50%, 50% 50%, 50% 50%, 50% 50%, 50% 50%, 50% 50%); */
+
+  /* square */
+  /* clip-path: inset(50% 50% 50% 50%); */
 }

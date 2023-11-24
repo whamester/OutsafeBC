@@ -9,7 +9,7 @@ import Header from '../../assets/components/Header.js';
 import AlertPopup from '../../assets/components/AlertPopup.js';
 import { onToggle } from '../../assets/components/ToggleSwitch.js';
 import ReportsEmpty from '../../assets/components/ReportsEmpty.js';
-
+import LoaderAnimation from '../../assets/components/WhiteTransition.js';
 // Variables
 const user = getUserSession();
 let userID = user?.id;
@@ -22,6 +22,9 @@ const recentBtn = document.getElementById('recentReportsBtn');
 const olderBtn = document.getElementById('olderReportsBtn');
 
 const empty = new ReportsEmpty();
+
+//Loading animation (White overlay)
+LoaderAnimation.initialize();
 
 //Redirect if not logged in
 function redirectUser() {
