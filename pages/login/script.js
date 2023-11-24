@@ -8,11 +8,16 @@ import {
 import Header from '../../assets/components/Header.js';
 import AlertPopup from '../../assets/components/AlertPopup.js';
 import injectHeader from '../../assets/helpers/inject-header.js';
+import LoaderAnimation from '../../assets/components/WhiteTransition.js';
+
 //Variables
 const password = document.getElementById('password-input');
 const showPw = document.getElementById('show-pw');
 const hidePw = document.getElementById('hide-pw');
 
+
+//Loading animation (White overlay)
+LoaderAnimation.initialize();
 /**
  * Google Auth Setup
  */

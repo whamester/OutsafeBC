@@ -8,6 +8,8 @@ import {
 import Header from '../../assets/components/Header.js';
 import AlertPopup from '../../assets/components/AlertPopup.js';
 import injectHeader from '../../assets/helpers/inject-header.js';
+import LoaderAnimation from '../../assets/components/WhiteTransition.js';
+
 //Variables
 const password = document.getElementById('password-input');
 const confirmPassword = document.getElementById('confirm-password-input');
@@ -18,6 +20,10 @@ const hidePw = document.getElementById('hide-pw');
 const showPwConfirm = document.getElementById('show-pw-confirm');
 const hidePwConfirm = document.getElementById('hide-pw-confirm');
 
+
+
+//Loading animation (White overlay)
+LoaderAnimation.initialize();
 /**
  * Google Auth Setup
  */
