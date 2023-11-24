@@ -90,33 +90,39 @@
           </section>
 
           <section id="changePasswordSettings" style="display: none">
-            <h2 class="text-heading-2">Change Password</h2>
-            <p>We will send you a link to change your password.</p>
+            <div class="account-settings__h2-p">
+              <h2 class="text-heading-2">Change Password</h2>
+              <p>We will send you a link to change your password.</p>
+            </div>
             <button id="resetPwBtn" class="btn btn-primary">Send link via email</button>
           </section>
 
           <section id="notificationsSettings" style="display: none">
             <h2 class="text-heading-2">Notifications</h2>
 
-            <div class="account-settings__notifications-details">
-              <i class="icon-notification-no" style="background-color: var(--neutral-700)"></i>
-              <div class="notifications-details__text">
-                <h3>Allow Push Notifications</h3>
-                <p>Get real-time updats for nearby reported hazards.</p>
+            <div class="account-settings__notifications-container">
+              <div class="account-settings__notifications-details">
+                <i class="icon-notification-no" style="background-color: var(--neutral-700)"></i>
+                <div class="notifications-details__text">
+                  <h3>Allow Push Notifications</h3>
+                  <p>Get real-time updats for nearby reported hazards.</p>
+                </div>
               </div>
-            </div>
 
-            <div class="report-card__toggle_button">
-              <label class="switch">
-                <input type="checkbox" id="pushNotificationSwitch" />
-                <span class="slider round"></span>
-              </label>
+              <div class="report-card__toggle_button">
+                <label class="switch">
+                  <input type="checkbox" id="pushNotificationSwitch" />
+                  <span class="slider round"></span>
+                </label>
+              </div>
             </div>
           </section>
 
           <section id="securitySettings" style="display: none">
-            <h2 class="text-heading-2">Delete Account</h2>
-            <p>If you no longer want to use Outsafe BC, you can permanently delete your account. You can’t undo this action!</p>
+            <div class="account-settings__h2-p">
+              <h2 class="text-heading-2">Delete Account</h2>
+              <p>If you no longer want to use Outsafe BC, you can permanently delete your account. You can’t undo this action!</p>
+            </div>
 
             <button id="deleteAccountBtn" class="btn btn-error">
               <i class="icon-check"></i>

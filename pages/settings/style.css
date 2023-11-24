@@ -1,9 +1,15 @@
-h1 {
-  text-align: center;
+main {
+  padding-top: 2.5rem;
 }
+
+h1,
 h2,
 h3 {
   margin: 0;
+}
+
+h1 {
+  margin-bottom: 1.81rem;
 }
 
 #dropdownMenu {
@@ -80,6 +86,11 @@ main section {
   align-self: stretch;
 }
 
+.report-card__toggle_button {
+  margin-top: 1.5rem;
+  justify-content: flex-start;
+}
+
 #sideMenu {
   display: none;
   width: 18.875rem;
@@ -137,7 +148,16 @@ main section {
 
 @media screen and (min-width: 768px) {
   main {
-    padding-top: 10.75rem;
+    padding-top: 6.75rem;
+    display: flex;
+
+    flex-direction: column;
+    gap: 3.5rem;
+  }
+
+  h1 {
+    text-align: center;
+    margin: 0;
   }
 
   #dropdownMenu {
@@ -154,9 +174,9 @@ main section {
 
   .account-settings__wrapper {
     display: flex;
-    justify-content: center;
+    align-items: flex-start;
     gap: 1.5rem;
-    margin: auto;
+    margin: 0 auto;
   }
 
   .account-settings_content {
@@ -165,6 +185,40 @@ main section {
 
   .form-field input {
     width: 20.375rem;
+  }
+
+  .account-settings__notifications-details {
+    display: flex;
+    flex-direction: row;
+  }
+  .account-settings__notifications-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+  .report-card__toggle_button {
+    margin: auto 0;
+  }
+
+  .account-settings__notifications-details i {
+    margin: auto 0;
+    width: 2rem;
+    height: 2rem;
+  }
+
+  .notifications-details__text p,
+  #changePasswordSettings p,
+  #securitySettings p {
+    font-size: var(--body-3-large-size);
+    color: var(--neutral-500, #667185);
+  }
+
+  .account-settings__h2-p {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    align-self: stretch;
   }
 }
 
