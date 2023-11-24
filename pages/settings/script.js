@@ -5,10 +5,13 @@ import { API_URL } from '../../constants.js';
 import Header from '../../assets/components/Header.js';
 import injectHeader from '../../assets/helpers/inject-header.js';
 import AlertPopup from '../../assets/components/AlertPopup.js';
+import Modal from '../../assets/components/Modal.js';
 
 const user = getUserSession();
 
 const inputFile = document.getElementById('inputImage');
+const uploadImageBtn = document.getElementById('uploadImageBtn');
+const deleteAccountBtn = document.getElementById('deleteAccountBtn');
 const nameField = document.getElementById('name');
 const emailField = document.getElementById('email');
 const basicInfoSettings = document.getElementById('basicInfoSettings');
@@ -35,6 +38,10 @@ window.onload = function () {
 
 nameField.addEventListener('input', () => {
   changedFields.name = true;
+});
+
+inputFile.addEventListener('input', () => {
+  changedFields.photo = true;
 });
 
 // SPA for sections
@@ -191,9 +198,11 @@ async function saveUserInfo(photo = undefined) {
         ...data,
       });
 
+      AlertPopup.show(`Changes have been saved`);
       console.log(message);
     }
   } catch (error) {
+    AlertPopup.show(AlertPopup.SOMETHING_WENT_WRONG_MESSAGE, AlertPopup.error);
     console.log('user name error', error);
   }
 }
@@ -207,11 +216,15 @@ function togglePwModal() {
 resetPwBtn.addEventListener('click', togglePwModal);
 
 // Profile photo
-function showProfilePic(url = '#') {
-  profilePhoto.setAttribute('src', url);
+function showProfilePic(url = '../../assets/img/default-nav-image.png') {
+  if (user?.photo) {
+    profilePhoto.setAttribute('src', url);
+  }
 }
 
 showProfilePic(user?.photo);
+
+inputFile.addEventListener('change', loadImage);
 
 function loadImage() {
   picture = inputFile.files[0];
@@ -220,6 +233,11 @@ function loadImage() {
     showProfilePic(target.result);
   });
 }
+
+uploadImageBtn.addEventListener('change', (e) => {
+  e.preventDefault();
+  loadImage();
+});
 
 async function saveProfilePicture() {
   try {
@@ -238,13 +256,47 @@ async function saveProfilePicture() {
   }
 }
 
-// Delete profile
-function toggleDelModal() {
-  const delModal = deleteAccountConfirm.style;
-  delModal.display = delModal.display === 'block' ? 'none' : 'block';
+async function deleteProfilePicture(){
+
+
 }
 
-deleteAccountBtn.addEventListener('click', toggleDelModal);
+// Delete profile
+deleteAccountBtn.addEventListener('click', () => {
+  const modal = new Modal();
+
+  const div = document.createElement('div');
+  div.setAttribute('class', 'btn-container');
+  const cancelBtn = document.createElement('button');
+  cancelBtn.setAttribute('id', 'cancel-modal-btn');
+  cancelBtn.setAttribute('class', 'btn btn-secondary');
+  cancelBtn.addEventListener('click', () => {
+    modal.close();
+  });
+  cancelBtn.innerHTML = 'Cancel';
+
+  const delBtn = document.createElement('button');
+  delBtn.setAttribute('id', 'delete-modal-btn');
+  delBtn.setAttribute('class', 'btn btn-error');
+  delBtn.addEventListener('click', () => {
+    deleteAccount();
+  });
+  delBtn.innerHTML = 'Delete Account';
+  div.appendChild(cancelBtn);
+  div.appendChild(delBtn);
+
+  modal.show({
+    title: 'Delete Account?',
+    description: 'Hey! We’re sorry to see you go. Are you sure you want to delete your account? This can’t be undone.',
+    icon: {
+      name: 'icon-exclamation-mark',
+      color: '#D42621',
+      size: '3.5rem',
+    },
+    actions: div,
+    enableOverlayClickClose: true,
+  });
+});
 
 async function deleteAccount() {
   try {
@@ -263,12 +315,11 @@ async function deleteAccount() {
       return;
     }
 
-    console.log('Account deleted successfully', data, message);
+    AlertPopup.show('Account deleted successfully');
 
-    toggleDelModal();
     window.location.replace('/pages/logout');
   } catch (error) {
-    console.log('Could not delete account', error);
+    AlertPopup.show(AlertPopup.SOMETHING_WENT_WRONG_MESSAGE, AlertPopup.error);
   }
 }
 
@@ -323,7 +374,6 @@ async function setNotificationSettings() {
     AlertPopup.show(`Notifications turned ${!!pushNotificationSwitch.checked ? 'on' : 'off'}`);
   } catch (error) {
     AlertPopup.show(AlertPopup.SOMETHING_WENT_WRONG_MESSAGE, AlertPopup.error);
-    console.log('Notifications turned off', error);
   }
 }
 

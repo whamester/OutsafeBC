@@ -119,6 +119,22 @@ main section {
   font-weight: 500;
 }
 
+/* Modal */
+.btn-container {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.btn-container .btn {
+  display: flex;
+  width: 9rem;
+  padding: 0.5rem 0.75rem;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 @media screen and (min-width: 768px) {
   main {
     padding-top: 10.75rem;

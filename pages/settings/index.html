@@ -59,10 +59,13 @@
             <h2 class="text-heading-2">Basic Info</h2>
 
             <div class="account-settings__profile-picture">
-              <img src="#" alt="User profile picture" id="profilePhoto" />
+              <img src="../../assets/img/default-nav-image.png" alt="User profile picture" id="profilePhoto" />
 
               <div class="account-settings__profile-picture-btns">
-                <button class="btn btn-secondary">Upload Image</button>
+                <label class="btn btn-secondary" id="uploadImageBtn">
+                  Upload Image
+                  <input type="file" accept="image/*" id="inputImage" style="display: none" />
+                </label>
                 <button class="btn btn-error">Delete</button>
               </div>
             </div>
