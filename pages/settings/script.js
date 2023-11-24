@@ -1,14 +1,15 @@
+import { API_URL } from '../../constants.js';
+// Helpers
 import readImage from '../../assets/helpers/read-image.js';
 import { getUserSession, setUserSession, updateUserSession } from '../../assets/helpers/storage.js';
-import { API_URL } from '../../constants.js';
-
-import Header from '../../assets/components/Header.js';
 import injectHeader from '../../assets/helpers/inject-header.js';
+// Components
+import Header from '../../assets/components/Header.js';
 import AlertPopup from '../../assets/components/AlertPopup.js';
 import Modal from '../../assets/components/Modal.js';
 
+// Variables
 const user = getUserSession();
-
 const inputFile = document.getElementById('inputImage');
 const uploadImageBtn = document.getElementById('uploadImageBtn');
 const deleteAccountBtn = document.getElementById('deleteAccountBtn');
@@ -20,10 +21,8 @@ const changePasswordSettings = document.getElementById('changePasswordSettings')
 const notificationsSettings = document.getElementById('notificationsSettings');
 const securitySettings = document.getElementById('securitySettings');
 const dropdownMenu = document.getElementById('dropdownMenu');
-
 let userID = user?.id;
 let picture;
-
 let changedFields = {
   name: false,
   photo: false,
@@ -108,7 +107,7 @@ function updateActiveButton() {
     activeButton.classList.add('active');
   } else {
     // If no active button is found, default to the first button
-    const defaultButton = document.getElementById('btn1'); // Adjust the ID accordingly
+    const defaultButton = document.getElementById('basicInfoBtn'); // Adjust the ID accordingly
     if (defaultButton) {
       defaultButton.classList.add('active');
       currentSelectedOption = 'basicInfoOptn'; // Set the corresponding setting key
@@ -120,10 +119,10 @@ function updateActiveButton() {
 updateActiveButton();
 
 // Setup side menu buttons
-setupSideMenuButton('btn1', 'basicInfoOptn');
-setupSideMenuButton('btn2', 'passwordOptn');
-setupSideMenuButton('btn3', 'notificationsOtp');
-setupSideMenuButton('btn4', 'securityOtn');
+setupSideMenuButton('basicInfoBtn', 'basicInfoOptn');
+setupSideMenuButton('passwordBtn', 'passwordOptn');
+setupSideMenuButton('notificationsBtn', 'notificationsOtp');
+setupSideMenuButton('securityBtn', 'securityOtn');
 
 function toggleButton(btnId) {
   var buttons = document.querySelectorAll('.account-settings__menu-btn');
