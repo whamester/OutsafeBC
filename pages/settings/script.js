@@ -12,6 +12,7 @@ const user = getUserSession();
 const inputFile = document.getElementById('inputImage');
 const uploadImageBtn = document.getElementById('uploadImageBtn');
 const deleteAccountBtn = document.getElementById('deleteAccountBtn');
+const deleteImageBtn = document.getElementById('deleteImageBtn');
 const nameField = document.getElementById('name');
 const emailField = document.getElementById('email');
 const basicInfoSettings = document.getElementById('basicInfoSettings');
@@ -256,9 +257,41 @@ async function saveProfilePicture() {
   }
 }
 
-async function deleteProfilePicture(){
+deleteImageBtn.addEventListener('click', deleteProfilePicture);
 
+async function deleteProfilePicture() {
+  try {
+    const name = nameField.value;
+    const photo = '';
 
+    const response = await fetch(`${API_URL}/user?id=${userID}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name,
+        photo,
+      }),
+    });
+    const { data, error, message } = await response.json();
+
+    if (!!error) {
+      console.error(error);
+      return;
+    }
+
+    if (data) {
+      setUserSession({
+        ...user,
+        ...data,
+      });
+
+      AlertPopup.show(`Image deleted`);
+    }
+  } catch (error) {
+    AlertPopup.show(AlertPopup.SOMETHING_WENT_WRONG_MESSAGE, AlertPopup.error);
+  }
 }
 
 // Delete profile
