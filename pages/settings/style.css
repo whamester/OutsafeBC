@@ -12,13 +12,21 @@ h1 {
   margin-bottom: 1.81rem;
 }
 
-#dropdownMenu {
-  display: flex;
+.account-settings__custom-select {
+  position: relative;
+  border: 1px solid var(--neutral-200, #e4e7ec);
+  border-radius: 1rem;
   margin-bottom: 1rem;
+}
+
+#dropdownMenu {
+  position: relative;
+  display: flex;
   width: 100%;
   padding: 1rem;
   align-items: center;
   gap: 0.5rem;
+  border: none;
   border-radius: 1rem;
   font-size: var(--body-1-large-size);
   letter-spacing: var(--body-1-large-letter-spacing);
@@ -26,7 +34,30 @@ h1 {
   font-weight: 500;
   color: var(--neutral-neutral-900, #101928);
   background: var(--secondary-secondary-200, #edf4f2);
-  border: 1px solid var(--neutral-200, #e4e7ec);
+
+  /* remove default arrow */
+  /* for Firefox */
+  appearance: none;
+  -moz-appearance: none;
+  /* for Chrome */
+  -webkit-appearance: none;
+}
+
+/* For IE10 */
+#dropdownMenu::-ms-expand {
+  display: none;
+}
+
+/* Custom arrow */
+.account-settings__custom-select::after {
+  content: url('../../assets/icons/chevron-left.svg');
+  position: absolute;
+  top: 50%;
+  right: 1rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  transform: translateY(-50%) rotate(-90deg);
+  pointer-events: none;
 }
 
 option {
@@ -92,6 +123,7 @@ main section {
   justify-content: flex-start;
 }
 
+/* Side menu */
 #sideMenu {
   display: none;
   width: 18.875rem;
