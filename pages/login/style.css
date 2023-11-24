@@ -56,9 +56,6 @@
 
 @media screen and (min-width: 768px) {
 
-  #login-main {
-    min-height: 100vh;
-  }
   #login-main .full-signup .content-image {
     display: block;
   }

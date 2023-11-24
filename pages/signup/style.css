@@ -46,9 +46,6 @@
 
 @media screen and (min-width: 768px) {
 
-  #signup-main {
-    /* min-height: 100vh; */
-  }
   #signup-main .full-signup .content-image {
     display: block;
   }
