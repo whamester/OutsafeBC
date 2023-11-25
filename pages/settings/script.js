@@ -257,10 +257,8 @@ async function saveProfilePicture() {
 
 function showHideDeleteImageBtn(photo) {
   if (photo) {
-    console.log('display the delete button');
     deleteImageBtn.setAttribute('style', 'display: flex;');
   } else {
-    console.log('hide the delete button');
     deleteImageBtn.setAttribute('style', 'display: none;');
   }
 }
