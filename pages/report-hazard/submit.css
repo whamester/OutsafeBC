@@ -41,6 +41,8 @@
 
 #submitContainer .main-submit-section__label {
   float: left;
+  align-items: center;
+  display: flex;
 }
 
 #submitContainer .main-submit-section__link {
