@@ -133,7 +133,7 @@ window.onload = async function () {
       const makerExists = geoMap.checkMarkerOnMap(hazardDetail);
 
       // marker currently doesnot exists on the map
-      if (!makerExists) geoMap.createLayerGroups([{ ...hazardDetail, hazardCategory: hazardDetail.category, hazard: hazardDetail.option }], {...markerParams, focus: true});
+      if (!makerExists) geoMap.createLayerGroups([{ ...hazardDetail, hazardCategory: hazardDetail.category, hazard: hazardDetail.option }], { ...markerParams, focus: true });
 
       flyTo(hazardDetail.location?.lat, hazardDetail.location?.lng);
     }
@@ -281,21 +281,21 @@ const getReportApiCall = async (lat, lng) => {
 };
 
 const changeActiveMarkerIcon = (lat, lng) => {
-  for(const marker of geoMap.mapLayers.getLayers()) {
+  for (const marker of geoMap.mapLayers.getLayers()) {
     const mCoords = marker.getLatLng();
     if (marker.active) {
-      marker.setIcon(Map.createIcon({iconName: marker.icon_name}));
+      marker.setIcon(Map.createIcon({ iconName: marker.icon_name }));
       marker.setZIndexOffset(null);
       marker.active = false;
     }
 
-    if(lat === mCoords.lat && lng === mCoords.lng) {
-      marker.setIcon(Map.createIcon({iconName: marker.icon_name_focused}));
+    if (lat === mCoords.lat && lng === mCoords.lng) {
+      marker.setIcon(Map.createIcon({ iconName: marker.icon_name_focused }));
       marker.setZIndexOffset(1000);
       marker.active = true;
     }
   }
-}
+};
 
 const cardsOnClick = () => {
   document.querySelectorAll('.sb-cards--item').forEach((card) => {
@@ -375,12 +375,17 @@ const injectCards = () => {
 
   injectHTML([{ func: HazardCardLayout, args: hazardCardParams, target: '#hazard-comp' }]);
 
-  document.querySelector('.sb-cards-btn--back').addEventListener('click', () => {
-    document.querySelector('.sb-cards').remove(); document.querySelector('.btn-report-hazard').style.display = 'flex'; 
-    searchInput.dataset.positionChange='false';
-    searchInput.value='';
-    geoMap.setRelativeMarkerOnMap(0, 0, {removeOnly: true});
-  }, false);
+  document.querySelector('.sb-cards-btn--back').addEventListener(
+    'click',
+    () => {
+      document.querySelector('.sb-cards').remove();
+      document.querySelector('.btn-report-hazard').style.display = 'flex';
+      searchInput.dataset.positionChange = 'false';
+      searchInput.value = '';
+      geoMap.setRelativeMarkerOnMap(0, 0, { removeOnly: true });
+    },
+    false
+  );
 
   document.querySelectorAll('.view-details')?.forEach((detailBtn) => {
     detailBtn.addEventListener('click', async ({ target }) => {
@@ -420,7 +425,7 @@ const injectCards = () => {
 const watchGeoLocationSuccess = async ({ coords }) => {
   const lat = coords?.latitude;
   const lng = coords?.longitude;
-  geoMap.setMarkerOnMap(lat, lng, {icon: 'current-location-map-pin.svg'});
+  geoMap.setMarkerOnMap(lat, lng, { icon: 'current-location-map-pin.svg' });
 
   // If there is a report id in the query params and the focus param is set, don't pan to the user's location
   // but to the report's location
@@ -512,7 +517,7 @@ const showHazardDetails = (hazardReport) => {
     root.appendChild(hazardReportPopulated, document.getElementById('hazard-comp'));
 
     const cardBackBtn = document.querySelector('.sb-cards-btn--back');
-    if(cardBackBtn) cardBackBtn.style.display = 'none';
+    if (cardBackBtn) cardBackBtn.style.display = 'none';
 
     loadIcons();
 
@@ -522,34 +527,38 @@ const showHazardDetails = (hazardReport) => {
     const baseUrl = window.location.origin;
     const url = baseUrl + `/pages/home/index.html?id=${hazardReport.id}&focus=true&open=true&zoom=12&lat=${hazardReport.lat}&lng=${hazardReport.lng}`;
 
-    reportShareBtn.addEventListener("click", async () => {
-      try {
-        const dateObj1 = new Date(hazardReport.created_at);
-        const date1 = DateFormat.getDate(dateObj1);
-        const time1 = DateFormat.getTime(dateObj1);
-
-        const dateObj2 = new Date(hazardReport.updated_at);
-        const date2 = DateFormat.getDate(dateObj2);
-        const time2 = DateFormat.getTime(dateObj2);
-
-        const data = {
-          title: hazardReport.hazard,
-          text: `Hazard: ${hazardReport.hazard}\nLocation: ${hazardReport.location}\nReported: ${date1 + ' ' + time1}\nUpdated: ${hazardReport.updated_at ?  date2 + ' ' + time2 : 'N/A'}\n`,
-          url,
-        };
-
-        await navigator.share(data);
-      } catch (err) {
-        console.error('Share error: ', err);
-
+    reportShareBtn.addEventListener(
+      'click',
+      async () => {
         try {
-          await navigator.clipboard.writeText(url);
-          AlertPopup.show('Link Copied!', AlertPopup.success);
+          const dateObj1 = new Date(hazardReport.created_at);
+          const date1 = DateFormat.getDate(dateObj1);
+          const time1 = DateFormat.getTime(dateObj1);
+
+          const dateObj2 = new Date(hazardReport.updated_at);
+          const date2 = DateFormat.getDate(dateObj2);
+          const time2 = DateFormat.getTime(dateObj2);
+
+          const data = {
+            title: hazardReport.hazard,
+            text: `Hazard: ${hazardReport.hazard}\nLocation: ${hazardReport.location}\nReported: ${date1 + ' ' + time1}\nUpdated: ${hazardReport.updated_at ? date2 + ' ' + time2 : 'N/A'}\n`,
+            url,
+          };
+
+          await navigator.share(data);
         } catch (err) {
-          console.error('Clipboard error: ', err);
+          console.error('Share error: ', err);
+
+          try {
+            await navigator.clipboard.writeText(url);
+            AlertPopup.show('Link Copied!', AlertPopup.success);
+          } catch (err) {
+            console.error('Clipboard error: ', err);
+          }
         }
-      }
-    }, false);
+      },
+      false
+    );
 
     const reportCloseBtn = document.getElementById('reportCloseBtn');
     reportCloseBtn.addEventListener('click', () => {
@@ -568,7 +577,9 @@ const showHazardDetails = (hazardReport) => {
 
     let updateHeight = (height) => {
       //updating sheet height
-      content.style.height = `${height}vh`;
+      if (window.matchMedia('(max-width: 768px)').matches) {
+        content.style.height = `${height}vh`;
+      }
     };
 
     function mediaQueryCheck(windowWidth) {

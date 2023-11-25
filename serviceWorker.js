@@ -181,47 +181,44 @@ self.addEventListener('activate', async (event) => {
 const API_REQUESTS_URLS = ['https://outsafebc-api.netlify.app'];
 const APP_BLACKLIST = ['https://outsafebc-api.netlify.app', '/jawg-terrain', 'chrome-extension://'];
 
-// self.addEventListener('fetch', (event) => {
-//   event.respondWith(
-//     caches.match(event.request).then((cache) => {
-//       const isAPIRequest = !!API_REQUESTS_URLS.find((url) => event.request.url.includes(url)) && event.request.method === 'GET';
-//       if (isAPIRequest) {
-//         caches.open(API_REQUESTS_KEY).then((cache) => cache.add(event.request).catch(console.error));
-//       }
+self.addEventListener('fetch', (event) => {
+  event.respondWith(
+    fetch(event.request)
+      .then(async (response) => {
+        const isAPIRequest = !!API_REQUESTS_URLS.find((url) => event.request.url.includes(url)) && event.request.method === 'GET';
 
-//       // console.log({ isAPIRequest, cache });
-//       if (cache && isAPIRequest) {
-//         fetch(event.request).then((response) =>
-//           caches
-//             .open(API_REQUESTS_KEY)
-//             .then((cache) => {
-//               cache.put(event.request, response.clone()).catch(console.error);
+        if (event.request.method !== 'GET') {
+          return response;
+        }
 
-//               return response;
-//             })
-//             .catch(console.log)
-//         );
-//       }
+        if (isAPIRequest) {
+          try {
+            const cache = await caches.open(API_REQUESTS_KEY);
+            if (cache) {
+              await cache.put(event.request, response.clone());
+            }
+          } catch (error) {
+            console.error(error);
+          }
+        }
 
-//       return (
-//         cache ||
-//         fetch(event.request)
-//           .then(async (response) => {
-//             return caches
-//               .open(APP_RESOURCES_KEY)
-//               .then((cache) => {
-//                 if (!APP_BLACKLIST.find((url) => event.request.url.includes(url)) && event.request.method === 'GET') {
-//                   cache.put(event.request, response.clone()).catch(console.error);
-//                 }
-//                 return response;
-//               })
-//               .catch(console.log);
-//           })
-//           .catch(console.log)
-//       );
-//     })
-//   );
-// });
+        if (!APP_BLACKLIST.find((url) => event.request.url.includes(url))) {
+          try {
+            const cache = await caches.open(APP_RESOURCES_KEY);
+            if (cache) {
+              await cache.put(event.request, response.clone());
+            }
+          } catch (error) {
+            console.error(error);
+          }
+        }
+        return response;
+      })
+      .catch(() => {
+        return caches.match(event.request);
+      })
+  );
+});
 
 self.addEventListener('push', function (event) {
   if (event.data) {
