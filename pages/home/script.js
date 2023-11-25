@@ -527,6 +527,7 @@ async function getHazardReportData(id) {
 // Show hazard report
 const showHazardDetails = (hazardReport) => {
   try {
+    toggleFilterModal(true);
     hazardReportPopulated = hazardReport.hazardCardContent();
 
     root.appendChild(hazardReportPopulated, document.getElementById('hazard-comp'));

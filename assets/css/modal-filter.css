@@ -169,7 +169,7 @@
   #closeBtnDesktop {
     display: block;
     position: absolute;
-    top: 0;
+    top: 1px;
     right: -45px;
     cursor: pointer;
     border: 1px solid var(--neutral-300);
