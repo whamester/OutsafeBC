@@ -22,6 +22,7 @@ import Map from '../../assets/models/Map.js';
 import HazardReport from '../../assets/models/HazardReport.js';
 import getHazardDetail from '../../assets/helpers/get-hazard-detail.js';
 import DateFormat from '../../assets/models/DateFormat.js';
+import { getPersistedLocation, setPersistedLocation } from '../../assets/helpers/persisted-location.js';
 
 // URL params
 const url = new URL(window.location.href);
@@ -34,7 +35,8 @@ const longitude = Number(url.searchParams.get('lng')) || null;
 
 //Variable Declaration
 let geoMap;
-let position = latitude && longitude ? { lat: latitude, lng: longitude } : Map.DEFAULT_LOCATION;
+const persistedLocation = getPersistedLocation();
+let position = latitude && longitude ? { lat: latitude, lng: longitude } : persistedLocation?.lat && persistedLocation?.lng ? persistedLocation : Map.DEFAULT_LOCATION;
 
 let reports = [];
 let positionSecondary = {};
@@ -435,6 +437,8 @@ const watchGeoLocationSuccess = async ({ coords }) => {
       lat,
       lng,
     };
+
+    setPersistedLocation(position);
 
     await getReportApiCall(lat, lng);
     flyTo(lat, lng);
