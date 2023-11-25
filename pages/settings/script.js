@@ -145,9 +145,19 @@ function showUserInfo() {
 
 showUserInfo();
 
+function clearDirtyField() {
+  changedFields.name = false;
+  changedFields.photo = false;
+}
+
 // Change user information
 saveProfileInfoBtn.addEventListener('click', async (e) => {
-  await saveUserInfo();
+  e.preventDefault();
+
+  if (changedFields.name) {
+    await saveUserInfo();
+    return;
+  }
 });
 
 // Save user information
@@ -178,10 +188,13 @@ async function saveUserInfo(photo = undefined) {
         ...data,
       });
 
+      showHideDeleteImageBtn(data?.photo);
+      showProfilePic(data?.photo);
 
       AlertPopup.show(`${!!changedFields.name ? 'Name' : 'Image'} has been saved`);
-      console.log(data);
       console.log(message);
+
+      clearDirtyField();
     }
   } catch (error) {
     AlertPopup.show(AlertPopup.SOMETHING_WENT_WRONG_MESSAGE, AlertPopup.error);
@@ -199,12 +212,10 @@ resetPwBtn.addEventListener('click', togglePwModal);
 
 // Profile photo
 function showProfilePic(url = '../../assets/img/default-nav-image.png') {
-  if (user?.photo) {
-    profilePhoto.setAttribute('src', url);
-  }
+  profilePhoto.setAttribute('src', url);
 }
 
-showProfilePic(user?.photo);
+showProfilePic(user?.photo || undefined);
 
 inputFile.addEventListener('change', loadImage);
 
@@ -225,7 +236,6 @@ uploadImageBtn.addEventListener('change', (e) => {
 async function uploadImage() {
   const result = await saveProfilePicture();
   await saveUserInfo(result.data.url);
-  showHideDeleteImageBtn();
 }
 
 async function saveProfilePicture() {
@@ -245,17 +255,18 @@ async function saveProfilePicture() {
   }
 }
 
-function showHideDeleteImageBtn() {
-  if (user.photo) {
-    deleteImageBtn.style.display = 'flex';
+function showHideDeleteImageBtn(photo) {
+  if (photo) {
+    console.log('display the delete button');
+    deleteImageBtn.setAttribute('style', 'display: flex;');
   } else {
-    deleteImageBtn.style.display = 'none';
+    console.log('hide the delete button');
+    deleteImageBtn.setAttribute('style', 'display: none;');
   }
 }
-showHideDeleteImageBtn();
+showHideDeleteImageBtn(user?.photo);
 
-console.log(user.photo);
-
+// Delete user image
 deleteImageBtn.addEventListener('click', deleteProfilePicture);
 
 async function deleteProfilePicture() {
@@ -286,7 +297,10 @@ async function deleteProfilePicture() {
         ...data,
       });
 
-      AlertPopup.show(`Image deleted`);
+      showProfilePic();
+      showHideDeleteImageBtn();
+
+      AlertPopup.show(`Image has been deleted`);
     }
   } catch (error) {
     AlertPopup.show(AlertPopup.SOMETHING_WENT_WRONG_MESSAGE, AlertPopup.error);
