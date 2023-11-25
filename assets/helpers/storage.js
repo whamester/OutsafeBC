@@ -2,6 +2,8 @@
 export const setUserSession = (user) => {
   try {
     localStorage.setItem('user', JSON.stringify(user));
+    localStorage.removeItem('prevPosition');
+    localStorage.removeItem('prevZoom');
   } catch (error) {
     console.debug(error);
   }
@@ -31,6 +33,8 @@ export const getUserSession = () => {
 export const clearUserSession = () => {
   try {
     localStorage.removeItem('user');
+    localStorage.removeItem('prevPosition');
+    localStorage.removeItem('prevZoom');
   } catch (error) {
     console.debug(error);
   }

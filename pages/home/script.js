@@ -49,7 +49,7 @@ let flyToTrigger = true;
 let mapOptions = {
   zoomControl: false,
   doubleClickZoom: false,
-  CURRENT_ZOOM: zoom,
+  CURRENT_ZOOM: localStorage.getItem('prevZoom') || 5
 };
 
 let hazardDetail = new HazardReport();
@@ -68,6 +68,9 @@ const root = document.getElementById('root');
 
 window.onload = async function () {
   try {
+    const prevPosition = localStorage.getItem('prevPosition');
+    if (prevPosition) position = JSON.parse(prevPosition);
+
     const { data } = await apiRequest(`hazard-category`, { method: 'GET' });
 
     searchBarParams.categories = data;
@@ -115,8 +118,14 @@ window.onload = async function () {
 
     Map.watchGeoLocation(watchGeoLocationSuccess, watchGeoLocationError);
 
-    // clear recenter btn focus
-    geoMap.map.on('drag', () => recenterBtn?.blur());
+    // clear recenter btn focus store current zoom, center
+    geoMap.map.on('drag', ({target}) => {
+      recenterBtn?.blur();
+      storePreviousPos(target);
+    });
+
+    // store current zoom, center
+    geoMap.map.on('zoom', ({target}) => storePreviousPos(target));
   } catch (error) {
     console.error(error, error.message);
 
@@ -437,7 +446,8 @@ const watchGeoLocationSuccess = async ({ coords }) => {
     };
 
     await getReportApiCall(lat, lng);
-    flyTo(lat, lng);
+    if(!localStorage.getItem('prevPosition'))
+      flyTo(lat, lng, Map.DEFAULT_MAP_ZOOM);
     recenterBtn.focus();
     flyToTrigger = false;
   }
@@ -720,3 +730,9 @@ const clearHazardFilter = async () => {
   geoMap.filterMarker([], hazardFilters);
   if (document.querySelector('.sb-cards')) injectCards();
 };
+
+const storePreviousPos = (target) => {
+  localStorage.setItem('prevZoom', target._zoom);
+  const prevPosition = target.boxZoom._map.getCenter();
+  localStorage.setItem('prevPosition', JSON.stringify(prevPosition));
+}
