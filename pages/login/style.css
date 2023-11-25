@@ -1,9 +1,7 @@
 #login-main {
   display: flex;
   flex-direction: column;
-  /* align-items: center; */
   justify-content: center;
-  /* min-height: 100vh; */
 }
 
 #login-main .content-wrapper {
@@ -55,7 +53,6 @@
 }
 
 @media screen and (min-width: 768px) {
-
   #login-main .full-signup .content-image {
     display: block;
   }
@@ -83,12 +80,12 @@
     position: relative;
     max-width: 100%;
     max-height: 100%;
-    background: var(--secondary-100, #F3F8F6); 
+    background: var(--secondary-100, #f3f8f6);
     overflow: hidden;
     margin: 0;
     padding: 0;
   }
-  
+
   #login-main .content-image img {
     position: absolute;
     top: 50%;
@@ -97,6 +94,5 @@
     max-height: 100%;
     width: auto;
     height: 39.7rem;
-}
-  
+  }
 }
