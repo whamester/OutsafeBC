@@ -145,11 +145,6 @@ function showUserInfo() {
 
 showUserInfo();
 
-// function clearDirtyField() {
-//   changedFields.name = false;
-//   changedFields.photo = false;
-// }
-
 // Change user information
 saveProfileInfoBtn.addEventListener('click', async (e) => {
   await saveUserInfo();
@@ -183,7 +178,9 @@ async function saveUserInfo(photo = undefined) {
         ...data,
       });
 
+
       AlertPopup.show(`${!!changedFields.name ? 'Name' : 'Image'} has been saved`);
+      console.log(data);
       console.log(message);
     }
   } catch (error) {
@@ -191,63 +188,6 @@ async function saveUserInfo(photo = undefined) {
     console.log('user name error', error);
   }
 }
-
-// // Change user information
-// saveProfileInfoBtn.addEventListener('click', async (e) => {
-//   e.preventDefault();
-
-//   if (changedFields.photo) {
-//     const result = await saveProfilePicture();
-//     await saveUserInfo(result.data.url);
-//     clearDirtyField();
-
-//     return;
-//   }
-
-//   if (changedFields.name) {
-//     await saveUserInfo();
-//     clearDirtyField();
-
-//     return;
-//   }
-// });
-
-// // Save user information
-// async function saveUserInfo(photo = undefined) {
-//   try {
-//     const name = nameField.value;
-
-//     const response = await fetch(`${API_URL}/user?id=${userID}`, {
-//       method: 'PUT',
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//       body: JSON.stringify({
-//         name,
-//         photo,
-//       }),
-//     });
-//     const { data, error, message } = await response.json();
-
-//     if (!!error) {
-//       console.error(error);
-//       return;
-//     }
-
-//     if (data) {
-//       setUserSession({
-//         ...user,
-//         ...data,
-//       });
-
-//       AlertPopup.show(`${!!changedFields.name ? 'Name' : 'Image'} has been saved`);
-//       console.log(message);
-//     }
-//   } catch (error) {
-//     AlertPopup.show(AlertPopup.SOMETHING_WENT_WRONG_MESSAGE, AlertPopup.error);
-//     console.log('user name error', error);
-//   }
-// }
 
 // Change password
 function togglePwModal() {
@@ -285,6 +225,7 @@ uploadImageBtn.addEventListener('change', (e) => {
 async function uploadImage() {
   const result = await saveProfilePicture();
   await saveUserInfo(result.data.url);
+  showHideDeleteImageBtn();
 }
 
 async function saveProfilePicture() {
@@ -305,13 +246,15 @@ async function saveProfilePicture() {
 }
 
 function showHideDeleteImageBtn() {
-  if (picture) {
+  if (user.photo) {
     deleteImageBtn.style.display = 'flex';
   } else {
     deleteImageBtn.style.display = 'none';
   }
 }
 showHideDeleteImageBtn();
+
+console.log(user.photo);
 
 deleteImageBtn.addEventListener('click', deleteProfilePicture);
 
