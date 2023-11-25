@@ -8,7 +8,7 @@ class Map {
   static CURRENT_ZOOM = 20;
   static MAP_ID = 'map';
   static MAX_ZOOM = 22;
-  static DEFAULT_MAP_ZOOM = 13; // If we don't set the zoom level, 12 is the default of Leaflet
+  static DEFAULT_MAP_ZOOM = 13; // If we don't set the zoom level, 13 is the default of Leaflet
   static DEFAULT_LOCATION = {
     lat: 55.72,
     lng: -126.64,
