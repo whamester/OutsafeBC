@@ -226,7 +226,7 @@ class ReportCardContainer {
       Flag report
     </button>
   
-    <div id="flagReportMessage" class="message error">
+    <div id="flagReportMessage" class="message error hidden">
       <i class="icon-flag message__icon"></i>
       <p class="message__content text-body-3 medium">
         You have flagged this report as fake.
