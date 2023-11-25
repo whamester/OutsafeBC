@@ -289,7 +289,10 @@ const getReportApiCall = async (lat, lng) => {
 const changeActiveMarkerIcon = (lat, lng) => {
   for (const marker of geoMap.mapLayers.getLayers()) {
     const mCoords = marker.getLatLng();
-    marker.setOpacity(0.8);
+    if (lat === 0 && lng === 0)
+      marker.setOpacity(1);
+    else
+      marker.setOpacity(0.8);
     
     if (marker.active) {
       const iconName = marker.icon_name
