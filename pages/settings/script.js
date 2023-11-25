@@ -145,29 +145,14 @@ function showUserInfo() {
 
 showUserInfo();
 
-function clearDirtyField() {
-  changedFields.name = false;
-  changedFields.photo = false;
-}
+// function clearDirtyField() {
+//   changedFields.name = false;
+//   changedFields.photo = false;
+// }
 
 // Change user information
 saveProfileInfoBtn.addEventListener('click', async (e) => {
-  e.preventDefault();
-
-  if (changedFields.photo) {
-    const result = await saveProfilePicture();
-    await saveUserInfo(result.data.url);
-    clearDirtyField();
-
-    return;
-  }
-
-  if (changedFields.name) {
-    await saveUserInfo();
-    clearDirtyField();
-
-    return;
-  }
+  await saveUserInfo();
 });
 
 // Save user information
@@ -198,7 +183,7 @@ async function saveUserInfo(photo = undefined) {
         ...data,
       });
 
-      AlertPopup.show(`Changes have been saved`);
+      AlertPopup.show(`${!!changedFields.name ? 'Name' : 'Image'} has been saved`);
       console.log(message);
     }
   } catch (error) {
@@ -206,6 +191,63 @@ async function saveUserInfo(photo = undefined) {
     console.log('user name error', error);
   }
 }
+
+// // Change user information
+// saveProfileInfoBtn.addEventListener('click', async (e) => {
+//   e.preventDefault();
+
+//   if (changedFields.photo) {
+//     const result = await saveProfilePicture();
+//     await saveUserInfo(result.data.url);
+//     clearDirtyField();
+
+//     return;
+//   }
+
+//   if (changedFields.name) {
+//     await saveUserInfo();
+//     clearDirtyField();
+
+//     return;
+//   }
+// });
+
+// // Save user information
+// async function saveUserInfo(photo = undefined) {
+//   try {
+//     const name = nameField.value;
+
+//     const response = await fetch(`${API_URL}/user?id=${userID}`, {
+//       method: 'PUT',
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//       body: JSON.stringify({
+//         name,
+//         photo,
+//       }),
+//     });
+//     const { data, error, message } = await response.json();
+
+//     if (!!error) {
+//       console.error(error);
+//       return;
+//     }
+
+//     if (data) {
+//       setUserSession({
+//         ...user,
+//         ...data,
+//       });
+
+//       AlertPopup.show(`${!!changedFields.name ? 'Name' : 'Image'} has been saved`);
+//       console.log(message);
+//     }
+//   } catch (error) {
+//     AlertPopup.show(AlertPopup.SOMETHING_WENT_WRONG_MESSAGE, AlertPopup.error);
+//     console.log('user name error', error);
+//   }
+// }
 
 // Change password
 function togglePwModal() {
@@ -237,7 +279,13 @@ function loadImage() {
 uploadImageBtn.addEventListener('change', (e) => {
   e.preventDefault();
   loadImage();
+  uploadImage();
 });
+
+async function uploadImage() {
+  const result = await saveProfilePicture();
+  await saveUserInfo(result.data.url);
+}
 
 async function saveProfilePicture() {
   try {
@@ -255,6 +303,15 @@ async function saveProfilePicture() {
     return null;
   }
 }
+
+function showHideDeleteImageBtn() {
+  if (picture) {
+    deleteImageBtn.style.display = 'flex';
+  } else {
+    deleteImageBtn.style.display = 'none';
+  }
+}
+showHideDeleteImageBtn();
 
 deleteImageBtn.addEventListener('click', deleteProfilePicture);
 
