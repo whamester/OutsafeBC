@@ -203,7 +203,7 @@
   }
 
   .sb-cards-wrapper::-webkit-scrollbar-track {
-    background: #f1f1f1;
+    background: var(--neutral-100);
   }
 
   .sb-cards-wrapper::-webkit-scrollbar-thumb {

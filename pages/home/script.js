@@ -25,17 +25,15 @@ import DateFormat from '../../assets/models/DateFormat.js';
 
 // URL params
 const url = new URL(window.location.href);
-const idReport = url.searchParams.get('id');
-const openDetail = url.searchParams.get('open') === 'true' && !!idReport;
-const focusMarker = url.searchParams.get('focus') === 'true' && !!idReport;
-const zoom = parseInt(url.searchParams.get('zoom')) || 12;
-const latitude = Number(url.searchParams.get('lat')) || null;
-const longitude = Number(url.searchParams.get('lng')) || null;
+const params = new URLSearchParams(url.search);
+const idReport = params.get('id');
+const openDetail = params.get('open') === 'true' && !!idReport;
+const focusMarker = params.get('focus') === 'true' && !!idReport;
+const zoom = parseInt(params.get('zoom')) || 12;
 
 //Variable Declaration
 let geoMap;
-let position = latitude && longitude ? { lat: latitude, lng: longitude } : Map.DEFAULT_LOCATION;
-
+let position = Map.DEFAULT_LOCATION;
 let reports = [];
 let positionSecondary = {};
 let hazardCardParams = {};
@@ -49,7 +47,7 @@ let flyToTrigger = true;
 let mapOptions = {
   zoomControl: false,
   doubleClickZoom: false,
-  CURRENT_ZOOM: zoom,
+  CURRENT_ZOOM: 5
 };
 
 let hazardDetail = new HazardReport();
@@ -102,7 +100,7 @@ window.onload = async function () {
     document.querySelectorAll('.quick-filter').forEach((filter) => filter.addEventListener('click', quickFiltersOnClick));
 
     document.querySelector('.map-controls-recenter-btn').addEventListener('click', () => {
-      flyTo(position.lat, position.lng);
+      flyTo(position.lat, position.lng, Map.CURRENT_ZOOM);
     });
 
     mapZoomIn.addEventListener('click', () => geoMap.map.zoomIn());
@@ -133,9 +131,13 @@ window.onload = async function () {
       const makerExists = geoMap.checkMarkerOnMap(hazardDetail);
 
       // marker currently doesnot exists on the map
-      if (!makerExists) geoMap.createLayerGroups([{ ...hazardDetail, hazardCategory: hazardDetail.category, hazard: hazardDetail.option }], { ...markerParams, focus: true });
+      if (!makerExists) {
+        geoMap.createLayerGroups([{ ...hazardDetail, hazardCategory: hazardDetail.category, hazard: hazardDetail.option }], { ...markerParams, focus: true });
+      }
 
-      flyTo(hazardDetail.location?.lat, hazardDetail.location?.lng);
+      changeActiveMarkerIcon(hazardDetail.location?.lat, hazardDetail.location?.lng);
+
+      flyTo(hazardDetail.location?.lat, hazardDetail.location?.lng, zoom);
     }
 
     if (openDetail) {
@@ -242,12 +244,16 @@ const markerParams = {
 
     changeActiveMarkerIcon(currentReport.location.lat, currentReport.location.lng);
     showHazardDetails(hazardReport);
-    flyTo(currentReport.location.lat, currentReport.location.lng);
+    panTo(currentReport.location.lat, currentReport.location.lng);
   },
 };
 
-const flyTo = (lat, lng) => {
-  geoMap.map.flyTo([lat, lng], 12, { animate: true });
+const panTo = (lat, lng) => {
+  geoMap.map.panTo([lat, lng]);
+};
+
+const flyTo = (lat, lng, zoom=Map.DEFAULT_MAP_ZOOM) => {
+  geoMap.map.flyTo([lat, lng], zoom, { animate: true });
 };
 
 const closeSearchSuggestion = (e) => {
@@ -283,16 +289,25 @@ const getReportApiCall = async (lat, lng) => {
 const changeActiveMarkerIcon = (lat, lng) => {
   for (const marker of geoMap.mapLayers.getLayers()) {
     const mCoords = marker.getLatLng();
+    marker.setOpacity(0.8);
+    
     if (marker.active) {
-      marker.setIcon(Map.createIcon({ iconName: marker.icon_name }));
+      const iconName = marker.icon_name
+      marker.setIcon(Map.createIcon({ iconName }));
       marker.setZIndexOffset(null);
       marker.active = false;
     }
 
     if (lat === mCoords.lat && lng === mCoords.lng) {
-      marker.setIcon(Map.createIcon({ iconName: marker.icon_name_focused }));
-      marker.setZIndexOffset(1000);
+      const iconName = marker.icon_name_focused
+      marker.setIcon(Map.createIcon({ 
+        iconName, 
+        iconSize: Map.focusIconSize,
+        iconAnchor: Map.focusIconAnchor
+      }));
+      marker.setZIndexOffset(100);
       marker.active = true;
+      marker.setOpacity(1);
     }
   }
 };
@@ -318,7 +333,7 @@ const suggestionOnClick = () => {
       // change user location
       searchInput.dataset.positionChange = 'true';
       positionSecondary = latLng;
-      flyTo(latLng.lat, latLng.lng);
+      flyTo(latLng.lat, latLng.lng, Map.DEFAULT_MAP_ZOOM);
       geoMap.setRelativeMarkerOnMap(latLng.lat, latLng.lng);
       closeSearchSuggestion();
       await getReportApiCall(latLng.lat, latLng.lng, categoryFilters, hazardFilters);
@@ -437,7 +452,7 @@ const watchGeoLocationSuccess = async ({ coords }) => {
     };
 
     await getReportApiCall(lat, lng);
-    flyTo(lat, lng);
+    flyTo(lat, lng, Map.DEFAULT_MAP_ZOOM);
     recenterBtn.focus();
     flyToTrigger = false;
   }
@@ -525,7 +540,7 @@ const showHazardDetails = (hazardReport) => {
     const reportShareBtn = document.getElementById('reportShareBtn');
 
     const baseUrl = window.location.origin;
-    const url = baseUrl + `/pages/home/index.html?id=${hazardReport.id}&focus=true&open=true&zoom=12&lat=${hazardReport.lat}&lng=${hazardReport.lng}`;
+    const url = baseUrl + `/pages/home/index.html?id=${hazardReport.id}&focus=true&open=true&zoom=${Map.CURRENT_ZOOM}`;
 
     reportShareBtn.addEventListener(
       'click',
@@ -567,6 +582,7 @@ const showHazardDetails = (hazardReport) => {
       }
       if (cardBackBtn) cardBackBtn.style.display = 'flex';
       changeActiveMarkerIcon(0, 0);
+      clearUrlParams();
     });
 
     //
@@ -586,12 +602,9 @@ const showHazardDetails = (hazardReport) => {
       if (windowWidth.matches) {
         reportShareBtn.style.display = 'flex';
         reportCloseBtn.style.display = 'flex';
-        // content.style.height = 'fit-content';
       } else {
         reportShareBtn.style.display = 'none';
         reportCloseBtn.style.display = 'none';
-        // Set initial height
-        // updateHeight(40);
 
         let isDragging = false,
           startY,
@@ -645,6 +658,7 @@ const showHazardDetails = (hazardReport) => {
             hazardReportPopulated.parentNode.removeChild(hazardReportPopulated);
             if (cardBackBtn) cardBackBtn.style.display = 'flex';
             changeActiveMarkerIcon(0, 0);
+            clearUrlParams();
           }
         };
 
@@ -720,3 +734,8 @@ const clearHazardFilter = async () => {
   geoMap.filterMarker([], hazardFilters);
   if (document.querySelector('.sb-cards')) injectCards();
 };
+
+
+const clearUrlParams = () => {
+  window.history.pushState({}, document.title, "/pages/home/");
+}

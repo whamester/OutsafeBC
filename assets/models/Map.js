@@ -8,11 +8,15 @@ class Map {
   static CURRENT_ZOOM = 20;
   static MAP_ID = 'map';
   static MAX_ZOOM = 22;
-  static DEFAULT_MAP_ZOOM = 12; // If we don't set the zoom level, 12 is the default of Leaflet
+  static DEFAULT_MAP_ZOOM = 13; // If we don't set the zoom level, 12 is the default of Leaflet
   static DEFAULT_LOCATION = {
     lat: 55.72,
-    lng: -127.64,
+    lng: -126.64,
   };
+  static defaultIconAnchor = [20, 40];
+  static defaultIconSize = [40, 40];
+  static focusIconSize = [55, 55];
+  static focusIconAnchor = [26.5, 55];
 
   constructor(lat, lng, customConfig = {}) {
     this.map = L.map(Map.MAP_ID, { ...customConfig }).setView(
@@ -39,21 +43,32 @@ class Map {
       iconUrl: `/assets/icons/${
         iconParams?.iconName ?? 'current-location-map-pin.svg'
       }`,
-      iconSize: [40, 40],
-      iconAnchor: [20, 40],
-      popupAnchor: [0, -40],
+      iconSize: Map.defaultIconSize,
+      iconAnchor: Map.defaultIconAnchor,
       ...iconParams,
     });
     return icon;
   }
 
   createLayerGroups(hazards, markerParams = {}) {
-    hazards?.forEach((hazard, idx) => {
+    hazards?.forEach(hazard => {
       const categoryId = hazard?.hazardCategory?.id;
       const subCategoryId = hazard?.hazard?.id;
       const iconName = `marker/${hazard?.hazardCategory?.settings?.icon}.svg`;
       const iconNameFocus = `marker/${hazard?.hazardCategory?.settings?.icon}-focused.svg`;
-      const pinIcon = Map.createIcon({iconName: markerParams.focus ? iconNameFocus: iconName});
+      let pinIcon;
+
+      if (markerParams.focus){
+        const focusParms = {
+          iconName: iconNameFocus,
+          iconSize: Map.focusIconSize,
+          iconAnchor: Map.focusIconAnchor
+        }
+        pinIcon = Map.createIcon(focusParms);
+      } else {
+        pinIcon = Map.createIcon({iconName});
+      }
+
       const marker = L.marker([hazard?.location?.lat, hazard?.location?.lng], {
         icon: pinIcon,
       });
@@ -78,7 +93,11 @@ class Map {
     for(const marker of this.mapLayers.getLayers()) {
       if (marker.id === hazard.id) {
         const iconName = marker.icon_name_focused;
-        marker.setIcon(Map.createIcon({iconName}));
+        marker.setIcon(Map.createIcon({
+          iconName, 
+          iconSize: Map.focusIconSize,
+          iconAnchor: Map.focusIconAnchor
+        }));
         marker.active = true;
         return true;
       }
@@ -95,6 +114,8 @@ class Map {
       ...markerParams.marker,
       icon: pinIcon,
     }).addTo(this.map);
+    
+    this.currentMarker.setZIndexOffset(200);
   }
 
   setRelativeMarkerOnMap(lat, lng, markerParams = {}) {
@@ -102,7 +123,8 @@ class Map {
     if (!!markerParams.removeOnly) return;
     const pinIcon = Map.createIcon({
       iconName: 'location-pin-fill-red.svg', 
-      iconSize: [30, 30]
+      iconSize: [30, 30],
+      iconAnchor: [20, 30]
     });
     this.relativeMarker = L.marker([lat, lng], {
       ...markerParams.marker,

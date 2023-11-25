@@ -19,7 +19,7 @@ const ModalFilter = (categories) => {
           ${ categories?.map(item => {
             return `
               <div class="modal-filter--catergories-wrapper-outer">
-                <h3>${ item?.name }</h3>
+                <h3 class="text-body-1">${ item?.name }</h3>
                 <div class="modal-filter--categories-wrapper-inner">
                   ${ 
                     item?.options?.map(option => {
@@ -37,11 +37,11 @@ const ModalFilter = (categories) => {
         <div class="modal-filter--bottom-wrapper">
           <button
             id="clearReportsBtn"
-            class="modal-filter--clear-btn">Clear All</button>
+            class="text-body-2 modal-filter--clear-btn">Clear All</button>
           <button
             disabled="true"
             id="showReportsBtn"
-            class="btn btn-primary modal-filter--show-btn">Show reports</button>
+            class="btn btn-primary text-body-2 modal-filter--show-btn">Show reports</button>
         </div>
       </div>
     </div>

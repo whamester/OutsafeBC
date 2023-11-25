@@ -4,13 +4,13 @@
 }
 
 #hazard-card__outer {
-  border-radius: 0.75rem 0.75rem 0 0;
-  width: 100%;
   position: fixed;
   bottom: 0;
-  height: 40vh;
   z-index: 3;
   transition: all 0.2s;
+  border-radius: 0.75rem 0.75rem 0 0;
+  width: 100%;
+  height: 40vh;
 }
 
 .report-card__top-controls {
@@ -22,46 +22,46 @@
 
 .circle-border {
   display: flex;
-  width: 2rem;
-  height: 2rem;
-  padding: 0.4rem;
+  flex-shrink: 0;
   justify-content: center;
   align-items: center;
-  flex-shrink: 0;
-  border-radius: 6.25rem;
   border: 1px solid var(--neutral-neutral-300, #d0d5dd);
+  border-radius: 6.25rem;
   background: var(--white, #fff);
+  padding: 0.4rem;
+  width: 2rem;
+  height: 2rem;
 }
 
 .report-card__hazard-detail-buttons {
   display: flex;
-  align-items: flex-start;
-  align-content: flex-start;
-  gap: 0.75rem;
-  align-self: stretch;
   flex-wrap: wrap;
+  align-content: flex-start;
+  align-items: flex-start;
+  align-self: stretch;
+  gap: 0.75rem;
 }
 
 .report-card__user-details {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
   align-self: stretch;
+  gap: 0.5rem;
 }
 
 #user-image {
+  border-radius: 6.25rem;
   width: 1.75rem;
   height: 1.75rem;
-  border-radius: 6.25rem;
   object-fit: cover;
 }
 
 .draggable-thumb {
+  cursor: grab;
+  border-radius: 0.125rem;
+  background: var(--neutral-neutral-300, #d0d5dd);
   width: 4.8125rem;
   height: 0.25rem;
-  background: var(--neutral-neutral-300, #d0d5dd);
-  border-radius: 0.125rem;
-  cursor: grab;
 }
 
 .report-card__top-info {
@@ -74,56 +74,43 @@
 
 @media screen and (min-width: 768px) {
   .report-card__top-controls {
-    flex-direction: column;
     position: absolute;
     top: 0;
     right: -45px;
-    margin: 0;
+    flex-direction: column;
     gap: 1.25rem;
+    margin: 0;
   }
 
   .report-card__top-controls .circle-border {
+    padding: 0;
     width: 2rem;
     height: 2rem;
-    padding: 0;
   }
 
   #hazard-card__outer {
-    width: 410px;
     position: absolute;
-    border-radius: 0.75rem;
     top: 14.3rem;
     left: 5rem;
+    border-radius: 0.75rem;
+    width: 410px;
+    height: fit-content;
     height: fit-content;
     max-height: max-content;
-    height: fit-content;
   }
-
-  .report-card__inner {
-    overflow-y: auto;
-  }
-
-  .report-card__inner::-webkit-scrollbar {
-    display: none;
-    width: 0;
-  }
-
+  
   .draggable-thumb {
     display: none;
   }
 
-  .report-card__heading-wrapper {
-    position: sticky;
-    top: 0;
-    left: 0;
-    z-index: 1;
-    background-color: var(--white);
+  .report-card__scroll-container {
+    height: 24rem;
+    overflow-y: auto;
   }
 
-  .report-card__scroll-container {
-    overflow-y: auto;
-    height: fit-content;
-    max-height: 40vh;
+  .report-card__scroll-container::-webkit-scrollbar {
+    display: none;
+    width: 0;
   }
 }
 

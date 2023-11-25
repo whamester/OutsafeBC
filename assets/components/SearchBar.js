@@ -31,7 +31,7 @@ const SearchBar = ({ categories }) => {
                 <i class="icon-search sb-search-box--icon"></i>
                 <input
                   id="searchInput"
-                  class="sb-search-box--input"
+                  class="text-body-2 sb-search-box--input"
                   placeholder="Search location"/>
               </div>
               <button

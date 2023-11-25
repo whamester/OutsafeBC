@@ -103,7 +103,7 @@
 }
 
 .report-card__picture-container::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: var(--neutral-100);
 }
 
 .report-card__picture-container::-webkit-scrollbar-thumb {

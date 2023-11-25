@@ -1,6 +1,6 @@
 const CheckBox = (id, label) => {
   return `
-    <div class="checkbox">
+    <div class="text-body-2 checkbox">
       <input
         class="cb"
         type="checkbox"
