@@ -193,7 +193,7 @@ main section {
     margin: 0;
   }
 
-  #dropdownMenu {
+  .account-settings__custom-select {
     display: none;
   }
 
