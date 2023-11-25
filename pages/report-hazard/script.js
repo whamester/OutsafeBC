@@ -144,10 +144,14 @@ const displayCurrentSection = () => {
       continueBtnText.innerHTML = 'Continue';
     }
 
+    const fullNavMenu = document.getElementById('fullNavMenu');
+    const main = document.querySelector('main');
     if (pageId === STEPS.location) {
-      fullNavMenu.style.visibility = 'hidden';
+      fullNavMenu.classList.add('hidden');
+      main.style.height = 'calc(100vh - 60px)';
     } else {
-      fullNavMenu.style.visibility = 'visible';
+      fullNavMenu.classList.remove('hidden');
+      main.style.height = 'calc(100% - 130px)';
     }
 
     if (pageId === STEPS.location && idReport && !mapInstance) {
@@ -959,3 +963,16 @@ const generateBreadcrumb = () => {
 
   document.getElementById('navMenu').innerHTML = elements.join('');
 };
+
+reportHazardForm.addEventListener('scroll', function (event) {
+  const main = document.querySelector('main');
+
+  const contentScrollHeight = reportHazardForm.scrollHeight - main.offsetHeight;
+  const currentScroll = this.scrollTop / contentScrollHeight;
+
+  if (currentScroll > 0.3 || currentScroll < -1) {
+    fullNavMenu.style.boxShadow = '0px 1px 2px 0px rgba(0, 0, 0, 0.15)';
+  } else {
+    fullNavMenu.style.boxShadow = 'none';
+  }
+});

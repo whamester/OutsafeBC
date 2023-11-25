@@ -87,10 +87,9 @@
 
 #continueBtnContainer {
   display: flex;
-  align-items: end;
+  align-items: center;
   margin-left: var(--padding-x);
   margin-right: var(--padding-x);
-  padding-top: 1rem;
 }
 
 @media screen and (min-width: 768px) {
@@ -101,6 +100,7 @@
   #report-hazard-body main {
     display: grid;
     height: calc(100% - 130px);
+    grid-template-rows: auto 100px;
   }
 
   #report-hazard-body .continue-btn {
@@ -117,9 +117,5 @@
 
   #backButton {
     display: none;
-  }
-
-  #continueBtnContainer {
-    padding-top: 1rem;
   }
 }
