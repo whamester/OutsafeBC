@@ -729,6 +729,18 @@ document.getElementById('b_ckButton').addEventListener('click', () => {
 });
 
 /**
+ *  Close Buttons
+ */
+
+document.getElementById('closeButton').addEventListener('click', () => {
+  window.location.replace('/pages/home/index.html');
+});
+
+document.getElementById('desktopBackButton').addEventListener('click', () => {
+  window.location.replace('/pages/home/index.html');
+});
+
+/**
  *  Continue Button
  */
 document.getElementById('continueBtn').addEventListener('click', async () => {

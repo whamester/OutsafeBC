@@ -40,10 +40,16 @@
     <ul id="navMenu">
     </ul>
   </nav>
-  <button id="b_ckButton">
-    <i class="icon-chevron-left"></i>
-    Back
-  </button>
+  <nav id="mobileNavMenu">
+    <button id="b_ckButton">
+      <i class="icon-chevron-left" aria-hidden="true"></i>
+      Back
+    </button>
+
+    <button id="closeButton">
+      <i class="icon-close-square" aria-hidden="true"></i>
+    </button>
+  </nav>
   <main>
     <form id="reportHazardForm">
       <section id="select-location" class="page">
@@ -306,18 +312,21 @@
     </form>
 
     <div id="continueBtnContainer">
-      <button type="button" id="continueBtn" class="btn btn-primary continue-btn btn-action">
-        <span id="continueBtnText">Continue</span>
-        <span class="btn__icon">
-          <i class="icon-arrow-right main-icon"></i>
-          <div class="loading-finished-icon hidden">
-            <i class="icon-checkmark"></i>
-          </div>
-          <div class="btn__icon__loader" style="font-size: 3px;">
-            <div class="spinner"></div>
-          </div>
-        </span>
-      </button>
+      <div class="buttons">
+        <button type="button" id="desktopBackButton" class="btn btn-tertiary">Cancel</button>
+        <button type="button" id="continueBtn" class="btn btn-primary continue-btn btn-action">
+          <span id="continueBtnText">Continue</span>
+          <span class="btn__icon">
+            <i class="icon-arrow-right main-icon"></i>
+            <div class="loading-finished-icon hidden">
+              <i class="icon-checkmark"></i>
+            </div>
+            <div class="btn__icon__loader" style="font-size: 3px;">
+              <div class="spinner"></div>
+            </div>
+          </span>
+        </button>
+      </div>
     </div>
   </main>
 </body>
