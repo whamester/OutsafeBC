@@ -122,7 +122,6 @@
   .report-card__scroll-container {
     overflow-y: auto;
     height: fit-content;
-    /* max-height: calc(100vh - 365px); */
     max-height: calc(100vh - 250px);
   }
 }
