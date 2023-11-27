@@ -1,4 +1,5 @@
 name: Update file on PR merge
+
 on:
   pull_request:
     branches:
@@ -18,11 +19,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set Git user and email
-        run: |
-          git config --global user.email "wonnyohamester@outlook.com"
-          git config --global user.name "whamester"
-
       - name: Update variables in serviceWorker.js
         run: |
           # Set new values for variables
@@ -30,14 +26,21 @@ jobs:
           NEW_APP_RESOURCES_KEY="app-resources-${COMMIT_HASH}"
           NEW_API_REQUESTS_KEY="api-requests-${COMMIT_HASH}"
 
-          # Replace the values of the variables in your_js_file.js
+          # Replace the values of the variables in serviceWorker.js
           sed -i "s/\(const STATIC_RESOURCES_KEY = \)'[^']*'/\1'${NEW_STATIC_RESOURCES_KEY}'/" serviceWorker.js
           sed -i "s/\(const APP_RESOURCES_KEY = \)'[^']*'/\1'${NEW_APP_RESOURCES_KEY}'/" serviceWorker.js
           sed -i "s/\(const API_REQUESTS_KEY = \)'[^']*'/\1'${NEW_API_REQUESTS_KEY}'/" serviceWorker.js
 
+      - name: Set Git user and email
+        run: |
+          git config --global user.email "wonnyohamester@outlook.com"
+          git config --global user.name "whamester"
 
       - name: Amend the last commit
         run: |
           git commit -a --amend --no-edit
-          git push --force-with-lease origin main
+
+      - name: Push changes using token
+        run: |
+          git push --force-with-lease "https://${GH_TOKEN}@github.com/${{ github.repository }}/main"
           echo "Complete"
