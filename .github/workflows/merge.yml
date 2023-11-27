@@ -9,27 +9,26 @@ jobs:
   update_version:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
+    env:
+      COMMIT_HASH: ${{ github.sha }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
 
-      - name: Get last commit hash
-        id: get_commit_hash
-        run: echo "::set-output name=hash::$(git rev-parse --short HEAD)"
-
       - name: Update variables in serviceWorker.js
         run: |
           # Set new values for variables
-          new_static_resources_key="static-resources-$({{ steps.get_commit_hash.outputs.hash }})"
-          new_app_resources_key="app-resources-$({{ steps.get_commit_hash.outputs.hash }})"
-          new_api_requests_key="api-requests-$({{ steps.get_commit_hash.outputs.hash }})"
+          NEW_STATIC_RESOURCES_KEY="static-resources-${COMMIT_HASH}"
+          NEW_APP_RESOURCES_KEY="app-resources-${COMMIT_HASH}"
+          NEW_API_REQUESTS_KEY="api-requests-${COMMIT_HASH}"
 
           # Replace the values of the variables in your_js_file.js
-          sed -i "s/\(const STATIC_RESOURCES_KEY = \)'[^']*'/\1'$new_static_resources_key'/" your_js_file.js
-          sed -i "s/\(const APP_RESOURCES_KEY = \)'[^']*'/\1'$new_app_resources_key'/" your_js_file.js
-          sed -i "s/\(const API_REQUESTS_KEY = \)'[^']*'/\1'$new_api_requests_key'/" your_js_file.js
+          sed -i "s/\(const STATIC_RESOURCES_KEY = \)'[^']*'/\1'${NEW_STATIC_RESOURCES_KEY}'/" serviceWorker.js
+          sed -i "s/\(const APP_RESOURCES_KEY = \)'[^']*'/\1'${NEW_APP_RESOURCES_KEY}'/" serviceWorker.js
+          sed -i "s/\(const API_REQUESTS_KEY = \)'[^']*'/\1'${NEW_API_REQUESTS_KEY}'/" serviceWorker.js
+
 
       - name: Amend the last commit
         run: |
