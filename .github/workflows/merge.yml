@@ -42,5 +42,6 @@ jobs:
 
       - name: Push changes using token
         run: |
-          git push --force-with-lease "https://${GH_TOKEN}@github.com/whamester/WMDD-4885-Project.git" main
+          git remote set-url origin "https://${GH_TOKEN}@github.com/whamester/WMDD-4885-Project.git"
+          git push --force-with-lease origin main
           echo "Complete"
