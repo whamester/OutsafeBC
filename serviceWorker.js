@@ -1,7 +1,7 @@
-const STATIC_RESOURCES_KEY = 'static-resources-5';
-const APP_RESOURCES_KEY = 'app-resources-5';
+const STATIC_RESOURCES_KEY = 'static-resources-6';
+const APP_RESOURCES_KEY = 'app-resources-6';
 
-const API_REQUESTS_KEY = 'api-requests-5';
+const API_REQUESTS_KEY = 'api-requests-6';
 
 const ICONS = [
   'assets/icons/search.svg',
@@ -169,8 +169,7 @@ self.addEventListener('install', (event) => {
 self.addEventListener('activate', async (event) => {
   event.waitUntil(
     caches.keys().then((keys) => {
-      console.log({ keys });
-      return Promise.all(keys.filter((key) => key !== STATIC_RESOURCES_KEY).map((key) => caches.delete(key)));
+      return Promise.all(keys.filter((key) => ![STATIC_RESOURCES_KEY, APP_RESOURCES_KEY, API_REQUESTS_KEY].includes(key)).map((key) => caches.delete(key)));
     })
   );
 

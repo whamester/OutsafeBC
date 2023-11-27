@@ -7,6 +7,10 @@
   gap: 2rem;
 }
 
+#map-controls.offline {
+  bottom: 12rem;
+}
+
 .map-controls-zoom {
   display: flex;
   flex-direction: column;
@@ -65,7 +69,7 @@
   align-items: center;
   border: none;
   border-radius: 6.25rem;
-  background: url("/assets/icons/current-location.svg");
+  background: url('/assets/icons/current-location.svg');
   background-position: center center;
   background-size: 20px 20px;
   background-repeat: no-repeat;
@@ -79,7 +83,7 @@
 }
 
 .map-controls-recenter-btn:focus {
-  background: url("/assets/icons/current-location-active.svg");
+  background: url('/assets/icons/current-location-active.svg');
   background-position: center center;
   background-size: 20px 20px;
   background-repeat: no-repeat;

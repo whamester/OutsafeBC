@@ -1,7 +1,7 @@
-export const GeoMap = () => {
+export const GeoMap = ({ offline }) => {
   return `
     <div id="map"></div>
-    <div id="map-controls">
+    <div id="map-controls" class="${offline ? 'offline' : ''}"> 
       <div class="map-controls-recenter">
         <button id="recenterBtn" class="map-controls-recenter-btn"></button>
       </div>

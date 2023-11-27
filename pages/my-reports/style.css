@@ -9,6 +9,11 @@
   padding-bottom: 1rem;
 }
 
+#recentReports.offline,
+#olderReports.offline {
+  padding-bottom: 10rem;
+}
+
 #olderReports .btn {
   pointer-events: none;
 }

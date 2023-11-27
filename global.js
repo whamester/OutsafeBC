@@ -66,13 +66,26 @@ loadIcons();
 
 errorInputHelper();
 
-window.addEventListener('online', function () {
-  AlertPopup.show('You are back online', AlertPopup.success);
+const showOfflineAlert = () => {
+  AlertPopup.show(
+    'You are offline right now. You can still view recent hazard reports, but to receive real-time updates, please connect to the internet. Stay safe out there! 🏕️🌲',
+    AlertPopup.warning,
+    -1,
+    AlertPopup.bottom_center,
+    true
+  );
+};
+
+window.addEventListener('load', () => {
+  if (!window.navigator.onLine) {
+    showOfflineAlert();
+  }
 });
 
 window.addEventListener('offline', function () {
-  AlertPopup.show(
-    'You are offline right now. You can still view recent hazard reports, but to receive real-time updates, please connect to the internet. Stay safe out there! 🏕️🌲',
-    AlertPopup.warning
-  );
+  showOfflineAlert();
+});
+
+window.addEventListener('online', function () {
+  AlertPopup.show('You are back online', AlertPopup.success);
 });

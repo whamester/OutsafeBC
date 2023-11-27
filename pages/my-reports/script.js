@@ -107,6 +107,9 @@ async function displayRecentReports() {
         updated_at: report.updated_at,
       });
       recentReports.appendChild(hazardReport.reportContent());
+      if (!window.navigator.onLine) {
+        recentReports.classList.add('offline');
+      }
 
       loadIcons();
     }
@@ -156,7 +159,9 @@ async function displayOlderReports() {
         updated_at: report.updated_at,
       });
       olderReports.appendChild(hazardReport.reportContent());
-
+      if (!window.navigator.onLine) {
+        olderReports.classList.add('offline');
+      }
       loadIcons();
     }
     toggleSwitchEventlistener();
@@ -229,3 +234,28 @@ function addGreyFilter() {
 }
 
 addGreyFilter();
+
+const handleOffline = () => {
+  try {
+    const olderReports = document.getElementById('olderReports');
+    const recentReports = document.getElementById('recentReports');
+
+    olderReports.classList.add('offline');
+    recentReports.classList.add('offline');
+  } catch (error) {
+    console.error(error);
+  }
+};
+window.addEventListener('offline', handleOffline);
+
+window.addEventListener('online', () => {
+  try {
+    const olderReports = document.getElementById('olderReports');
+    const recentReports = document.getElementById('recentReports');
+
+    olderReports.classList.remove('offline');
+    recentReports.classList.remove('offline');
+  } catch (error) {
+    console.error(error);
+  }
+});
