@@ -17,6 +17,11 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Set Git user and email
+        run: |
+          git config --global user.email "wonnyohamester@outlook.com"
+          git config --global user.name "whamester"
+
       - name: Update variables in serviceWorker.js
         run: |
           # Set new values for variables
@@ -32,8 +37,6 @@ jobs:
 
       - name: Amend the last commit
         run: |
-          git config --global user.email "wonnyohamester@outlook.com"
-          git config --global user.name "Github Actions"
           git commit -a --amend --no-edit
           git push --force-with-lease
           echo "Complete"
