@@ -1,25 +1,28 @@
-import readImage from '../../assets/helpers/read-image.js';
-import {
-  getUserSession,
-  setUserSession,
-  updateUserSession,
-} from '../../assets/helpers/storage.js';
 import { API_URL } from '../../constants.js';
-
-import Header from '../../assets/components/Header.js';
+// Helpers
+import readImage from '../../assets/helpers/read-image.js';
+import { getUserSession, setUserSession, updateUserSession } from '../../assets/helpers/storage.js';
 import injectHeader from '../../assets/helpers/inject-header.js';
+// Components
+import Header from '../../assets/components/Header.js';
 import AlertPopup from '../../assets/components/AlertPopup.js';
+import Modal from '../../assets/components/Modal.js';
 
+// Variables
 const user = getUserSession();
-
-const dropArea = document.getElementById('dropArea');
 const inputFile = document.getElementById('inputImage');
+const uploadImageBtn = document.getElementById('uploadImageBtn');
+const deleteAccountBtn = document.getElementById('deleteAccountBtn');
+const deleteImageBtn = document.getElementById('deleteImageBtn');
 const nameField = document.getElementById('name');
 const emailField = document.getElementById('email');
-
+const basicInfoSettings = document.getElementById('basicInfoSettings');
+const changePasswordSettings = document.getElementById('changePasswordSettings');
+const notificationsSettings = document.getElementById('notificationsSettings');
+const securitySettings = document.getElementById('securitySettings');
+const dropdownMenu = document.getElementById('dropdownMenu');
 let userID = user?.id;
 let picture;
-
 let changedFields = {
   name: false,
   photo: false,
@@ -29,9 +32,8 @@ let changedFields = {
  * Page Init
  */
 window.onload = function () {
-  injectHeader([
-    { func: Header, target: '#profile-body', position: 'afterbegin' },
-  ]);
+  injectHeader([{ func: Header, target: '#profile-body', position: 'afterbegin' }]);
+  basicInfoSettings.style.display = 'flex';
 };
 
 nameField.addEventListener('input', () => {
@@ -41,6 +43,94 @@ nameField.addEventListener('input', () => {
 inputFile.addEventListener('input', () => {
   changedFields.photo = true;
 });
+
+// SPA for sections
+const settingsMap = {
+  basicInfoOptn: basicInfoSettings,
+  passwordOptn: changePasswordSettings,
+  notificationsOtp: notificationsSettings,
+  securityOtn: securitySettings,
+};
+
+let currentSelectedOption = null;
+
+function toggleSettingsDisplay(selectedSetting) {
+  for (const settingsElement of Object.values(settingsMap)) {
+    settingsElement.style.display = 'none';
+  }
+
+  if (selectedSetting) {
+    selectedSetting.style.display = 'flex';
+  }
+}
+
+// Set the initial selected option to the first option in the dropdown
+const initialOption = dropdownMenu.options[0].value;
+dropdownMenu.value = initialOption;
+
+// Initialize the state based on the initially selected option
+currentSelectedOption = initialOption;
+updateActiveButton(); // This will add the 'active' class to the corresponding button
+toggleSettingsDisplay(settingsMap[initialOption]);
+
+// Dropdown menu
+dropdownMenu.addEventListener('change', () => {
+  const selectedSettings = settingsMap[dropdownMenu.value];
+  currentSelectedOption = dropdownMenu.value;
+  toggleSettingsDisplay(selectedSettings);
+  updateActiveButton();
+});
+
+// Side menu
+function setupSideMenuButton(btnId, settingKey) {
+  const button = document.getElementById(btnId);
+
+  // Add a click event listener to each side menu button
+  button.addEventListener('click', function () {
+    dropdownMenu.value = settingKey; // Set the dropdown value
+    const selectedSettings = settingsMap[settingKey];
+    currentSelectedOption = settingKey;
+    toggleSettingsDisplay(selectedSettings);
+    updateActiveButton();
+    toggleButton(btnId); // Add 'active' class to the clicked button
+  });
+}
+
+function updateActiveButton() {
+  var buttons = document.querySelectorAll('.account-settings__menu-btn');
+  buttons.forEach(function (button) {
+    button.classList.remove('active');
+  });
+
+  const activeButton = document.getElementById(currentSelectedOption);
+  if (activeButton) {
+    activeButton.classList.add('active');
+  } else {
+    // If no active button is found, default to the first button
+    const defaultButton = document.getElementById('basicInfoBtn'); // Adjust the ID accordingly
+    if (defaultButton) {
+      defaultButton.classList.add('active');
+      currentSelectedOption = 'basicInfoOptn'; // Set the corresponding setting key
+    }
+  }
+}
+
+// Initialize the state based on the currently selected option
+updateActiveButton();
+
+// Setup side menu buttons
+setupSideMenuButton('basicInfoBtn', 'basicInfoOptn');
+setupSideMenuButton('passwordBtn', 'passwordOptn');
+setupSideMenuButton('notificationsBtn', 'notificationsOtp');
+setupSideMenuButton('securityBtn', 'securityOtn');
+
+function toggleButton(btnId) {
+  var buttons = document.querySelectorAll('.account-settings__menu-btn');
+  buttons.forEach(function (button) {
+    button.classList.remove('active');
+  });
+  document.getElementById(btnId).classList.add('active');
+}
 
 //Show user information
 function showUserInfo() {
@@ -64,18 +154,8 @@ function clearDirtyField() {
 saveProfileInfoBtn.addEventListener('click', async (e) => {
   e.preventDefault();
 
-  if (changedFields.photo) {
-    const result = await saveProfilePicture();
-    await saveUserInfo(result.data.url);
-    clearDirtyField();
-
-    return;
-  }
-
   if (changedFields.name) {
     await saveUserInfo();
-    clearDirtyField();
-
     return;
   }
 });
@@ -108,9 +188,16 @@ async function saveUserInfo(photo = undefined) {
         ...data,
       });
 
+      showHideDeleteImageBtn(data?.photo);
+      showProfilePic(data?.photo);
+
+      AlertPopup.show(`${!!changedFields.name ? 'Name' : 'Image'} has been saved`);
       console.log(message);
+
+      clearDirtyField();
     }
   } catch (error) {
+    AlertPopup.show(AlertPopup.SOMETHING_WENT_WRONG_MESSAGE, AlertPopup.error);
     console.log('user name error', error);
   }
 }
@@ -122,15 +209,13 @@ function togglePwModal() {
 }
 
 resetPwBtn.addEventListener('click', togglePwModal);
-resetPwSaveBtn.addEventListener('click', togglePwModal);
-resetPwCanelBtn.addEventListener('click', togglePwModal);
 
 // Profile photo
-function showProfilePic(url = '#') {
+function showProfilePic(url = '../../assets/img/default-nav-image.png') {
   profilePhoto.setAttribute('src', url);
 }
 
-showProfilePic(user?.photo);
+showProfilePic(user?.photo || undefined);
 
 inputFile.addEventListener('change', loadImage);
 
@@ -142,32 +227,26 @@ function loadImage() {
   });
 }
 
-dropArea.addEventListener('dragover', (e) => {
+uploadImageBtn.addEventListener('change', (e) => {
   e.preventDefault();
-});
-
-dropArea.addEventListener('drop', (e) => {
-  e.preventDefault();
-
-  inputFile.files = e.dataTransfer.files;
   loadImage();
+  uploadImage();
 });
+
+async function uploadImage() {
+  const result = await saveProfilePicture();
+  await saveUserInfo(result.data.url);
+}
 
 async function saveProfilePicture() {
   try {
-    const response = await fetch(
-      `${API_URL}/user-image?userId=${userID}.${picture?.type?.replace(
-        'image/',
-        ''
-      )}`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': picture.type,
-        },
-        body: picture,
-      }
-    );
+    const response = await fetch(`${API_URL}/user-image?userId=${userID}.${picture?.type?.replace('image/', '')}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': picture.type,
+      },
+      body: picture,
+    });
     const result = await response.json();
     return result;
   } catch (error) {
@@ -176,15 +255,92 @@ async function saveProfilePicture() {
   }
 }
 
-// Delete profile
-function toggleDelModal() {
-  const delModal = deleteAccountConfirm.style;
-  delModal.display = delModal.display === 'block' ? 'none' : 'block';
+function showHideDeleteImageBtn(photo) {
+  if (photo) {
+    deleteImageBtn.setAttribute('style', 'display: flex;');
+  } else {
+    deleteImageBtn.setAttribute('style', 'display: none;');
+  }
+}
+showHideDeleteImageBtn(user?.photo);
+
+// Delete user image
+deleteImageBtn.addEventListener('click', deleteProfilePicture);
+
+async function deleteProfilePicture() {
+  try {
+    const name = nameField.value;
+    const photo = '';
+
+    const response = await fetch(`${API_URL}/user?id=${userID}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name,
+        photo,
+      }),
+    });
+    const { data, error, message } = await response.json();
+
+    if (!!error) {
+      console.error(error);
+      return;
+    }
+
+    if (data) {
+      setUserSession({
+        ...user,
+        ...data,
+      });
+
+      showProfilePic();
+      showHideDeleteImageBtn();
+
+      AlertPopup.show(`Image has been deleted`);
+    }
+  } catch (error) {
+    AlertPopup.show(AlertPopup.SOMETHING_WENT_WRONG_MESSAGE, AlertPopup.error);
+  }
 }
 
-deleteAccountBtn.addEventListener('click', toggleDelModal);
-deleteAccountNoBtn.addEventListener('click', toggleDelModal);
-deleteAccountYesBtn.addEventListener('click', deleteAccount);
+// Delete profile
+deleteAccountBtn.addEventListener('click', () => {
+  const modal = new Modal();
+
+  const div = document.createElement('div');
+  div.setAttribute('class', 'btn-container');
+  const cancelBtn = document.createElement('button');
+  cancelBtn.setAttribute('id', 'cancel-modal-btn');
+  cancelBtn.setAttribute('class', 'btn btn-secondary');
+  cancelBtn.addEventListener('click', () => {
+    modal.close();
+  });
+  cancelBtn.innerHTML = 'Cancel';
+
+  const delBtn = document.createElement('button');
+  delBtn.setAttribute('id', 'delete-modal-btn');
+  delBtn.setAttribute('class', 'btn btn-error');
+  delBtn.addEventListener('click', () => {
+    deleteAccount();
+  });
+  delBtn.innerHTML = 'Delete Account';
+  div.appendChild(cancelBtn);
+  div.appendChild(delBtn);
+
+  modal.show({
+    title: 'Delete Account?',
+    description: 'Hey! We’re sorry to see you go. Are you sure you want to delete your account? This can’t be undone.',
+    icon: {
+      name: 'icon-exclamation-mark',
+      color: '#D42621',
+      size: '3.5rem',
+    },
+    actions: div,
+    enableOverlayClickClose: true,
+  });
+});
 
 async function deleteAccount() {
   try {
@@ -203,46 +359,15 @@ async function deleteAccount() {
       return;
     }
 
-    console.log('Account deleted successfully', data, message);
+    AlertPopup.show('Account deleted successfully');
 
-    toggleDelModal();
     window.location.replace('/pages/logout');
   } catch (error) {
-    console.log('Could not delete account', error);
+    AlertPopup.show(AlertPopup.SOMETHING_WENT_WRONG_MESSAGE, AlertPopup.error);
   }
 }
 
 // Update settings
-// Check permission status
-function checkPermissions() {
-  const permissionStatus = document.getElementById('permissionStatus');
-
-  if ('Notification' in window) {
-    navigator.permissions
-      .query({ name: 'notifications' })
-      .then((notificationPermissionStatus) => {
-        if (notificationPermissionStatus.state !== 'granted') {
-          const pElement = document.createElement('p');
-          pElement.textContent =
-            'Push Notification permissions are not granted';
-          permissionStatus.appendChild(pElement);
-        }
-      });
-  }
-
-  if ('geolocation' in navigator) {
-    navigator.permissions
-      .query({ name: 'geolocation' })
-      .then((geolocationPermissionStatus) => {
-        if (geolocationPermissionStatus.state !== 'granted') {
-          const pElement = document.createElement('p');
-          pElement.textContent = 'Geolocation permissions are not granted';
-          permissionStatus.appendChild(pElement);
-        }
-      });
-  }
-}
-checkPermissions();
 
 // Check status of push notification setting
 async function getNotificationSettings() {
@@ -290,18 +415,10 @@ async function setNotificationSettings() {
       notifications_enabled: !!pushNotificationSwitch.checked,
     });
 
-    AlertPopup.show(
-      `Notifications turned ${!!pushNotificationSwitch.checked ? 'on' : 'off'}`
-    );
-    console.log('Notifications turned on', data, message);
+    AlertPopup.show(`Notifications turned ${!!pushNotificationSwitch.checked ? 'on' : 'off'}`);
   } catch (error) {
     AlertPopup.show(AlertPopup.SOMETHING_WENT_WRONG_MESSAGE, AlertPopup.error);
-    console.log('Notifications turned off', error);
   }
 }
 
 pushNotificationSwitch.addEventListener('change', setNotificationSettings);
-
-logOutBtn.addEventListener('click', () => {
-  window.location.replace('/pages/logout');
-});
