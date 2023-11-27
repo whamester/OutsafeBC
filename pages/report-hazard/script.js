@@ -88,11 +88,19 @@ window.onload = async function () {
       if (mapInstance) {
         mapInstance.map.on('click', onSelectLocation);
       }
-
       loadGeolocation();
     } else {
       populateReport(idReport);
     }
+
+    document.getElementById('mapZoomIn').addEventListener('click', () => {
+      mapInstance.map.zoomIn();
+    });
+
+    document.getElementById('mapZoomOut').addEventListener('click', () => {
+      mapInstance.map.zoomOut();
+    });
+
   } catch (error) {
     console.error({ error });
     AlertPopup.show(error.message || AlertPopup.SOMETHING_WENT_WRONG_MESSAGE, AlertPopup.error, 500);
