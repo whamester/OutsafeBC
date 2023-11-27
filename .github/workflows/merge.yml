@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       COMMIT_HASH: ${{ github.sha }}
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -38,5 +39,5 @@ jobs:
       - name: Amend the last commit
         run: |
           git commit -a --amend --no-edit
-          git push --force-with-lease
+          git push --force-with-lease origin main
           echo "Complete"
