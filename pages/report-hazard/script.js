@@ -169,7 +169,7 @@ const displayCurrentSection = () => {
       }
     }
 
-    document.body.scrollTop = true;
+    document.body.scrollTop = document.documentElement.scrollTop = 0;
 
     generateBreadcrumb();
   } catch (error) {

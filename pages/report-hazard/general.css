@@ -1,4 +1,9 @@
 /* Header */
+
+#report-hazard-body {
+  overflow-y: auto;
+}
+
 #report-hazard-body main {
   overflow: unset;
   padding: 0;
