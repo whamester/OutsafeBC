@@ -1,4 +1,4 @@
-import { API_URL } from '../../constants.js';
+import { API_URL, PREV_CENTER } from '../../constants.js';
 //Components
 import Header from '../../assets/components/Header.js';
 import GeoMap from '../../assets/components/GeoMap.js';
@@ -17,6 +17,11 @@ import geocode from '../../assets/helpers/geocode.js';
 import loadIcons from '../../assets/helpers/load-icons.js';
 import geolocationDistance from '../../assets/helpers/geolocation-distance.js';
 import { getUserSession } from '../../assets/helpers/storage.js';
+import { 
+  setPrevCenter,
+  getPrevCenter,
+  checkPrevCenter
+} from '../../assets/helpers/prev-center.js';
 //Models
 import Map from '../../assets/models/Map.js';
 import HazardReport from '../../assets/models/HazardReport.js';
@@ -28,7 +33,7 @@ const url = new URL(window.location.href);
 const idReport = url.searchParams.get('id');
 const openDetail = url.searchParams.get('open') === 'true' && !!idReport;
 const focusMarker = url.searchParams.get('focus') === 'true' && !!idReport;
-const zoom = parseInt(url.searchParams.get('zoom')) || 12;
+const zoom = parseInt(url.searchParams.get('zoom')) || 5;
 const latitude = Number(url.searchParams.get('lat')) || null;
 const longitude = Number(url.searchParams.get('lng')) || null;
 
@@ -49,7 +54,7 @@ let flyToTrigger = true;
 let mapOptions = {
   zoomControl: false,
   doubleClickZoom: false,
-  CURRENT_ZOOM: localStorage.getItem('prevZoom') || 5
+  CURRENT_ZOOM: getPrevCenter('zoom') || zoom
 };
 
 let hazardDetail = new HazardReport();
@@ -68,8 +73,7 @@ const root = document.getElementById('root');
 
 window.onload = async function () {
   try {
-    const prevPosition = localStorage.getItem('prevPosition');
-    if (prevPosition) position = JSON.parse(prevPosition);
+    if (checkPrevCenter()) position = getPrevCenter('position');
 
     const { data } = await apiRequest(`hazard-category`, { method: 'GET' });
 
@@ -446,7 +450,7 @@ const watchGeoLocationSuccess = async ({ coords }) => {
     };
 
     await getReportApiCall(lat, lng);
-    if(!localStorage.getItem('prevPosition'))
+    if(!checkPrevCenter())
       flyTo(lat, lng, Map.DEFAULT_MAP_ZOOM);
     recenterBtn.focus();
     flyToTrigger = false;
@@ -732,7 +736,8 @@ const clearHazardFilter = async () => {
 };
 
 const storePreviousPos = (target) => {
-  localStorage.setItem('prevZoom', target._zoom);
-  const prevPosition = target.boxZoom._map.getCenter();
-  localStorage.setItem('prevPosition', JSON.stringify(prevPosition));
+  setPrevCenter({
+    zoom: target._zoom,
+    position: target.boxZoom._map.getCenter()
+  });
 }
