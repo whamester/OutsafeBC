@@ -100,7 +100,6 @@ window.onload = async function () {
     document.getElementById('mapZoomOut').addEventListener('click', () => {
       mapInstance.map.zoomOut();
     });
-
   } catch (error) {
     console.error({ error });
     AlertPopup.show(error.message || AlertPopup.SOMETHING_WENT_WRONG_MESSAGE, AlertPopup.error, 500);
@@ -707,7 +706,7 @@ const getEmptyImages = () => {
  *  Back Button
  */
 
-document.getElementById('backButton').addEventListener('click', () => {
+document.getElementById('b_ckButton').addEventListener('click', () => {
   const url = new URL(window.location.href);
 
   const allSteps = ['#select-location', '#hazard-category', '#hazard-type', '#additional-details', '#upload-photos', '#review-report'];
