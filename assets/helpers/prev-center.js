@@ -21,9 +21,7 @@ export const getPrevCenter = (key) => {
 
 export const checkPrevCenter = () => {
   try {
-    let data = localStorage.getItem(PREV_CENTER);
-    data = data ? JSON.parse(data) : {};
-    return !!Object.keys(data).length;
+    return !!Object.keys(getPrevCenter()).length;
   } catch (error) {
     console.error(error);
     return false;
