@@ -12,7 +12,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       COMMIT_HASH: ${{ github.sha }}
-      GH_TOKEN: ${{ secrets.GH_TOKEN }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -31,17 +30,14 @@ jobs:
           sed -i "s/\(const APP_RESOURCES_KEY = \)'[^']*'/\1'${NEW_APP_RESOURCES_KEY}'/" serviceWorker.js
           sed -i "s/\(const API_REQUESTS_KEY = \)'[^']*'/\1'${NEW_API_REQUESTS_KEY}'/" serviceWorker.js
 
-      - name: Set Git user and email
+      - name: Commit file
         run: |
-          git config --global user.email "wonnyohamester@outlook.com"
-          git config --global user.name "whamester"
-
-      - name: Amend the last commit
-        run: |
-          git commit -a --amend --no-edit
-
-      - name: Push changes using token
-        run: |
-          git remote set-url origin "https://${GH_TOKEN}@github.com/whamester/WMDD-4885-Project.git"
-          git push --force-with-lease origin main
-          echo "Complete"
+          git config --local user.email "wonnyohamester@outlook.com"
+          git config --local user.name "whamester"
+          git add .
+          git diff --cached --quiet && echo there are no changes || git commit -m "chore: update cache ${GITHUB_SHA}" -a
+      - name: Persist changes in repository
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
