@@ -42,5 +42,5 @@ jobs:
 
       - name: Push changes using token
         run: |
-          git push --force-with-lease "https://${GH_TOKEN}@github.com/${{ github.repository }}/main"
+          git push --force-with-lease "https://${GH_TOKEN}@github.com/whamester/WMDD-4885-Project/tree/main"
           echo "Complete"
