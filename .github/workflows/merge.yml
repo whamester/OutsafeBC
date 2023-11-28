@@ -1,0 +1,43 @@
+name: Update file on PR merge
+
+on:
+  pull_request:
+    branches:
+      - main
+    types: closed
+
+jobs:
+  update_version:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    env:
+      COMMIT_HASH: ${{ github.sha }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Update variables in serviceWorker.js
+        run: |
+          # Set new values for variables
+          NEW_STATIC_RESOURCES_KEY="static-resources-${COMMIT_HASH}"
+          NEW_APP_RESOURCES_KEY="app-resources-${COMMIT_HASH}"
+          NEW_API_REQUESTS_KEY="api-requests-${COMMIT_HASH}"
+
+          # Replace the values of the variables in serviceWorker.js
+          sed -i "s/\(const STATIC_RESOURCES_KEY = \)'[^']*'/\1'${NEW_STATIC_RESOURCES_KEY}'/" serviceWorker.js
+          sed -i "s/\(const APP_RESOURCES_KEY = \)'[^']*'/\1'${NEW_APP_RESOURCES_KEY}'/" serviceWorker.js
+          sed -i "s/\(const API_REQUESTS_KEY = \)'[^']*'/\1'${NEW_API_REQUESTS_KEY}'/" serviceWorker.js
+
+      - name: Commit file
+        run: |
+          git config --local user.email "wonnyohamester@outlook.com"
+          git config --local user.name "whamester"
+          git add .
+          git diff --cached --quiet && echo there are no changes || git commit -m "chore: update cache ${GITHUB_SHA}" -a
+      - name: Persist changes in repository
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
