@@ -32,7 +32,9 @@ const SearchBar = ({ categories }) => {
                 <input
                   id="searchInput"
                   class="sb-search-box--input"
-                  placeholder="Search location"/>
+                  placeholder="Search location"
+                  autocomplete="off"
+                  />
               </div>
               <button
                 id="filterBtn"
@@ -49,15 +51,19 @@ const SearchBar = ({ categories }) => {
           
           <div class="sb-categories">
             <div class="sb-categories-wrapper">
-            ${categories.length ? categories
-              ?.map((item) => {
-                return QuickFilter({
-                  id: item.id,
-                  name: item.name,
-                  icon: item?.ui_settings?.icon ?? 'icon-location-pin-outline',
-                });
-              })
-              .join('') : ''}
+            ${
+              categories.length
+                ? categories
+                    ?.map((item) => {
+                      return QuickFilter({
+                        id: item.id,
+                        name: item.name,
+                        icon: item?.ui_settings?.icon ?? 'icon-location-pin-outline',
+                      });
+                    })
+                    .join('')
+                : ''
+            }
             </div>
           </div>
         </div>
