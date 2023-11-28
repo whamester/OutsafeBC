@@ -153,4 +153,9 @@
     color: var(--neutral-500);
     height: 3.5rem;
   }
+
+  #desktopBackButton:hover {
+    border-color: var(--neutral-800);
+    color: var(--neutral-800);
+  }
 }
