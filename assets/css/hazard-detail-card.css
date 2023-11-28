@@ -96,7 +96,6 @@
     left: 5rem;
     height: fit-content;
     max-height: max-content;
-    height: fit-content;
   }
 
   .report-card__inner {
@@ -123,7 +122,7 @@
   .report-card__scroll-container {
     overflow-y: auto;
     height: fit-content;
-    max-height: 40vh;
+    max-height: calc(100vh - 250px);
   }
 }
 

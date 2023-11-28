@@ -90,31 +90,17 @@
 .report-card__picture-container {
   display: flex;
   gap: 0.75rem;
-  overflow-x: auto;
+  overflow: auto;
   scroll-behavior: smooth;
-  padding-bottom: 0.75rem;
+
+  /* Hide scroll bar */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; /* Firefox */
 }
 
-/* Scroller */
 .report-card__picture-container::-webkit-scrollbar {
-  display: block;
-  width: 6px;
-  height: 6px;
+  display: none; /* Safari and Chrome */
 }
-
-.report-card__picture-container::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-
-.report-card__picture-container::-webkit-scrollbar-thumb {
-  border-radius: 2px;
-  background: var(--neutral-300);
-}
-
-.report-card__picture-container::-webkit-scrollbar-thumb:hover {
-  background: var(--neutral-400);
-}
-/* Scroller */
 
 .report-card__picture-container img {
   height: 5.125rem;

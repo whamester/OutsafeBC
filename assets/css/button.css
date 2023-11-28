@@ -24,7 +24,7 @@
   padding: 0.5rem 0.75rem;
   align-items: center;
   gap: 0.5rem;
-  border-radius: 0.5rem;
+  border-radius: 0.75rem;
   border: 1px solid var(--secondary-900);
   background: var(--secondary-200);
   color: var(--secondary-900);
