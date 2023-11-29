@@ -1,4 +1,9 @@
 /* Header */
+
+#report-hazard-body {
+  overflow-y: auto;
+}
+
 #report-hazard-body main {
   overflow: unset;
   padding: 0;
@@ -34,7 +39,7 @@
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  height: calc(100vh - 170px);
+  height: calc(100vh - 220px);
 }
 
 #report-hazard-body .continue-btn {
@@ -62,24 +67,31 @@
   margin: 0;
 }
 
-#backButton {
+#mobileNavMenu {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--neutral-300);
+}
+
+#mobileNavMenu button {
   border: none;
   background: none;
   color: inherit;
   cursor: pointer;
   text-decoration: none;
   color: var(--neutral-500);
+  padding: 0;
 
   display: flex;
   gap: 0.5rem;
   align-items: center;
-
-  width: 100%;
-  padding: 0.75rem 1rem;
-  border-bottom: 1px solid var(--neutral-300);
 }
 
-#backButton .icon-chevron-left {
+#mobileNavMenu i[class^='icon-'] {
   height: 1.5rem;
   width: 1.5rem;
   background-color: var(--neutral-500);
@@ -90,6 +102,17 @@
   align-items: center;
   margin-left: var(--padding-x);
   margin-right: var(--padding-x);
+}
+
+#continueBtnContainer .buttons {
+  display: flex;
+  align-items: end;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+#desktopBackButton {
+  display: none;
 }
 
 @media screen and (min-width: 768px) {
@@ -115,7 +138,24 @@
     padding-top: 1.5rem;
   }
 
-  #backButton {
+  #mobileNavMenu {
     display: none;
+  }
+
+  #continueBtnContainer {
+    padding-top: 1rem;
+  }
+
+  #desktopBackButton {
+    display: flex;
+    background-color: var(--white);
+    border-color: var(--neutral-400);
+    color: var(--neutral-500);
+    height: 3.5rem;
+  }
+
+  #desktopBackButton:hover {
+    border-color: var(--neutral-800);
+    color: var(--neutral-800);
   }
 }
