@@ -1,1 +1,1 @@
-window.location.replace("../view-hazard");
+window.location.replace('../home/index.html');

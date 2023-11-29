@@ -88,11 +88,18 @@ window.onload = async function () {
       if (mapInstance) {
         mapInstance.map.on('click', onSelectLocation);
       }
-
       loadGeolocation();
     } else {
       populateReport(idReport);
     }
+
+    document.getElementById('mapZoomIn').addEventListener('click', () => {
+      mapInstance.map.zoomIn();
+    });
+
+    document.getElementById('mapZoomOut').addEventListener('click', () => {
+      mapInstance.map.zoomOut();
+    });
   } catch (error) {
     console.error({ error });
     AlertPopup.show(error.message || AlertPopup.SOMETHING_WENT_WRONG_MESSAGE, AlertPopup.error, 500);
@@ -162,7 +169,7 @@ const displayCurrentSection = () => {
       }
     }
 
-    document.body.scrollTop = true;
+    document.body.scrollTop = document.documentElement.scrollTop = 0;
 
     generateBreadcrumb();
   } catch (error) {
@@ -699,7 +706,7 @@ const getEmptyImages = () => {
  *  Back Button
  */
 
-document.getElementById('backButton').addEventListener('click', () => {
+document.getElementById('b_ckButton').addEventListener('click', () => {
   const url = new URL(window.location.href);
 
   const allSteps = ['#select-location', '#hazard-category', '#hazard-type', '#additional-details', '#upload-photos', '#review-report'];
@@ -719,6 +726,18 @@ document.getElementById('backButton').addEventListener('click', () => {
 
   url.hash = previousHash;
   window.location.href = url.href;
+});
+
+/**
+ *  Close Buttons
+ */
+
+document.getElementById('closeButton').addEventListener('click', () => {
+  window.location.replace('/pages/home/index.html');
+});
+
+document.getElementById('desktopBackButton').addEventListener('click', () => {
+  window.location.replace('/pages/home/index.html');
 });
 
 /**

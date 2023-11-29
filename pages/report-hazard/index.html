@@ -40,10 +40,16 @@
     <ul id="navMenu">
     </ul>
   </nav>
-  <button id="backButton" class="back-button-mobile">
-    <i class="icon-chevron-left"></i>
-    Back
-  </button>
+  <nav id="mobileNavMenu">
+    <button id="b_ckButton">
+      <i class="icon-chevron-left" aria-hidden="true"></i>
+      Back
+    </button>
+
+    <button id="closeButton">
+      <i class="icon-close-square" aria-hidden="true"></i>
+    </button>
+  </nav>
   <main>
     <form id="reportHazardForm">
       <section id="select-location" class="page">
@@ -69,6 +75,14 @@
               </div>
 
               <div id="map"></div>
+              <div class="map-controls-zoom">
+                <button type="button" class="map-controls-zoom-btn" id="mapZoomIn">
+                  <i class="icon-plus"></i>
+                </button>
+                <button type="button" class="map-controls-zoom-btn" id="mapZoomOut">
+                  <i class="icon-minus"></i>
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -224,7 +238,7 @@
         <div id="submitContainer" class="scroll-container">
 
           <div class="main-submit-section">
-            <p class="text-body-2 semibold text-neutral-900 main-submit-section__label">
+            <p class="text-body-2 medium text-neutral-900 main-submit-section__label">
               Location:
             </p>
             <a id="editLocation" href="#select-location"
@@ -239,7 +253,7 @@
 
           <div class="main-submit-section">
 
-            <p class="text-body-2 semibold text-neutral-900 main-submit-section__label">
+            <p class="text-body-2 medium text-neutral-900 main-submit-section__label">
               Type of hazard:
             </p>
 
@@ -254,7 +268,7 @@
 
 
           <div id="review-report-category" class="main-submit-section">
-            <p class="text-body-2 semibold text-neutral-900 main-submit-section__label">
+            <p class="text-body-2 medium text-neutral-900 main-submit-section__label">
               Hazard:
             </p>
             <a id="editType" href="#hazard-type"
@@ -268,7 +282,7 @@
 
 
           <div class="main-submit-section">
-            <p class="text-body-2 semibold text-neutral-900 main-submit-section__label">
+            <p class="text-body-2 medium text-neutral-900 main-submit-section__label">
               Additional details:
             </p>
             <a id="editDetails" href="#additional-details"
@@ -282,7 +296,7 @@
 
 
           <div class="main-submit-section">
-            <p class="text-body-2 semibold text-neutral-900 main-submit-section__label">
+            <p class="text-body-2 medium text-neutral-900 main-submit-section__label">
               Photos:
             </p>
             <a id="editPhotos" href="#upload-photos"
@@ -298,18 +312,21 @@
     </form>
 
     <div id="continueBtnContainer">
-      <button type="button" id="continueBtn" class="btn btn-primary continue-btn btn-action">
-        <span id="continueBtnText">Continue</span>
-        <span class="btn__icon">
-          <i class="icon-arrow-right main-icon"></i>
-          <div class="loading-finished-icon hidden">
-            <i class="icon-checkmark"></i>
-          </div>
-          <div class="btn__icon__loader" style="font-size: 3px;">
-            <div class="spinner"></div>
-          </div>
-        </span>
-      </button>
+      <div class="buttons">
+        <button type="button" id="desktopBackButton" class="btn btn-tertiary">Cancel</button>
+        <button type="button" id="continueBtn" class="btn btn-primary continue-btn btn-action">
+          <span id="continueBtnText">Continue</span>
+          <span class="btn__icon">
+            <i class="icon-arrow-right main-icon"></i>
+            <div class="loading-finished-icon hidden">
+              <i class="icon-checkmark"></i>
+            </div>
+            <div class="btn__icon__loader" style="font-size: 3px;">
+              <div class="spinner"></div>
+            </div>
+          </span>
+        </button>
+      </div>
     </div>
   </main>
 </body>

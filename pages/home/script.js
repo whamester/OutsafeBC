@@ -81,7 +81,11 @@ window.onload = async function () {
 
     injectHeader([{ func: Header, target: '#home-body', position: 'afterbegin' }]);
 
-    injectHTML([{ func: GeoMap }, { func: SearchBar, args: searchBarParams }, { func: ModalFilter, args: searchBarParams.categories }]);
+    injectHTML([
+      { func: GeoMap, args: { offline: !window.navigator.onLine } },
+      { func: SearchBar, args: searchBarParams },
+      { func: ModalFilter, args: searchBarParams.categories },
+    ]);
 
     document.getElementById('reportHazardBtn').addEventListener('click', () => {
       if (!user) {
@@ -452,6 +456,8 @@ const watchGeoLocationSuccess = async ({ coords }) => {
     await getReportApiCall(lat, lng);
     if(!checkPrevCenter())
       flyTo(lat, lng, Map.DEFAULT_MAP_ZOOM);
+
+    
     recenterBtn.focus();
     flyToTrigger = false;
   }
@@ -741,3 +747,29 @@ const storePreviousPos = (target) => {
     position: target.boxZoom._map.getCenter()
   });
 }
+const handleOffline = () => {
+  try {
+    const homepage = document.getElementById('home-body');
+    const mapControls = document.getElementById('map-controls');
+
+    if (homepage && mapControls) {
+      mapControls.classList.add('offline');
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+window.addEventListener('offline', handleOffline);
+
+window.addEventListener('online', () => {
+  try {
+    const homepage = document.getElementById('home-body');
+    const mapControls = document.getElementById('map-controls');
+
+    if (homepage && mapControls) {
+      mapControls.classList.remove('offline');
+    }
+  } catch (error) {
+    console.error(error);
+  }
+});
