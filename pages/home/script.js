@@ -1,4 +1,4 @@
-import { API_URL } from '../../constants.js';
+import { API_URL, PREV_CENTER } from '../../constants.js';
 //Components
 import Header from '../../assets/components/Header.js';
 import GeoMap from '../../assets/components/GeoMap.js';
@@ -17,6 +17,11 @@ import geocode from '../../assets/helpers/geocode.js';
 import loadIcons from '../../assets/helpers/load-icons.js';
 import geolocationDistance from '../../assets/helpers/geolocation-distance.js';
 import { getUserSession } from '../../assets/helpers/storage.js';
+import { 
+  setPrevCenter,
+  getPrevCenter,
+  checkPrevCenter
+} from '../../assets/helpers/prev-center.js';
 //Models
 import Map from '../../assets/models/Map.js';
 import HazardReport from '../../assets/models/HazardReport.js';
@@ -28,7 +33,7 @@ const url = new URL(window.location.href);
 const idReport = url.searchParams.get('id');
 const openDetail = url.searchParams.get('open') === 'true' && !!idReport;
 const focusMarker = url.searchParams.get('focus') === 'true' && !!idReport;
-const zoom = parseInt(url.searchParams.get('zoom')) || 12;
+const zoom = parseInt(url.searchParams.get('zoom')) || 5;
 const latitude = Number(url.searchParams.get('lat')) || null;
 const longitude = Number(url.searchParams.get('lng')) || null;
 
@@ -49,7 +54,7 @@ let flyToTrigger = true;
 let mapOptions = {
   zoomControl: false,
   doubleClickZoom: false,
-  CURRENT_ZOOM: zoom,
+  CURRENT_ZOOM: getPrevCenter('zoom') || zoom
 };
 
 let hazardDetail = new HazardReport();
@@ -68,6 +73,8 @@ const root = document.getElementById('root');
 
 window.onload = async function () {
   try {
+    if (checkPrevCenter()) position = getPrevCenter('position');
+
     const { data } = await apiRequest(`hazard-category`, { method: 'GET' });
 
     searchBarParams.categories = data;
@@ -119,8 +126,14 @@ window.onload = async function () {
 
     Map.watchGeoLocation(watchGeoLocationSuccess, watchGeoLocationError);
 
-    // clear recenter btn focus
-    geoMap.map.on('drag', () => recenterBtn?.blur());
+    // clear recenter btn focus store current zoom, center
+    geoMap.map.on('drag', ({target}) => {
+      recenterBtn?.blur();
+      storePreviousPos(target);
+    });
+
+    // store current zoom, center
+    geoMap.map.on('zoom', ({target}) => storePreviousPos(target));
   } catch (error) {
     console.error(error, error.message);
 
@@ -441,7 +454,10 @@ const watchGeoLocationSuccess = async ({ coords }) => {
     };
 
     await getReportApiCall(lat, lng);
-    flyTo(lat, lng);
+    if(!checkPrevCenter())
+      flyTo(lat, lng, Map.DEFAULT_MAP_ZOOM);
+
+    
     recenterBtn.focus();
     flyToTrigger = false;
   }
@@ -725,6 +741,12 @@ const clearHazardFilter = async () => {
   if (document.querySelector('.sb-cards')) injectCards();
 };
 
+const storePreviousPos = (target) => {
+  setPrevCenter({
+    zoom: target._zoom,
+    position: target.boxZoom._map.getCenter()
+  });
+}
 const handleOffline = () => {
   try {
     const homepage = document.getElementById('home-body');
