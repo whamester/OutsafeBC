@@ -19,7 +19,7 @@ class Map {
   static focusIconAnchor = [26.5, 55];
 
   constructor(lat, lng, customConfig = {}) {
-    this.map = L.map(Map.MAP_ID, { ...customConfig }).setView(
+    this.map = L.map(Map.MAP_ID, {zoomControl: false}, { ...customConfig }).setView(
       [lat, lng],
       customConfig.CURRENT_ZOOM ?? Map.CURRENT_ZOOM
     );

@@ -1,102 +1,142 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 
 <head>
-	<meta charset="UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-	<link rel="icon" type="image/x-icon" href="../../assets/img/icons/logo-square.png">
+  <link rel="icon" type="image/x-icon" href="../../assets/img/icons/logo-square.png" />
 
-	<!-- WPA -->
-	<link rel="manifest" href="../../manifest.json" />
-	<link rel="apple-touch-icon" href="../../assets/css/img/icons/icon-96x96.png" />
-	<meta name="apple-mobile-web-app-status-bar" content="#000000" />
-	<meta name="theme-color" content="#000000" />
+  <!-- WPA -->
+  <link rel="manifest" href="../../manifest.json" />
+  <link rel="apple-touch-icon" href="../../assets/css/img/icons/icon-96x96.png" />
+  <meta name="apple-mobile-web-app-status-bar" content="#000000" />
+  <meta name="theme-color" content="#000000" />
 
-	<!-- Global Styles -->
-	<link rel="stylesheet" href="../../assets/css/_global.css" />
-	<!-- Feature Styles -->
-	<link rel="stylesheet" href="./style.css" />
-	<!-- Global JS -->
-	<script type="module" src="../../global.js" defer></script>
-	<!-- Feature JS -->
-	<script type="module" src="./script.js" defer></script>
+  <!-- leaflet CSS for maps -->
+  <link rel="stylesheet" href="../../modules/leaflet/leaflet.css" />
+  <!-- leaflet JS for maps -->
+  <script src="../../modules/leaflet/leaflet.js"></script>
+  <!-- Global Styles -->
+  <link rel="stylesheet" href="../../assets/css/_global.css" />
+  <!-- Global JS -->
+  <script type="module" src="../../global.js" defer></script>
+  <!-- Feature Styles -->
+  <link rel="stylesheet" href="./style.css" />
+  <!-- Feature JS -->
+  <script type="module" src="./script.js" defer></script>
+  <!-- Notifications JS -->
+  <script src="https://js.pusher.com/beams/1.0/push-notifications-cdn.js"></script>
+  <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+  <!-- End Notifications JS -->
 
-	<!-- Notifications JS -->
-	<script src="https://js.pusher.com/beams/1.0/push-notifications-cdn.js"></script>
-	<script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
-	<!-- End Notifications JS -->
-
-	<title>Settings</title>
+  <title>Account Settings</title>
 </head>
 
 <body id="profile-body">
-	<main>
-		<section id="myProfile">
-			<h1>My Profile</h1>
-			<p>Update your photo and personal details here.</p>
+  <main>
+    <h1 id="profile-heading" class="text-heading-1">Account Settings</h1>
 
-			<form id="profileForm">
-				<label for="name">Name</label>
-				<input type="text" id="name" required />
-				<label for="email">Email address</label>
-				<input type="email" id="email" readonly />
-			</form>
+    <div class="account-settings__wrapper">
+      <div class="account-settings__menu">
 
-			<h2>Password</h2>
-			<button id="resetPwBtn">Reset Password</button>
+        <div class="account-settings__custom-select">
+          <label for="dropdownMenu"></label>
+          <select name="dropdownMenu" id="dropdownMenu" class="text-lg-body-1 medium">
+            <option value="basicInfoOptn" selected class="text-lg-body-1">Basic Info</option>
+            <option value="passwordOptn" class="text-lg-body-1">Password</option>
+            <option value="notificationsOtp" class="text-lg-body-1">Notifications</option>
+            <option value="securityOtn" class="text-lg-body-1">Security</option>
+          </select>
+        </div>
 
-			<div id="resetPwPopup">
-				<button id="resetPwSaveBtn">Reset Password</button>
-				<button id="resetPwCanelBtn">Cancel</button>
-			</div>
+        <div class="account-settings__side-menu" id="sideMenu">
+          <a href="#" class="account-settings__menu-btn text-lg-body-1" id="basicInfoBtn">Basic Info</a>
+          <a href="#" class="account-settings__menu-btn text-lg-body-1" id="passwordBtn">Password</a>
+          <a href="#" class="account-settings__menu-btn text-lg-body-1" id="notificationsBtn">Notifications</a>
+          <a href="#" class="account-settings__menu-btn text-lg-body-1" id="securityBtn">Security</a>
+        </div>
+      </div>
 
-			<h2>Your photo</h2>
-			<p>This will be displayed on your profile.</p>
-			<img src="#" alt="User profile picture" id="profilePhoto" />
+      <div class="account-settings_content">
+        <section id="basicInfoSettings" style="display: none">
+          <h2 class="text-heading-2">Basic Info</h2>
 
-			<div id="fileDropWrapper">
-				<label for="inputImage" id="dropArea">
-					<input type="file" accept="image/*" id="inputImage" hidden />
-					Drop your image here, or click to browse
-				</label>
-			</div>
+          <div class="account-settings__profile-picture">
+            <img src="../../assets/img/default-nav-image.png" alt="User profile picture" id="profilePhoto" />
 
-			<button type="submit" id="saveProfileInfoBtn" form="profileForm">
-				Save
-			</button>
-		</section>
+            <div class="account-settings__profile-picture-btns">
+              <label class="btn btn-secondary" id="uploadImageBtn">
+                Upload Image
+                <input type="file" accept="image/*" id="inputImage" style="display: none" />
+              </label>
+              <button class="btn btn-error" id="deleteImageBtn">Delete</button>
+            </div>
+          </div>
 
-		<section id="settings">
-			<h1>Settings</h1>
+          <form id="profileForm">
+            <div class="form-field">
+              <label for="name" class="text-body-2 medium"> Name </label>
+              <div class="form-field__input-container">
+                <input type="text" id="name" required class="text-body-2 regular" />
+              </div>
+            </div>
+          </form>
 
-			<p>Update your preferences here</p>
-			<div id="permissionStatus"></div>
+          <div class="account-settings__email form-field">
+            <label for="email" class="text-body-2 medium"> Email address </label>
+            <div class="form-field__input-container">
+              <input type="email" id="email" class="text-body-2 regular" disabled />
+            </div>
+          </div>
 
-			<div class="form-check form-switch">
-				<img src="#" alt="#" />
-				<!-- icon -->
-				<label class="form-check-label" for="pushNotificationSwitch">Push Notifications</label>
-				<input class="form-check-input" type="checkbox" role="switch" id="pushNotificationSwitch" />
-			</div>
-		</section>
+          <button type="submit" id="saveProfileInfoBtn" form="profileForm" class="btn btn-primary">Save Changes</button>
+        </section>
 
-		<section id="deleteAccount">
-			<h1>Delete Account</h1>
-			<p>
-				If you no longer want to use Outsafe BC, you can permanently delete your
-				account. You can’t undo this action!
-			</p>
-			<button id="deleteAccountBtn">Delete Account</button>
-			<div id="deleteAccountConfirm">
-				<h2>Are you sure you want to delete your account?</h2>
-				<button id="deleteAccountYesBtn">Yes</button>
-				<button id="deleteAccountNoBtn">No</button>
-			</div>
-		</section>
+        <section id="changePasswordSettings" style="display: none">
+          <div class="account-settings__h2-p">
+            <h2 class="text-heading-2">Change Password</h2>
+            <p>We will send you a link to change your password.</p>
+          </div>
+          <button id="resetPwBtn" class="btn btn-primary">Send link via email</button>
+        </section>
 
-		<button id="logOutBtn">Logout</button>
-	</main>
+        <section id="notificationsSettings" style="display: none">
+          <h2 class="text-heading-2">Notifications</h2>
+
+          <div class="account-settings__notifications-container">
+            <div class="account-settings__notifications-details">
+              <i class="icon-notification-no" style="background-color: var(--neutral-700)"></i>
+              <div class="notifications-details__text">
+                <h3>Allow Push Notifications</h3>
+                <p>Get real-time updats for nearby reported hazards.</p>
+              </div>
+            </div>
+
+            <div class="report-card__toggle_button">
+              <label class="switch">
+                <input type="checkbox" id="pushNotificationSwitch" />
+                <span class="slider round"></span>
+              </label>
+            </div>
+          </div>
+        </section>
+
+        <section id="securitySettings" style="display: none">
+          <div class="account-settings__h2-p">
+            <h2 class="text-heading-2">Delete Account</h2>
+            <p>If you no longer want to use Outsafe BC, you can permanently delete your account. You can’t undo this
+              action!</p>
+          </div>
+
+          <button id="deleteAccountBtn" class="btn btn-error">
+            <i class="icon-exclamation-mark"></i>
+            Delete Account
+          </button>
+        </section>
+      </div>
+    </div>
+  </main>
 </body>
 
 </html>

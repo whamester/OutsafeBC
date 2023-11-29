@@ -95,7 +95,6 @@
     border-radius: 0.75rem;
     width: 410px;
     height: fit-content;
-    height: fit-content;
     max-height: max-content;
   }
   
@@ -105,6 +104,8 @@
 
   .report-card__scroll-container {
     height: 24rem;
+    height: fit-content;
+    max-height: calc(100vh - 250px);
     overflow-y: auto;
   }
 

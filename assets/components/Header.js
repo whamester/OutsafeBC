@@ -74,7 +74,7 @@ const Header = () => {
               </div>
           </li>
             <li class="text-body-2">
-              <a href="/pages/settings#myProfile"><i class="icon-profile"></i> <span>Account Settings</span></a>
+              <a href="/pages/settings"><i class="icon-profile"></i> <span>Account Settings</span></a>
             </li>
             <li class="text-body-2">
               <a href="/pages/my-reports"><i class="icon-reports"></i> <span>Report History</span></a>
