@@ -60,8 +60,8 @@
 }
 
 #alert #alert-icon {
-  width: 3rem;
-  height: 3rem;
+  width: 2.5rem;
+  height: 2.5rem;
   border-radius: 6.25rem;
   display: flex;
   justify-content: center;
@@ -70,8 +70,8 @@
 }
 
 #alert #alert-icon i {
-  width: 1.75rem;
-  height: 1.75rem;
+  width: 1.5rem;
+  height: 1.5rem;
   flex-shrink: 0;
 }
 
@@ -113,7 +113,7 @@
 }
 
 #alert.success {
-  border: 1px solid var(--success);
+  border: 1px solid var(--success-500);
   background: var(--success-50);
   color: var(--success-900);
 }
