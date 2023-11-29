@@ -28,6 +28,12 @@ h3,
   line-height: var(--body-1-line-height);
 }
 
+.text-lg-body-1 {
+  font-size: var(--body-1-large-size);
+  letter-spacing: var(--body-1-large-letter-spacing);
+  line-height: var(--body-1-large-line-height);
+}
+
 .text-body-2 {
   font-size: var(--body-2-size);
   letter-spacing: var(--body-2-letter-spacing);
