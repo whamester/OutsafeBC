@@ -59,6 +59,8 @@ channel.addEventListener('message', (event) => {
     const emptyDiv = document.getElementById('empty-notifications');
 
     emptyDiv.innerHTML = '';
+    markAllAsReadAction?.classList?.add('text-neutral-900');
+    markAsReadIcon.style.backgroundColor = 'var(--neutral-900)';
   }
 });
 

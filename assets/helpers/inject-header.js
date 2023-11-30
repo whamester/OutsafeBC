@@ -22,8 +22,14 @@ const injectHeader = (params) => {
       const emptyDiv = document.getElementById('empty-notifications');
       const empty = new NotificationsEmpty();
       emptyDiv.innerHTML = empty.getHTML();
+
+      markAllAsReadAction?.classList?.add('text-neutral-400');
+      markAsReadIcon.style.backgroundColor = 'var(--neutral-400)';
       return;
     }
+
+    markAllAsReadAction?.classList?.add('text-neutral-900');
+    markAsReadIcon.style.backgroundColor = 'var(--neutral-900)';
 
     if (Array.isArray(notifications)) {
       for (let i = 0; i < notifications.length; i++) {
