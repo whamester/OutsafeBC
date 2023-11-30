@@ -151,10 +151,12 @@ const displayCurrentSection = () => {
       continueBtnText.innerHTML = 'Continue';
     }
 
+    const fullNavMenu = document.getElementById('fullNavMenu');
+    const main = document.querySelector('main');
     if (pageId === STEPS.location) {
-      fullNavMenu.style.visibility = 'hidden';
+      fullNavMenu.classList.add('hidden');
     } else {
-      fullNavMenu.style.visibility = 'visible';
+      fullNavMenu.classList.remove('hidden');
     }
 
     if (pageId === STEPS.location && idReport && !mapInstance) {
@@ -168,6 +170,8 @@ const displayCurrentSection = () => {
         mapInstance.map.on('click', onSelectLocation);
       }
     }
+
+    continueBtnContainer.style.boxShadow = 'none';
 
     document.body.scrollTop = document.documentElement.scrollTop = 0;
 
@@ -978,3 +982,22 @@ const generateBreadcrumb = () => {
 
   document.getElementById('navMenu').innerHTML = elements.join('');
 };
+
+reportHazardForm.addEventListener('scroll', function (event) {
+  const body = document.querySelector('#report-hazard-body');
+
+  const contentScrollHeight = reportHazardForm.scrollHeight - body.offsetHeight;
+  const currentScroll = this.scrollTop / contentScrollHeight;
+
+  if (currentScroll > 0.3 || currentScroll < 0) {
+    fullNavMenu.style.boxShadow = '0px 1px 2px 0px rgba(0, 0, 0, 0.15)';
+  } else {
+    fullNavMenu.style.boxShadow = 'none';
+  }
+
+  if (currentScroll === -0) {
+    continueBtnContainer.style.boxShadow = '0px 1px 2px 0px rgba(0, 0, 0, 0.15) inset';
+  } else {
+    continueBtnContainer.style.boxShadow = 'none';
+  }
+});

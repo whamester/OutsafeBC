@@ -1,12 +1,7 @@
-/* Header */
-
 #report-hazard-body {
-  overflow-y: auto;
-}
-
-#report-hazard-body main {
-  overflow: unset;
-  padding: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 #report-hazard-body input[type='radio'] {
@@ -39,7 +34,6 @@
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  height: calc(100vh - 220px);
 }
 
 #report-hazard-body .continue-btn {
@@ -54,8 +48,9 @@
 }
 
 #reportHazardForm {
-  padding-top: 1rem;
   overflow: auto;
+  flex: 1;
+  padding-top: 1rem;
 }
 
 #reportHazardForm .padded {
@@ -99,10 +94,8 @@
 
 #continueBtnContainer {
   display: flex;
-  align-items: end;
-  margin-left: var(--padding-x);
-  margin-right: var(--padding-x);
-  padding-top: 1rem;
+  align-items: center;
+  padding: 1rem var(--padding-x);
 }
 
 #continueBtnContainer .buttons {
@@ -121,29 +114,12 @@
     display: block;
   }
 
-  #report-hazard-body main {
-    display: grid;
-    height: calc(100% - 130px);
-  }
-
   #report-hazard-body .continue-btn {
     width: 15.5rem;
   }
 
-  #report-hazard-body .section-container {
-    height: 100%;
-  }
-
-  #reportHazardForm {
-    padding-top: 1.5rem;
-  }
-
   #mobileNavMenu {
     display: none;
-  }
-
-  #continueBtnContainer {
-    padding-top: 1rem;
   }
 
   #desktopBackButton {

@@ -1,4 +1,4 @@
-import { API_URL } from '../../constants.js';
+import { API_URL, PREV_CENTER } from '../../constants.js';
 //Components
 import Header from '../../assets/components/Header.js';
 import GeoMap from '../../assets/components/GeoMap.js';
@@ -17,6 +17,11 @@ import geocode from '../../assets/helpers/geocode.js';
 import loadIcons from '../../assets/helpers/load-icons.js';
 import geolocationDistance from '../../assets/helpers/geolocation-distance.js';
 import { getUserSession } from '../../assets/helpers/storage.js';
+import { 
+  setPrevCenter,
+  getPrevCenter,
+  checkPrevCenter
+} from '../../assets/helpers/prev-center.js';
 //Models
 import Map from '../../assets/models/Map.js';
 import HazardReport from '../../assets/models/HazardReport.js';
@@ -47,7 +52,7 @@ let flyToTrigger = true;
 let mapOptions = {
   zoomControl: false,
   doubleClickZoom: false,
-  CURRENT_ZOOM: 5
+  CURRENT_ZOOM: getPrevCenter('zoom') || zoom
 };
 
 let hazardDetail = new HazardReport();
@@ -66,6 +71,8 @@ const root = document.getElementById('root');
 
 window.onload = async function () {
   try {
+    if (checkPrevCenter()) position = getPrevCenter('position');
+
     const { data } = await apiRequest(`hazard-category`, { method: 'GET' });
 
     searchBarParams.categories = data;
@@ -117,8 +124,14 @@ window.onload = async function () {
 
     Map.watchGeoLocation(watchGeoLocationSuccess, watchGeoLocationError);
 
-    // clear recenter btn focus
-    geoMap.map.on('drag', () => recenterBtn?.blur());
+    // clear recenter btn focus store current zoom, center
+    geoMap.map.on('drag', ({target}) => {
+      recenterBtn?.blur();
+      storePreviousPos(target);
+    });
+
+    // store current zoom, center
+    geoMap.map.on('zoom', ({target}) => storePreviousPos(target));
   } catch (error) {
     console.error(error, error.message);
 
@@ -459,7 +472,9 @@ const watchGeoLocationSuccess = async ({ coords }) => {
     };
 
     await getReportApiCall(lat, lng);
-    flyTo(lat, lng, Map.DEFAULT_MAP_ZOOM);
+    if(!checkPrevCenter())
+      flyTo(lat, lng, Map.DEFAULT_MAP_ZOOM);
+    
     recenterBtn.focus();
     flyToTrigger = false;
   }
@@ -743,11 +758,16 @@ const clearHazardFilter = async () => {
   if (document.querySelector('.sb-cards')) injectCards();
 };
 
-
 const clearUrlParams = () => {
   window.history.pushState({}, document.title, "/pages/home/");
 }
 
+const storePreviousPos = (target) => {
+  setPrevCenter({
+    zoom: target._zoom,
+    position: target.boxZoom._map.getCenter()
+  });
+}
 const handleOffline = () => {
   try {
     const homepage = document.getElementById('home-body');

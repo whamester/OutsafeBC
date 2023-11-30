@@ -22,6 +22,8 @@ const injectHeader = (params) => {
       const emptyDiv = document.getElementById('empty-notifications');
       const empty = new NotificationsEmpty();
       emptyDiv.innerHTML = empty.getHTML();
+
+      disableMarkAllAsRead();
       return;
     }
 
@@ -50,6 +52,8 @@ const injectHeader = (params) => {
 
         checkIfAllNotificationsAreRead();
       }
+
+      disableMarkAllAsRead();
     });
   }
 
@@ -98,9 +102,12 @@ export const checkIfAllNotificationsAreRead = () => {
 
   if (Array.isArray(notifications) && noNotificationsIcon && badge) {
     const readAll = notifications.map((n) => !!n.read).every((value) => !!value);
+
     if (readAll) {
+      disableMarkAllAsRead();
       badge.classList.add('hidden');
     } else {
+      enableMarkAllAsRead();
       badge.classList.remove('hidden');
     }
   }
@@ -111,6 +118,28 @@ export const checkIfAllNotificationsAreRead = () => {
     if (countElement) {
       countElement.innerHTML = count > 0 ? `(${count})` : '';
     }
+  }
+};
+
+export const disableMarkAllAsRead = () => {
+  try {
+    markAllAsReadAction?.classList?.add('text-neutral-400');
+    markAllAsReadAction?.classList?.remove('text-neutral-900');
+    markAllAsReadAction.style.cursor = 'auto';
+    markAsReadIcon.style.backgroundColor = 'var(--neutral-400)';
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const enableMarkAllAsRead = () => {
+  try {
+    markAllAsReadAction?.classList?.add('text-neutral-900');
+    markAllAsReadAction?.classList?.remove('text-neutral-400');
+    markAllAsReadAction.style.cursor = 'pointer';
+    markAsReadIcon.style.backgroundColor = 'var(--neutral-900)';
+  } catch (error) {
+    console.error(error);
   }
 };
 
