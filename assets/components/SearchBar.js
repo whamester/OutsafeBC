@@ -32,7 +32,8 @@ const SearchBar = ({ categories }) => {
                 <input
                   id="searchInput"
                   class="text-body-2 sb-search-box--input"
-                  placeholder="Search location"/>
+                  placeholder="Search location"
+                  autocomplete="off" />
               </div>
               <button
                 id="filterBtn"
