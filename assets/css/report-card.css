@@ -106,7 +106,7 @@
   height: 6rem;
   width: 9.5625rem;
   object-fit: cover;
-  border-radius: 0.25rem;
+  border-radius: 0.5rem;
 }
 
 .report-card__my-reports-buttons .btn-tertiary {
