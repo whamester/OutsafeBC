@@ -371,6 +371,9 @@ const suggestionOnClick = () => {
 };
 
 const quickFiltersOnClick = async ({ target }) => {
+  // close filter
+  toggleFilterModal(true);
+
   hazardFilters = [];
   hazardTempFilters = [];
   filterBtn.classList.remove('selected');
