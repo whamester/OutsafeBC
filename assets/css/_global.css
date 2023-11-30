@@ -38,6 +38,7 @@ body {
 
 main {
   overflow-y: auto;
+  height: calc(100vh - 60px);
   padding-left: var(--padding-x);
   padding-right: var(--padding-x);
 }

@@ -57,7 +57,6 @@ channel.addEventListener('message', (event) => {
     checkIfAllNotificationsAreRead();
     loadIcons();
     const emptyDiv = document.getElementById('empty-notifications');
-
     emptyDiv.innerHTML = '';
   }
 });

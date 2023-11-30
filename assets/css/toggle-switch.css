@@ -27,7 +27,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: var(--warning-700, #ad7311);
+  background-color: var(--neutral-200, #e4e7ec);
   -webkit-transition: 0.4s;
   transition: 0.4s;
 }
