@@ -103,7 +103,9 @@
 }
 
 .report-card__picture-container img {
-  height: 5.125rem;
+  height: 6rem;
+  width: 9.5625rem;
+  object-fit: cover;
   border-radius: 0.25rem;
 }
 
