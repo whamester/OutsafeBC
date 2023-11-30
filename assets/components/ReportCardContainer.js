@@ -158,7 +158,7 @@ class ReportCardContainer {
 
   getDescription() {
     const contentHTML = `	
-    <p class="text-body-3 regular">Description</p>
+    <p class="text-body-4 regular">Description</p>
 		<p class="text-body-2 regular">${this.comment}</p>`;
     const div = document.createElement('div');
     div.setAttribute('class', 'report-card__description');
@@ -181,7 +181,7 @@ class ReportCardContainer {
 
   getReportedBy() {
     const contentHTML = `
-    <p class="text-body-3 regular">
+    <p class="text-body-4 regular">
     Reported by ${this.createdByUserLoggedIn ? 'You' : ''}
   </p>
   

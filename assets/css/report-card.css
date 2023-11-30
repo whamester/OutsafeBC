@@ -61,6 +61,10 @@
   gap: 1.5rem;
 }
 
+.report-card__inner .text-body-4 {
+  color: var(--neutral-500);
+}
+
 .report-card__details {
   display: flex;
   align-items: center;
