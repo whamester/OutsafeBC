@@ -24,11 +24,13 @@ const injectHeader = (params) => {
       emptyDiv.innerHTML = empty.getHTML();
 
       markAllAsReadAction?.classList?.add('text-neutral-400');
+      markAllAsReadAction.style.cursor = 'auto';
       markAsReadIcon.style.backgroundColor = 'var(--neutral-400)';
       return;
     }
 
     markAllAsReadAction?.classList?.add('text-neutral-900');
+    markAllAsReadAction.style.cursor = 'pointer';
     markAsReadIcon.style.backgroundColor = 'var(--neutral-900)';
 
     if (Array.isArray(notifications)) {
