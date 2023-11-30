@@ -34,8 +34,8 @@ let changedFields = {
 window.onload = function () {
   injectHeader([{ func: Header, target: '#profile-body', position: 'afterbegin' }]);
   basicInfoSettings.style.display = 'flex';
-  
-  showProfilePic(user?.photo || undefined);
+
+  showProfilePic(user?.photo || undefined, true);
 };
 
 nameField.addEventListener('input', () => {
@@ -191,7 +191,7 @@ async function saveUserInfo(photo = undefined) {
       });
 
       showHideDeleteImageBtn(data?.photo);
-      showProfilePic(data?.photo);
+      showProfilePic(data?.photo, true);
 
       AlertPopup.show(`${!!changedFields.name ? 'Name' : 'Image'} has been saved`);
       console.log(message);
@@ -213,9 +213,10 @@ function togglePwModal() {
 resetPwBtn.addEventListener('click', togglePwModal);
 
 // Profile photo
-function showProfilePic(url = '../../assets/img/default-nav-image.png') {
-  profilePhoto.setAttribute('src', url);
-  document.getElementById('avatar').setAttribute('src', url);
+function showProfilePic(url = '../../assets/img/default-nav-image.png', withTimestamp = false) {
+  const src = withTimestamp ? `${url}?t=${new Date().getTime()}` : url;
+  profilePhoto.setAttribute('src', src);
+  document.getElementById('avatar').setAttribute('src', src);
 }
 
 inputFile.addEventListener('change', loadImage);
