@@ -34,6 +34,8 @@ let changedFields = {
 window.onload = function () {
   injectHeader([{ func: Header, target: '#profile-body', position: 'afterbegin' }]);
   basicInfoSettings.style.display = 'flex';
+  
+  showProfilePic(user?.photo || undefined);
 };
 
 nameField.addEventListener('input', () => {
@@ -213,9 +215,8 @@ resetPwBtn.addEventListener('click', togglePwModal);
 // Profile photo
 function showProfilePic(url = '../../assets/img/default-nav-image.png') {
   profilePhoto.setAttribute('src', url);
+  document.getElementById('avatar').setAttribute('src', url);
 }
-
-showProfilePic(user?.photo || undefined);
 
 inputFile.addEventListener('change', loadImage);
 
