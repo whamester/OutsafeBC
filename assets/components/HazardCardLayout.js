@@ -12,15 +12,20 @@ const HazardCardLayout = ({ reports, position }) => {
       </div>
       <div class="sb-cards-wrapper d-grid">
         ${reports
+          ?.map((item) => ({ ...item, distance: geolocationDistance(item.location.lat, item.location.lng, position.lat, position.lng) }))
+          ?.sort((prev, curr) => {
+            if (Number(prev.distance) > Number(curr.distance)) {
+              return 1;
+            }
+            return -1;
+          })
           ?.map((item, idx) => {
-            const location =
-              item?.location?.address ??
-              `${item?.location?.lat}, ${item?.location?.lng}`;
+            const location = item?.location?.address ?? `${item?.location?.lat}, ${item?.location?.lng}`;
             const dateObj = new Date(item.created_at);
             const date = DateFormat.getDate(dateObj);
             const time = DateFormat.getTime(dateObj);
             const id = item.id;
-      
+
             return `
             <div
               class="sb-cards--item"
@@ -28,16 +33,10 @@ const HazardCardLayout = ({ reports, position }) => {
               data-details='${JSON.stringify(item)}'>
       
               <div class="report-card__heading">
-                <span class="btn__icon report-card__heading__icon" style="background-color: ${
-                  item.hazardCategory.settings.iconBackround
-                }">
-                  <i class="${
-                    item.hazardCategory.settings.icon
-                  }-outline" style="width:24px; height:24px; background-color: white"></i>
+                <span class="btn__icon report-card__heading__icon" style="background-color: ${item.hazardCategory.settings.iconBackround}">
+                  <i class="${item.hazardCategory.settings.icon}-outline" style="width:24px; height:24px; background-color: white"></i>
                 </span>
-                    <p class="text-body-1 semibold">${
-                      item.hazardCategory.name
-                    }</p>
+                    <p class="text-body-1 semibold">${item.hazardCategory.name}</p>
               </div>
               <div class="report-card__details sb-cards-info--box">
                 <i class="icon-location-pin-outline" style="background-color: var(--neutral-400)"></i>
@@ -58,12 +57,7 @@ const HazardCardLayout = ({ reports, position }) => {
       
               <div class="report-card__details sb-cards-info--box">
                 <i class="icon-distance" style="background-color: var(--neutral-400)"></i>
-                <p class="text-body-2 regular">${geolocationDistance(
-                  item.location.lat,
-                  item.location.lng,
-                  position.lat,
-                  position.lng
-                )} km away</p>
+                <p class="text-body-2 regular">${item.distance} km away</p>
               </div>
       
               <button data-id="${id}" class="btn btn-secondary view-details" id="viewDetailsBtn">
