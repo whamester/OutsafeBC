@@ -192,7 +192,7 @@
 
 .report-hazard-box-wrapper {
   margin: auto;
-  padding-inline: var(--padding-x);
+  padding-left: var(--padding-x);
 }
 
 .btn-report-hazard {

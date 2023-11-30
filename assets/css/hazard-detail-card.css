@@ -103,7 +103,6 @@
   }
 
   .report-card__scroll-container {
-    height: 24rem;
     height: fit-content;
     max-height: calc(100vh - 250px);
     overflow-y: auto;

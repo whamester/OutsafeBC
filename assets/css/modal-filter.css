@@ -113,17 +113,17 @@
 }
 
 .modal-filter--clear-btn {
+  cursor: pointer;
   margin-right: 16px;
   border: none;
   background-color: transparent;
   padding: 0;
   text-decoration: underline;
-  cursor: pointer;
 }
 
 .modal-filter--show-btn {
-  margin-right: 16px;
   cursor: pointer;
+  margin-right: 16px;
 }
 
 /* Scroller */
@@ -198,6 +198,8 @@
   }
   
   .modal-filter--bottom-wrapper {
+    border-bottom-right-radius: 0.75rem;
+    border-bottom-left-radius: 0.75rem;
     background-color: var(--white);
   }
 }

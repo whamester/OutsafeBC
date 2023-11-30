@@ -193,6 +193,10 @@ window.onload = async function () {
 };
 
 const toggleFilterModal = async (flag) => {
+  // close hazard details card
+  const reportCloseBtn = document.getElementById('reportCloseBtn');
+  if(reportCloseBtn) reportCloseBtn.click();
+
   const filterModal = document.querySelector('.modal-filter');
   filterModal.classList.toggle('hidden', flag);
 
@@ -345,6 +349,10 @@ const cardsOnClick = () => {
 const suggestionOnClick = () => {
   document.querySelectorAll('.sb-suggestion-item').forEach((card) => {
     card.addEventListener('click', async ({ target }) => {
+      // close hazard details card
+      const reportCloseBtn = document.getElementById('reportCloseBtn');
+      if(reportCloseBtn) reportCloseBtn.click();
+
       const suggestionItem = target.closest('.sb-suggestion-item');
 
       searchInput.value = suggestionItem?.dataset?.addr1;
@@ -472,8 +480,17 @@ const watchGeoLocationSuccess = async ({ coords }) => {
     };
 
     await getReportApiCall(lat, lng);
-    if(!checkPrevCenter())
+
+    if(checkPrevCenter()) {
+      panTo(lat, lng);
+      setPrevCenter({
+        zoom: geoMap.map.getZoom(),
+        position
+      })
+    }
+    else {
       flyTo(lat, lng, Map.DEFAULT_MAP_ZOOM);
+    }
     
     recenterBtn.focus();
     flyToTrigger = false;
