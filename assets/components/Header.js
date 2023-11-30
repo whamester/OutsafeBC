@@ -97,7 +97,7 @@ const Header = () => {
         </ul>
         <div id="empty-notifications"></div>
         <div id="markAllAsReadAction" class="notifications-popup__footer text-body-4 medium pointer">
-          <i class="icon-mark-as-read"></i> Mark all as read
+          <i id="markAsReadIcon" class="icon-mark-as-read"></i> Mark all as read
         </div>
       </div>
     </div>
