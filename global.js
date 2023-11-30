@@ -57,11 +57,7 @@ channel.addEventListener('message', (event) => {
     checkIfAllNotificationsAreRead();
     loadIcons();
     const emptyDiv = document.getElementById('empty-notifications');
-
     emptyDiv.innerHTML = '';
-    markAllAsReadAction?.classList?.add('text-neutral-900');
-    markAllAsReadAction.style.cursor = 'pointer';
-    markAsReadIcon.style.backgroundColor = 'var(--neutral-900)';
   }
 });
 
