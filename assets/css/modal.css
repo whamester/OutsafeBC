@@ -38,14 +38,10 @@
 #modal #modal-title-container {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 1rem;
   justify-content: center;
   align-items: center;
   text-align: center;
-}
-
-#modal #modal-title {
-  margin: 0;
 }
 
 @media screen and (max-width: 400px) {
