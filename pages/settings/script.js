@@ -35,7 +35,7 @@ window.onload = function () {
   injectHeader([{ func: Header, target: '#profile-body', position: 'afterbegin' }]);
   basicInfoSettings.style.display = 'flex';
 
-  showProfilePic(user?.photo || undefined, true);
+  showProfilePic(user?.photo || undefined);
 };
 
 nameField.addEventListener('input', () => {
@@ -191,7 +191,7 @@ async function saveUserInfo(photo = undefined) {
       });
 
       showHideDeleteImageBtn(data?.photo);
-      showProfilePic(data?.photo, true);
+      showProfilePic(data?.photo);
 
       AlertPopup.show(`${!!changedFields.name ? 'Name' : 'Image'} has been saved`);
       console.log(message);
@@ -213,10 +213,9 @@ function togglePwModal() {
 resetPwBtn.addEventListener('click', togglePwModal);
 
 // Profile photo
-function showProfilePic(url = '../../assets/img/default-nav-image.png', withTimestamp = false) {
-  const src = withTimestamp ? `${url}?t=${new Date().getTime()}` : url;
-  profilePhoto.setAttribute('src', src);
-  document.getElementById('avatar').setAttribute('src', src);
+function showProfilePic(url = '../../assets/img/default-nav-image.png') {
+  profilePhoto.setAttribute('src', url);
+  document.getElementById('avatar').setAttribute('src', url);
 }
 
 inputFile.addEventListener('change', loadImage);
@@ -232,12 +231,14 @@ function loadImage() {
 uploadImageBtn.addEventListener('change', (e) => {
   e.preventDefault();
   loadImage();
-  uploadImage();
+  uploadImage(true);
 });
 
-async function uploadImage() {
+async function uploadImage(withTimestamp = false) {
   const result = await saveProfilePicture();
-  await saveUserInfo(result.data.url);
+  const src = withTimestamp ? `${result.data.url}?t=${new Date().getTime()}` : result.data.url;
+
+  await saveUserInfo(src);
 }
 
 async function saveProfilePicture() {
@@ -249,6 +250,7 @@ async function saveProfilePicture() {
       },
       body: picture,
     });
+
     const result = await response.json();
     return result;
   } catch (error) {
