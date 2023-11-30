@@ -19,10 +19,10 @@ export const onToggle = ({ target }) => {
 
   if (toggleSwitch.checked) {
     toggleStatus.textContent = 'Ongoing';
-    toggleStatus.style.color = 'var(--success, #10973D)';
+    toggleStatus.style.color = 'var(--success-500, #10973D)';
   } else {
     toggleStatus.textContent = 'Inactive';
-    toggleStatus.style.color = 'var(--warning-700, #AD7311)';
+    toggleStatus.style.color = 'var(--neutral-400, #98A2B3)';
   }
 };
 
