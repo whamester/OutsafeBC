@@ -34,7 +34,7 @@ const params = new URLSearchParams(url.search);
 const idReport = params.get('id');
 const openDetail = params.get('open') === 'true' && !!idReport;
 const focusMarker = params.get('focus') === 'true' && !!idReport;
-const zoom = parseInt(params.get('zoom')) || 12;
+const zoom = parseInt(params.get('zoom')) || 5;
 
 //Variable Declaration
 let geoMap;

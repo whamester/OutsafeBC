@@ -5,7 +5,7 @@ class Map {
   currentMarker = null;
   relativeMarker = null;
   locationWatcher = null;
-  static CURRENT_ZOOM = 20;
+  static CURRENT_ZOOM = 19;
   static MAP_ID = 'map';
   static MAX_ZOOM = 22;
   static DEFAULT_MAP_ZOOM = 13; // If we don't set the zoom level, 13 is the default of Leaflet
