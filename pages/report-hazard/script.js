@@ -688,7 +688,6 @@ const displayImages = (base64File) => {
   currentReport.images2.push(`picture-${divNumber}`);
   currentReport.images.splice(0, currentReport.images.length);
   currentReport.images.push(base64File);
-  // console.log();
 
   if (currentReport.images2.length === 3) {
     document.getElementById('starCameraBtn').setAttribute('disabled', true);
@@ -1007,8 +1006,8 @@ reportHazardForm.addEventListener('scroll', function (event) {
 //imprimr currentReport siempre
 function handleHashChange() {
   var newUrl = window.location.hash;
-  console.log("Nueva URL:", newUrl);
+  console.log('Nueva URL:', newUrl);
   console.log(currentReport);
 }
-window.addEventListener("hashchange", handleHashChange);
+window.addEventListener('hashchange', handleHashChange);
 handleHashChange();
