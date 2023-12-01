@@ -1001,3 +1001,12 @@ reportHazardForm.addEventListener('scroll', function (event) {
     continueBtnContainer.style.boxShadow = 'none';
   }
 });
+
+//imprimr currentReport siempre
+function handleHashChange() {
+  var newUrl = window.location.hash;
+  console.log("Nueva URL:", newUrl);
+  console.log(currentReport);
+}
+window.addEventListener("hashchange", handleHashChange);
+handleHashChange();
