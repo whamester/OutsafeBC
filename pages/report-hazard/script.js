@@ -846,7 +846,7 @@ const submitReport = async () => {
         button.setAttribute('id', 'open-modal-btn');
         button.setAttribute('class', 'btn btn-primary');
         button.addEventListener('click', () =>
-          window.location.assign(`/pages/home/index.html?id=${data.id}&focus=true&zoom=${Map.CURRENT_ZOOM}`)
+          window.location.assign(`/pages/home/index.html?id=${data.id}&focus=true&zoom=${Map.FOCUSED_ZOOM_LEVEL}`)
         );
         button.innerHTML = 'Continue Exploring';
 

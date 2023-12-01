@@ -52,7 +52,7 @@ let flyToTrigger = true;
 let mapOptions = {
   zoomControl: false,
   doubleClickZoom: false,
-  CURRENT_ZOOM: getPrevCenter('zoom') || zoom
+  FOCUSED_ZOOM_LEVEL: getPrevCenter('zoom') || zoom
 };
 
 let hazardDetail = new HazardReport();
@@ -111,7 +111,7 @@ window.onload = async function () {
     document.querySelectorAll('.quick-filter').forEach((filter) => filter.addEventListener('click', quickFiltersOnClick));
 
     document.querySelector('.map-controls-recenter-btn').addEventListener('click', () => {
-      flyTo(position.lat, position.lng, Map.CURRENT_ZOOM);
+      flyTo(position.lat, position.lng, Map.FOCUSED_ZOOM_LEVEL);
     });
 
     mapZoomIn.addEventListener('click', () => geoMap.map.zoomIn());
@@ -583,7 +583,7 @@ const showHazardDetails = (hazardReport) => {
     const reportShareBtn = document.getElementById('reportShareBtn');
 
     const baseUrl = window.location.origin;
-    const url = baseUrl + `/pages/home/index.html?id=${hazardReport.id}&focus=true&open=true&zoom=${Map.CURRENT_ZOOM}`;
+    const url = baseUrl + `/pages/home/index.html?id=${hazardReport.id}&focus=true&open=true&zoom=${Map.FOCUSED_ZOOM_LEVEL}`;
 
     reportShareBtn.addEventListener(
       'click',
