@@ -686,7 +686,9 @@ const displayImages = (base64File) => {
   imagesArea.querySelector(`.picture-${divNumber}`).appendChild(deleteButton);
 
   currentReport.images2.push(`picture-${divNumber}`);
+  currentReport.images.splice(0, currentReport.images.length);
   currentReport.images.push(base64File);
+  // console.log();
 
   if (currentReport.images2.length === 3) {
     document.getElementById('starCameraBtn').setAttribute('disabled', true);
