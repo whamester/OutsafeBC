@@ -1,6 +1,10 @@
 @import url(../../assets/css/report-card.css);
 @import url(../../assets/css/toggle-switch.css);
 
+#reportsArea{
+ padding-bottom: 3rem;
+}
+
 #recentReports,
 #olderReports {
   display: flex;
