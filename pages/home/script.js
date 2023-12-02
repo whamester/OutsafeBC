@@ -363,7 +363,7 @@ const suggestionOnClick = () => {
       // change user location
       searchInput.dataset.positionChange = 'true';
       positionSecondary = latLng;
-      flyTo(latLng.lat, latLng.lng, Map.DEFAULT_MAP_ZOOM);
+      flyTo(latLng.lat, latLng.lng, Map.UNFOCUSED_MAP_ZOOM);
       geoMap.setRelativeMarkerOnMap(latLng.lat, latLng.lng);
       closeSearchSuggestion();
       await getReportApiCall(latLng.lat, latLng.lng, categoryFilters, hazardFilters);
