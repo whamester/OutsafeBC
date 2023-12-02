@@ -9,6 +9,7 @@ import AlertPopup from '../../assets/components/AlertPopup.js';
 import HazardDetailCard from '../../assets/components/HazardDetailCard.js';
 import showLoginModal from '../../assets/helpers/showLoginModal.js';
 //Helpers
+import Loader from '../../assets/helpers/loader.js';
 import injectHTML from '../../assets/helpers/inject-html.js';
 import injectHeader from '../../assets/helpers/inject-header.js';
 import apiRequest from '../../assets/helpers/api-request.js';
@@ -73,13 +74,14 @@ const root = document.getElementById('root');
 
 window.onload = async function () {
   try {
+    injectHeader([{ func: Header, target: '#home-body', position: 'afterbegin' }]);
+    Loader(true);
+
     if (checkPrevCenter()) position = getPrevCenter('position');
 
     const { data } = await apiRequest(`hazard-category`, { method: 'GET' });
 
     searchBarParams.categories = data;
-
-    injectHeader([{ func: Header, target: '#home-body', position: 'afterbegin' }]);
 
     injectHTML([
       { func: GeoMap, args: { offline: !window.navigator.onLine } },
@@ -134,10 +136,13 @@ window.onload = async function () {
 
     // store current zoom, center
     geoMap.map.on('zoom', ({target}) => storePreviousPos(target));
+
+    Loader(false);
   } catch (error) {
     console.error(error, error.message);
 
     AlertPopup.show('Error loading categories', AlertPopup.error, 500);
+    Loader(false);
   }
 
   try {
