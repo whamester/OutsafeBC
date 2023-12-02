@@ -34,7 +34,7 @@ const params = new URLSearchParams(url.search);
 const idReport = params.get('id');
 const openDetail = params.get('open') === 'true' && !!idReport;
 const focusMarker = params.get('focus') === 'true' && !!idReport;
-const zoom = parseInt(params.get('zoom')) || 5;
+const zoom = parseInt(params.get('zoom')) || Map.FOCUSED_MAP_ZOOM;
 
 //Variable Declaration
 let geoMap;
@@ -51,8 +51,7 @@ let flyToTrigger = true;
 
 let mapOptions = {
   zoomControl: false,
-  doubleClickZoom: false,
-  FOCUSED_ZOOM_LEVEL: getPrevCenter('zoom') || zoom
+  doubleClickZoom: false
 };
 
 let hazardDetail = new HazardReport();
@@ -71,7 +70,10 @@ const root = document.getElementById('root');
 
 window.onload = async function () {
   try {
-    if (checkPrevCenter()) position = getPrevCenter('position');
+    if (!idReport && flyToTrigger && checkPrevCenter()) {
+      position = getPrevCenter('position');
+      mapOptions.MAP_ZOOM = getPrevCenter('zoom');
+    }
 
     const { data } = await apiRequest(`hazard-category`, { method: 'GET' });
 
@@ -111,7 +113,7 @@ window.onload = async function () {
     document.querySelectorAll('.quick-filter').forEach((filter) => filter.addEventListener('click', quickFiltersOnClick));
 
     document.querySelector('.map-controls-recenter-btn').addEventListener('click', () => {
-      flyTo(position.lat, position.lng, Map.FOCUSED_ZOOM_LEVEL);
+      flyTo(position.lat, position.lng, Map.FOCUSED_MAP_ZOOM);
     });
 
     mapZoomIn.addEventListener('click', () => geoMap.map.zoomIn());
@@ -273,7 +275,7 @@ const panTo = (lat, lng) => {
   geoMap.map.panTo([lat, lng]);
 };
 
-const flyTo = (lat, lng, zoom=Map.DEFAULT_MAP_ZOOM) => {
+const flyTo = (lat, lng, zoom=Map.UNFOCUSED_MAP_ZOOM) => {
   geoMap.map.flyTo([lat, lng], zoom, { animate: true });
 };
 
@@ -489,10 +491,10 @@ const watchGeoLocationSuccess = async ({ coords }) => {
       setPrevCenter({
         zoom: geoMap.map.getZoom(),
         position
-      })
+      });
     }
     else {
-      flyTo(lat, lng, Map.DEFAULT_MAP_ZOOM);
+      flyTo(lat, lng);
     }
     
     recenterBtn.focus();
@@ -583,7 +585,7 @@ const showHazardDetails = (hazardReport) => {
     const reportShareBtn = document.getElementById('reportShareBtn');
 
     const baseUrl = window.location.origin;
-    const url = baseUrl + `/pages/home/index.html?id=${hazardReport.id}&focus=true&open=true&zoom=${Map.FOCUSED_ZOOM_LEVEL}`;
+    const url = baseUrl + `/pages/home/index.html?id=${hazardReport.id}&zoom=${Map.FOCUSED_MAP_ZOOM}&focus=true&open=true`;
 
     reportShareBtn.addEventListener(
       'click',

@@ -81,7 +81,7 @@ window.onload = async function () {
 
     if (!idReport) {
       // Loads the map even if the user has not accepted the permissions
-      mapInstance = new Map(position.lat, position.lng);
+      mapInstance = new Map(position.lat, position.lng, {MAP_ZOOM: Map.REPORT_HAZARD_MAP_ZOOM});
       mapInstance.setMarkerOnMap(position.lat, position.lng, {
         draggable: true,
       });
@@ -161,7 +161,7 @@ const displayCurrentSection = () => {
 
     if (pageId === STEPS.location && idReport && !mapInstance) {
       // Display the position of the report location
-      mapInstance = new Map(currentReport.location.lat, currentReport.location.lng);
+      mapInstance = new Map(currentReport.location.lat, currentReport.location.lng, {MAP_ZOOM: Map.REPORT_HAZARD_MAP_ZOOM});
       mapInstance.setRelativeMarkerOnMap(currentReport.location.lat, currentReport.location.lng, {
         draggable: true,
       });
@@ -846,7 +846,7 @@ const submitReport = async () => {
         button.setAttribute('id', 'open-modal-btn');
         button.setAttribute('class', 'btn btn-primary');
         button.addEventListener('click', () =>
-          window.location.assign(`/pages/home/index.html?id=${data.id}&focus=true&zoom=${Map.FOCUSED_ZOOM_LEVEL}`)
+          window.location.assign(`/pages/home/index.html?id=${data.id}&zoom=${Map.FOCUSED_MAP_ZOOM}&focus=true`)
         );
         button.innerHTML = 'Continue Exploring';
 

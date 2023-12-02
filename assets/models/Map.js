@@ -5,10 +5,12 @@ class Map {
   currentMarker = null;
   relativeMarker = null;
   locationWatcher = null;
-  static FOCUSED_ZOOM_LEVEL = 18;
   static MAP_ID = 'map';
   static MAX_ZOOM = 22;
-  static DEFAULT_MAP_ZOOM = 13; // If we don't set the zoom level, 13 is the default of Leaflet
+  static DEFAULT_MAP_ZOOM = 5; // If we don't set the zoom level, 5 is the default of Leaflet
+  static FOCUSED_MAP_ZOOM = 18;
+  static UNFOCUSED_MAP_ZOOM = 14;
+  static REPORT_HAZARD_MAP_ZOOM = 20;
   static DEFAULT_LOCATION = {
     lat: 55.72,
     lng: -126.64,
@@ -21,7 +23,7 @@ class Map {
   constructor(lat, lng, customConfig = {}) {
     this.map = L.map(Map.MAP_ID, {zoomControl: false}, { ...customConfig }).setView(
       [lat, lng],
-      customConfig.FOCUSED_ZOOM_LEVEL ?? Map.FOCUSED_ZOOM_LEVEL
+      customConfig.MAP_ZOOM ?? Map.DEFAULT_MAP_ZOOM
     );
 
     L.tileLayer(
