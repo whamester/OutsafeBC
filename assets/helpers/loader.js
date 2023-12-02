@@ -5,7 +5,7 @@ const Loader = (loadingState=true) => {
     return `
       <div id="loader">
         <div class="loader-wrapper">
-          <img class="loader--img" src="/assets/img/bear.gif"/>
+          <div class="loader--img"></div>
           <h2 class="loader--txt text-heading-2">Loading...</h2>
         </div>
       </div>

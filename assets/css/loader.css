@@ -3,20 +3,24 @@
   position: absolute;
   top: 0;
   left: 0;
+  justify-content: center;
+  align-items: center;
   z-index: 1;
   background-color: white;
   width: 100vw;
   height: 100vh;
-  align-items: center;
-  justify-content: center;
 }
 
 .loader--img {
+  background: url(/assets/img/bear.gif);
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
   width: 7.75rem;
   height: 7.75rem;
 }
 
 .loader--txt {
-  text-align: center;
   margin: 0;
+  text-align: center;
 }
