@@ -648,6 +648,8 @@ const displayImages = (base64File) => {
   deleteButton.type = 'button';
   deleteButton.classList.add('delete-button');
   deleteButton.addEventListener('click', function () {
+    currentReport.images.splice((divNumber-1), 1);
+    currentReport.images2.splice((divNumber-1), 1);
     imagesArea.querySelector(`.picture-${divNumber}`).removeChild(img);
     imagesArea.querySelector(`.picture-${divNumber}`).removeChild(deleteButton);
 
