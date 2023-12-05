@@ -237,6 +237,13 @@ const populateReport = async (id) => {
 
         editReport.images = data.images;
 
+        let arrayImag2 = [];
+          for (let i = 1; i <= data.images.length; i++) {
+            arrayImag2.push("picture-" + i);
+          }
+        
+        editReport.images2 = arrayImag2;
+
         displayReviewStepInfo(editReport);
 
         setFormValues(editReport);
@@ -688,7 +695,6 @@ const displayImages = (base64File) => {
   imagesArea.querySelector(`.picture-${divNumber}`).appendChild(deleteButton);
 
   currentReport.images2.push(`picture-${divNumber}`);
-  currentReport.images.splice(0, currentReport.images.length);
   currentReport.images.push(base64File);
 
   if (currentReport.images2.length === 3) {
@@ -1004,12 +1010,3 @@ reportHazardForm.addEventListener('scroll', function (event) {
     continueBtnContainer.style.boxShadow = 'none';
   }
 });
-
-//imprimr currentReport siempre
-function handleHashChange() {
-  var newUrl = window.location.hash;
-  console.log('Nueva URL:', newUrl);
-  console.log(currentReport);
-}
-window.addEventListener('hashchange', handleHashChange);
-handleHashChange();
