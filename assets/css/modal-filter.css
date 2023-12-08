@@ -157,7 +157,7 @@
     transition: none;
     border-radius: 0.75rem;
     padding: 1rem;
-    width: calc(410px - 32px);
+    width: calc(var(--hazard-panel-width) - 32px);
     height: 22rem;
   }
 
@@ -170,18 +170,18 @@
     display: block;
     position: absolute;
     top: 1px;
-    right: -45px;
+    right: -46px;
     cursor: pointer;
     border: 1px solid var(--neutral-300);
     border-radius: 6.25rem;
     background-image: url(/assets/icons/close-square.svg);
     background-position: center center;
-    background-size: 1.2rem 1.2rem;
+    background-size: 1.25rem 1.25rem;
     background-repeat: no-repeat;
     background-color: var(--white);
     padding: 0;
-    width: 2rem;
-    height: 2rem;
+    width: 2.125rem;
+    height: 2.125rem;
   }
 
   .modal-filter--top {
