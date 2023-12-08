@@ -10,7 +10,9 @@ const HazardCardLayout = ({ reports }) => {
 
   return reports
     ? `<div class="sb-cards">
-    <button class="sb-cards-btn--back"></button>
+    <button class="sb-cards-btn--back">
+      <i class="icon-close-square" style="background-color: var(--neutral-500)"></i>
+    </button>
     <div class="sb-cards-outer">
       <div class="sb-cards-header">
         <p class="sb-label-title">Recent Hazards</p>

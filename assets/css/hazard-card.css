@@ -15,15 +15,13 @@
   background-color: var(--white);
   padding: 7px 15px 7px 5px;
   color: var(--neutral-900);
+  width: 2.125rem;
+  height: 2.125rem;
 }
 
-.sb-cards-btn--back::before {
-  content: url(/assets/icons/chevron-left.svg);
-}
-
-.sb-cards-btn--back::after {
-  margin-top: -1.5px;
-  content: 'Back';
+.sb-cards-btn--back i.icon-close-square {
+  width: 1.25rem;
+  height: 1.25rem;
 }
 
 .sb-cards {
@@ -53,7 +51,7 @@
   font-style: normal;
   font-weight: 600;
   font-size: var(--body-1-size);
-  line-height: 1.6875rem
+  line-height: 1.6875rem;
 }
 
 .sb-label-count {
@@ -121,36 +119,18 @@
 
   #hazard-comp {
     position: absolute;
-    top: 8.7rem;
+    top: var(--hazard-container-top);
     left: var(--padding-x);
-    width: 410px;
+    width: var(--hazard-panel-width);
   }
 
   .sb-cards-btn--back {
-    display: flex;
     position: absolute;
-    top: 0;
-    right: -45px;
+    top: 1px;
+    right: -46px;
     justify-content: center;
     align-items: center;
     padding: 0;
-    width: 2rem;
-    height: 2rem;
-  }
-
-  .sb-cards-btn--back::before {
-    content: '';
-  }
-
-  .sb-cards-btn--back {
-    background-image: url(/assets/icons/close-square.svg);
-    background-position: center center;
-    background-size: 1.2rem 1.2rem;
-    background-repeat: no-repeat;
-  }
-
-  .sb-cards-btn--back::after {
-    content: '';
   }
 
   .sb-cards {
@@ -162,9 +142,9 @@
     border-radius: 0.75rem;
     background-color: var(--white);
     padding: 1rem;
-    width: calc(410px - 2rem);
     height: 22rem;
     overflow: hidden;
+    border: 1px solid var(--white);
   }
 
   .sb-cards--gradient {
@@ -172,7 +152,7 @@
     position: absolute;
     bottom: 0;
     left: 0;
-    background: linear-gradient(0deg, #FFF 0%, rgba(255, 255, 255, 0.00) 120.13%);
+    background: linear-gradient(0deg, #fff 0%, rgba(255, 255, 255, 0) 120.13%);
     width: calc(100% - 3rem);
     height: 4.8125rem;
     pointer-events: none;
@@ -188,7 +168,7 @@
   }
 
   .sb-cards--item {
-    width: calc(410px - 4rem - 16px);
+    width: calc(var(--hazard-panel-width) - 4rem - 16px);
     height: auto;
   }
 

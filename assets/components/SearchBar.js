@@ -45,7 +45,7 @@ const SearchBar = ({ categories }) => {
             <div class="sb-suggestion">
               <div class="sb-suggestion-wrapper" style="display:none"></div>
             </div>
-            <div id="hazard-comp"></div>
+            <div id="hazard-comp" class="hidden"></div>
           </div>
           
           <div class="sb-categories">

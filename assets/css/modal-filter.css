@@ -25,7 +25,7 @@
 
 .checkbox label {
   font-style: normal;
-  line-height: 1.5rem
+  line-height: 1.5rem;
 }
 
 .modal-filter--wrapper-outer {
@@ -95,7 +95,7 @@
   position: fixed;
   bottom: 0;
   left: 0;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.00) 0%, #FFF 100%);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #fff 100%);
   width: 100%;
 }
 
@@ -150,14 +150,14 @@
 @media only screen and (min-width: 768px) {
   .modal-filter {
     position: absolute;
-    top: 14.3rem;
+    top: var(--hazard-container-top);
     left: 5rem;
     z-index: 4;
     animation: none;
     transition: none;
     border-radius: 0.75rem;
     padding: 1rem;
-    width: calc(410px - 32px);
+    width: calc(var(--hazard-panel-width) - 32px);
     height: 22rem;
   }
 
@@ -170,18 +170,18 @@
     display: block;
     position: absolute;
     top: 1px;
-    right: -45px;
+    right: -46px;
     cursor: pointer;
     border: 1px solid var(--neutral-300);
     border-radius: 6.25rem;
     background-image: url(/assets/icons/close-square.svg);
     background-position: center center;
-    background-size: 1.2rem 1.2rem;
+    background-size: 1.25rem 1.25rem;
     background-repeat: no-repeat;
     background-color: var(--white);
     padding: 0;
-    width: 2rem;
-    height: 2rem;
+    width: 2.125rem;
+    height: 2.125rem;
   }
 
   .modal-filter--top {
@@ -196,14 +196,13 @@
   .modal-filter--bottom {
     position: absolute;
   }
-  
+
   .modal-filter--bottom-wrapper {
     border-bottom-right-radius: 0.75rem;
     border-bottom-left-radius: 0.75rem;
     background-color: var(--white);
   }
 }
-
 
 @keyframes modalFilterAnimation {
   from {
