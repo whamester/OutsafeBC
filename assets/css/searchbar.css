@@ -220,7 +220,7 @@
 
   .sb-wrapper-inner {
     padding: 0;
-    width: 28.6rem;
+    width: var(--hazard-panel-width);
   }
 
   .sb-suggestion-wrapper,

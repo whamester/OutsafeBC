@@ -92,10 +92,10 @@
 
   #hazard-card__outer {
     position: absolute;
-    top: 14.3rem;
+    top: var(--hazard-container-top);
     left: var(--padding-x);
     border-radius: 0.75rem;
-    max-width: 28.6rem;
+    max-width: var(--hazard-panel-width);
     width: 100%;
     height: fit-content;
     max-height: max-content;
