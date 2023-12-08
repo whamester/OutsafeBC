@@ -1,4 +1,4 @@
-import { API_URL, PREV_CENTER } from '../../constants.js';
+import { API_URL } from '../../constants.js';
 //Components
 import Header from '../../assets/components/Header.js';
 import GeoMap from '../../assets/components/GeoMap.js';
@@ -24,6 +24,7 @@ import Map from '../../assets/models/Map.js';
 import HazardReport from '../../assets/models/HazardReport.js';
 import getHazardDetail from '../../assets/helpers/get-hazard-detail.js';
 import DateFormat from '../../assets/models/DateFormat.js';
+import { getUserLocation, setUserLocation } from '../../assets/helpers/user-geocoordinates.js';
 
 // URL params
 const url = new URL(window.location.href);
@@ -31,11 +32,11 @@ const params = new URLSearchParams(url.search);
 const idReport = params.get('id');
 const openDetail = params.get('open') === 'true' && !!idReport;
 const focusMarker = params.get('focus') === 'true' && !!idReport;
-const zoom = parseInt(params.get('zoom')) || Map.FOCUSED_MAP_ZOOM;
+const zoom = parseInt(params.get('zoom')) || getPrevCenter('zoom') || Map.FOCUSED_MAP_ZOOM;
 
 //Variable Declaration
 let geoMap;
-let position = Map.DEFAULT_LOCATION;
+let position = checkPrevCenter() ? getPrevCenter('position') : Map.DEFAULT_LOCATION;
 let reports = [];
 let positionSecondary = {};
 let hazardCardParams = {};
@@ -67,15 +68,13 @@ const root = document.getElementById('root');
 
 window.onload = async function () {
   try {
-    if (!idReport && flyToTrigger && checkPrevCenter()) {
-      position = getPrevCenter('position');
-      mapOptions.MAP_ZOOM = getPrevCenter('zoom');
-    }
     injectHeader([{ func: Header, target: '#home-body', position: 'afterbegin' }]);
     Loader(true);
 
-    if (checkPrevCenter()) position = getPrevCenter('position');
-
+    if (checkPrevCenter()) {
+      position = getPrevCenter('position');
+      mapOptions.MAP_ZOOM = getPrevCenter('zoom');
+    }
     const { data } = await apiRequest(`hazard-category`, { method: 'GET' });
 
     searchBarParams.categories = data;
@@ -111,10 +110,6 @@ window.onload = async function () {
 
     document.querySelectorAll('.quick-filter').forEach((filter) => filter.addEventListener('click', quickFiltersOnClick));
 
-    document.querySelector('.map-controls-recenter-btn').addEventListener('click', () => {
-      flyTo(position.lat, position.lng, Map.FOCUSED_MAP_ZOOM);
-    });
-
     mapZoomIn.addEventListener('click', () => geoMap.map.zoomIn());
     mapZoomOut.addEventListener('click', () => geoMap.map.zoomOut());
 
@@ -122,17 +117,32 @@ window.onload = async function () {
 
     geoMap = new Map(position.lat, position.lng, mapOptions);
     await getReportApiCall(position.lat, position.lng);
+    geoMap.setMarkerOnMap(position.lat, position.lng, { icon: 'current-location-map-pin.svg' });
 
     Map.watchGeoLocation(watchGeoLocationSuccess, watchGeoLocationError);
 
-    // clear recenter btn focus store current zoom, center
-    geoMap.map.on('drag', ({ target }) => {
-      recenterBtn?.blur();
-      storePreviousPos(target);
+    document.getElementById('recenterBtn').addEventListener('click', async () => {
+      const userStoredLocation = getUserLocation();
+      recenterBtn.focus();
+
+      if (!!userStoredLocation.lat && !!userStoredLocation.lng) {
+        flyTo(userStoredLocation.lat, userStoredLocation.lng, Map.FOCUSED_MAP_ZOOM);
+      } else {
+        const current = await Map.getCurrentLocation();
+        flyTo(current.lat, current.lng, Map.FOCUSED_MAP_ZOOM);
+        setUserLocation(current);
+      }
+      setTimeout(() => {
+        recenterBtn?.blur();
+      }, 500);
     });
 
-    // store current zoom, center
-    geoMap.map.on('zoom', ({ target }) => storePreviousPos(target));
+    geoMap.map.on('zoomend', ({ target }) => {
+      setPrevCenter({
+        zoom: target._zoom,
+        position: target.boxZoom._map.getCenter(),
+      });
+    });
 
     Loader(false);
   } catch (error) {
@@ -159,6 +169,11 @@ window.onload = async function () {
       changeActiveMarkerIcon(hazardDetail.location?.lat, hazardDetail.location?.lng);
 
       flyTo(hazardDetail.location?.lat, hazardDetail.location?.lng, zoom);
+
+      setPrevCenter({
+        zoom: zoom,
+        position: { lat: hazardDetail.location?.lat, lng: hazardDetail.location?.lng },
+      });
     }
 
     if (openDetail) {
@@ -270,6 +285,14 @@ const markerParams = {
     changeActiveMarkerIcon(currentReport.location.lat, currentReport.location.lng);
     showHazardDetails(hazardReport);
     panTo(currentReport.location.lat, currentReport.location.lng);
+
+    const prevZoom = getPrevCenter('zoom');
+    console.log({ prevZoom });
+
+    setPrevCenter({
+      zoom: zoom,
+      position: { lat: currentReport.location.lat, lng: currentReport.location.lng, zoom: prevZoom || Map.FOCUSED_MAP_ZOOM },
+    });
   },
 };
 
@@ -278,7 +301,7 @@ const panTo = (lat, lng) => {
 };
 
 const flyTo = (lat, lng, zoom = Map.UNFOCUSED_MAP_ZOOM) => {
-  geoMap.map.flyTo([lat, lng], zoom, { animate: true });
+  geoMap.map.flyTo([lat, lng], zoom);
 };
 
 const closeSearchSuggestion = (e) => {
@@ -475,6 +498,7 @@ const injectCards = () => {
 const watchGeoLocationSuccess = async ({ coords }) => {
   const lat = coords?.latitude;
   const lng = coords?.longitude;
+
   geoMap.setMarkerOnMap(lat, lng, { icon: 'current-location-map-pin.svg' });
 
   // If there is a report id in the query params and the focus param is set, don't pan to the user's location
@@ -486,19 +510,11 @@ const watchGeoLocationSuccess = async ({ coords }) => {
       lng,
     };
 
+    setUserLocation(position);
+
     await getReportApiCall(lat, lng);
 
-    if (checkPrevCenter()) {
-      panTo(lat, lng);
-      setPrevCenter({
-        zoom: geoMap.map.getZoom(),
-        position,
-      });
-    } else {
-      flyTo(lat, lng);
-    }
-
-    recenterBtn.focus();
+    flyTo(lat, lng);
     flyToTrigger = false;
   }
 
@@ -575,7 +591,9 @@ const showHazardDetails = (hazardReport) => {
     toggleFilterModal(true);
     hazardReportPopulated = hazardReport.hazardCardContent();
 
-    root.appendChild(hazardReportPopulated, document.getElementById('hazard-comp'));
+    root.appendChild(document.getElementById('hazard-comp'));
+
+    root.insertBefore(hazardReportPopulated, document.getElementById('map'));
 
     const cardBackBtn = document.querySelector('.sb-cards-btn--back');
     if (cardBackBtn) cardBackBtn.style.display = 'none';
@@ -634,12 +652,12 @@ const showHazardDetails = (hazardReport) => {
     //
 
     // Bottom sheet
-    const content = document.querySelector('#hazard-card__outer');
     let windowWidth = window.matchMedia('(min-width: 768px)');
 
     let updateHeight = (height) => {
       //updating sheet height
       if (window.matchMedia('(max-width: 768px)').matches) {
+        const content = document.querySelector('#hazard-card__outer');
         content.style.height = `${height}vh`;
       }
     };
@@ -658,10 +676,11 @@ const showHazardDetails = (hazardReport) => {
 
         let dragStart = (e) => {
           isDragging = true;
+          const content = document.querySelector('#hazard-card__outer');
 
           //recording intitial y position and sheet height
           startY = e.pageY || e.touches?.[0].pageY;
-          startHeight = parseInt(content.style.height);
+          startHeight = parseInt(content.style.height || '40vh');
         };
 
         let dragging = (e) => {
@@ -671,13 +690,13 @@ const showHazardDetails = (hazardReport) => {
           //calculating new height of sheet by using starty and start height
           let delta = startY - (e.pageY || e.touches?.[0].pageY);
           let newHeight = startHeight + (delta / window.innerHeight) * 100;
-
           //calling updateHeight function with new height as argument
           updateHeight(newHeight);
         };
 
         let dragStop = () => {
           isDragging = false;
+          const content = document.querySelector('#hazard-card__outer');
 
           //setting sheet height based on the sheet current height or position
           let sheetHeight = parseInt(content.style.height);
@@ -707,14 +726,15 @@ const showHazardDetails = (hazardReport) => {
             clearUrlParams();
           }
         };
+        const hazardContent = document.querySelector('#hazard-card__outer');
 
-        content.addEventListener('mousedown', dragStart);
-        content.addEventListener('mousemove', dragging);
-        content.addEventListener('mouseup', dragStop);
+        hazardContent.addEventListener('mousedown', dragStart);
+        hazardContent.addEventListener('mousemove', dragging);
+        hazardContent.addEventListener('mouseup', dragStop);
 
-        content.addEventListener('touchstart', dragStart);
-        content.addEventListener('touchmove', dragging);
-        content.addEventListener('touchend', dragStop);
+        hazardContent.addEventListener('touchstart', dragStart);
+        hazardContent.addEventListener('touchmove', dragging);
+        hazardContent.addEventListener('touchend', dragStop);
       }
     }
     mediaQueryCheck(windowWidth);
@@ -782,15 +802,9 @@ const clearHazardFilter = async () => {
 };
 
 const clearUrlParams = () => {
-  window.history.pushState({}, document.title, '/pages/home/');
+  window.history.pushState({}, document.title, '/pages/home/index.html');
 };
 
-const storePreviousPos = (target) => {
-  setPrevCenter({
-    zoom: target._zoom,
-    position: target.boxZoom._map.getCenter(),
-  });
-};
 const handleOffline = () => {
   try {
     const homepage = document.getElementById('home-body');

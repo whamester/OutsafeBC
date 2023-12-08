@@ -1,12 +1,12 @@
-import { PREV_CENTER } from '../../constants.js';
+const PREV_CENTER = 'map-geocoordinates';
 
 export const setPrevCenter = (data) => {
-  try{
+  try {
     localStorage.setItem(PREV_CENTER, JSON.stringify(data));
   } catch (error) {
     console.error(error);
   }
-}
+};
 
 export const getPrevCenter = (key) => {
   try {
@@ -17,7 +17,7 @@ export const getPrevCenter = (key) => {
     console.error(error);
     return {};
   }
-}
+};
 
 export const checkPrevCenter = () => {
   try {
@@ -26,12 +26,12 @@ export const checkPrevCenter = () => {
     console.error(error);
     return false;
   }
-}
+};
 
 export const clearPrevCenter = () => {
-  try{
+  try {
     localStorage.removeItem(PREV_CENTER);
   } catch (error) {
     console.error(error);
   }
-}
+};
