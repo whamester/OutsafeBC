@@ -26,15 +26,13 @@ const SearchBar = ({ categories }) => {
       <div class="sb-wrapper-outer">
         <div class="sb-wrapper-inner">
           <div class="sb-search">
-            <div class="d-flex">
-              <div class="sb-search-box">
-                <i class="icon-search sb-search-box--icon"></i>
-                <input
-                  id="searchInput"
-                  class="text-body-2 sb-search-box--input"
-                  placeholder="Search location"
-                  autocomplete="off" />
-              </div>
+            <div class="sb-search--search-container">
+            <div class="form-field with-icon large">
+                  <div class="form-field__input-container">
+                      <i class="icon-search left"></i>
+                      <input id="searchInput" type="text" placeholder="Search location"  class="sb-search-box--input" autocomplete="off"/>
+                  </div>
+                </div>
               <button
                 id="filterBtn"
                 class="sb-search-box--filter-btn">
