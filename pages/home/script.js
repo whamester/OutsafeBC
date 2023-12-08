@@ -1,4 +1,4 @@
-import { API_URL, PREV_CENTER } from '../../constants.js';
+import { API_URL } from '../../constants.js';
 //Components
 import Header from '../../assets/components/Header.js';
 import GeoMap from '../../assets/components/GeoMap.js';
@@ -18,45 +18,31 @@ import geocode from '../../assets/helpers/geocode.js';
 import loadIcons from '../../assets/helpers/load-icons.js';
 import geolocationDistance from '../../assets/helpers/geolocation-distance.js';
 import { getUserSession } from '../../assets/helpers/storage.js';
-import { 
-  setPrevCenter,
-  getPrevCenter,
-  checkPrevCenter
-} from '../../assets/helpers/prev-center.js';
+import { setPrevCenter, getPrevCenter, checkPrevCenter } from '../../assets/helpers/prev-center.js';
 //Models
 import Map from '../../assets/models/Map.js';
 import HazardReport from '../../assets/models/HazardReport.js';
 import getHazardDetail from '../../assets/helpers/get-hazard-detail.js';
 import DateFormat from '../../assets/models/DateFormat.js';
+import { getUserLocation, setUserLocation } from '../../assets/helpers/user-geocoordinates.js';
 
 // URL params
 const url = new URL(window.location.href);
-const idReport = url.searchParams.get('id');
-const openDetail = url.searchParams.get('open') === 'true' && !!idReport;
-const focusMarker = url.searchParams.get('focus') === 'true' && !!idReport;
-const zoom = parseInt(url.searchParams.get('zoom')) || 5;
-const latitude = Number(url.searchParams.get('lat')) || null;
-const longitude = Number(url.searchParams.get('lng')) || null;
+const params = new URLSearchParams(url.search);
+const idReport = params.get('id');
+const openDetail = params.get('open') === 'true' && !!idReport;
+const focusMarker = params.get('focus') === 'true' && !!idReport;
+const zoom = parseInt(params.get('zoom')) || getPrevCenter('zoom') || Map.FOCUSED_MAP_ZOOM;
 
-//Variable Declaration
+// Global Variable Declaration
 let geoMap;
-let position = latitude && longitude ? { lat: latitude, lng: longitude } : Map.DEFAULT_LOCATION;
-
 let reports = [];
 let positionSecondary = {};
-let hazardCardParams = {};
 let searchSuggestions = [];
 let categoryFilters = [];
 let hazardTempFilters = [];
 let hazardFilters = [];
 let hazardShowCount = 0;
-let flyToTrigger = true;
-
-let mapOptions = {
-  zoomControl: false,
-  doubleClickZoom: false,
-  CURRENT_ZOOM: getPrevCenter('zoom') || zoom
-};
 
 let hazardDetail = new HazardReport();
 let hazardReportPopulated;
@@ -77,8 +63,6 @@ window.onload = async function () {
     injectHeader([{ func: Header, target: '#home-body', position: 'afterbegin' }]);
     Loader(true);
 
-    if (checkPrevCenter()) position = getPrevCenter('position');
-
     const { data } = await apiRequest(`hazard-category`, { method: 'GET' });
 
     searchBarParams.categories = data;
@@ -93,7 +77,8 @@ window.onload = async function () {
       if (!user) {
         showLoginModal();
       } else {
-        window.location = `/pages/report-hazard/index.html?lat=${position.lat}&lng=${position.lng}`;
+        const userLoc = getUserLocation();
+        window.location = `/pages/report-hazard/index.html?lat=${userLoc.lat}&lng=${userLoc.lng}`;
       }
     });
 
@@ -114,28 +99,56 @@ window.onload = async function () {
 
     document.querySelectorAll('.quick-filter').forEach((filter) => filter.addEventListener('click', quickFiltersOnClick));
 
-    document.querySelector('.map-controls-recenter-btn').addEventListener('click', () => {
-      flyTo(position.lat, position.lng);
-    });
-
     mapZoomIn.addEventListener('click', () => geoMap.map.zoomIn());
     mapZoomOut.addEventListener('click', () => geoMap.map.zoomOut());
 
     loadIcons();
 
-    geoMap = new Map(position.lat, position.lng, mapOptions);
-    await getReportApiCall(position.lat, position.lng);
+    const mapOptions = {
+      zoomControl: false,
+      doubleClickZoom: false,
+    };
+    let startingPosition = Map.DEFAULT_LOCATION;
+    if (checkPrevCenter()) {
+      startingPosition = getPrevCenter('position');
+      mapOptions.MAP_ZOOM = getPrevCenter('zoom');
+    }
+    geoMap = new Map(startingPosition.lat, startingPosition.lng, mapOptions);
+    await getReportApiCall(startingPosition.lat, startingPosition.lng);
+
+    const userPrevLocation = getUserLocation();
+
+    if (!!userPrevLocation.lat && !!userPrevLocation.lng) {
+      geoMap.setMarkerOnMap(userPrevLocation.lat, userPrevLocation.lng, { icon: 'current-location-map-pin.svg' });
+      if (!openDetail && !focusMarker) {
+        flyTo(userPrevLocation.lat, userPrevLocation.lng, Map.FOCUSED_MAP_ZOOM);
+      }
+    }
 
     Map.watchGeoLocation(watchGeoLocationSuccess, watchGeoLocationError);
 
-    // clear recenter btn focus store current zoom, center
-    geoMap.map.on('drag', ({target}) => {
-      recenterBtn?.blur();
-      storePreviousPos(target);
+    document.getElementById('recenterBtn').addEventListener('click', async () => {
+      const userStoredLocation = getUserLocation();
+      recenterBtn.focus();
+
+      if (!!userStoredLocation.lat && !!userStoredLocation.lng) {
+        flyTo(userStoredLocation.lat, userStoredLocation.lng, Map.FOCUSED_MAP_ZOOM);
+      } else {
+        const current = await Map.getCurrentLocation();
+        flyTo(current.lat, current.lng, Map.FOCUSED_MAP_ZOOM);
+        setUserLocation(current);
+      }
+      setTimeout(() => {
+        recenterBtn?.blur();
+      }, 500);
     });
 
-    // store current zoom, center
-    geoMap.map.on('zoom', ({target}) => storePreviousPos(target));
+    geoMap.map.on('zoomend', ({ target }) => {
+      setPrevCenter({
+        zoom: target._zoom,
+        position: target.boxZoom._map.getCenter(),
+      });
+    });
 
     Loader(false);
   } catch (error) {
@@ -155,14 +168,26 @@ window.onload = async function () {
       const makerExists = geoMap.checkMarkerOnMap(hazardDetail);
 
       // marker currently doesnot exists on the map
-      if (!makerExists) geoMap.createLayerGroups([{ ...hazardDetail, hazardCategory: hazardDetail.category, hazard: hazardDetail.option }], { ...markerParams, focus: true });
+      if (!makerExists) {
+        geoMap.createLayerGroups([{ ...hazardDetail, hazardCategory: hazardDetail.category, hazard: hazardDetail.option }], { ...markerParams, focus: true });
+      }
 
-      flyTo(hazardDetail.location?.lat, hazardDetail.location?.lng);
+      changeActiveMarkerIcon(hazardDetail.location?.lat, hazardDetail.location?.lng);
+
+      flyTo(hazardDetail.location?.lat, hazardDetail.location?.lng, zoom);
+
+      setPrevCenter({
+        zoom: zoom,
+        position: { lat: hazardDetail.location?.lat, lng: hazardDetail.location?.lng },
+      });
     }
 
     if (openDetail) {
       // id, category, hazard, location, date, photos, comment, settings,flagged_count, not_there_count,still_there_count
       // distance, user, flagged_as_fake, enable_reaction
+
+      const userLocation = getUserLocation();
+
       const data = new HazardDetailCard({
         id: hazardDetail.id,
         category: hazardDetail.category.name,
@@ -181,7 +206,7 @@ window.onload = async function () {
         created_at: hazardDetail.created_at,
         updated_at: hazardDetail.updated_at,
         deleted_at: hazardDetail.deleted_at,
-        distance: geolocationDistance(hazardDetail.location.lat, hazardDetail.location.lng, position.lat, position.lng),
+        distance: geolocationDistance(hazardDetail.location.lat, hazardDetail.location.lng, userLocation.lat, userLocation.lng),
         user: hazardDetail.user,
       });
 
@@ -196,6 +221,10 @@ window.onload = async function () {
 };
 
 const toggleFilterModal = async (flag) => {
+  // close hazard details card
+  const reportCloseBtn = document.getElementById('reportCloseBtn');
+  if (reportCloseBtn) reportCloseBtn.click();
+
   const filterModal = document.querySelector('.modal-filter');
   filterModal.classList.toggle('hidden', flag);
 
@@ -240,7 +269,9 @@ const markerParams = {
 
     const currentReport = await getHazardReportData(hazardID);
 
-    let hazardReport = new HazardDetailCard({
+    const userLocation = getUserLocation();
+
+    const hazardReport = new HazardDetailCard({
       id: currentReport.id,
       category: currentReport.hazardCategory.name,
       hazard: currentReport.hazard.name,
@@ -258,18 +289,29 @@ const markerParams = {
       created_at: currentReport.created_at,
       updated_at: currentReport.updated_at,
       deleted_at: currentReport.deleted_at,
-      distance: geolocationDistance(currentReport.location.lat, currentReport.location.lng, position.lat, position.lng),
+      distance: geolocationDistance(currentReport.location.lat, currentReport.location.lng, userLocation.lat, userLocation.lng),
       user: currentReport.user,
     });
 
     changeActiveMarkerIcon(currentReport.location.lat, currentReport.location.lng);
     showHazardDetails(hazardReport);
-    flyTo(currentReport.location.lat, currentReport.location.lng);
+    panTo(currentReport.location.lat, currentReport.location.lng);
+
+    const prevZoom = getPrevCenter('zoom');
+
+    setPrevCenter({
+      zoom: zoom,
+      position: { lat: currentReport.location.lat, lng: currentReport.location.lng, zoom: prevZoom || Map.FOCUSED_MAP_ZOOM },
+    });
   },
 };
 
-const flyTo = (lat, lng) => {
-  geoMap.map.flyTo([lat, lng], 12, { animate: true });
+const panTo = (lat, lng) => {
+  geoMap.map.panTo([lat, lng]);
+};
+
+const flyTo = (lat, lng, zoom = Map.UNFOCUSED_MAP_ZOOM) => {
+  geoMap.map.flyTo([lat, lng], zoom);
 };
 
 const closeSearchSuggestion = (e) => {
@@ -292,7 +334,6 @@ const getReportApiCall = async (lat, lng) => {
 
   const res = await apiRequest(url, { method: 'GET' });
   reports = res.data?.results;
-  hazardCardParams.position = position;
 
   geoMap.createLayerGroups(reports, markerParams);
   if (hazardFilters.length > 0) {
@@ -305,15 +346,24 @@ const getReportApiCall = async (lat, lng) => {
 const changeActiveMarkerIcon = (lat, lng) => {
   for (const marker of geoMap.mapLayers.getLayers()) {
     const mCoords = marker.getLatLng();
+
     if (marker.active) {
-      marker.setIcon(Map.createIcon({ iconName: marker.icon_name }));
+      const iconName = marker.icon_name;
+      marker.setIcon(Map.createIcon({ iconName }));
       marker.setZIndexOffset(null);
       marker.active = false;
     }
 
     if (lat === mCoords.lat && lng === mCoords.lng) {
-      marker.setIcon(Map.createIcon({ iconName: marker.icon_name_focused }));
-      marker.setZIndexOffset(1000);
+      const iconName = marker.icon_name_focused;
+      marker.setIcon(
+        Map.createIcon({
+          iconName,
+          iconSize: Map.focusIconSize,
+          iconAnchor: Map.focusIconAnchor,
+        })
+      );
+      marker.setZIndexOffset(100);
       marker.active = true;
     }
   }
@@ -332,6 +382,10 @@ const cardsOnClick = () => {
 const suggestionOnClick = () => {
   document.querySelectorAll('.sb-suggestion-item').forEach((card) => {
     card.addEventListener('click', async ({ target }) => {
+      // close hazard details card
+      const reportCloseBtn = document.getElementById('reportCloseBtn');
+      if (reportCloseBtn) reportCloseBtn.click();
+
       const suggestionItem = target.closest('.sb-suggestion-item');
 
       searchInput.value = suggestionItem?.dataset?.addr1;
@@ -340,7 +394,7 @@ const suggestionOnClick = () => {
       // change user location
       searchInput.dataset.positionChange = 'true';
       positionSecondary = latLng;
-      flyTo(latLng.lat, latLng.lng);
+      flyTo(latLng.lat, latLng.lng, Map.UNFOCUSED_MAP_ZOOM);
       geoMap.setRelativeMarkerOnMap(latLng.lat, latLng.lng);
       closeSearchSuggestion();
       await getReportApiCall(latLng.lat, latLng.lng, categoryFilters, hazardFilters);
@@ -350,6 +404,9 @@ const suggestionOnClick = () => {
 };
 
 const quickFiltersOnClick = async ({ target }) => {
+  // close filter
+  toggleFilterModal(true);
+
   hazardFilters = [];
   hazardTempFilters = [];
   filterBtn.classList.remove('selected');
@@ -387,6 +444,8 @@ const injectCards = () => {
   document.querySelector('#reportHazardBtn').style.display = 'none';
   document.querySelector('.sb-cards')?.remove();
 
+  let hazardCardParams = {};
+
   if (categoryFilters.length > 0) {
     hazardCardParams.reports = reports.filter((report) => categoryFilters.includes(report.hazardCategory.id));
   } else if (hazardFilters.length > 0) {
@@ -414,6 +473,8 @@ const injectCards = () => {
       const hazardID = target.dataset.id;
       hazardDetail = await getHazardDetail(hazardID);
 
+      const userLocation = getUserLocation();
+
       const data = new HazardDetailCard({
         id: hazardDetail.id,
         category: hazardDetail.category.name,
@@ -432,7 +493,7 @@ const injectCards = () => {
         created_at: hazardDetail.created_at,
         updated_at: hazardDetail.updated_at,
         deleted_at: hazardDetail.deleted_at,
-        distance: geolocationDistance(hazardDetail.location.lat, hazardDetail.location.lng, position.lat, position.lng),
+        distance: geolocationDistance(hazardDetail.location.lat, hazardDetail.location.lng, userLocation.lat, userLocation.lng),
         user: hazardDetail.user,
       });
 
@@ -447,40 +508,33 @@ const injectCards = () => {
 const watchGeoLocationSuccess = async ({ coords }) => {
   const lat = coords?.latitude;
   const lng = coords?.longitude;
+
   geoMap.setMarkerOnMap(lat, lng, { icon: 'current-location-map-pin.svg' });
+  const prevUserLocation = getUserLocation();
+  setUserLocation({
+    lat,
+    lng,
+  });
+  await getReportApiCall(lat, lng);
 
-  // If there is a report id in the query params and the focus param is set, don't pan to the user's location
-  // but to the report's location
-  if (flyToTrigger && !(!!idReport && (!!focusMarker || !!openDetail))) {
-    // update current user position
-    position = {
-      lat,
-      lng,
-    };
-
-    await getReportApiCall(lat, lng);
-    if(!checkPrevCenter())
-      flyTo(lat, lng, Map.DEFAULT_MAP_ZOOM);
-
-    
-    recenterBtn.focus();
-    flyToTrigger = false;
-  }
-
-  const distanceDiff = geolocationDistance(lat, lng, position.lat, position.lng);
+  const distanceDiff = geolocationDistance(lat, lng, prevUserLocation.lat, prevUserLocation.lng);
 
   // if user moves more than 25Km's
   // change his current position to get new reports
   if (distanceDiff > 25) {
-    position = {
+    setUserLocation({
       lat,
       lng,
-    };
+    });
   }
 };
 
 const watchGeoLocationError = async (err) => {
   // AlertPopup.show(`Unable to access geolocation`, AlertPopup.warning);
+  const userLocation = getUserLocation();
+
+  const position = userLocation || Map.DEFAULT_LOCATION;
+
   await getReportApiCall(position.lat, position.lng);
 };
 
@@ -537,9 +591,12 @@ async function getHazardReportData(id) {
 // Show hazard report
 const showHazardDetails = (hazardReport) => {
   try {
+    toggleFilterModal(true);
     hazardReportPopulated = hazardReport.hazardCardContent();
 
-    root.appendChild(hazardReportPopulated, document.getElementById('hazard-comp'));
+    root.appendChild(document.getElementById('hazard-comp'));
+
+    root.insertBefore(hazardReportPopulated, document.getElementById('map'));
 
     const cardBackBtn = document.querySelector('.sb-cards-btn--back');
     if (cardBackBtn) cardBackBtn.style.display = 'none';
@@ -550,7 +607,7 @@ const showHazardDetails = (hazardReport) => {
     const reportShareBtn = document.getElementById('reportShareBtn');
 
     const baseUrl = window.location.origin;
-    const url = baseUrl + `/pages/home/index.html?id=${hazardReport.id}&focus=true&open=true&zoom=12&lat=${hazardReport.lat}&lng=${hazardReport.lng}`;
+    const url = baseUrl + `/pages/home/index.html?id=${hazardReport.id}&zoom=${Map.FOCUSED_MAP_ZOOM}&focus=true&open=true`;
 
     reportShareBtn.addEventListener(
       'click',
@@ -592,17 +649,18 @@ const showHazardDetails = (hazardReport) => {
       }
       if (cardBackBtn) cardBackBtn.style.display = 'flex';
       changeActiveMarkerIcon(0, 0);
+      clearUrlParams();
     });
 
     //
 
     // Bottom sheet
-    const content = document.querySelector('#hazard-card__outer');
     let windowWidth = window.matchMedia('(min-width: 768px)');
 
     let updateHeight = (height) => {
       //updating sheet height
       if (window.matchMedia('(max-width: 768px)').matches) {
+        const content = document.querySelector('#hazard-card__outer');
         content.style.height = `${height}vh`;
       }
     };
@@ -611,12 +669,9 @@ const showHazardDetails = (hazardReport) => {
       if (windowWidth.matches) {
         reportShareBtn.style.display = 'flex';
         reportCloseBtn.style.display = 'flex';
-        // content.style.height = 'fit-content';
       } else {
         reportShareBtn.style.display = 'none';
         reportCloseBtn.style.display = 'none';
-        // Set initial height
-        // updateHeight(40);
 
         let isDragging = false,
           startY,
@@ -624,10 +679,11 @@ const showHazardDetails = (hazardReport) => {
 
         let dragStart = (e) => {
           isDragging = true;
+          const content = document.querySelector('#hazard-card__outer');
 
           //recording intitial y position and sheet height
           startY = e.pageY || e.touches?.[0].pageY;
-          startHeight = parseInt(content.style.height);
+          startHeight = parseInt(content.style.height || '40vh');
         };
 
         let dragging = (e) => {
@@ -637,19 +693,32 @@ const showHazardDetails = (hazardReport) => {
           //calculating new height of sheet by using starty and start height
           let delta = startY - (e.pageY || e.touches?.[0].pageY);
           let newHeight = startHeight + (delta / window.innerHeight) * 100;
-
           //calling updateHeight function with new height as argument
           updateHeight(newHeight);
         };
 
         let dragStop = () => {
           isDragging = false;
+          const content = document.querySelector('#hazard-card__outer');
 
           //setting sheet height based on the sheet current height or position
           let sheetHeight = parseInt(content.style.height);
 
           //if height is greater than 75 making sheet full screen else making it to 50vh
-          sheetHeight < 20 ? closeSheet() : sheetHeight > 55 ? maxHeight(90) : minHeight(40);
+          switch (true) {
+            case sheetHeight < 20:
+              closeSheet();
+              break;
+            case sheetHeight > 55 && window.innerHeight > 800: // If screen is large enough
+              maxHeight(90);
+              break;
+            case sheetHeight > 55:
+              maxHeight(100);
+              break;
+            default:
+              minHeight(40);
+              break;
+          }
         };
 
         let minHeight = (min) => {
@@ -670,16 +739,18 @@ const showHazardDetails = (hazardReport) => {
             hazardReportPopulated.parentNode.removeChild(hazardReportPopulated);
             if (cardBackBtn) cardBackBtn.style.display = 'flex';
             changeActiveMarkerIcon(0, 0);
+            clearUrlParams();
           }
         };
+        const hazardContent = document.querySelector('#hazard-card__outer');
 
-        content.addEventListener('mousedown', dragStart);
-        content.addEventListener('mousemove', dragging);
-        content.addEventListener('mouseup', dragStop);
+        hazardContent.addEventListener('mousedown', dragStart);
+        hazardContent.addEventListener('mousemove', dragging);
+        hazardContent.addEventListener('mouseup', dragStop);
 
-        content.addEventListener('touchstart', dragStart);
-        content.addEventListener('touchmove', dragging);
-        content.addEventListener('touchend', dragStop);
+        hazardContent.addEventListener('touchstart', dragStart);
+        hazardContent.addEventListener('touchmove', dragging);
+        hazardContent.addEventListener('touchend', dragStop);
       }
     }
     mediaQueryCheck(windowWidth);
@@ -746,12 +817,10 @@ const clearHazardFilter = async () => {
   if (document.querySelector('.sb-cards')) injectCards();
 };
 
-const storePreviousPos = (target) => {
-  setPrevCenter({
-    zoom: target._zoom,
-    position: target.boxZoom._map.getCenter()
-  });
-}
+const clearUrlParams = () => {
+  window.history.pushState({}, document.title, '/pages/home/index.html');
+};
+
 const handleOffline = () => {
   try {
     const homepage = document.getElementById('home-body');

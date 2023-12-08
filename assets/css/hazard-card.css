@@ -40,7 +40,6 @@
   overflow-x: auto;
   scrollbar-width: none;
   white-space: nowrap;
-  white-space: nowrap;
 }
 
 .sb-cards-header {
@@ -203,7 +202,7 @@
   }
 
   .sb-cards-wrapper::-webkit-scrollbar-track {
-    background: #f1f1f1;
+    background: var(--neutral-100);
   }
 
   .sb-cards-wrapper::-webkit-scrollbar-thumb {

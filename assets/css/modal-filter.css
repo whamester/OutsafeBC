@@ -15,10 +15,7 @@
 .modal-filter h3 {
   margin: 0;
   margin-top: 1rem;
-  color: var(--neutral-900);
   font-style: normal;
-  font-weight: 600;
-  font-size: var(--body-1-size);
   line-height: 1.5rem;
 }
 
@@ -27,10 +24,7 @@
 }
 
 .checkbox label {
-  color: var(--neutral-800);
   font-style: normal;
-  font-weight: 400;
-  font-size: var(--body-2-size);
   line-height: 1.5rem
 }
 
@@ -119,18 +113,17 @@
 }
 
 .modal-filter--clear-btn {
+  cursor: pointer;
   margin-right: 16px;
   border: none;
   background-color: transparent;
   padding: 0;
-  color: var(--primary-500);
   text-decoration: underline;
-  font-size: var(--body-2-size);
 }
 
 .modal-filter--show-btn {
+  cursor: pointer;
   margin-right: 16px;
-  font-size: var(--body-2-size);
 }
 
 /* Scroller */
@@ -141,7 +134,7 @@
 }
 
 .modal-filter--wrapper-outer::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: var(--neutral-100);
 }
 
 .modal-filter--wrapper-outer::-webkit-scrollbar-thumb {
@@ -159,13 +152,13 @@
     position: absolute;
     top: 14.3rem;
     left: 5rem;
+    z-index: 4;
     animation: none;
     transition: none;
     border-radius: 0.75rem;
     padding: 1rem;
     width: calc(410px - 32px);
     height: 22rem;
-    z-index: 4;
   }
 
   .modal-filter--catergories-wrapper-outer {
@@ -176,7 +169,7 @@
   #closeBtnDesktop {
     display: block;
     position: absolute;
-    top: 0;
+    top: 1px;
     right: -45px;
     cursor: pointer;
     border: 1px solid var(--neutral-300);
@@ -205,6 +198,8 @@
   }
   
   .modal-filter--bottom-wrapper {
+    border-bottom-right-radius: 0.75rem;
+    border-bottom-left-radius: 0.75rem;
     background-color: var(--white);
   }
 }

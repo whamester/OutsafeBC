@@ -96,14 +96,14 @@
   gap: 0.75rem;
   overflow: auto;
   scroll-behavior: smooth;
+}
 
-  /* Hide scroll bar */
-  -ms-overflow-style: none; /* Internet Explorer 10+ */
-  scrollbar-width: none; /* Firefox */
+.report-card__picture-container::-webkit-scrollbar-track {
+  background: var(--neutral-100);
 }
 
 .report-card__picture-container::-webkit-scrollbar {
-  display: none; /* Safari and Chrome */
+  display: none;
 }
 
 .report-card__picture-container img {

@@ -9,14 +9,19 @@
   -webkit-appearance:none;
   -o-appearance:none;
   appearance: none;
+  cursor: pointer;
   margin-right: 8px;
-  width: 20px;
-  height: 20px;
+  background-image: url(/assets/icons/checkbox-unchecked.svg);
   background-position: center;
   background-repeat: no-repeat;
-  background-image: url(/assets/icons/checkbox-unchecked.svg);
+  width: 20px;
+  height: 20px;
 }
 
 .checkbox input:checked {
   background-image: url(/assets/icons/checkbox-checked.svg);
+}
+
+.checkbox label {
+  cursor: pointer;
 }
