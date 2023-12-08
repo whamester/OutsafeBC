@@ -93,9 +93,10 @@
   #hazard-card__outer {
     position: absolute;
     top: 14.3rem;
-    left: 5rem;
+    left: var(--padding-x);
     border-radius: 0.75rem;
-    width: 410px;
+    max-width: 28.6rem;
+    width: 100%;
     height: fit-content;
     max-height: max-content;
   }

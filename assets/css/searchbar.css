@@ -203,6 +203,7 @@
 @media only screen and (min-width: 768px) {
   .sb {
     top: 90px;
+    left: var(--padding-x);
   }
 
   .sb,
@@ -219,7 +220,7 @@
 
   .sb-wrapper-inner {
     padding: 0;
-    width: 490px;
+    width: 28.6rem;
   }
 
   .sb-suggestion-wrapper,
@@ -239,9 +240,14 @@
 
   .sb-search {
     padding-right: 0;
+    padding-left: 0;
   }
 
   .sb-categories-wrapper {
     margin: auto;
+  }
+
+  .sb-categories {
+    padding-left: 0;
   }
 }
