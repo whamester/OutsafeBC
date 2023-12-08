@@ -34,6 +34,9 @@
 .form-field.large input,
 .form-field.large textarea {
   padding: 9px 0.75rem;
+  font-size: var(--body-2-large-size) !important;
+  letter-spacing: var(--body-2-large-letter-spacing) !important;
+  line-height: var(--body-2-large-line-height) !important;
 }
 
 .form-field input:focus,
