@@ -116,15 +116,6 @@ window.onload = async function () {
     geoMap = new Map(startingPosition.lat, startingPosition.lng, mapOptions);
     await getReportApiCall(startingPosition.lat, startingPosition.lng);
 
-    const userPrevLocation = getUserLocation();
-
-    if (!!userPrevLocation.lat && !!userPrevLocation.lng) {
-      geoMap.setMarkerOnMap(userPrevLocation.lat, userPrevLocation.lng, { icon: 'current-location-map-pin.svg' });
-      if (!openDetail && !focusMarker) {
-        flyTo(userPrevLocation.lat, userPrevLocation.lng, Map.FOCUSED_MAP_ZOOM);
-      }
-    }
-
     Map.watchGeoLocation(watchGeoLocationSuccess, watchGeoLocationError);
 
     document.getElementById('recenterBtn').addEventListener('click', async () => {
@@ -153,6 +144,15 @@ window.onload = async function () {
     });
 
     Loader(false);
+
+    const userPrevLocation = getUserLocation();
+
+    if (!!userPrevLocation.lat && !!userPrevLocation.lng) {
+      geoMap.setMarkerOnMap(userPrevLocation.lat, userPrevLocation.lng, { icon: 'current-location-map-pin.svg' });
+      if (!openDetail && !focusMarker) {
+        flyTo(userPrevLocation.lat, userPrevLocation.lng, Map.FOCUSED_MAP_ZOOM);
+      }
+    }
   } catch (error) {
     console.error(error, error.message);
 
@@ -542,6 +542,11 @@ const watchGeoLocationSuccess = async ({ coords }) => {
       lat,
       lng,
     });
+  }
+
+  if ((!prevUserLocation.lat || !prevUserLocation.lng) && !openDetail && !focusMarker) {
+    flyTo(lat, lng, Map.FOCUSED_MAP_ZOOM);
+    setUserLocation(current);
   }
 };
 
