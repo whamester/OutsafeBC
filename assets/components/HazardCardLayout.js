@@ -70,7 +70,7 @@ const HazardCardLayout = ({ reports }) => {
       
               <button data-id="${id}" class="btn btn-secondary view-details" id="viewDetailsBtn">
                   <i class="icon-plus"></i>
-                  View Deatils
+                  View Details
               </button>
             </div>
           `;
