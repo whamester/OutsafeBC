@@ -143,6 +143,8 @@ window.onload = async function () {
       }, 500);
     });
 
+    root.appendChild(document.getElementById('hazard-comp'));
+
     geoMap.map.on('zoomend', ({ target }) => {
       setPrevCenter({
         zoom: target._zoom,
@@ -223,7 +225,9 @@ window.onload = async function () {
 const toggleFilterModal = async (flag) => {
   // close hazard details card
   const reportCloseBtn = document.getElementById('reportCloseBtn');
-  if (reportCloseBtn) reportCloseBtn.click();
+  if (reportCloseBtn) {
+    reportCloseBtn.click();
+  }
 
   const filterModal = document.querySelector('.modal-filter');
   filterModal.classList.toggle('hidden', flag);
@@ -384,7 +388,9 @@ const suggestionOnClick = () => {
     card.addEventListener('click', async ({ target }) => {
       // close hazard details card
       const reportCloseBtn = document.getElementById('reportCloseBtn');
-      if (reportCloseBtn) reportCloseBtn.click();
+      if (reportCloseBtn) {
+        reportCloseBtn.click();
+      }
 
       const suggestionItem = target.closest('.sb-suggestion-item');
 
@@ -454,6 +460,11 @@ const injectCards = () => {
     hazardCardParams.reports = reports;
   }
 
+  const hazardComp = document.getElementById('hazard-comp');
+  if (hazardComp) {
+    hazardComp.classList.remove('hidden');
+  }
+
   injectHTML([{ func: HazardCardLayout, args: hazardCardParams, target: '#hazard-comp' }]);
 
   document.querySelector('.sb-cards-btn--back').addEventListener(
@@ -464,6 +475,11 @@ const injectCards = () => {
       searchInput.dataset.positionChange = 'false';
       searchInput.value = '';
       geoMap.setRelativeMarkerOnMap(0, 0, { removeOnly: true });
+
+      const hazardComp = document.querySelector('#hazard-comp');
+      if (hazardComp) {
+        hazardComp.classList.add('hidden');
+      }
     },
     false
   );
@@ -592,6 +608,16 @@ async function getHazardReportData(id) {
 const showHazardDetails = (hazardReport) => {
   try {
     toggleFilterModal(true);
+    // Disable body scroll when the pull-up card is open
+    const body = document.getElementById('home-body');
+    body.style.overflowY = 'hidden';
+
+    // Hide the search results when a hazard detail is open
+    const searchResultList = document.querySelector('.sb-cards-outer');
+    if (searchResultList) {
+      searchResultList.classList.add('no-visible');
+    }
+
     hazardReportPopulated = hazardReport.hazardCardContent();
 
     root.appendChild(document.getElementById('hazard-comp'));
@@ -650,6 +676,12 @@ const showHazardDetails = (hazardReport) => {
       if (cardBackBtn) cardBackBtn.style.display = 'flex';
       changeActiveMarkerIcon(0, 0);
       clearUrlParams();
+
+      // Show the search results when the hazard detail closes
+      const searchResultList = document.querySelector('.sb-cards-outer');
+      if (searchResultList) {
+        searchResultList.classList.remove('no-visible');
+      }
     });
 
     //
@@ -740,6 +772,18 @@ const showHazardDetails = (hazardReport) => {
             if (cardBackBtn) cardBackBtn.style.display = 'flex';
             changeActiveMarkerIcon(0, 0);
             clearUrlParams();
+
+            // Enable body scroll when the pull-up card is close
+            // This will allow the users to refresh when scroll down
+            const body = document.getElementById('home-body');
+            body.style.overflowY = 'auto';
+
+            //HERE
+            // Show the search results when the hazard detail closes
+            const searchResultList = document.querySelector('.sb-cards-outer');
+            if (searchResultList) {
+              searchResultList.classList.remove('no-visible');
+            }
           }
         };
         const hazardContent = document.querySelector('#hazard-card__outer');
