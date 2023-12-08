@@ -4,7 +4,7 @@
   background: var(--white, #fff);
   box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.15);
   display: inline-flex;
-  padding: 0.5rem;
+  padding: 8px;
   align-items: center;
   gap: 0.25rem;
   cursor: pointer;
@@ -51,4 +51,8 @@
   color: var(--white);
 }
 
-/* TODO: Styles for Desktop here */
+@media only screen and (min-width: 768px) {
+  .quick-filter {
+    padding: 10px 8px;
+  }
+}
