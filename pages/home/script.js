@@ -337,8 +337,6 @@ const getReportApiCall = async (lat, lng) => {
 const changeActiveMarkerIcon = (lat, lng) => {
   for (const marker of geoMap.mapLayers.getLayers()) {
     const mCoords = marker.getLatLng();
-    if (lat === 0 && lng === 0) marker.setOpacity(1);
-    else marker.setOpacity(0.8);
 
     if (marker.active) {
       const iconName = marker.icon_name;
@@ -358,7 +356,6 @@ const changeActiveMarkerIcon = (lat, lng) => {
       );
       marker.setZIndexOffset(100);
       marker.active = true;
-      marker.setOpacity(1);
     }
   }
 };
