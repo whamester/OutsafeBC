@@ -1,6 +1,7 @@
 @import url(../css/notification-item.css);
 
 header {
+  z-index: 10;
   background: var(--primary-900, #0f1815);
   border-bottom: 1px solid var(--neutral-200, #e4e7ec);
 }

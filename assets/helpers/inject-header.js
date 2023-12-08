@@ -84,7 +84,7 @@ export const displayNotificationItem = (report) => {
       detailsButton.addEventListener('click', () => {
         insertedElement.classList.add('notification__item--read');
         updateNotificationAsRead(user.id, report.id);
-        window.location.replace(`/pages/home/index.html?id=${report.id}&open=true&zoom=${Map.DEFAULT_MAP_ZOOM}&lat=${report.location.lat}&lng=${report.location.lng}`);
+        window.location.replace(`/pages/home/index.html?id=${report.id}&open=true&zoom=${Map.FOCUSED_MAP_ZOOM}&lat=${report.location.lat}&lng=${report.location.lng}`);
 
         checkIfAllNotificationsAreRead();
       });
