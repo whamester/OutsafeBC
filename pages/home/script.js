@@ -34,23 +34,15 @@ const openDetail = params.get('open') === 'true' && !!idReport;
 const focusMarker = params.get('focus') === 'true' && !!idReport;
 const zoom = parseInt(params.get('zoom')) || getPrevCenter('zoom') || Map.FOCUSED_MAP_ZOOM;
 
-//Variable Declaration
+// Global Variable Declaration
 let geoMap;
-let position = checkPrevCenter() ? getPrevCenter('position') : Map.DEFAULT_LOCATION;
 let reports = [];
 let positionSecondary = {};
-let hazardCardParams = {};
 let searchSuggestions = [];
 let categoryFilters = [];
 let hazardTempFilters = [];
 let hazardFilters = [];
 let hazardShowCount = 0;
-let flyToTrigger = true;
-
-let mapOptions = {
-  zoomControl: false,
-  doubleClickZoom: false,
-};
 
 let hazardDetail = new HazardReport();
 let hazardReportPopulated;
@@ -71,10 +63,6 @@ window.onload = async function () {
     injectHeader([{ func: Header, target: '#home-body', position: 'afterbegin' }]);
     Loader(true);
 
-    if (checkPrevCenter()) {
-      position = getPrevCenter('position');
-      mapOptions.MAP_ZOOM = getPrevCenter('zoom');
-    }
     const { data } = await apiRequest(`hazard-category`, { method: 'GET' });
 
     searchBarParams.categories = data;
@@ -89,7 +77,8 @@ window.onload = async function () {
       if (!user) {
         showLoginModal();
       } else {
-        window.location = `/pages/report-hazard/index.html?lat=${position.lat}&lng=${position.lng}`;
+        const userLoc = getUserLocation();
+        window.location = `/pages/report-hazard/index.html?lat=${userLoc.lat}&lng=${userLoc.lng}`;
       }
     });
 
@@ -115,9 +104,26 @@ window.onload = async function () {
 
     loadIcons();
 
-    geoMap = new Map(position.lat, position.lng, mapOptions);
-    await getReportApiCall(position.lat, position.lng);
-    geoMap.setMarkerOnMap(position.lat, position.lng, { icon: 'current-location-map-pin.svg' });
+    const mapOptions = {
+      zoomControl: false,
+      doubleClickZoom: false,
+    };
+    let startingPosition = Map.DEFAULT_LOCATION;
+    if (checkPrevCenter()) {
+      startingPosition = getPrevCenter('position');
+      mapOptions.MAP_ZOOM = getPrevCenter('zoom');
+    }
+    geoMap = new Map(startingPosition.lat, startingPosition.lng, mapOptions);
+    await getReportApiCall(startingPosition.lat, startingPosition.lng);
+
+    const userPrevLocation = getUserLocation();
+
+    if (!!userPrevLocation.lat && !!userPrevLocation.lng) {
+      geoMap.setMarkerOnMap(userPrevLocation.lat, userPrevLocation.lng, { icon: 'current-location-map-pin.svg' });
+      if (!openDetail && !focusMarker) {
+        flyTo(userPrevLocation.lat, userPrevLocation.lng, Map.FOCUSED_MAP_ZOOM);
+      }
+    }
 
     Map.watchGeoLocation(watchGeoLocationSuccess, watchGeoLocationError);
 
@@ -179,6 +185,9 @@ window.onload = async function () {
     if (openDetail) {
       // id, category, hazard, location, date, photos, comment, settings,flagged_count, not_there_count,still_there_count
       // distance, user, flagged_as_fake, enable_reaction
+
+      const userLocation = getUserLocation();
+
       const data = new HazardDetailCard({
         id: hazardDetail.id,
         category: hazardDetail.category.name,
@@ -197,7 +206,7 @@ window.onload = async function () {
         created_at: hazardDetail.created_at,
         updated_at: hazardDetail.updated_at,
         deleted_at: hazardDetail.deleted_at,
-        distance: geolocationDistance(hazardDetail.location.lat, hazardDetail.location.lng, position.lat, position.lng),
+        distance: geolocationDistance(hazardDetail.location.lat, hazardDetail.location.lng, userLocation.lat, userLocation.lng),
         user: hazardDetail.user,
       });
 
@@ -260,7 +269,9 @@ const markerParams = {
 
     const currentReport = await getHazardReportData(hazardID);
 
-    let hazardReport = new HazardDetailCard({
+    const userLocation = getUserLocation();
+
+    const hazardReport = new HazardDetailCard({
       id: currentReport.id,
       category: currentReport.hazardCategory.name,
       hazard: currentReport.hazard.name,
@@ -278,7 +289,7 @@ const markerParams = {
       created_at: currentReport.created_at,
       updated_at: currentReport.updated_at,
       deleted_at: currentReport.deleted_at,
-      distance: geolocationDistance(currentReport.location.lat, currentReport.location.lng, position.lat, position.lng),
+      distance: geolocationDistance(currentReport.location.lat, currentReport.location.lng, userLocation.lat, userLocation.lng),
       user: currentReport.user,
     });
 
@@ -287,7 +298,6 @@ const markerParams = {
     panTo(currentReport.location.lat, currentReport.location.lng);
 
     const prevZoom = getPrevCenter('zoom');
-    console.log({ prevZoom });
 
     setPrevCenter({
       zoom: zoom,
@@ -324,7 +334,6 @@ const getReportApiCall = async (lat, lng) => {
 
   const res = await apiRequest(url, { method: 'GET' });
   reports = res.data?.results;
-  hazardCardParams.position = position;
 
   geoMap.createLayerGroups(reports, markerParams);
   if (hazardFilters.length > 0) {
@@ -435,6 +444,8 @@ const injectCards = () => {
   document.querySelector('#reportHazardBtn').style.display = 'none';
   document.querySelector('.sb-cards')?.remove();
 
+  let hazardCardParams = {};
+
   if (categoryFilters.length > 0) {
     hazardCardParams.reports = reports.filter((report) => categoryFilters.includes(report.hazardCategory.id));
   } else if (hazardFilters.length > 0) {
@@ -462,6 +473,8 @@ const injectCards = () => {
       const hazardID = target.dataset.id;
       hazardDetail = await getHazardDetail(hazardID);
 
+      const userLocation = getUserLocation();
+
       const data = new HazardDetailCard({
         id: hazardDetail.id,
         category: hazardDetail.category.name,
@@ -480,7 +493,7 @@ const injectCards = () => {
         created_at: hazardDetail.created_at,
         updated_at: hazardDetail.updated_at,
         deleted_at: hazardDetail.deleted_at,
-        distance: geolocationDistance(hazardDetail.location.lat, hazardDetail.location.lng, position.lat, position.lng),
+        distance: geolocationDistance(hazardDetail.location.lat, hazardDetail.location.lng, userLocation.lat, userLocation.lng),
         user: hazardDetail.user,
       });
 
@@ -497,38 +510,31 @@ const watchGeoLocationSuccess = async ({ coords }) => {
   const lng = coords?.longitude;
 
   geoMap.setMarkerOnMap(lat, lng, { icon: 'current-location-map-pin.svg' });
+  const prevUserLocation = getUserLocation();
+  setUserLocation({
+    lat,
+    lng,
+  });
+  await getReportApiCall(lat, lng);
 
-  // If there is a report id in the query params and the focus param is set, don't pan to the user's location
-  // but to the report's location
-  if (flyToTrigger && !(!!idReport && (!!focusMarker || !!openDetail))) {
-    // update current user position
-    position = {
-      lat,
-      lng,
-    };
-
-    setUserLocation(position);
-
-    await getReportApiCall(lat, lng);
-
-    flyTo(lat, lng);
-    flyToTrigger = false;
-  }
-
-  const distanceDiff = geolocationDistance(lat, lng, position.lat, position.lng);
+  const distanceDiff = geolocationDistance(lat, lng, prevUserLocation.lat, prevUserLocation.lng);
 
   // if user moves more than 25Km's
   // change his current position to get new reports
   if (distanceDiff > 25) {
-    position = {
+    setUserLocation({
       lat,
       lng,
-    };
+    });
   }
 };
 
 const watchGeoLocationError = async (err) => {
   // AlertPopup.show(`Unable to access geolocation`, AlertPopup.warning);
+  const userLocation = getUserLocation();
+
+  const position = userLocation || Map.DEFAULT_LOCATION;
+
   await getReportApiCall(position.lat, position.lng);
 };
 
@@ -699,7 +705,20 @@ const showHazardDetails = (hazardReport) => {
           let sheetHeight = parseInt(content.style.height);
 
           //if height is greater than 75 making sheet full screen else making it to 50vh
-          sheetHeight < 20 ? closeSheet() : sheetHeight > 55 ? maxHeight(90) : minHeight(40);
+          switch (true) {
+            case sheetHeight < 20:
+              closeSheet();
+              break;
+            case sheetHeight > 55 && window.innerHeight > 800: // If screen is large enough
+              maxHeight(90);
+              break;
+            case sheetHeight > 55:
+              maxHeight(100);
+              break;
+            default:
+              minHeight(40);
+              break;
+          }
         };
 
         let minHeight = (min) => {

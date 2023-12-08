@@ -1,7 +1,13 @@
 import geolocationDistance from '../helpers/geolocation-distance.js';
+import { getUserLocation } from '../helpers/user-geocoordinates.js';
 import DateFormat from '../models/DateFormat.js';
+import Map from '../models/Map.js';
 
-const HazardCardLayout = ({ reports, position }) => {
+const HazardCardLayout = ({ reports }) => {
+  const userLocation = getUserLocation();
+
+  const position = userLocation || Map.DEFAULT_LOCATION;
+
   return reports
     ? `<div class="sb-cards">
     <button class="sb-cards-btn--back"></button>
