@@ -221,7 +221,7 @@ class ReportCardContainer {
       Not there
     </button>
 
-    <button class="btn btn-error" id="flagReportBtn">
+    <button class="btn btn-error hidden" id="flagReportBtn">
       <i class="icon-flag"></i>
       Flag report
     </button>

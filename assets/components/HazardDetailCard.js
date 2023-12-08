@@ -135,7 +135,9 @@ class HazardDetailCard extends ReportCardContainer {
       this.divContainer.querySelector('#notThereBtn').classList.add('hidden');
     } else {
       // show the flag report button
-      this.divContainer.querySelector('#flagReportBtn').classList.remove('hidden');
+      if (!this.createdByUserLoggedIn) {
+        this.divContainer.querySelector('#flagReportBtn').classList.remove('hidden');
+      }
       // show the reaction buttons
       this.divContainer.querySelector('#stillThereBtn').classList.remove('hidden');
       this.divContainer.querySelector('#notThereBtn').classList.remove('hidden');
@@ -148,13 +150,13 @@ class HazardDetailCard extends ReportCardContainer {
     }
 
     // If I have flagged the report and others aswell
-    if (this.flagged_as_fake && this.flagged_count > 0) {
+    if (this.flagged_as_fake && this.flagged_count > 0 && !this.createdByUserLoggedIn) {
       // show flagged by me and others the message
       this.divContainer.querySelector('#flagReportMessage').classList.remove('hidden');
       this.divContainer.querySelector('#flagReportMessage p').innerHTML = FLAGGED_BY_OTHERS_AND_I_MESSAGE;
     }
     // If I have flagged the report
-    else if (this.flagged_as_fake) {
+    else if (this.flagged_as_fake && !this.createdByUserLoggedIn) {
       // show flagged by me message
       this.divContainer.querySelector('#flagReportMessage').classList.remove('hidden');
       this.divContainer.querySelector('#flagReportMessage p').innerHTML = FLAGGED_BY_ME_MESSAGE;
