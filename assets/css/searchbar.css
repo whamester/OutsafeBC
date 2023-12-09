@@ -10,8 +10,22 @@
 }
 
 .sb-search {
-  padding-bottom: 18px;
+  padding-bottom: 16px;
   padding-inline: var(--padding-x);
+}
+
+.sb-search--search-container {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.sb-search--search-container {
+  display: flex;
+  gap: 0.75rem;
+}
+
+#searchInput:not(:focus-visible) {
+  box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.15);
 }
 
 .sb-search-box {
@@ -28,49 +42,37 @@
   height: 44px;
 }
 
-.sb-search-box .sb-search-box--icon {
-  margin-left: 10px;
-  width: 20px;
-  height: 20px;
-  background-color: var(--neutral-500);
-}
-
-.sb-search-box--input {
-  outline: none;
-  border: none;
-  background-color: transparent;
+.sb-search .form-field {
   width: 100%;
-  height: 100%;
-  text-indent: 2px;
-  caret-color: var(--accent-500);
 }
 
 .sb-search-box:focus-within {
-  box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.05), 0px 0px 0px 2px #9aa3a1;
+  box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.05), 0px 0px 0px 2px var(--primary-200);
   outline: none;
 }
 
-.sb-search-box--input::placeholder {
-  color: var(--neutral-400);
-  opacity: 1;
-}
-
-.sb-search-box--input::-ms-input-placeholder {
-  color: var(--neutral-400);
-}
-
 .sb-search-box--filter-btn {
-  border: 1px solid var(--neutral-200);
+  border: 1px solid var(--neutral-300);
   border-radius: 8px;
   background-color: var(--white);
-  width: 44px;
-  height: 44px;
+  width: 40px;
+  height: 40px;
   position: relative;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.15);
 }
 
 .sb-search-box--filter-btn:hover {
-  border: 1px solid var(--neutral-500, #667185);
+  border: 1px solid var(--neutral-500);
+}
+
+.sb-search-box--filter-btn:focus-visible {
+  border: 1px solid var(--neutral-500);
+  outline: none;
 }
 
 .sb-search-box--filter-btn.selected {
@@ -203,6 +205,7 @@
 @media only screen and (min-width: 768px) {
   .sb {
     top: 90px;
+    left: var(--padding-x);
   }
 
   .sb,
@@ -219,7 +222,7 @@
 
   .sb-wrapper-inner {
     padding: 0;
-    width: 490px;
+    width: var(--hazard-panel-width);
   }
 
   .sb-suggestion-wrapper,
@@ -239,9 +242,20 @@
 
   .sb-search {
     padding-right: 0;
+    padding-left: 0;
+    padding-bottom: 18px;
   }
 
   .sb-categories-wrapper {
     margin: auto;
+  }
+
+  .sb-categories {
+    padding-left: 0;
+  }
+
+  .sb-search-box--filter-btn {
+    width: 44px;
+    height: 44px;
   }
 }

@@ -24,6 +24,9 @@ header {
 #map {
   position: relative;
   width: 100vw;
-  height: 100vh;
   height: 100dvh;
+}
+
+#root {
+  overflow-y: hidden;
 }
