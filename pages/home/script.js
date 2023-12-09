@@ -531,13 +531,14 @@ const watchGeoLocationSuccess = async ({ coords }) => {
     lat,
     lng,
   });
-  await getReportApiCall(lat, lng);
 
   const distanceDiff = geolocationDistance(lat, lng, prevUserLocation.lat, prevUserLocation.lng);
 
   // if user moves more than 25Km's
   // change his current position to get new reports
   if (distanceDiff > 25) {
+    await getReportApiCall(lat, lng);
+
     setUserLocation({
       lat,
       lng,
@@ -550,13 +551,9 @@ const watchGeoLocationSuccess = async ({ coords }) => {
   }
 };
 
-const watchGeoLocationError = async (err) => {
+const watchGeoLocationError = async (error) => {
+  console.error(error);
   // AlertPopup.show(`Unable to access geolocation`, AlertPopup.warning);
-  const userLocation = getUserLocation();
-
-  const position = userLocation || Map.DEFAULT_LOCATION;
-
-  await getReportApiCall(position.lat, position.lng);
 };
 
 const onSearchInput = debounce(async ({ target }) => {
