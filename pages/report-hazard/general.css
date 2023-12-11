@@ -1,3 +1,7 @@
+#continueBtnText {
+  font-size: var(--body-2-size);
+}
+
 #report-hazard-body {
   height: 100%;
   display: flex;
