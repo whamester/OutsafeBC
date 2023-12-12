@@ -430,7 +430,6 @@ const populateHazardOptions = (options, selectedOptionQuestion) => {
         currentReport.option.id = event.target.value;
         currentReport.option.name = option.name;
 
-        // Call populateHazardOptions again to redraw all options
         populateHazardOptions(options, selectedOptionQuestion);
       });
 
@@ -462,7 +461,6 @@ const populateHazardOptions = (options, selectedOptionQuestion) => {
 
       hazardOptionContent.appendChild(div);
 
-      // Highlight the selected option
       if (option.id === selectedOptionId) {
         label.style.backgroundColor = 'your-selected-color';
         label.style.borderColor = 'your-selected-border-color';
