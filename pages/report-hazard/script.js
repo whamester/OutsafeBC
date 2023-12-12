@@ -462,8 +462,7 @@ const populateHazardOptions = (options, selectedOptionQuestion) => {
       hazardOptionContent.appendChild(div);
 
       if (option.id === selectedOptionId) {
-        label.style.backgroundColor = '#D8E7E2';
-        label.style.borderColor = '#ffffff';
+        label.classList.add('selected-label');
       }
     }
   } catch (error) {
@@ -471,6 +470,7 @@ const populateHazardOptions = (options, selectedOptionQuestion) => {
     AlertPopup.show(error.message || AlertPopup.SOMETHING_WENT_WRONG_MESSAGE, AlertPopup.error);
   }
 };
+
 
 
 /**

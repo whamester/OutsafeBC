@@ -17,10 +17,13 @@
   background: var(--neutral-50);
 }
 
-#hazard-option-content input[type='radio']:checked + label {
+#hazard-option-content .selected-label {
   border-radius: 6.25rem;
-  border: 0.0625rem solid var(--neutral-100);
-  background: var(--secondary-500);
+  background-color: var(--secondary-500);
+}
+
+#hazard-option-content input[type='radio'].selected + label .checkmark {
+  display: block;
 }
 
 #hazard-option-content .container-type {
