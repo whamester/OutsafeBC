@@ -428,18 +428,25 @@ const populateHazardOptions = (options, selectedOptionQuestion) => {
         currentReport.option.id = event.target.value;
         currentReport.option.name = option.name;
 
+        // Hide all icons
         const allIconTypes = document.querySelectorAll('.category-icon-type');
         allIconTypes.forEach((iconType) => {
           iconType.style.display = 'none';
         });
 
+        // Show icon for selected option
         const selectedLabel = document.querySelector(`label[for=${radio.id}]`);
         const iconType = selectedLabel.querySelector('.category-icon-type');
         if (iconType) {
           iconType.style.display = 'block';
         }
 
+        // Call populateHazardOptions again to redraw all options
         populateHazardOptions(options, selectedOptionQuestion);
+
+        // Highlight the selected option (you may customize this part)
+        selectedLabel.style.backgroundColor = 'your-selected-color';
+        selectedLabel.style.borderColor = 'your-selected-border-color';
       });
 
       const label = document.createElement('label');
@@ -468,6 +475,12 @@ const populateHazardOptions = (options, selectedOptionQuestion) => {
       div.appendChild(label);
 
       hazardOptionContent.appendChild(div);
+
+      // Highlight the selected option (you may customize this part)
+      if (option.id === currentReport.option.id) {
+        label.style.backgroundColor = 'your-selected-color';
+        label.style.borderColor = 'your-selected-border-color';
+      }
     }
   } catch (error) {
     console.error({ error });
