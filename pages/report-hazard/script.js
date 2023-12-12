@@ -465,7 +465,7 @@ const populateHazardOptions = (options, selectedOptionQuestion) => {
       if (option.id === selectedOptionId) {
         label.style.backgroundColor = 'your-selected-color';
         label.style.borderColor = 'your-selected-border-color';
-        div1Icon.style.display = 'block';
+        div1Icon.style.display = 'block'; // Mostrar el icono cuando la opción está seleccionada
       }
     }
   } catch (error) {
