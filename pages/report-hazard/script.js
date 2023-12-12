@@ -402,8 +402,6 @@ const getCategories = async () => {
 const populateHazardOptions = (options, selectedOptionQuestion) => {
   try {
     const hazardOptionContent = document.getElementById('hazard-option-content');
-    const selectedOptionId = currentReport.option.id;
-
     hazardOptionContent.innerHTML = '';
 
     if (options.length === 1) {
@@ -430,7 +428,16 @@ const populateHazardOptions = (options, selectedOptionQuestion) => {
         currentReport.option.id = event.target.value;
         currentReport.option.name = option.name;
 
-        populateHazardOptions(options, selectedOptionQuestion);
+        const allIconTypes = document.querySelectorAll('.category-icon-type');
+        allIconTypes.forEach((iconType) => {
+          iconType.style.display = 'none';
+        });
+
+        const selectedLabel = document.querySelector(`label[for=${radio.id}]`);
+        const iconType = selectedLabel.querySelector('.category-icon-type');
+        if (iconType) {
+          iconType.style.display = 'block';
+        }
       });
 
       const label = document.createElement('label');
@@ -441,9 +448,8 @@ const populateHazardOptions = (options, selectedOptionQuestion) => {
       divContainer.classList.add('container-type');
 
       const div1Icon = document.createElement('div');
-      div1Icon.innerHTML = '<img class="category-icon-type" src="../../assets/icons/checkmark.svg">';
+      div1Icon.innerHTML = '<img class="category-icon-type" src="../../assets/icons/checkmark.svg" style="display: none">';
       div1Icon.classList.add('checkmark');
-      div1Icon.style.display = option.id === selectedOptionId ? 'block' : 'none';
 
       const div2Text = document.createElement('div');
       div2Text.innerHTML = option.name;
@@ -460,19 +466,13 @@ const populateHazardOptions = (options, selectedOptionQuestion) => {
       div.appendChild(label);
 
       hazardOptionContent.appendChild(div);
-
-      if (option.id === selectedOptionId) {
-        label.style.backgroundColor = 'your-selected-color';
-        label.style.borderColor = 'your-selected-border-color';
-      }
     }
   } catch (error) {
     console.error({ error });
+
     AlertPopup.show(error.message || AlertPopup.SOMETHING_WENT_WRONG_MESSAGE, AlertPopup.error);
   }
 };
-
-
 /**
  * Step 4: Comments
  */
