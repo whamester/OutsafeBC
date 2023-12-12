@@ -433,10 +433,12 @@ const populateHazardOptions = (options, selectedOptionQuestion) => {
           iconType.style.display = 'none';
         });
 
-        const selectedLabel = document.querySelector(`label[for=${radio.id}]`);
-        const iconType = selectedLabel.querySelector('.category-icon-type');
-        if (iconType) {
-          iconType.style.display = 'block';
+        if (radio.checked) {
+          const selectedLabel = document.querySelector(`label[for=${radio.id}]`);
+          const iconType = selectedLabel.querySelector('.category-icon-type');
+          if (iconType) {
+            iconType.style.display = 'block';
+          }
         }
       });
 
@@ -473,6 +475,7 @@ const populateHazardOptions = (options, selectedOptionQuestion) => {
     AlertPopup.show(error.message || AlertPopup.SOMETHING_WENT_WRONG_MESSAGE, AlertPopup.error);
   }
 };
+
 
 /**
  * Step 4: Comments
