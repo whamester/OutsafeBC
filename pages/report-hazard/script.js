@@ -433,13 +433,13 @@ const populateHazardOptions = (options, selectedOptionQuestion) => {
           iconType.style.display = 'none';
         });
 
-        if (radio.checked) {
-          const selectedLabel = document.querySelector(`label[for=${radio.id}]`);
-          const iconType = selectedLabel.querySelector('.category-icon-type');
-          if (iconType) {
-            iconType.style.display = 'block';
-          }
+        const selectedLabel = document.querySelector(`label[for=${radio.id}]`);
+        const iconType = selectedLabel.querySelector('.category-icon-type');
+        if (iconType) {
+          iconType.style.display = 'block';
         }
+
+        populateHazardOptions(options, selectedOptionQuestion);
       });
 
       const label = document.createElement('label');
