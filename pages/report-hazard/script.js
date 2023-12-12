@@ -402,6 +402,8 @@ const getCategories = async () => {
 const populateHazardOptions = (options, selectedOptionQuestion) => {
   try {
     const hazardOptionContent = document.getElementById('hazard-option-content');
+    const selectedOptionId = currentReport.option.id;
+
     hazardOptionContent.innerHTML = '';
 
     if (options.length === 1) {
@@ -428,25 +430,8 @@ const populateHazardOptions = (options, selectedOptionQuestion) => {
         currentReport.option.id = event.target.value;
         currentReport.option.name = option.name;
 
-        // Hide all icons
-        const allIconTypes = document.querySelectorAll('.category-icon-type');
-        allIconTypes.forEach((iconType) => {
-          iconType.style.display = 'none';
-        });
-
-        // Show icon for selected option
-        const selectedLabel = document.querySelector(`label[for=${radio.id}]`);
-        const iconType = selectedLabel.querySelector('.category-icon-type');
-        if (iconType) {
-          iconType.style.display = 'block';
-        }
-
         // Call populateHazardOptions again to redraw all options
         populateHazardOptions(options, selectedOptionQuestion);
-
-        // Highlight the selected option (you may customize this part)
-        selectedLabel.style.backgroundColor = 'your-selected-color';
-        selectedLabel.style.borderColor = 'your-selected-border-color';
       });
 
       const label = document.createElement('label');
@@ -476,15 +461,15 @@ const populateHazardOptions = (options, selectedOptionQuestion) => {
 
       hazardOptionContent.appendChild(div);
 
-      // Highlight the selected option (you may customize this part)
-      if (option.id === currentReport.option.id) {
+      // Highlight the selected option
+      if (option.id === selectedOptionId) {
         label.style.backgroundColor = 'your-selected-color';
         label.style.borderColor = 'your-selected-border-color';
+        div1Icon.style.display = 'block';
       }
     }
   } catch (error) {
     console.error({ error });
-
     AlertPopup.show(error.message || AlertPopup.SOMETHING_WENT_WRONG_MESSAGE, AlertPopup.error);
   }
 };
