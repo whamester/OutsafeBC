@@ -442,8 +442,9 @@ const populateHazardOptions = (options, selectedOptionQuestion) => {
       divContainer.classList.add('container-type');
 
       const div1Icon = document.createElement('div');
-      div1Icon.innerHTML = '<img class="category-icon-type" src="../../assets/icons/checkmark.svg" style="display: none">';
+      div1Icon.innerHTML = '<img class="category-icon-type" src="../../assets/icons/checkmark.svg">';
       div1Icon.classList.add('checkmark');
+      div1Icon.style.display = option.id === selectedOptionId ? 'block' : 'none';
 
       const div2Text = document.createElement('div');
       div2Text.innerHTML = option.name;
@@ -465,7 +466,6 @@ const populateHazardOptions = (options, selectedOptionQuestion) => {
       if (option.id === selectedOptionId) {
         label.style.backgroundColor = 'your-selected-color';
         label.style.borderColor = 'your-selected-border-color';
-        div1Icon.style.display = 'block'; // Mostrar el icono cuando la opción está seleccionada
       }
     }
   } catch (error) {
