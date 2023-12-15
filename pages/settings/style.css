@@ -241,6 +241,12 @@ main section {
     height: 2rem;
   }
 
+  .notifications-details__text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
   .notifications-details__text p,
   #changePasswordSettings p,
   #securitySettings p {
