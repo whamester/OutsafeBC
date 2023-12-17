@@ -77,7 +77,7 @@ const Header = () => {
               <a href="/pages/settings"><i class="icon-profile"></i> <span>Account Settings</span></a>
             </li>
             <li class="text-body-2">
-              <a href="/pages/my-reports"><i class="icon-reports"></i> <span>Report History</span></a>
+              <a href="/pages/my-reports"><i class="icon-reports"></i> <span>My Reports</span></a>
             </li>
             <li class="text-body-2">
               <a href="/pages/logout"><i class="icon-logout"></i> <span>Logout</span></a>
