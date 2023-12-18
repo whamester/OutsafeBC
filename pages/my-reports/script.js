@@ -5,7 +5,6 @@ import { getUserSession } from '../../assets/helpers/storage.js';
 import loadIcons from '../../assets/helpers/load-icons.js';
 import injectHeader from '../../assets/helpers/inject-header.js';
 // Components
-import Header from '../../assets/components/Header.js';
 import AlertPopup from '../../assets/components/AlertPopup.js';
 import { onToggle } from '../../assets/components/ToggleSwitch.js';
 import ReportsEmpty from '../../assets/components/ReportsEmpty.js';
@@ -37,7 +36,7 @@ redirectUser();
  */
 window.onload = function () {
   // Inject Header
-  injectHeader([{ func: Header, target: '#myReportsBody', position: 'afterbegin' }]);
+  injectHeader();
 
   loadIcons();
 

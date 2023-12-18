@@ -1,11 +1,7 @@
 import { API_URL, GOOGLE_ID } from '../../constants.js';
 //Helpers
-import {
-  getUserSession,
-  setUserSession,
-} from '../../assets/helpers/storage.js';
+import { getUserSession, setUserSession } from '../../assets/helpers/storage.js';
 //Components
-import Header from '../../assets/components/Header.js';
 import AlertPopup from '../../assets/components/AlertPopup.js';
 import injectHeader from '../../assets/helpers/inject-header.js';
 //Variables
@@ -18,9 +14,7 @@ const hidePw = document.getElementById('hide-pw');
  */
 window.onload = function () {
   // Inject Header
-  injectHeader([
-    { func: Header, target: '#login-body', position: 'afterbegin' },
-  ]);
+  injectHeader();
 
   const user = getUserSession();
 
@@ -46,15 +40,9 @@ window.onload = function () {
           return;
         }
 
-        AlertPopup.show(
-          AlertPopup.SOMETHING_WENT_WRONG_MESSAGE,
-          AlertPopup.error
-        );
+        AlertPopup.show(AlertPopup.SOMETHING_WENT_WRONG_MESSAGE, AlertPopup.error);
       } catch (error) {
-        AlertPopup.show(
-          AlertPopup.SOMETHING_WENT_WRONG_MESSAGE,
-          AlertPopup.error
-        );
+        AlertPopup.show(AlertPopup.SOMETHING_WENT_WRONG_MESSAGE, AlertPopup.error);
         console.debug(error);
       }
     },
@@ -70,43 +58,38 @@ window.onload = function () {
 /**
  * Login Submit
  */
-document
-  .getElementById('login-form')
-  .addEventListener('submit', async (event) => {
-    event.preventDefault();
+document.getElementById('login-form').addEventListener('submit', async (event) => {
+  event.preventDefault();
 
-    try {
-      const email = document.getElementById('email-input').value;
-      const password = document.getElementById('password-input').value;
+  try {
+    const email = document.getElementById('email-input').value;
+    const password = document.getElementById('password-input').value;
 
-      const response = await fetch(`${API_URL}/auth`, {
-        method: 'POST',
-        body: JSON.stringify({
-          email,
-          password,
-        }),
-      });
+    const response = await fetch(`${API_URL}/auth`, {
+      method: 'POST',
+      body: JSON.stringify({
+        email,
+        password,
+      }),
+    });
 
-      const { data, error } = await response.json();
+    const { data, error } = await response.json();
 
-      if (data?.id) {
-        AlertPopup.show('Welcome back!');
+    if (data?.id) {
+      AlertPopup.show('Welcome back!');
 
-        setUserSession(data);
-        window.location.replace('/');
-      }
-
-      if (!!error) {
-        AlertPopup.show(error, AlertPopup.error);
-      }
-    } catch (error) {
-      AlertPopup.show(
-        AlertPopup.SOMETHING_WENT_WRONG_MESSAGE,
-        AlertPopup.error
-      );
-      console.debug(error);
+      setUserSession(data);
+      window.location.replace('/');
     }
-  });
+
+    if (!!error) {
+      AlertPopup.show(error, AlertPopup.error);
+    }
+  } catch (error) {
+    AlertPopup.show(AlertPopup.SOMETHING_WENT_WRONG_MESSAGE, AlertPopup.error);
+    console.debug(error);
+  }
+});
 
 /**
  * Toggle Password Visibility

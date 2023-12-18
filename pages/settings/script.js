@@ -4,7 +4,6 @@ import readImage from '../../assets/helpers/read-image.js';
 import { getUserSession, setUserSession, updateUserSession } from '../../assets/helpers/storage.js';
 import injectHeader from '../../assets/helpers/inject-header.js';
 // Components
-import Header from '../../assets/components/Header.js';
 import AlertPopup from '../../assets/components/AlertPopup.js';
 import Modal from '../../assets/components/Modal.js';
 
@@ -32,7 +31,7 @@ let changedFields = {
  * Page Init
  */
 window.onload = function () {
-  injectHeader([{ func: Header, target: '#profile-body', position: 'afterbegin' }]);
+  injectHeader();
   basicInfoSettings.style.display = 'flex';
 
   showProfilePic(user?.photo || undefined);

@@ -31,3 +31,8 @@ i[class^='icon-'] {
   mask: url(../icons/chevron-left.svg);
   -webkit-mask-image: url(../icons/chevron-left.svg);
 }
+
+.icon-notification-no {
+  mask: url(../icons/notification-no.svg);
+  -webkit-mask-image: url(../icons/notification-no.svg);
+}

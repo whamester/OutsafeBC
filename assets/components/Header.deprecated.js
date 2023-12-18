@@ -80,7 +80,7 @@ const Header = () => {
               <a href="/pages/my-reports"><i class="icon-reports"></i> <span>My Reports</span></a>
             </li>
             <li class="text-body-2">
-              <a href="/pages/logout"><i class="icon-logout"></i> <span>Logout</span></a>
+              <a href="/pages/logout/index.html"><i class="icon-logout"></i> <span>Logout</span></a>
             </li>
         </ul>
       </div>
