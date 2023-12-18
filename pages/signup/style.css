@@ -3,6 +3,7 @@
   flex-direction: column;
   justify-content: center;
   overflow-y: auto;
+  height: calc(100% - 60px);
 }
 
 #signup-main .content-wrapper {
