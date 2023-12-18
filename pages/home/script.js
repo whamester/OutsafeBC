@@ -60,7 +60,7 @@ const root = document.getElementById('root');
 
 window.onload = async function () {
   try {
-    injectHeader([{ func: Header, target: '#home-body', position: 'afterbegin' }]);
+    // injectHeader([{ func: Header, target: '#home-body', position: 'afterbegin' }]);
     Loader(true);
 
     const { data } = await apiRequest(`hazard-category`, { method: 'GET' });
