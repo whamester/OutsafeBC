@@ -183,6 +183,11 @@
 
   --hazard-container-top: 14.3rem;
   --hazard-panel-width: 28.6rem;
+
+  --bold-weight: 700;
+  --semibold-weight: 600;
+  --medium-weight: 500;
+  --regular-weight: 400;
 }
 
 @media screen and (max-width: 768px) {
