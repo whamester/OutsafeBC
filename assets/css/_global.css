@@ -1,6 +1,5 @@
 @import url(./_fonts.css);
 @import url(./_variables.css);
-@import url(./_typography.css);
 
 @import url(./icon.css); /* Default icon styles first so the next imports have priority */
 
@@ -18,6 +17,8 @@
 @import url(./hazard-detail-card.css);
 @import url(./toggle-switch.css);
 @import url(./loader.css);
+
+@import url(./_typography.css);
 
 :root {
   font-size: var(--font-size-base);

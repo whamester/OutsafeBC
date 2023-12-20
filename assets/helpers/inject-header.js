@@ -55,7 +55,7 @@ const injectHeader = () => {
             " />
           `;
     } else {
-      headerNav.innerHTML = '<a href="/pages/login/index.html"><button class="btn btn-secondary">Log in</button></a>';
+      headerNav.innerHTML = '<a href="/pages/login/index.html"><button id="header-login-button" class="btn btn-secondary text-body-3 medium">Log in</button></a>';
     }
   }
 
