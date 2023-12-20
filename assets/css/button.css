@@ -29,7 +29,10 @@
   background: var(--secondary-200);
   color: var(--secondary-900);
   cursor: pointer;
+}
 
+.btn,
+.btn span {
   /* Font */
   font-size: var(--body-2-size);
   letter-spacing: var(--body-2-letter-spacing);
@@ -89,6 +92,7 @@
   background: var(--primary);
   box-shadow: 0px 15px 30px 0px rgba(0, 0, 0, 0.15);
   color: var(--primary-btn-color);
+  font-weight: var(--semibold-weight);
 }
 
 .btn-primary:hover {
