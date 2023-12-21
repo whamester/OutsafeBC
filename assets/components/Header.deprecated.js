@@ -7,7 +7,7 @@ const Header = () => {
   return `
   <header>
     <div id="header-content">
-      <a href="/pages/home/index.html"><img src="../../assets/img/header-logo-dark.svg" style="width:8.06rem; height:100%" alt="Outsafe BC logo" /></a>
+      <a href="/pages/home/index.html" ><img src="https://storage.googleapis.com/campbuddy-4944b.appspot.com/app/header-logo-dark.png" style="width:8.06rem; height:100%" alt="Outsafe BC logo" /></a>
       ${
         !!showNavigation
           ? ` <nav id="header-nav">
@@ -80,7 +80,7 @@ const Header = () => {
               <a href="/pages/my-reports"><i class="icon-reports"></i> <span>My Reports</span></a>
             </li>
             <li class="text-body-2">
-              <a href="/pages/logout"><i class="icon-logout"></i> <span>Logout</span></a>
+              <a href="/pages/logout/index.html"><i class="icon-logout"></i> <span>Logout</span></a>
             </li>
         </ul>
       </div>

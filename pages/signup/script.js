@@ -1,11 +1,7 @@
 import { API_URL, GOOGLE_ID } from '../../constants.js';
 //Helpers
-import {
-  getUserSession,
-  setUserSession,
-} from '../../assets/helpers/storage.js';
+import { getUserSession, setUserSession } from '../../assets/helpers/storage.js';
 //Components
-import Header from '../../assets/components/Header.js';
 import AlertPopup from '../../assets/components/AlertPopup.js';
 import injectHeader from '../../assets/helpers/inject-header.js';
 //Variables
@@ -24,9 +20,7 @@ const hidePwConfirm = document.getElementById('hide-pw-confirm');
 
 window.onload = function () {
   // Inject Header
-  injectHeader([
-    { func: Header, target: '#signup-body', position: 'afterbegin' },
-  ]);
+  injectHeader();
 
   const user = getUserSession();
 
@@ -71,38 +65,36 @@ window.onload = function () {
 /**
  * Create Account Submit
  */
-document
-  .getElementById('signup-form')
-  .addEventListener('submit', async (event) => {
-    event.preventDefault();
-    const email = document.getElementById('email-input').value;
-    const password = document.getElementById('password-input').value;
-    const userName = document.getElementById('name-input').value;
-    try {
-      const response = await fetch(`${API_URL}/user?provider=password`, {
-        method: 'POST',
-        body: JSON.stringify({
-          email,
-          password,
-          userName,
-        }),
-      });
+document.getElementById('signup-form').addEventListener('submit', async (event) => {
+  event.preventDefault();
+  const email = document.getElementById('email-input').value;
+  const password = document.getElementById('password-input').value;
+  const userName = document.getElementById('name-input').value;
+  try {
+    const response = await fetch(`${API_URL}/user?provider=password`, {
+      method: 'POST',
+      body: JSON.stringify({
+        email,
+        password,
+        userName,
+      }),
+    });
 
-      const { data, error } = await response.json();
-      if (data?.id) {
-        AlertPopup.show('Welcome!');
+    const { data, error } = await response.json();
+    if (data?.id) {
+      AlertPopup.show('Welcome!');
 
-        setUserSession(data);
-        window.location.replace('/');
-      }
-
-      if (!!error) {
-        AlertPopup.show(error, AlertPopup.error);
-      }
-    } catch (error) {
-      console.debug(error);
+      setUserSession(data);
+      window.location.replace('/');
     }
-  });
+
+    if (!!error) {
+      AlertPopup.show(error, AlertPopup.error);
+    }
+  } catch (error) {
+    console.debug(error);
+  }
+});
 
 /**
  * Validate Password

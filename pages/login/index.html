@@ -39,53 +39,56 @@
 </head>
 
 <body id="login-body">
+  <header id="app-header">
+    <div id="header-content">
+      <a id="logo-link" href="/pages/home/index.html"><img src="../../assets/img/header-logo-dark.svg"
+          style="width:8.06rem; height:100%" alt="Outsafe BC logo" /></a>
+      <nav id="header-nav"></nav>
+    </div>
+  </header>
   <main id="login-main">
     <script src="https://accounts.google.com/gsi/client" async></script>
 
     <div class="full-signup">
-    <div class="content-wrapper">
-      <h1 class="text-heading-1">Log in</h1>
-      <p class="text-body-2 text-neutral-500">Welcome back! Please enter your details</p>
-      <form id="login-form">
-        <div class="form-field">
-          <label for="email-input" class="text-body-2 medium">Email</label>
-          <div class="form-field__input-container">
-            <input id="email-input" autocomplete="username" type="email" required placeholder="name@email.com" />
+      <div class="content-wrapper">
+        <h1 class="text-heading-1">Log in</h1>
+        <p class="text-body-2 text-neutral-500">Welcome back! Please enter your details</p>
+        <form id="login-form">
+          <div class="form-field">
+            <label for="email-input" class="text-body-2 medium">Email</label>
+            <div class="form-field__input-container">
+              <input id="email-input" autocomplete="username" type="email" required placeholder="name@email.com" />
+            </div>
+          </div>
+
+          <div class="form-field with-icon">
+            <label for="password-input" class="text-body-2 medium">Password*</label>
+            <div class="form-field__input-container">
+              <i class="icon-password-close right pointer" id="show-pw"></i>
+              <i class="icon-password-visible right pointer hidden" id="hide-pw"></i>
+              <input id="password-input" autocomplete="current-password" type="password" required />
+            </div>
+          </div>
+        </form>
+
+        <div class="align-right">
+          <button class="text-body-2 bold forget-password pointer">Forgot Password?</button>
+        </div>
+        <div class="flex-wrapper__bottom">
+          <button type="submit" form="login-form" class="btn btn-primary">Log in</button>
+
+          <div id="google-button"></div>
+
+          <div class="text-body-2 medium text-center">
+            Don't have an account?
+            <a href="/pages/signup/index.html" aria-label="Link to sign up" class="link">Sign up</a>
           </div>
         </div>
-
-        <div class="form-field with-icon">
-          <label for="password-input" class="text-body-2 medium">Password*</label>
-          <div class="form-field__input-container">
-            <i class="icon-password-close right pointer" id="show-pw"></i>
-            <i class="icon-password-visible right pointer hidden" id="hide-pw"></i>
-            <input id="password-input" autocomplete="current-password" type="password" required />
-          </div>
-        </div>
-      </form>
-
-      <div class="align-right">
-        <button class="text-body-2 bold forget-password pointer">
-          Forgot Password?
-        </button>
       </div>
-      <div class="flex-wrapper__bottom">
-        <button type="submit" form="login-form" class="btn btn-primary">
-          Log in
-        </button>
-
-        <div id="google-button"></div>
-
-        <div class="text-body-2 medium text-center">
-          Don't have an account?
-          <a href="/pages/signup/index.html" aria-label="Link to sign up" class="link">Sign up</a>
-        </div>
+      <div class="content-image">
+        <img src="../../assets/img/default-log_in-sign_up-image.png" alt="App image" />
       </div>
     </div>
-    <div class="content-image">
-			<img src="../../assets/img/default-log_in-sign_up-image.png" alt="App image">
-		</div>
-  </div>
   </main>
 </body>
 

@@ -1,68 +1,77 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <link rel="icon" type="image/x-icon" href="../../assets/img/icons/logo-square.png" />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- WPA -->
-    <link rel="manifest" href="../../manifest.json" />
-    <link rel="apple-touch-icon" href="../../assets/css/img/icons/icon-96x96.png" />
-    <meta name="apple-mobile-web-app-status-bar" content="#000000" />
-    <meta name="theme-color" content="#000000" />
+  <link rel="icon" type="image/x-icon" href="../../assets/img/icons/logo-square.png" />
 
-    <!-- leaflet CSS for maps -->
-    <!-- <link rel="stylesheet" href="../../modules/leaflet/leaflet.css"> -->
-    <!-- leaflet JS for maps -->
-    <!-- <script src="../../modules/leaflet/leaflet.js"></script> -->
-    <!-- Firebase JS -->
-    <script src="https://www.gstatic.com/firebasejs/ui/6.0.1/firebase-ui-auth.js"></script>
-    <!-- Firebase CSS -->
-    <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/6.0.1/firebase-ui-auth.css" />
-    <!-- Global Styles -->
-    <link rel="stylesheet" href="../../assets/css/_global.css" />
-    <!-- Feature Styles -->
-    <link rel="stylesheet" href="./style.css" />
-    <!-- Global JS -->
-    <script type="module" src="../../global.js" defer></script>
-    <!-- Feature JS -->
-    <script type="module" src="./script.js" defer></script>
+  <!-- WPA -->
+  <link rel="manifest" href="../../manifest.json" />
+  <link rel="apple-touch-icon" href="../../assets/css/img/icons/icon-96x96.png" />
+  <meta name="apple-mobile-web-app-status-bar" content="#000000" />
+  <meta name="theme-color" content="#000000" />
 
-    <!-- Notifications JS -->
-    <script src="https://js.pusher.com/beams/1.0/push-notifications-cdn.js"></script>
-    <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
-    <!-- End Notifications JS -->
+  <!-- leaflet CSS for maps -->
+  <!-- <link rel="stylesheet" href="../../modules/leaflet/leaflet.css"> -->
+  <!-- leaflet JS for maps -->
+  <!-- <script src="../../modules/leaflet/leaflet.js"></script> -->
+  <!-- Firebase JS -->
+  <script src="https://www.gstatic.com/firebasejs/ui/6.0.1/firebase-ui-auth.js"></script>
+  <!-- Firebase CSS -->
+  <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/6.0.1/firebase-ui-auth.css" />
+  <!-- Global Styles -->
+  <link rel="stylesheet" href="../../assets/css/_global.css" />
+  <!-- Feature Styles -->
+  <link rel="stylesheet" href="./style.css" />
+  <!-- Global JS -->
+  <script type="module" src="../../global.js" defer></script>
+  <!-- Feature JS -->
+  <script type="module" src="./script.js" defer></script>
 
-    <title>My Reports</title>
-  </head>
+  <!-- Notifications JS -->
+  <script src="https://js.pusher.com/beams/1.0/push-notifications-cdn.js"></script>
+  <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+  <!-- End Notifications JS -->
 
-  <body id="myReportsBody">
-    <main>
-      <div class="my-reports__top-section">
-        <div class="my-reports__heading-text">
-          <h1 class="text-heading-1">My Reports</h1>
-          <p class="text-body-3">Here's the list of the reports you've made.</p>
-        </div>
+  <title>My Reports</title>
+</head>
 
-        <div class="my-reports__reports-tabs">
-          <div class="my-reports__recent-tab my-reports__active-tab">
-            <i class="icon-report-submitted"></i>
-            <label for="recentReportsBtn">Recent Reports</label>
-            <input type="radio" name="reportsRadioBtn" id="recentReportsBtn" value="recent" />
-          </div>
-          <div class="my-reports__older-tab">
-            <i class="icon-time"></i>
-            <label for="olderReportsBtn">Older Reports</label>
-            <input type="radio" name="reportsRadioBtn" id="olderReportsBtn" value="older" />
-          </div>
-        </div>
+<body id="myReportsBody">
+  <header id="app-header">
+    <div id="header-content">
+      <a id="logo-link" href="/pages/home/index.html"><img src="../../assets/img/header-logo-dark.svg"
+          style="width:8.06rem; height:100%" alt="Outsafe BC logo" /></a>
+      <nav id="header-nav"></nav>
+    </div>
+  </header>
+  <main>
+    <div class="my-reports__top-section">
+      <div class="my-reports__heading-text">
+        <h1 class="text-heading-1">My Reports</h1>
+        <p class="text-body-3">Here's the list of the reports you've made.</p>
       </div>
 
-      <div id="reportsArea">
-        <div id="recentReports"></div>
-        <div id="olderReports"></div>
+      <div class="my-reports__reports-tabs">
+        <div class="my-reports__recent-tab my-reports__active-tab">
+          <i class="icon-report-submitted"></i>
+          <label for="recentReportsBtn">Recent Reports</label>
+          <input type="radio" name="reportsRadioBtn" id="recentReportsBtn" value="recent" />
+        </div>
+        <div class="my-reports__older-tab">
+          <i class="icon-time"></i>
+          <label for="olderReportsBtn">Older Reports</label>
+          <input type="radio" name="reportsRadioBtn" id="olderReportsBtn" value="older" />
+        </div>
       </div>
-    </main>
-  </body>
+    </div>
+
+    <div id="reportsArea">
+      <div id="recentReports"></div>
+      <div id="olderReports"></div>
+    </div>
+  </main>
+</body>
+
 </html>

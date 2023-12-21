@@ -5,7 +5,7 @@
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-	<link rel="icon" type="image/x-icon" href="../../assets/img/icons/logo-square.png">
+	<link rel="icon" type="image/x-icon" href="../../assets/img/icons/logo-square.png" />
 
 	<!-- WPA -->
 	<link rel="manifest" href="../../manifest.json" />
@@ -39,66 +39,71 @@
 </head>
 
 <body id="signup-body">
+	<header id="app-header">
+		<div id="header-content">
+			<a id="logo-link" href="/pages/home/index.html"><img src="../../assets/img/header-logo-dark.svg"
+					style="width:8.06rem; height:100%" alt="Outsafe BC logo" /></a>
+			<nav id="header-nav"></nav>
+		</div>
+	</header>
 	<main id="signup-main">
 		<script src="https://accounts.google.com/gsi/client" async></script>
 
 		<div class="full-signup">
-		<div class="content-wrapper">
-			<h1 class="text-heading-1">Create an account</h1>
-			<form id="signup-form">
-				<div class="form-field">
-					<label for="name-input" class="text-body-2 medium">Name</label>
-					<div class="form-field__input-container">
-						<input id="name-input" autocomplete="name" type="text" required />
+			<div class="content-wrapper">
+				<h1 class="text-heading-1">Create an account</h1>
+				<form id="signup-form">
+					<div class="form-field">
+						<label for="name-input" class="text-body-2 medium">Name</label>
+						<div class="form-field__input-container">
+							<input id="name-input" autocomplete="name" type="text" required />
+						</div>
 					</div>
-				</div>
 
-
-				<div class="form-field">
-					<label for="email-input" class="text-body-2 medium">Email*</label>
-					<div class="form-field__input-container">
-						<input id="email-input" autocomplete="email" type="email" required />
+					<div class="form-field">
+						<label for="email-input" class="text-body-2 medium">Email*</label>
+						<div class="form-field__input-container">
+							<input id="email-input" autocomplete="email" type="email" required />
+						</div>
 					</div>
-				</div>
 
-				<div class="form-field with-icon">
-					<label for="password-input" class="text-body-2 medium">Password*</label>
-					<div class="form-field__input-container">
-						<i class="icon-password-close pointer right" id="show-pw"></i>
-						<i class="icon-password-visible pointer right hidden" id="hide-pw"></i>
-						<input id="password-input" autocomplete="new-password" type="password" required />
+					<div class="form-field with-icon">
+						<label for="password-input" class="text-body-2 medium">Password*</label>
+						<div class="form-field__input-container">
+							<i class="icon-password-close pointer right" id="show-pw"></i>
+							<i class="icon-password-visible pointer right hidden" id="hide-pw"></i>
+							<input id="password-input" autocomplete="new-password" type="password" required />
+						</div>
+						<span class="form-field__helper">Must be at least 8 characters</span>
 					</div>
-					<span class="form-field__helper">Must be at least 8 characters</span>
-				</div>
 
-
-				<div class="form-field with-icon" id="confirmPwForm">
-					<label for="confirm-password-input" class="text-body-2 medium">Confirm Password*</label>
-					<div class="form-field__input-container">
-						<i class="icon-password-close pointer right" id="show-pw-confirm"></i>
-						<i class="icon-password-visible pointer right hidden" id="hide-pw-confirm"></i>
-						<input id="confirm-password-input" type="password" required />
+					<div class="form-field with-icon" id="confirmPwForm">
+						<label for="confirm-password-input" class="text-body-2 medium">Confirm Password*</label>
+						<div class="form-field__input-container">
+							<i class="icon-password-close pointer right" id="show-pw-confirm"></i>
+							<i class="icon-password-visible pointer right hidden" id="hide-pw-confirm"></i>
+							<input id="confirm-password-input" type="password" required />
+						</div>
+						<span class="form-field__helper" style="display: none" id="confirmPwError">Passwords don't
+							match</span>
 					</div>
-					<span class="form-field__helper" style="display: none" id="confirmPwError">Passwords don't
-						match</span>
-				</div>
 
-				<button type="submit" class="btn btn-primary">Sign up</button>
-			</form>
-			<div class="flex-wrapper__bottom">
-				<div id="google-button"></div>
+					<button type="submit" class="btn btn-primary">Sign up</button>
+				</form>
+				<div class="flex-wrapper__bottom">
+					<div id="google-button"></div>
 
-				<div class="text-body-2 medium text-center">
-					Already have an account?
-					<a href="/pages/login/index.html" aria-label="Link to login" class="link">Log in</a>
+					<div class="text-body-2 medium text-center">
+						Already have an account?
+						<a href="/pages/login/index.html" aria-label="Link to login" class="link">Log in</a>
+					</div>
 				</div>
 			</div>
-		</div>
 
-		<div class="content-image">
-			<img src="../../assets/img/default-log_in-sign_up-image.png" alt="App image">
+			<div class="content-image">
+				<img src="../../assets/img/default-log_in-sign_up-image.png" alt="App image" />
+			</div>
 		</div>
-	</div>
 	</main>
 </body>
 

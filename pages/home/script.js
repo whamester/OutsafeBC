@@ -1,6 +1,5 @@
 import { API_URL } from '../../constants.js';
 //Components
-import Header from '../../assets/components/Header.js';
 import GeoMap from '../../assets/components/GeoMap.js';
 import SearchBar, { SearchBarSuggestionCard } from '../../assets/components/SearchBar.js';
 import HazardCardLayout from '../../assets/components/HazardCardLayout.js';
@@ -60,9 +59,8 @@ const root = document.getElementById('root');
 
 window.onload = async function () {
   try {
-    injectHeader([{ func: Header, target: '#home-body', position: 'afterbegin' }]);
     Loader(true);
-
+    injectHeader();
     const { data } = await apiRequest(`hazard-category`, { method: 'GET' });
 
     searchBarParams.categories = data;
@@ -157,6 +155,7 @@ window.onload = async function () {
     console.error(error, error.message);
 
     AlertPopup.show('Error loading categories', AlertPopup.error, 500);
+
     Loader(false);
   }
 
@@ -547,7 +546,7 @@ const watchGeoLocationSuccess = async ({ coords }) => {
 
   if ((!prevUserLocation.lat || !prevUserLocation.lng) && !openDetail && !focusMarker) {
     flyTo(lat, lng, Map.FOCUSED_MAP_ZOOM);
-    setUserLocation(current);
+    setUserLocation({ lat, lng });
   }
 };
 
