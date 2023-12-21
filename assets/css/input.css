@@ -1,3 +1,9 @@
+:root {
+  --input-font-size: var(--body-2-large-size);
+  --input-letter-spacing: var(--body-2-large-letter-spacing);
+  --input-line-height: var(--body-2-large-line-height);
+}
+
 .form-field {
   display: flex;
   flex-direction: column;
@@ -6,9 +12,9 @@
 }
 
 .form-field label {
-  font-size: var(--body-2-size);
-  letter-spacing: var(--body-2-letter-spacing);
-  line-height: var(--body-2-line-height);
+  font-size: var(--input-font-size);
+  letter-spacing: var(--input-letter-spacing);
+  line-height: var(--input-line-height);
   color: var(--neutral-700);
 }
 
@@ -25,9 +31,9 @@
   align-self: stretch;
   color: var(--neutral-800);
   caret-color: var(--accent-500);
-  font-size: var(--body-2-size);
-  letter-spacing: var(--body-2-letter-spacing);
-  line-height: var(--body-2-line-height);
+  font-size: var(--input-font-size);
+  letter-spacing: var(--input-letter-spacing);
+  line-height: var(--input-line-height);
   width: 100%;
 }
 
