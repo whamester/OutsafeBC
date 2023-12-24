@@ -1,8 +1,8 @@
 @import url(../../assets/css/report-card.css);
 @import url(../../assets/css/toggle-switch.css);
 
-#reportsArea{
- padding-bottom: 3rem;
+#reportsArea {
+  padding-bottom: 3rem;
 }
 
 #recentReports,
@@ -72,6 +72,11 @@ input[type='radio'] {
 .my-reports__older-tab {
   display: flex;
   gap: 0.62rem;
+}
+
+.my-reports__recent-tab label,
+.my-reports__older-tab label{
+  cursor: pointer;
 }
 
 .my-reports__active-tab {
