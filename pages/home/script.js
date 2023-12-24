@@ -274,6 +274,7 @@ const markerParams = {
     const currentReport = await getHazardReportData(hazardID);
 
     const userLocation = getUserLocation();
+    const position = Object.keys(userLocation).length ? userLocation : Map.DEFAULT_LOCATION;
 
     const hazardReport = new HazardDetailCard({
       id: currentReport.id,
@@ -293,7 +294,7 @@ const markerParams = {
       created_at: currentReport.created_at,
       updated_at: currentReport.updated_at,
       deleted_at: currentReport.deleted_at,
-      distance: geolocationDistance(currentReport.location.lat, currentReport.location.lng, userLocation.lat, userLocation.lng),
+      distance: geolocationDistance(currentReport.location.lat, currentReport.location.lng, position.lat, position.lng),
       user: currentReport.user,
     });
 
