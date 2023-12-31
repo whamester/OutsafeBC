@@ -22,7 +22,19 @@ class Map {
   static focusIconAnchor = [26.5, 55];
 
   constructor(lat, lng, customConfig = {}) {
-    this.map = L.map(Map.MAP_ID, { zoomControl: false }, { ...customConfig }).setView([lat, lng], customConfig.MAP_ZOOM ?? Map.DEFAULT_MAP_ZOOM);
+    this.map = L.map(
+      Map.MAP_ID,
+      {
+        zoomControl: false,
+        maxBounds: [
+          //south west
+          [45.244, -148.711],
+          //north east
+          [62.227, -105.513],
+        ],
+      },
+      { ...customConfig }
+    ).setView([lat, lng], customConfig.MAP_ZOOM ?? Map.DEFAULT_MAP_ZOOM);
 
     L.tileLayer(`https://{s}.tile.jawg.io/jawg-terrain/{z}/{x}/{y}{r}.png?access-token=${JAWG_ACCESS_TOKEN}`, {
       attribution:
