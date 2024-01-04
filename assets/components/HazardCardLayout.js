@@ -5,8 +5,7 @@ import Map from '../models/Map.js';
 
 const HazardCardLayout = ({ reports }) => {
   const userLocation = getUserLocation();
-
-  const position = userLocation || Map.DEFAULT_LOCATION;
+  const position = Object.keys(userLocation).length ? userLocation : Map.DEFAULT_LOCATION;
 
   return reports
     ? `<div class="sb-cards">
@@ -63,10 +62,12 @@ const HazardCardLayout = ({ reports }) => {
                 </div>
               </div>
       
-              <div class="report-card__details sb-cards-info--box">
-                <i class="icon-distance" style="background-color: var(--neutral-400)"></i>
-                <p class="text-body-2 regular">${item.distance} km away</p>
-              </div>
+              ${
+                `<div class="report-card__details sb-cards-info--box">
+                  <i class="icon-distance" style="background-color: var(--neutral-400)"></i>
+                  <p class="text-body-2 regular">${item.distance} km away</p>
+                </div>`
+              }
       
               <button data-id="${id}" class="btn btn-secondary view-details" id="viewDetailsBtn">
                   <i class="icon-plus"></i>

@@ -3,7 +3,7 @@ class DateFormat {
 
   static getDate(dateValue) {
     try {
-      const date = dateValue.toLocaleString('default', {
+      const date = dateValue.toLocaleString('en-CA', {
         day: 'numeric',
         month: 'long',
         year: 'numeric',
@@ -18,10 +18,10 @@ class DateFormat {
 
   static getTime(dateValue) {
     try {
-      const time = dateValue.toLocaleTimeString('default', {
+      const time = dateValue.toLocaleTimeString('en-CA', {
         hour: '2-digit',
         minute: '2-digit',
-        timeZoneName: 'short',
+        timeZoneName: 'short'
       });
       return time;
     } catch (error) {

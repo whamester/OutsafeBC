@@ -23,7 +23,7 @@ import Map from '../../assets/models/Map.js';
 import HazardReport from '../../assets/models/HazardReport.js';
 import getHazardDetail from '../../assets/helpers/get-hazard-detail.js';
 import DateFormat from '../../assets/models/DateFormat.js';
-import { getUserLocation, setUserLocation } from '../../assets/helpers/user-geocoordinates.js';
+import { getUserLocation, setUserLocation, clearUserLocation } from '../../assets/helpers/user-geocoordinates.js';
 
 // URL params
 const url = new URL(window.location.href);
@@ -271,8 +271,8 @@ const markerParams = {
     }
 
     const currentReport = await getHazardReportData(hazardID);
-
     const userLocation = getUserLocation();
+    const position = Object.keys(userLocation).length ? userLocation : Map.DEFAULT_LOCATION;
 
     const hazardReport = new HazardDetailCard({
       id: currentReport.id,
@@ -292,7 +292,7 @@ const markerParams = {
       created_at: currentReport.created_at,
       updated_at: currentReport.updated_at,
       deleted_at: currentReport.deleted_at,
-      distance: geolocationDistance(currentReport.location.lat, currentReport.location.lng, userLocation.lat, userLocation.lng),
+      distance: geolocationDistance(currentReport.location.lat, currentReport.location.lng, position.lat, position.lng),
       user: currentReport.user,
     });
 
@@ -551,8 +551,9 @@ const watchGeoLocationSuccess = async ({ coords }) => {
 };
 
 const watchGeoLocationError = async (error) => {
+  clearUserLocation();
+  AlertPopup.show(`Unable to access geolocation`, AlertPopup.warning);
   console.error(error);
-  // AlertPopup.show(`Unable to access geolocation`, AlertPopup.warning);
 };
 
 const onSearchInput = debounce(async ({ target }) => {
